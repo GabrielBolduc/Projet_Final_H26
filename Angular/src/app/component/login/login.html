@@ -1,1 +1,27 @@
-<p>login works!</p>
+<mat-card class="auth-card">
+  <h2>Connexion</h2>
+
+  <form  (ngSubmit)="submit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email">
+      <mat-error >Email invalide</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Mot de passe</mat-label>
+      <input matInput  [type]="hidePassword ? 'password' : 'text'">
+      <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      </button>
+     
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" class="full-width" type="submit">
+      Se connecter
+    </button>
+  </form>
+  <button mat-raised-button color="primary" class="full-width" type="submit" [routerLink]="['/signup']" >
+      S'inscrire
+  </button>
+</mat-card>

@@ -9,13 +9,22 @@
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
   transition: box-shadow 0.2s ease-in-out;
-  color: var(--mat-sys-primary);
+  color: var();
+}
+
+.toolbar-logo {
+  height: 55px; 
+  width: auto; 
+  margin-right: 12px; 
+  object-fit: contain;
+  vertical-align: middle;
 }
 
 .logo-link {
   text-decoration: none;
-  color: inherit; 
+  color: var(--mat-sys-primary);
   font-weight: bold;
+  font-size: 1.5rem;
 }
 
 .spacer {

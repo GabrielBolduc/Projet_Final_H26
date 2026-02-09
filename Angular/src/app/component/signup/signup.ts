@@ -7,16 +7,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from "@angular/router";
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.html',
   styleUrls: ['./signup.css'],
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule, MatCardModule, RouterLink]
+  imports: [MatCheckboxModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule, MatCardModule, RouterLink]
 })
 export class Signup {
   hidePassword = true;
   hideConfirmPassword = true;
+  is_staff = false;
 
  
 

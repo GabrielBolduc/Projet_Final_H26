@@ -1,23 +1,20 @@
-import { Injectable, signal, inject, effect, PLATFORM_ID } from '@angular/core';
+import { Injectable, signal, inject, effect, PLATFORM_ID, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
-  private router = inject(Router);
-  private platformId = inject(PLATFORM_ID);
-  private readonly STORAGE_KEY = 'auth_state';
+  export class AuthService {
+    private router = inject(Router);
+    private platformId = inject(PLATFORM_ID);
+    private readonly STORAGE_KEY = 'auth_state';
 
-  isLoggedIn = signal(
-    isPlatformBrowser(this.platformId) 
-      ? localStorage.getItem(this.STORAGE_KEY) === 'true' 
-      : false
-  );
+  isLoggedIn = signal(false);
 
   constructor() {
-    effect(() => {
-      if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem(this.STORAGE_KEY, String(this.isLoggedIn()));
+    afterNextRender(() => {
+      const savedState = localStorage.getItem(this.STORAGE_KEY) === 'true';
+      if (savedState) {
+        this.isLoggedIn.set(true);
       }
     });
   }

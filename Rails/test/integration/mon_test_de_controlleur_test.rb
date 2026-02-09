@@ -11,6 +11,7 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
     )
   end
 
+  # create
   test "should sign up a new user" do
     post user_registration_url, params: {
       user: {

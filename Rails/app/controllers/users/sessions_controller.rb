@@ -6,10 +6,20 @@ class Users::SessionsController < Devise::SessionsController
   def create
     self.resource = warden.authenticate!(auth_options)
     sign_in(resource_name, resource)
-    render json: { success: true, email: resource.email }
+    render json: {
+      status: 'success',
+      data: {
+        user: {
+          email: resource.email,
+          role: resource.role
+        }
+      }
+    }, status: :ok
   end
 
   def respond_to_on_destroy
-    render json: { success: false }
+    render json: {
+      status: 'success'
+    }, status: :ok
   end
 end

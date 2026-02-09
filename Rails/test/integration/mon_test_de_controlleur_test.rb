@@ -24,9 +24,40 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
       }
     }
     assert_response :success
+    json = JSON.parse(response.body)
 
-    json_response = JSON.parse(response.body)
-    assert_equal true, json_response["success"]
-    assert_equal "user@user.com", json_response["email"]
+    assert_equal "success", json["status"] 
+
+    assert_equal "user@user.com", json["data"]["email"]
+    assert_equal "Bob", json["data"]["name"]
+    assert_equal "CLIENT", json["data"]["role"]
+  end
+
+  # Login succes
+  test "should login with valid crendentials" do
+    post user_session_url, params: {
+      user: {
+        email: @user.email,
+        password: "qwerty"
+      }
+    }
+    assert_response :success
+    json = JSON.parse(response.body)
+
+    assert_equal "success", json["status"]
+
+    assert_equal @user.email, json["data"]["user"]["email"]
+    assert_equal "CLIENT", json["data"]["user"]["role"]
+  end
+
+  # Login error
+  test "should not login with invalid credentials" do
+    post user_session_url, params: {
+      user: {
+        email: @user.email,
+        password: "123456"
+      }
+    }
+    assert_response :unauthorized
   end
 end

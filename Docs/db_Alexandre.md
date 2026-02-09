@@ -13,6 +13,7 @@
 - user_id INT
 - unit_id INT
 - edition_id INT
+<hr>
 
 - FOREIGN KEY (user_id) REFERENCES Users(id)
 - FOREIGN KEY (unit_id) REFERENCES Units(id)
@@ -32,6 +33,7 @@
 - time_walk INT UNSIGNED NOT NULL
 - commission DECIMAL(5, 2) NOT NULL DEFAULT 0.00
 - edition_id INT NOT NULL
+<hr>
 
 - SPATIAL INDEX(coordinates)
 - FOREIGN KEY (edition_id) REFERENCES Editions(id)
@@ -51,39 +53,40 @@
 - parking_cost DECIMAL(10, 2) NOT NULL DEFAULT 0.00
 - food_options SET('None', 'Breakfast', 'Half-board', 'Full-board', 'Restaurant');
 - accomodation_id INT NOT NULL
+<hr>
 
 - FOREIGN KEY (accomodation_id) REFERENCES Accomodations(id)
 - CONSTRAINT chk_quantity CHECK (quantity > 0)
 
 #### Triggers (Alexandre)
 
-CREATE TRIGGER check_hotel_capacity_before_reservation
-BEFORE INSERT ON Reservations
-FOR EACH ROW
-BEGIN
-    DECLARE unit_category ENUM('Camping', 'Hotel');
-    DECLARE unit_room_type ENUM('Simple', 'Double', 'Family');
-    DECLARE max_capacity INT;
+    CREATE TRIGGER check_hotel_capacity_before_reservation
+    BEFORE INSERT ON Reservations
+    FOR EACH ROW
+    BEGIN
+        DECLARE unit_category ENUM('Camping', 'Hotel');
+        DECLARE unit_room_type ENUM('Simple', 'Double', 'Family');
+        DECLARE max_capacity INT;
 
-    SELECT a.category, u.room_type 
-    INTO unit_category, unit_room_type
-    FROM Units u
-    JOIN Accommodations a ON u.accommodation_id = a.id
-    WHERE u.id = NEW.unit_id;
+        SELECT a.category, u.room_type 
+        INTO unit_category, unit_room_type
+        FROM Units u
+        JOIN Accommodations a ON u.accommodation_id = a.id
+        WHERE u.id = NEW.unit_id;
 
-    IF unit_category = 'Hotel' THEN
-        
-        SET max_capacity = CASE unit_room_type
-            WHEN 'Simple' THEN 1
-            WHEN 'Double' THEN 2
-            WHEN 'Family' THEN 6
-            ELSE 0 
-        END;
+        IF unit_category = 'Hotel' THEN
+            
+            SET max_capacity = CASE unit_room_type
+                WHEN 'Simple' THEN 1
+                WHEN 'Double' THEN 2
+                WHEN 'Family' THEN 6
+                ELSE 0 
+            END;
 
-        IF NEW.nb_of_people > max_capacity THEN
-            SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Reservation exceeds hotel room capacity for this room type.';
+            IF NEW.nb_of_people > max_capacity THEN
+                SIGNAL SQLSTATE '45000' 
+                SET MESSAGE_TEXT = 'Reservation exceeds hotel room capacity for this room type.';
+            END IF;
+            
         END IF;
-        
-    END IF;
-END;
+    END;

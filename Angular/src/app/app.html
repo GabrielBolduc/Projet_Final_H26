@@ -1,3 +1,26 @@
+<mat-toolbar color="primary" class="brand-header"> 
+  <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
+  <a [routerLink]="['/']" class="logo-link">
+    <span>Home</span>
+  </a>
 
+  <span class="spacer"></span>
 
-<router-outlet />
+  <div class="header-actions">
+    @if (auth.isLoggedIn()) {
+      <button mat-stroked-button (click)="auth.logout()">
+        <mat-icon>logout</mat-icon>
+        Disconnect
+      </button>
+    } @else {
+      <button mat-flat-button color="accent" routerLink="/">
+        <mat-icon>login</mat-icon>
+        Connect
+      </button>
+    }
+  </div>
+</mat-toolbar>
+
+<main class="content">
+  <router-outlet />
+</main>

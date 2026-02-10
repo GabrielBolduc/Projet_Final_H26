@@ -7,7 +7,8 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
       password: "qwerty", 
       password_confirmation: "qwerty", 
       name: "test", 
-      role: "CLIENT"
+      role: "CLIENT",
+      phone_number: "444-444-4444"
     )
   end
 
@@ -39,7 +40,7 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
       user: {
         email: "test@user.com",
         password: "qwerty",
-        password: "qwerty"
+        password_confirmation: "qwerty"
       }
     }
     assert_response :success

@@ -17,7 +17,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
             id: resource.id,
             email: resource.email,
             name: resource.name,
-            role: resource.role
+            role: resource.role,
+            phone_number: resource.phone_number
           }
         }, status: :ok
       else

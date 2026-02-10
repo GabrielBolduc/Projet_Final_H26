@@ -12,7 +12,7 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
   end
 
   # create
-  test "should sign up a new user" do
+  test "should signup a new user" do
     post user_registration_url, params: {
       user: {
         email: "user@user.com",
@@ -33,7 +33,24 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
     assert_equal "CLIENT", json["data"]["role"]
   end
 
-  # Login succes
+  # create error
+  test "should fail signup with missing info" do 
+    post user_registration_url, params: {
+      user: {
+        email: "test@user.com",
+        password: "qwerty",
+        password: "qwerty"
+      }
+    }
+    assert_response :success
+    json = JSON.parse(response.body)
+
+    assert_equal "error", json["status"]
+    assert_equal 422, json["code"]
+    assert_includes json["errors"].to_s, "Name can't be blank"
+  end
+
+  # Login
   test "should login with valid crendentials" do
     post user_session_url, params: {
       user: {
@@ -58,6 +75,22 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
         password: "123456"
       }
     }
-    assert_response :unauthorized
+    assert_response :success
+    json = JSON.parse(response.body)
+
+    assert_equal "error", json["status"]
+    assert_equal 401, json["code"]
+    assert_equal "Invalid login credentials", json["message"]
+  end
+
+  # Logout
+  test "should logout" do
+    sign_in @user
+
+    delete destroy_user_session_url
+
+    assert_response :success
+    json = JSON.parse(response.body)
+    assert_equal "success", json["status"]
   end
 end

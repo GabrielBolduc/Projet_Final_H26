@@ -17,7 +17,8 @@ class Users::SessionsController < Devise::SessionsController
     }, status: :ok
   end
 
-  def respond_to_on_destroy
+  # * pour accept arguments envoyer par devise 5
+  def respond_to_on_destroy(*)
     render json: {
       status: 'success'
     }, status: :ok

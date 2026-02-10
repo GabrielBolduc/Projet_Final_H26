@@ -42,7 +42,12 @@
         Je suis un expert
     </mat-checkbox>
 
-    
+      @if (is_staff) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Spécialité</mat-label>
+          <input matInput >
+        </mat-form-field>
+      }
 
     <button mat-raised-button color="primary" class="full-width" type="submit" >
       S'inscrire

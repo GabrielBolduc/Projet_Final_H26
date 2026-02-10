@@ -1,7 +1,13 @@
 <mat-card class="auth-card">
   <h2>Créer un compte</h2>
 
-  <form  (ngSubmit)="submit(nameInput.value, emailInput.value, passwordInput.value, phoneInput.value, is_staff)">
+  <form (ngSubmit)="onSubmit(nameInput.value, emailInput.value, passwordInput.value, phoneInput.value, is_staff)">
+
+    @if (error()) {
+    <div id="error">
+        {{ error() }}
+    </div>
+    }
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Nom</mat-label>

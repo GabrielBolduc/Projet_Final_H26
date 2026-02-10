@@ -1,54 +1,129 @@
-import { Injectable, signal, inject, effect, PLATFORM_ID, afterNextRender } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Router } from '@angular/router';
-import { LoginCredentials } from './models/loginCredential';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {User} from './models/user';
+import {LoginCredentials} from './models/loginCredentials';
+import {SignupCredentials} from './models/signupCredentials';
+import {map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
+import {HttpErrorResponse} from '@angular/common/http';
 
-@Injectable({ providedIn: 'root' })
-  export class AuthService {
-    private router = inject(Router);
-    private platformId = inject(PLATFORM_ID);
-    private readonly STORAGE_KEY = 'auth_state';
+@Injectable({
+  providedIn: 'root'
+})
 
-  isLoggedIn = signal(false);
+export class AuthService {
+  private readonly CURRENT_USER_KEY = 'festify.currentUser';
 
-  constructor() {
-    afterNextRender(() => {
-      const savedState = localStorage.getItem(this.STORAGE_KEY) === 'true';
-      if (savedState) {
-        this.isLoggedIn.set(true);
-      }
-    });
+  private _currentUser : User | null = null;
+
+  get currentUser(): User | null {
+    return this._currentUser;
   }
 
-  private SetCurrentUser(isLoggedIn: boolean) {
-    this.isLoggedIn.set(isLoggedIn);
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(this.STORAGE_KEY, String(isLoggedIn));
+  get isLoggedIn(): boolean {
+    return !!this._currentUser;
+  }
+
+  /*get isAdmin(): boolean {
+    //console.log(this._currentUser?.is_admin);
+    return !!this._currentUser?.is_admin;
+  }
+    */
+
+  constructor(private http: HttpClient) {
+    try {
+    const storedCurrentUser = JSON.parse(localStorage.getItem(this.CURRENT_USER_KEY) ?? 'null');
+
+    if (storedCurrentUser) {
+      this._currentUser = new User(storedCurrentUser.id, storedCurrentUser.email, storedCurrentUser.username, storedCurrentUser.telephone, storedCurrentUser.role);
+      //console.log(this._currentUser)
+    }
+    } catch(e) {
+      console.warn('Local storage not available:', e);
     }
   }
 
-  signup(credentials: LoginCredentials): Observable<boolean> {
-    this.SetCurrentUser(true);
-    this.router.navigate(['/']);
-    return new Observable(observer => {
-      observer.next(true);
-      observer.complete();
-    });
+  getUserId(): number | null {
+    return this._currentUser ? this._currentUser.id : null;
   }
 
-  login(credentials: LoginCredentials): Observable<boolean> {
-    this.isLoggedIn.set(true);
-    this.router.navigate(['/']);
-    return new Observable(observer => {
-      observer.next(true);
-      observer.complete();
-    });
+  private setCurrentUser(user: User | null) {
+    this._currentUser = user;
+    localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(user));
   }
 
-  logout() {
-    this.isLoggedIn.set(false);
-    localStorage.removeItem(this.STORAGE_KEY);
-    this.router.navigate(['/']);
+  login(credentials: LoginCredentials): Observable<null | false | User> {
+    return this.http.post('users/sessions', { user: credentials }).pipe(
+      catchError(err => {
+        return err.error.errors;
+      }),
+      map((response: any) => {
+        if (response.success) {
+          try {
+            //console.log(response);
+            //console.log(response.is_admin)
+            const validUser = new User(response.id, response.email, response.username, response.telephone, response.role);
+            //console.log(validUser);
+            this.setCurrentUser(validUser);
+            //console.log(this._currentUser)
+            return validUser;
+          } catch {
+            return false;
+          }
+        } else if (response instanceof HttpErrorResponse) {
+          return false;
+        } else {
+          return null;
+        }
+      })
+    );
+  }
+
+  signup(credentials: SignupCredentials): Observable<null | false | User> {
+    return this.http.post('users/registrations'
+      , {user: credentials}
+    ).pipe(catchError(err => {
+      return err.error.errors;
+    }),
+      map((response: any) => {
+        if (response.success) {
+          try {
+            const validUser = new User(response.id,response.email, response.username, response.telephone, response.role);
+            this.setCurrentUser(validUser)
+            return validUser
+          } catch {
+            return false;
+          }
+        } else if (response instanceof HttpErrorResponse) {
+          return false;
+        } else {
+          return null;
+        }
+      })
+    )
+  }
+
+  logOut() {
+    
+    return this.http.delete('users/sign_out').pipe(map((response: any) => {
+      //console.log("logOut", response);
+      if (response.success) {
+        
+        try {
+          this.setCurrentUser(null);
+          return true
+        } catch {
+          return false;
+        }
+      } else {
+        
+        return null;
+      }
+    }))
+  }
+
+  getCurrentUser(): User | null {
+    return this._currentUser;
   }
 }

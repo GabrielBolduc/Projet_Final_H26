@@ -10,7 +10,7 @@ import { Router, RouterLink } from "@angular/router";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { AuthService } from '../../auth.service';
-import { LoginCredentials } from '../../models/loginCredential';
+import { SignupCredentials } from '../../models/signupCredentials';
 
 @Component({
   selector: 'app-signup',
@@ -31,8 +31,8 @@ export class Signup {
 
   constructor(private authService: AuthService) {}
 
-  submit(name: string, email: string, password: string, phone: string, is_staff: boolean) {
-    const credentials: LoginCredentials = { email, password };
+  onSubmit(name: string, email: string, password: string, phone: string, is_staff: boolean) {
+    const credentials: SignupCredentials = { email, password, name, phone, is_staff };
     
     this.auth.signup(credentials).subscribe(success => {
       if (success) {

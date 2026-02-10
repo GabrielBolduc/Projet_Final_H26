@@ -10,8 +10,11 @@ class Users::SessionsController < Devise::SessionsController
       status: 'success',
       data: {
         user: {
+          id: resource.id,
           email: resource.email,
-          role: resource.role
+          role: resource.role,
+          name: resource.name,
+          phone_number: resource.phone_number
         }
       }
     }, status: :ok

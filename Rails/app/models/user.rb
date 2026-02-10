@@ -5,10 +5,14 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   validates :name, presence: true
-  validates :role, presence: true, inclusion: {in: %w(CLIENT STAFF ADMIN)}
+  validates :role, presence: true
+  validates :phone_number, presence: true
 
+  # role par default
   after_initialize :set_default_role, if: :new_record?
+  # sync role et type (sti)
   before_validation :set_type_from_role
+
   before_save :sync_role_from_type
 
   private

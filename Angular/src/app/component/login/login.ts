@@ -8,6 +8,9 @@ import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from "@angular/router";
 
+import { AuthService } from '../../auth.service';
+import { UserCredentials } from '../../models/loginCredential';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',

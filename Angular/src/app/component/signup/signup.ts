@@ -9,6 +9,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from "@angular/router";
 import { MatCheckboxModule } from '@angular/material/checkbox';
 
+import { AuthService } from '../../auth.service';
+import { UserCredentials } from '../../models/loginCredential';
+
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.html',

@@ -7,6 +7,15 @@
   <span class="spacer"></span>
 
   <div class="header-actions">
+    <a [routerLink]="['/hospitality']" class="logo-link">
+      <span>Hospitality</span>
+    </a>
+    <a [routerLink]="['/ticketing']" class="logo-link">
+      <span>Ticketing</span>
+    </a>
+    <a class="logo-link">
+      <span>FR</span>
+    </a>
     @if (auth.isLoggedIn()) {
       <button mat-stroked-button (click)="auth.logout()">
         <mat-icon>logout</mat-icon>

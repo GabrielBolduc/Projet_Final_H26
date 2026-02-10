@@ -11,6 +11,12 @@
   transition: box-shadow 0.2s ease-in-out;
 }
 
+.header-actions {
+  display: flex; 
+  align-items: center; 
+  gap: 20px; 
+}
+
 .toolbar-logo {
   height: 50px; 
   width: auto; 
@@ -32,6 +38,10 @@
 
 .content {
   padding: 20px;
+}
+
+.header-actions {
+  justify-content: space-between;
 }
 
 button mat-icon {

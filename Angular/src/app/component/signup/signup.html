@@ -17,7 +17,7 @@
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Téléphone</mat-label>
-      <input matInput  type="tel" placeholder="+33 6 12 34 56 78">
+      <input matInput  type="tel" >
       <mat-error >Numéro invalide</mat-error>
     </mat-form-field>
 
@@ -39,7 +39,7 @@
     </mat-form-field>
 
     <mat-checkbox [checked]="is_staff" >
-        Je suis un expert
+        Je suis un membre du staff
     </mat-checkbox>
 
       @if (is_staff) {

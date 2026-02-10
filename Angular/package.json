@@ -5,9 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:rails": "ng build && cp -a ../Rails/public/browser/. ../Rails/public/ && rm -rf ../Rails/public/browser",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "serve:ssr:Angular": "node dist/Angular/server/server.mjs"
+    "test": "ng test"
   },
   "prettier": {
     "printWidth": 100,

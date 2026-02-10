@@ -11,7 +11,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../auth.service';
-import { SignupCredentials } from '../../models/signupCredentials';
+import { SignupCredentials } from '../../models/signupCredential';
 
 @Component({
   selector: 'app-signup',
@@ -32,6 +32,7 @@ import { SignupCredentials } from '../../models/signupCredentials';
 export class Signup {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
+  private readonly fb = inject(FormBuilder);
 
   error = signal<string | null>(null);
   hidePassword = true;
@@ -40,15 +41,46 @@ export class Signup {
 
   constructor(private authService: AuthService, private translate: TranslateService) {}
 
-  onSubmit(name: string, email: string, password: string, phone: string, is_staff: boolean) {
-    const credentials: SignupCredentials = { email, password, name, phone, is_staff };
-    
-    this.auth.signup(credentials).subscribe(success => {
-      if (success) {
-          this.router.navigate(['/']);
-      } else {
-          this.error.set('Impossible de créer le compte');
+  signupForm = this.fb.group({
+    name: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+    password_confirmation: ['', [Validators.required]],
+    phone_number: ['', [Validators.required]],
+    role: ['']
+  });
+
+  submit() {
+      console.log('Angular is handling the signup!');
+      
+      if (this.signupForm.valid) {
+        // 1. Extract values. Cast to string to ensure types.
+        const val = this.signupForm.value;
+        const credentials = {
+          email: val.email as string,
+          name: val.name as string,
+          password: val.password as string,
+          password_confirmation: val.password_confirmation as string,
+          phone_number: val.phone_number as string,
+          role: val.role as 'CLIENT'
+        };
+
+        // 2. Call the service
+        this.auth.signup(credentials).subscribe({
+          next: (success) => {
+            if (success) {
+              console.log('Signup successful!');
+              this.router.navigate(['/']); // Redirect to home on success
+            } else {
+              // Handle specific Rails validation errors if needed, or a generic message
+              this.error.set('Erreur lors de l\'inscription. Vérifiez les champs.');
+            }
+          },
+          error: (err) => {
+            console.error(err);
+            this.error.set('Une erreur technique est survenue.');
+          }
+        });
       }
-    });
+    }
   }
-}

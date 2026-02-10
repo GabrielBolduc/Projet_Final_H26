@@ -1,7 +1,7 @@
 <mat-card class="auth-card">
   <h2>{{ 'AUTH.LOGIN_TITLE' | translate }}</h2>
 
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="loginForm" (ngSubmit)="submit()">
 
     @if (error()) {
       <div id="error">{{ error() }}</div>

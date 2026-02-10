@@ -1,13 +1,16 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
 import { AuthService } from '../../auth.service';
+import { LoginCredentials } from '../../models/loginCredential';
 
 @Component({
   selector: 'app-login',
@@ -25,10 +28,13 @@ import { AuthService } from '../../auth.service';
   ]
 
 })
+
 export class Login {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
   private readonly fb = inject(FormBuilder);
+
+  constructor(private translate: TranslateService) {}
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -38,12 +44,8 @@ export class Login {
   error = signal<string | null>(null);
   hidePassword = true;
 
-  constructor(private translate: TranslateService) {}
-
-  onSubmit() {
+  submit() {
     console.log('Angular is handling the submit!');
-
-    console.log('Form values:', this.loginForm.value);
     
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;

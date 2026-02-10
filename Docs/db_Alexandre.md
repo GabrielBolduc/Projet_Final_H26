@@ -12,12 +12,12 @@
 - reservation_name VARCHAR(250) NOT NULL
 - user_id INT
 - unit_id INT
-- edition_id INT
+- festival_id INT
 <hr>
 
 - FOREIGN KEY (user_id) REFERENCES Users(id)
 - FOREIGN KEY (unit_id) REFERENCES Units(id)
-- FOREIGN KEY (edition_id) REFERENCES Editions(id)
+- FOREIGN KEY (festival_id) REFERENCES Festivals(id)
 - CONSTRAINT chk_dates CHECK (arrival_date < departure_date)
 - CONSTRAINT chk_guests CHECK (nb_of_people > 0)
 
@@ -32,18 +32,17 @@
 - time_car INT UNSIGNED NOT NULL
 - time_walk INT UNSIGNED NOT NULL
 - commission DECIMAL(5, 2) NOT NULL DEFAULT 0.00
-- edition_id INT NOT NULL
+- festival_id INT NOT NULL
 <hr>
 
 - SPATIAL INDEX(coordinates)
-- FOREIGN KEY (edition_id) REFERENCES Editions(id)
+- FOREIGN KEY (festival_id) REFERENCES Festivals(id)
 - CONSTRAINT chk_commission CHECK (commission >= 0 AND commission <= 100)
 
 #### Units (STI)
 
 - id INT PRIMARY KEY
 - person_per_night_cost DECIMAL(10, 2) NOT NULL
-- type VARCHAR(255) NOT NULL
 - room_type ENUM('Simple','Double','Family')
 - terrain_type ENUM('Small', 'Standard', 'Deluxe')
 - quantity INT NOT NULL

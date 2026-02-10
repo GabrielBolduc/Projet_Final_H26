@@ -53,7 +53,10 @@
       S'inscrire
     </button>
   </form>
-  <button mat-raised-button color="primary" class="full-width" type="submit" [routerLink]="['/']" >
+  <div class="auth-footer">
+    <span>Déjà un compte ?</span>
+    <a mat-button color="accent" [routerLink]="['/login']">
       Se connecter
-  </button>
+    </a>
+  </div>
 </mat-card>

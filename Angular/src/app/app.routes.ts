@@ -3,12 +3,13 @@ import { Login } from './component/login/login';
 import { Signup } from './component/signup/signup'; 
 import { Notfound } from './component/notfound/notfound';
 import path from 'path';
+import { Home } from './component/home/home';
 
 export const routes: Routes = [
 
 {
     path: '',
-    component: Login
+    component: Home
 },
 {
     path: 'signup',
@@ -16,9 +17,12 @@ export const routes: Routes = [
 
 },
 {
+    path: 'login',
+    component: Login
+},
+{
     path: '**',
     component: Notfound
 }
-
 
 ];

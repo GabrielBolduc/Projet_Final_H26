@@ -16,7 +16,7 @@
     <a (click)="toggleLanguage()" class="logo-link" style="cursor: pointer;">
       <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
     </a>
-    @if (auth.isLoggedIn()) {
+    @if (auth.isLoggedIn) {
       <button mat-stroked-button (click)="auth.logOut()">
         <mat-icon>logout</mat-icon>
         {{ 'AUTH.LOGOUT' | translate }}

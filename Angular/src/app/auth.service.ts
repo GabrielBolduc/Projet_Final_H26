@@ -22,7 +22,13 @@ export class AuthService {
       const stored = localStorage.getItem(this.CURRENT_USER_KEY);
       if (stored) {
         const p = JSON.parse(stored);
-        this._currentUser = new User(p.id || 0, p.email, p.username || '', p.telephone || '', p.role);
+        this._currentUser = new User(
+          p.id || 0, 
+          p.email, 
+          p.name || '', 
+          p.phone_number || '', 
+          p.role
+        );
       }
     } catch (e) { console.warn(e); }
   }
@@ -30,16 +36,28 @@ export class AuthService {
   login(credentials: LoginCredentials): Observable<User | boolean> {
     return this.http.post<any>('users/sign_in', { user: credentials }).pipe(
       map(response => {
-        if (response.status === 'success' && response.data && response.data.user) {
-          const data = response.data.user;
-          const user = new User(0, data.email, '', '', data.role);
+        if (response.status === 'error') {
+          return false;
+        }
+
+        if (response.status === 'success' && response.data) {
+          const data = response.data;
+          
+          const user = new User(
+            data.id, 
+            data.email, 
+            data.name, 
+            data.phone_number,
+            data.role
+          );
+          
           this.setCurrentUser(user);
           return user;
         }
         return false;
       }),
       catchError(error => {
-        console.error('Login Error:', error);
+        console.error('Login Failed:', error);
         return of(false);
       })
     );
@@ -49,12 +67,20 @@ export class AuthService {
     return this.http.post<any>('users', { user: credentials }).pipe(
       map(response => {
         if (response.status === 'error') {
-          console.warn('Validation error:', response.errors);
           return false;
         }
+
         if (response.status === 'success' && response.data) {
           const data = response.data;
-          const user = new User(data.id, data.email, data.name, '', data.role);
+          
+          const user = new User(
+            data.id, 
+            data.email, 
+            data.name, 
+            '', 
+            data.role
+          );
+          
           this.setCurrentUser(user);
           return user;
         }

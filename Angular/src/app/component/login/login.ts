@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -6,10 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 import { AuthService } from '../../auth.service';
-import { UserCredentials } from '../../models/loginCredential';
+import { LoginCredentials } from '../../models/loginCredential';
 
 @Component({
   selector: 'app-login',
@@ -18,14 +18,27 @@ import { UserCredentials } from '../../models/loginCredential';
   imports: [RouterLink,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule, MatCardModule]
 })
 export class Login {
+  private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
+
+  error = signal<string | null>(null);
   hidePassword = true;
+  
+  constructor(private authService: AuthService) {}
+  
+  submit(email: string, password: string) {
+    const credentials: LoginCredentials = { email, password };
 
-  constructor() {}
-  
-  
-  
-
-  submit() {
-    // Handle login logic here
+    console.log('Attempting login with credentials:', credentials);
+    
+    this.auth.login(credentials).subscribe(success => {
+      if (success) {
+          console.log('Login successful');
+          this.router.navigate(['/']);
+      } else {
+          console.log('Login failed');
+          this.error.set('Identifiants invalides');
+      }
+    });
   }
 }

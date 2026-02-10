@@ -1,16 +1,23 @@
 <mat-card class="auth-card">
   <h2>Connexion</h2>
 
-  <form  (ngSubmit)="submit()">
+  <form  (ngSubmit)="submit(emailInput.value, passwordInput.value)">
+
+    @if (error()) {
+    <div id="error">
+        {{ error() }}
+    </div>
+    }
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Email</mat-label>
-      <input matInput type="email">
+      <input #emailInput matInput type="email">
       <mat-error >Email invalide</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Mot de passe</mat-label>
-      <input matInput  [type]="hidePassword ? 'password' : 'text'">
+      <input #passwordInput matInput  [type]="hidePassword ? 'password' : 'text'">
       <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
         <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>

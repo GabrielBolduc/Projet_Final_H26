@@ -1,9 +1,9 @@
-export class UserCredentials {
+export class LoginCredentials {
     readonly email: string
     readonly password: string
 
-    constructor(value: { username: string, password: string }) {
-        this.email = value.username.toLowerCase()
+    constructor(value: { email: string, password: string }) {
+        this.email = value.email.toLowerCase()
         this.password = value.password
     }
 

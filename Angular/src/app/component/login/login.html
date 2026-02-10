@@ -1,9 +1,5 @@
 <mat-card class="auth-card">
-  <h2>Connexion</h2>
-
-  <button mat-icon-button class="back-button" routerLink="/">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
+  <h2>{{ 'AUTH.LOGIN_TITLE' | translate }}</h2>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
@@ -12,28 +8,28 @@
     }
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'AUTH.EMAIL_LABEL' | translate }}</mat-label>
       <input matInput type="email" formControlName="email">
       @if (loginForm.get('email')?.hasError('email')) {
-        <mat-error>Email invalide</mat-error>
+        <mat-error>{{ 'AUTH.EMAIL_ERROR' | translate }}</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Mot de passe</mat-label>
+      <mat-label>{{ 'AUTH.PASSWORD_LABEL' | translate }}</mat-label>
       <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
       <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
         <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" class="full-width" type="button" (click)="onSubmit()">
-      Se connecter
+    <button mat-raised-button color="primary" class="full-width" type="submit">
+      {{ 'AUTH.LOGIN' | translate }}
     </button>
   </form>
 
   <div class="auth-footer">
-    <span>Pas encore de compte ?</span>
-    <a mat-button color="accent" [routerLink]="['/signup']">S'inscrire</a>
+     <span>{{ 'AUTH.NO_ACCOUNT' | translate }}</span>
+    <a mat-button color="accent" [routerLink]="['/signup']">{{ 'AUTH.SIGNUP_LINK' | translate }}</a>
   </div>
 </mat-card>

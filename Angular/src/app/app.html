@@ -1,21 +1,30 @@
 <mat-toolbar color="primary" class="brand-header"> 
   <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
   <a [routerLink]="['/']" class="logo-link">
-    <span>Home</span>
+    <span>{{ 'NAV.HOME' | translate }}</span>
   </a>
 
   <span class="spacer"></span>
 
   <div class="header-actions">
-    @if (auth.isLoggedIn) {
+    <a [routerLink]="['/hospitality']" class="logo-link">
+      <span>{{ 'NAV.HOSPITALITY' | translate }}</span>
+    </a>
+    <a [routerLink]="['/ticketing']" class="logo-link">
+      <span>{{ 'NAV.TICKETING' | translate }}</span>
+    </a>
+    <a (click)="toggleLanguage()" class="logo-link" style="cursor: pointer;">
+      <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
+    </a>
+    @if (auth.isLoggedIn()) {
       <button mat-stroked-button (click)="auth.logOut()">
         <mat-icon>logout</mat-icon>
-        Disconnect
+        {{ 'AUTH.LOGOUT' | translate }}
       </button>
     } @else {
       <button mat-flat-button color="accent" routerLink="/login">
         <mat-icon>login</mat-icon>
-        Connect
+        {{ 'AUTH.LOGIN' | translate }}
       </button>
     }
   </div>

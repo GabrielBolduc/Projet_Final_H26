@@ -6,22 +6,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { Router, RouterLink } from "@angular/router";
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
-  standalone: true,
   imports: [
-    ReactiveFormsModule,
     RouterLink,
     MatFormFieldModule, 
     MatInputModule, 
     MatButtonModule, 
+    ReactiveFormsModule, 
     MatIconModule, 
-    MatCardModule
+    MatCardModule,
+    TranslateModule
   ]
+
 })
 export class Login {
   private readonly router = inject(Router);
@@ -36,8 +38,12 @@ export class Login {
   error = signal<string | null>(null);
   hidePassword = true;
 
+  constructor(private translate: TranslateService) {}
+
   onSubmit() {
     console.log('Angular is handling the submit!');
+
+    console.log('Form values:', this.loginForm.value);
     
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;

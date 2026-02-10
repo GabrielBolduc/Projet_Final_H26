@@ -7,3 +7,29 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+User.destroy_all
+
+Client.create!(
+    email: "client@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Client #1",
+    phone_number: "555-555-5555"
+)
+
+Admin.create!(
+    email: "admin@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Admin",
+    phone_number: "222-222-2222"
+)
+
+Staff.create!(
+    email: "staff@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Staff #1",
+    phone_number: "666-666-6666"
+)

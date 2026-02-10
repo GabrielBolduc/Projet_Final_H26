@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AuthService } from '../../auth.service';
 import { SignupCredentials } from '../../models/signupCredentials';
@@ -16,7 +17,17 @@ import { SignupCredentials } from '../../models/signupCredentials';
   selector: 'app-signup',
   templateUrl: './signup.html',
   styleUrls: ['./signup.css'],
-  imports: [MatCheckboxModule,MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatIconModule, MatCardModule, RouterLink]
+  imports: [
+    MatCheckboxModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatButtonModule, 
+    ReactiveFormsModule, 
+    MatIconModule, 
+    MatCardModule, 
+    RouterLink,
+    TranslateModule
+  ]
 })
 export class Signup {
   private readonly router = inject(Router);
@@ -27,9 +38,7 @@ export class Signup {
   hideConfirmPassword = true;
   is_staff = false;
 
- 
-
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private translate: TranslateService) {}
 
   onSubmit(name: string, email: string, password: string, phone: string, is_staff: boolean) {
     const credentials: SignupCredentials = { email, password, name, phone, is_staff };

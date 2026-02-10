@@ -1,68 +1,61 @@
 <mat-card class="auth-card">
-  <h2>Créer un compte</h2>
+  <h2>{{ 'AUTH.SIGNUP_TITLE' | translate }}</h2>
 
   <form (ngSubmit)="onSubmit(nameInput.value, emailInput.value, passwordInput.value, phoneInput.value, is_staff)">
-
-    @if (error()) {
-    <div id="error">
-        {{ error() }}
-    </div>
-    }
-
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nom</mat-label>
-      <input #nameInput matInput type="name" >
-      <mat-error >Nom requis</mat-error>
+      <mat-label>{{ 'AUTH.NAME_LABEL' | translate }}</mat-label>
+      <input matInput #nameInput>
+      <mat-error>{{ 'AUTH.NAME_ERROR' | translate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input #emailInput matInput  type="email">
-      <mat-error >Email invalide</mat-error>
+      <mat-label>{{ 'AUTH.EMAIL_LABEL' | translate }}</mat-label>
+      <input matInput type="email" #emailInput>
+      <mat-error>{{ 'AUTH.EMAIL_ERROR' | translate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Téléphone</mat-label>
-      <input #phoneInput matInput  type="tel" >
-      <mat-error >Numéro invalide</mat-error>
+      <mat-label>{{ 'AUTH.PHONE_LABEL' | translate }}</mat-label>
+      <input matInput type="tel" #phoneInput placeholder="+33 6 12 34 56 78">
+      <mat-error>{{ 'AUTH.PHONE_ERROR' | translate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Mot de passe</mat-label>
-      <input #passwordInput matInput [type]="hidePassword ? 'password' : 'text'" >
+      <mat-label>{{ 'AUTH.PASSWORD_LABEL' | translate }}</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" #passwordInput>
       <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
         <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Confirmer le mot de passe</mat-label>
-      <input #confirmPasswordInput matInput [type]="hideConfirmPassword ? 'password' : 'text'" >
+      <mat-label>{{ 'AUTH.CONFIRM_PASSWORD_LABEL' | translate }}</mat-label>
+      <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" #confirmPasswordInput>
       <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
         <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>
-     
     </mat-form-field>
 
-    <mat-checkbox [checked]="is_staff" >
-        Je suis un membre du staff
+    <mat-checkbox [checked]="is_staff" class="checkbox">
+      {{ 'AUTH.IS_EXPERT' | translate }}
     </mat-checkbox>
 
-      @if (is_staff) {
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Spécialité</mat-label>
-          <input matInput >
-        </mat-form-field>
-      }
+    @if (is_staff) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'AUTH.SPECIALTY_LABEL' | translate }}</mat-label>
+        <input matInput #specialtyInput>
+      </mat-form-field>
+    }
 
-    <button mat-raised-button color="primary" class="full-width" type="submit" >
-      S'inscrire
+    <button mat-flat-button color="primary" class="full-width" type="submit">
+      {{ 'AUTH.SUBMIT_SIGNUP' | translate }}
     </button>
   </form>
+
   <div class="auth-footer">
-    <span>Déjà un compte ?</span>
+    <span>{{ 'AUTH.ALREADY_ACCOUNT' | translate }}</span>
     <a mat-button color="accent" [routerLink]="['/login']">
-      Se connecter
+      {{ 'AUTH.LOGIN_LINK' | translate }}
     </a>
   </div>
 </mat-card>

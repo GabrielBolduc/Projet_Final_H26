@@ -1,16 +1,16 @@
 <mat-card class="auth-card">
-  <h2>Connexion</h2>
+  <h2>{{ 'AUTH.LOGIN_TITLE' | translate }}</h2>
 
   <form  (ngSubmit)="submit()">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'AUTH.EMAIL_LABEL' | translate }}</mat-label>
       <input matInput type="email">
-      <mat-error >Email invalide</mat-error>
+      <mat-error>{{ 'AUTH.EMAIL_ERROR' | translate }}</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Mot de passe</mat-label>
-      <input matInput  [type]="hidePassword ? 'password' : 'text'">
+      <mat-label>{{ 'AUTH.PASSWORD_LABEL' | translate }}</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'">
       <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
         <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>
@@ -19,13 +19,13 @@
 
   
     <button mat-flat-button color="accent" class="full-width" type="submit">
-      Se connecter
+      {{ 'AUTH.LOGIN' | translate }}
     </button>
   </form>
   <div class="auth-footer">
-    <span>Pas encore de compte ?</span>
+    <span>{{ 'AUTH.NO_ACCOUNT' | translate }}</span>
     <a mat-button color="accent" [routerLink]="['/signup']">
-      S'inscrire
+      {{ 'AUTH.SIGNUP_LINK' | translate }}
     </a>
   </div>
 </mat-card>

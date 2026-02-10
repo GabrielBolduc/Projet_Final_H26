@@ -38,11 +38,25 @@
      
     </mat-form-field>
 
+    <mat-checkbox [checked]="is_staff" >
+        Je suis un expert
+    </mat-checkbox>
+
+      @if (is_staff) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Spécialité</mat-label>
+          <input matInput >
+        </mat-form-field>
+      }
+
     <button mat-raised-button color="primary" class="full-width" type="submit" >
       S'inscrire
     </button>
   </form>
-  <button mat-raised-button color="primary" class="full-width" type="submit" [routerLink]="['/']" >
+  <div class="auth-footer">
+    <span>Déjà un compte ?</span>
+    <a mat-button color="accent" [routerLink]="['/login']">
       Se connecter
-  </button>
+    </a>
+  </div>
 </mat-card>

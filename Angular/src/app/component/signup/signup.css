@@ -2,12 +2,18 @@
   max-width: 400px;
   margin: 5rem auto;
   padding: 2rem;
+  background-color: white;
 }
 
 .full-width {
   width: 100%;
 
   margin-bottom: 10px;
+}
+
+.checkbox {
+  margin-bottom: 10px;
+  margin-top: -10px;
 }
 
 h2 {

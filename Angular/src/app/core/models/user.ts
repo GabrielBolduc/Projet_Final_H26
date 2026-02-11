@@ -16,10 +16,6 @@ export class User {
     this.email = email;
     this.name = name;
     this.phone_number = phone_number;
-    
-    // 👇 LA CORRECTION EST ICI
-    // On utilise '?.' pour éviter le crash si 'role' est vide
-    // On utilise '||' pour mettre 'CLIENT' par défaut si le rôle est manquant
     this.role = (role?.toUpperCase() || 'CLIENT') as 'ADMIN' | 'STAFF' | 'CLIENT';
   }
 

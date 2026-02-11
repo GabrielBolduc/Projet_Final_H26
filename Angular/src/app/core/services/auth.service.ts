@@ -50,6 +50,33 @@ export class AuthService {
     );
   }
 
+        if (response.status === 'success' && response.data?.user) {
+          const userData = response.data.user;
+          const user = new User(
+            userData.id,
+            userData.email,
+            userData.name,
+            userData.phone_number,
+            userData.role || 'CLIENT'
+          );
+
+          this.isLoggedIn.set(true);
+          this.currentUser.set(user);
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+          
+          return true; 
+        }
+        
+        return false;
+      }),
+      
+      catchError(error => {
+        console.error('Erreur réseau ou serveur :', error);
+        return of(false);
+      })
+    );
+  }
+  
   logout() {
     this.http.delete(`${this.API_URL}/sign_out`).subscribe();
     this.isLoggedIn.set(false);

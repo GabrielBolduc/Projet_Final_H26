@@ -3,7 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  
+
   validates :name, presence: true
   validates :role, presence: true
   validates :phone_number, presence: true
@@ -18,7 +18,7 @@ class User < ApplicationRecord
   private
 
   def set_default_role
-    self.role ||= 'CLIENT'
+    self.role ||= "CLIENT"
   end
 
   def set_type_from_role

@@ -33,7 +33,7 @@ module Projet
 
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use ActionDispatch::Session::CookieStore
-    
-    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
+
+    config.railties_order = [ ActiveStorage::Engine, :main_app, :all ]
   end
 end

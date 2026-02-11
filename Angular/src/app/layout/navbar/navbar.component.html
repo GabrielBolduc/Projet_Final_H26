@@ -17,14 +17,18 @@
     <a (click)="toggleLanguage()" class="logo-link" style="cursor: pointer;">
       <span>{{ translate.currentLang === 'en' ? 'FR' : 'EN' }}</span>
     </a>
-
-   
     
-    
+      @if (auth.isLoggedIn()) {
+      <button mat-stroked-button (click)="auth.logout()">
+        <mat-icon>logout</mat-icon>
+        Disconnect
+      </button>
+    } @else {
       <button mat-flat-button color="accent" routerLink="/login">
         <mat-icon>login</mat-icon>
-        {{ 'AUTH.LOGIN' | translate }}
+        Connect
       </button>
+    }
     
   </div>
 </mat-toolbar>

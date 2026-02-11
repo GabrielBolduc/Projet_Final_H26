@@ -28,4 +28,9 @@ export class NavbarComponent {
     const targetLang = current === 'en' ? 'fr' : 'en';
     this.translate.use(targetLang);
   }
+  onLogout() {
+    this.auth.logout();
+  }
+
+
 }

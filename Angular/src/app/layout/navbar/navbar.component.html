@@ -19,7 +19,7 @@
     </a>
     
       @if (auth.isLoggedIn()) {
-      <button mat-stroked-button (click)="auth.logout()">
+      <button mat-flat-button color="accent" (click)="auth.logout()">
         <mat-icon>logout</mat-icon>
         Disconnect
       </button>

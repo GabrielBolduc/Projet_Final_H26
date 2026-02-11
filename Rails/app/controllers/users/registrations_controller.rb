@@ -7,12 +7,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
     build_resource(sign_up_params)
     resource.save
     yield resource if block_given?
-    
+
     if resource.persisted?
       if resource.active_for_authentication?
         sign_up(resource_name, resource)
         render json: {
-          status: 'success',
+          status: "success",
           data: {
             id: resource.id,
             email: resource.email,
@@ -24,7 +24,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       else
         expire_data_after_sign_in!
         render json: {
-          status: 'success',
+          status: "success",
           data: {
             email: resource.email
           }
@@ -35,8 +35,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       set_minimum_password_length
       # si erreur de validation (ex: mot de passe trop court, email utilise)
       render json: {
-        status: 'error',
-        message: 'validation failed',
+        status: "error",
+        message: "validation failed",
         errors: resource.errors.full_messages,
         code: 422 # Unprocessable entity
       }, status: :ok

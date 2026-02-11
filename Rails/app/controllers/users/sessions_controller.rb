@@ -7,7 +7,7 @@ class Users::SessionsController < Devise::SessionsController
     self.resource = warden.authenticate!(auth_options)
     sign_in(resource_name, resource)
     render json: {
-      status: 'success',
+      status: "success",
       data: {
         user: {
           id: resource.id,
@@ -23,7 +23,7 @@ class Users::SessionsController < Devise::SessionsController
   # * pour accept arguments envoyer par devise 5
   def respond_to_on_destroy(*)
     render json: {
-      status: 'success'
+      status: "success"
     }, status: :ok
   end
 end

@@ -1,37 +1,49 @@
 import { Routes } from '@angular/router';
-import { Login } from './component/login/login';
-import { Signup } from './component/signup/signup'; 
-import { Notfound } from './component/notfound/notfound';
-import path from 'path';
-import { Home } from './component/home/home';
-import { Hospitality } from './component/hospitality/hospitality';
-import { Ticketing } from './component/ticketing/ticketing';
+import { Login } from './features/auth/login/login';
+import { Signup } from './features/auth/signup/signup'; 
+import { Notfound } from './core/notfound/notfound';
+import { Home } from './features/home/home';
+import { Hospitality } from './features/hospitality/hospitality';
+import { Ticketing } from './features/ticketing/ticketing';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 
 export const routes: Routes = [
+    {
+        path: '',
+        component: MainLayoutComponent, 
+        children: [
+            {
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full'
+            },
+            
+            {
+                path: 'home',
+                component: Home
+            },
+            {
+                path: 'hospitality',
+                component: Hospitality
+            },
+            {
+                path: 'ticketing',
+                component: Ticketing
+            },
 
-{
-    path: '',
-    component: Home
-},
-{
-    path: 'hospitality',
-    component: Hospitality
-},
-{
-    path: 'ticketing',
-    component: Ticketing
-},
-{
-    path: 'signup',
-    component: Signup
-},
-{
-    path: 'login',
-    component: Login
-},
-{
-    path: '**',
-    component: Notfound
-}
+            {
+                path: 'login',
+                component: Login
+            },
+            {
+                path: 'signup',
+                component: Signup
+            },
 
+            {
+                path: '**',
+                component: Notfound
+            }
+        ]
+    }
 ];

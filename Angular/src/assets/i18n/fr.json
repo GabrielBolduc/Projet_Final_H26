@@ -23,6 +23,8 @@
     "NO_ACCOUNT": "Pas encore de compte ?",
     "SIGNUP_LINK": "S'inscrire",
     "ALREADY_ACCOUNT": "Déjà un compte ?",
-    "LOGIN_LINK": "Se connecter"
+    "LOGIN_LINK": "Se connecter",
+    "EMAIL_REQUIRED": "Email requis",
+    "PASSWORD_REQUIRED": "Mot de passe requis"
   }
 }

@@ -12,7 +12,7 @@ class Users::SessionsController < Devise::SessionsController
         user: {
           id: resource.id,
           email: resource.email,
-          role: resource.role,
+          role: resource.type,
           name: resource.name,
           phone_number: resource.phone_number
         }

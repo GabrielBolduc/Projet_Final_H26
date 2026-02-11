@@ -15,7 +15,7 @@
     </a>
     
     <a (click)="toggleLanguage()" class="logo-link" style="cursor: pointer;">
-      <span>{{ translate.currentLang === 'en' ? 'FR' : 'EN' }}</span>
+      <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
     </a>
     
       @if (auth.isLoggedIn()) {

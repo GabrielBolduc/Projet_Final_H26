@@ -53,8 +53,8 @@
   - [STAGE] : UPDATE CASCADE, DELETE RESTRICT.
 
 **Validations:**
-  - [start_time] : DATETIME requis. Doit être inclus dans les dates du [FESTIVAL].
-  - [end_time] : DATETIME requis. Doit être strictement postérieur à [start_time].
+  - [start_time] : DATETIME requis. Doit etre inclus dans les dates du [FESTIVAL].
+  - [end_time] : DATETIME requis. Doit etre strictement apres [start_time].
   - [price] : Décimal positif ou nul (>= 0.00).
-  - [LOGIQUE MÉTIER] : Trigger (Intégrité Temporelle) - Un [stage_id] ne peut pas avoir de chevauchement d'horaire.
-  - [LOGIQUE MÉTIER] : Validation Applicative - Un [artist_id] ne peut pas jouer à deux endroits en même temps.
+  - [LOGIQUE MÉTIER] : Trigger. Un [stage_id] ne peut pas avoir de chevauchement d'horaire.
+  - [LOGIQUE MÉTIER] : Validation. Un [artist_id] ne peut pas jouer a deux endroits en meme temps.

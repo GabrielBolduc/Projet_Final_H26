@@ -1,0 +1,34 @@
+<mat-toolbar color="primary" class="brand-header"> 
+  <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
+  <a [routerLink]="['/']" class="logo-link">
+    <span>{{ 'NAV.HOME' | translate }}</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <div class="header-actions">
+    <a [routerLink]="['/hospitality']" class="logo-link">
+      <span>{{ 'NAV.HOSPITALITY' | translate }}</span>
+    </a>
+    <a [routerLink]="['/ticketing']" class="logo-link">
+      <span>{{ 'NAV.TICKETING' | translate }}</span>
+    </a>
+    
+    <a (click)="toggleLanguage()" class="logo-link" style="cursor: pointer;">
+      <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
+    </a>
+    
+      @if (auth.isLoggedIn()) {
+      <button mat-flat-button color="accent" (click)="auth.logout()">
+        <mat-icon>logout</mat-icon>
+        Disconnect
+      </button>
+    } @else {
+      <button mat-flat-button color="accent" routerLink="/login">
+        <mat-icon>login</mat-icon>
+        Connect
+      </button>
+    }
+    
+  </div>
+</mat-toolbar>

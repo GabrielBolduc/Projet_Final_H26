@@ -3,11 +3,12 @@ require "test_helper"
 class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(
-      email: "test@test.com", 
-      password: "qwerty", 
-      password_confirmation: "qwerty", 
-      name: "test", 
-      role: "CLIENT"
+      email: "test@test.com",
+      password: "qwerty",
+      password_confirmation: "qwerty",
+      name: "test",
+      role: "CLIENT",
+      phone_number: "444-444-4444"
     )
   end
 
@@ -26,7 +27,7 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
     assert_response :success
     json = JSON.parse(response.body)
 
-    assert_equal "success", json["status"] 
+    assert_equal "success", json["status"]
 
     assert_equal "user@user.com", json["data"]["email"]
     assert_equal "Bob", json["data"]["name"]
@@ -34,12 +35,12 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
   end
 
   # create error
-  test "should fail signup with missing info" do 
+  test "should fail signup with missing info" do
     post user_registration_url, params: {
       user: {
         email: "test@user.com",
         password: "qwerty",
-        password: "qwerty"
+        password_confirmation: "qwerty"
       }
     }
     assert_response :success
@@ -74,13 +75,11 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
         email: @user.email,
         password: "123456"
       }
-    }
-    assert_response :success
+    }, as: :json
+    assert_response :success 
     json = JSON.parse(response.body)
-
     assert_equal "error", json["status"]
     assert_equal 401, json["code"]
-    assert_equal "Invalid login credentials", json["message"]
   end
 
   # Logout

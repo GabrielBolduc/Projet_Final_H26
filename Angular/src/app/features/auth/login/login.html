@@ -1,0 +1,53 @@
+<mat-card class="auth-card">
+  <h2>{{ 'AUTH.LOGIN_TITLE' | translate }}</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="submit()">
+    
+    @if (errorMessage) {
+      <div class="form-error" style="color: #f44336; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'AUTH.EMAIL_LABEL' | translate }}</mat-label>
+      <input matInput type="email" formControlName="email">
+      
+      @if (loginForm.get('email')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.EMAIL_REQUIRED' | translate }}</mat-error>
+      }
+      @if (loginForm.get('email')?.hasError('email')) {
+        <mat-error>{{ 'AUTH.EMAIL_ERROR' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'AUTH.PASSWORD_LABEL' | translate }}</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+      
+      <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+
+      @if (loginForm.get('password')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.PASSWORD_REQUIRED' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <button mat-flat-button color="accent" class="full-width" type="submit" [disabled]="loginForm.invalid || isLoading">
+      @if (isLoading) {
+        <span>Checking...</span> 
+      } @else {
+        {{ 'AUTH.LOGIN' | translate }}
+      }
+    </button>
+
+  </form>
+
+  <div class="auth-footer">
+    <span>{{ 'AUTH.NO_ACCOUNT' | translate }}</span>
+    <a mat-button color="accent" [routerLink]="['/signup']">
+      {{ 'AUTH.SIGNUP_LINK' | translate }}
+    </a>
+  </div>
+</mat-card>

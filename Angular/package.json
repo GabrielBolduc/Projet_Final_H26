@@ -4,8 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "build:rails": "ng build && cp -a ../Rails/public/browser/. ../Rails/public/ && rm -rf ../Rails/public/browser",
+    "build": "ng build && cp -r ../Rails/public/browser/* ../Rails/public/ && rm -rf ../Rails/public/browser",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

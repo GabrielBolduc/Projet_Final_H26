@@ -1,11 +1,15 @@
 class CustomFailure < Devise::FailureApp
   def respond
-    self.status = 200
-    self.content_type = 'application/json'
-    self.response_body = {
-      status: 'error',
-      message: "Invalid login credentials",
-      code: 401
-    }.to_json
+    if request.format == :json || request.content_type == 'application/json'
+      self.status = 200 
+      self.content_type = 'application/json'
+      self.response_body = {
+        status: 'error',
+        message: i18n_message,
+        code: 401
+      }.to_json
+    else
+      super
+    end
   end
 end

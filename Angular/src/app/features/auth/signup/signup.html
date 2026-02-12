@@ -62,16 +62,17 @@
         <mat-error>Les mots de passe ne correspondent pas</mat-error>
       }
     </mat-form-field>
+   @if (is_admin==='ADMIN') {
+      <mat-checkbox formControlName="is_staff" class="checkbox">
+        {{ 'AUTH.IS_EXPERT' | translate }}
+      </mat-checkbox>
 
-    <mat-checkbox formControlName="is_staff" class="checkbox">
-      {{ 'AUTH.IS_EXPERT' | translate }}
-    </mat-checkbox>
-
-    @if (is_staff) {
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'AUTH.SPECIALTY_LABEL' | translate }}</mat-label>
-        <input matInput formControlName="specialty">
-      </mat-form-field>
+      @if (is_staff) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'AUTH.SPECIALTY_LABEL' | translate }}</mat-label>
+          <input matInput formControlName="specialty">
+        </mat-form-field>
+      }
     }
 
     <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="signupForm.invalid || isLoading">

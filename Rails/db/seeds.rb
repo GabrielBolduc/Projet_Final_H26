@@ -31,5 +31,6 @@ Staff.create!(
     password: "qwerty",
     password_confirmation: "qwerty",
     name: "Staff #1",
-    phone_number: "666-666-6666"
+    phone_number: "666-666-6666",
+    ability: "Gestion des réservations"
 )

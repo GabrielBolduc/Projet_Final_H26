@@ -1,5 +1,5 @@
 class AngularController < ActionController::Base
   def index
-    render file: 'public/index.html'
+    render file: 'public/browser/index.html'
   end
 end

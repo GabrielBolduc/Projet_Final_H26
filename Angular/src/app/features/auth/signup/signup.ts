@@ -84,7 +84,7 @@ export class Signup {
         next: (success) => {
           this.isLoading = false;
           if (success) {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/']);
           } else {
             this.errorMessage = 'Erreur lors de l\'inscription';
           }

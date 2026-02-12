@@ -1,4 +1,3 @@
-# Caractéristiques détaillées des entités (Module 1)
 
 ## [FESTIVAL]
 
@@ -25,9 +24,9 @@
   - [SELF] : SOFT DELETE (archive sans perte d'historique).
 
 **Validations:**
-  - [name] : String requis (Max 100). Doit être UNIQUE.
+  - [name] : String requis (Max 100). Doit etre UNIQUE.
   - [genre] : String requis (Max 50).
-  - [popularity] : Entier requis. Doit être compris entre 0 et 5.
+  - [popularity] : Entier requis. Doit etre entre 0 et 5.
   - [image] : Validation du format.
 
 ---

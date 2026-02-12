@@ -34,10 +34,13 @@ export class Signup {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  is_admin = JSON.parse(localStorage.getItem('festify_user') || 'false').role;
   isLoading = false;
   errorMessage = '';
   hidePassword = true;
   hideConfirmPassword = true;
+
+ 
 
   signupForm = this.fb.group({
     name: ['', [Validators.required]],

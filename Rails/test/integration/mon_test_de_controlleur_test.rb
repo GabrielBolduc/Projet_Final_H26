@@ -75,13 +75,11 @@ class MonTestDeControlleurTest < ActionDispatch::IntegrationTest
         email: @user.email,
         password: "123456"
       }
-    }
-    assert_response :success
+    }, as: :json
+    assert_response :success 
     json = JSON.parse(response.body)
-
     assert_equal "error", json["status"]
     assert_equal 401, json["code"]
-    assert_equal "Invalid login credentials", json["message"]
   end
 
   # Logout

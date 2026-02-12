@@ -14,7 +14,8 @@ class Users::SessionsController < Devise::SessionsController
           email: resource.email,
           role: resource.role,
           name: resource.name,
-          phone_number: resource.phone_number
+          phone_number: resource.phone_number,
+          ability: resource.ability
         }
       }
     }, status: :ok

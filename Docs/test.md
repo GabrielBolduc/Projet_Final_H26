@@ -1,3 +1,4 @@
+<img width="2171" height="2069" alt="Schema_analyse drawio(6)" src="https://github.com/user-attachments/assets/2abfb344-36cd-4b4c-8a5a-9d230e054415" />
 
 ## FESTIVAL Gabriel Bolduc
 

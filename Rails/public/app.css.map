@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/app.css"],
-  "sourcesContent": [".brand-header {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  width: 100%;\n    \n  position: sticky;\n  top: 0;\n  z-index: 1000;\n  box-shadow: 0 2px 4px rgba(0,0,0,0.1); \n  transition: box-shadow 0.2s ease-in-out;\n}\n\n.header-actions {\n  display: flex; \n  align-items: center; \n  gap: 20px; \n}\n\n.toolbar-logo {\n  height: 50px; \n  width: auto; \n  margin-right: 12px; \n  object-fit: contain;\n  vertical-align: middle;\n}\n\n.logo-link {\n  text-decoration: none;\n  color: var(--mat-sys-primary);\n  font-weight: bold;\n  font-size: 1.5rem;\n}\n\n.spacer {\n  flex: 1 1 auto;\n}\n\n.content {\n  padding: 20px;\n}\n\n.header-actions {\n  justify-content: space-between;\n}\n\nbutton mat-icon {\n  margin-right: 8px;\n}\n"],
-  "mappings": ";AAAA,CAAC;AACC,WAAS;AACT,mBAAiB;AACjB,eAAa;AACb,SAAO;AAEP,YAAU;AACV,OAAK;AACL,WAAS;AACT,cAAY,EAAE,IAAI,IAAI,KAAK,CAAC,EAAC,CAAC,EAAC,CAAC,EAAC;AACjC,cAAY,WAAW,KAAK;AAC9B;AAEA,CAAC;AACC,WAAS;AACT,eAAa;AACb,OAAK;AACP;AAEA,CAAC;AACC,UAAQ;AACR,SAAO;AACP,gBAAc;AACd,cAAY;AACZ,kBAAgB;AAClB;AAEA,CAAC;AACC,mBAAiB;AACjB,SAAO,IAAI;AACX,eAAa;AACb,aAAW;AACb;AAEA,CAAC;AACC,QAAM,EAAE,EAAE;AACZ;AAEA,CAAC;AACC,WAAS;AACX;AAEA,CA7BC;AA8BC,mBAAiB;AACnB;AAEA,OAAO;AACL,gBAAc;AAChB;",
-  "names": []
-}

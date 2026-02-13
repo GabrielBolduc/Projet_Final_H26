@@ -77,7 +77,8 @@ export class Signup {
         password_confirmation: formValue.password_confirmation!,
         name: formValue.name!,
         phone_number: formValue.phone_number!,
-        role: (formValue.is_staff ? 'STAFF' : 'CLIENT') as 'CLIENT'
+        role: (formValue.is_staff ? 'STAFF' : 'CLIENT') as 'CLIENT',
+        ability: formValue.is_staff ? formValue.specialty : null
       };
 
       this.authService.signup(credentials).subscribe({

@@ -34,10 +34,13 @@ export class Signup {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  is_admin = JSON.parse(localStorage.getItem('festify_user') || 'false').role;
   isLoading = false;
   errorMessage = '';
   hidePassword = true;
   hideConfirmPassword = true;
+
+ 
 
   signupForm = this.fb.group({
     name: ['', [Validators.required]],
@@ -81,7 +84,7 @@ export class Signup {
         next: (success) => {
           this.isLoading = false;
           if (success) {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/']);
           } else {
             this.errorMessage = 'Erreur lors de l\'inscription';
           }

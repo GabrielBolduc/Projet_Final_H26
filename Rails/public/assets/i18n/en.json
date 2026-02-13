@@ -19,7 +19,7 @@
     "PASSWORD_LABEL": "Password",
     "PASSWORD_REQUIRED": "Password required",
     "CONFIRM_PASSWORD_LABEL": "Confirm password",
-    "IS_EXPERT": "I am an expert",
+    "IS_EXPERT": "Staff account?",
     "SPECIALTY_LABEL": "Specialty",
     "SUBMIT_SIGNUP": "Sign up",
     "NO_ACCOUNT": "Don't have an account?",

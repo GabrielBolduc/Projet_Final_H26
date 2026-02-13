@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["angular:styles/component:css;a5d88d0e8027397835d78e750c22c7dc9c72d1436855284df89c7d07c3d2fda3;/home/etd/Festify/Angular/src/app/layout/main-layout/main-layout.component.ts"],
+  "sourcesContent": ["\n    .content { padding: 20px; }\n  "],
+  "mappings": ";AACI,CAAC;AAAU,WAAS;AAAM;",
+  "names": []
+}

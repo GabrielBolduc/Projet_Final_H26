@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/home/home.css"],
+  "sourcesContent": [".title {\n    margin: 5rem auto;\n    text-align: center;\n    color: var(--mat-sys-primary);\n}"],
+  "mappings": ";AAAA,CAAC;AACG,UAAQ,KAAK;AACb,cAAY;AACZ,SAAO,IAAI;AACf;",
+  "names": []
+}

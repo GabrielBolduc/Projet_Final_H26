@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/core/notfound/notfound.css"],
+  "sourcesContent": [".error-container {\n  display: grid;\n  place-items: center;\n  min-height: 100vh;\n  background-color: var(--mat-sys-surface-container);\n}\n\nmat-card-title {\n  font-size: 2rem;\n  font-weight: bold;\n  color: var(--mat-sys-primary);\n  margin-bottom: 1rem;\n}"],
+  "mappings": ";AAAA,CAAC;AACC,WAAS;AACT,eAAa;AACb,cAAY;AACZ,oBAAkB,IAAI;AACxB;AAEA;AACE,aAAW;AACX,eAAa;AACb,SAAO,IAAI;AACX,iBAAe;AACjB;",
+  "names": []
+}

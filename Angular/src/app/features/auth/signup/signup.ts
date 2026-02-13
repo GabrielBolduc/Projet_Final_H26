@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
@@ -35,8 +35,8 @@ export class Signup {
   private router = inject(Router);
 
   is_admin = JSON.parse(localStorage.getItem('festify_user') || 'false').role;
-  isLoading = false;
-  errorMessage = '';
+  isLoading = signal(false);
+  errorMessage = signal('');
   hidePassword = true;
   hideConfirmPassword = true;
 
@@ -67,8 +67,8 @@ export class Signup {
 
   submit() {
     if (this.signupForm.valid) {
-      this.isLoading = true;
-      this.errorMessage = '';
+      this.isLoading.set(true);
+      this.errorMessage.set('');
 
       const formValue = this.signupForm.value;
       const credentials = {
@@ -82,16 +82,16 @@ export class Signup {
 
       this.authService.signup(credentials).subscribe({
         next: (success) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           if (success) {
             this.router.navigate(['/']);
           } else {
-            this.errorMessage = 'Erreur lors de l\'inscription';
+            this.errorMessage.set('Erreur lors de l\'inscription');
           }
         },
         error: () => {
-          this.isLoading = false;
-          this.errorMessage = 'Erreur serveur';
+          this.isLoading.set(false);
+          this.errorMessage.set('Erreur serveur');
         }
       });
     }

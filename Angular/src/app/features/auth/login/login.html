@@ -3,9 +3,9 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="submit()">
     
-    @if (errorMessage) {
+    @if (errorMessage()) {
       <div class="form-error" style="color: #f44336; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
-        {{ errorMessage }}
+        {{ errorMessage() }}
       </div>
     }
 
@@ -34,8 +34,8 @@
       }
     </mat-form-field>
 
-    <button mat-flat-button color="accent" class="full-width" type="submit" [disabled]="loginForm.invalid || isLoading">
-      @if (isLoading) {
+    <button mat-flat-button color="accent" class="full-width" type="submit" [disabled]="loginForm.invalid || isLoading()">
+      @if (isLoading()) {
         <span>Checking...</span> 
       } @else {
         {{ 'AUTH.LOGIN' | translate }}

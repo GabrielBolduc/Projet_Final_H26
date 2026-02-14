@@ -1,0 +1,30 @@
+{
+  "NAV": {
+    "HOME": "Accueil",
+    "HOSPITALITY": "Hospitalité",
+    "TICKETING": "Billetterie"
+  },
+  "AUTH": {
+    "LOGOUT": "Déconnexion",
+    "LOGIN": "Connexion",
+    "LOGIN_TITLE": "Connexion",
+    "SIGNUP_TITLE": "Créer un compte",
+    "NAME_LABEL": "Nom",
+    "NAME_ERROR": "Nom requis",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_ERROR": "Email invalide",
+    "EMAIL_REQUIRED": "Email requis",
+    "PHONE_LABEL": "Téléphone",
+    "PHONE_ERROR": "Numéro invalide",
+    "PASSWORD_LABEL": "Mot de passe",
+    "CONFIRM_PASSWORD_LABEL": "Confirmer le mot de passe",
+    "PASSWORD_REQUIRED": "Mot de passe requis",
+    "IS_EXPERT": "Je suis un expert",
+    "SPECIALTY_LABEL": "Spécialité",
+    "SUBMIT_SIGNUP": "S'inscrire",
+    "NO_ACCOUNT": "Pas encore de compte ?",
+    "SIGNUP_LINK": "S'inscrire",
+    "ALREADY_ACCOUNT": "Déjà un compte ?",
+    "LOGIN_LINK": "Se connecter"
+  }
+}

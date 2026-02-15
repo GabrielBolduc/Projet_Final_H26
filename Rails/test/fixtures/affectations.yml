@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start: 2026-02-14 15:26:14
+  end: 2026-02-14 15:26:14
+  expected_start: 2026-02-14 15:26:14
+  expected_end: 2026-02-14 15:26:14
+  responsability: MyString
+  festival: one
+  task: one
+  user: one
+
+two:
+  start: 2026-02-14 15:26:14
+  end: 2026-02-14 15:26:14
+  expected_start: 2026-02-14 15:26:14
+  expected_end: 2026-02-14 15:26:14
+  responsability: MyString
+  festival: two
+  task: two
+  user: two

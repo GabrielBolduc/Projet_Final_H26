@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_14_182114) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_15_040241) do
+  create_table "affectations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "end"
+    t.datetime "expected_end"
+    t.datetime "expected_start"
+    t.bigint "festival_id", null: false
+    t.string "responsability"
+    t.datetime "start"
+    t.bigint "task_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["festival_id"], name: "index_affectations_on_festival_id"
+    t.index ["task_id"], name: "index_affectations_on_task_id"
+    t.index ["user_id"], name: "index_affectations_on_user_id"
+  end
+
   create_table "festivals", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", limit: 250, null: false
     t.text "comment"
@@ -30,6 +46,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_14_182114) do
     t.check_constraint "`statut` in ('DRAFT','ONGOING','COMPLETED')", name: "check_festivals_statut_enum"
   end
 
+  create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.integer "difficulty"
+    t.integer "priority"
+    t.boolean "reusable"
+    t.string "title"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "ability"
     t.datetime "created_at", null: false
@@ -40,11 +66,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_14_182114) do
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
-    t.string "role"
     t.string "type"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["type"], name: "index_users_on_type"
   end
+
+  add_foreign_key "affectations", "festivals"
+  add_foreign_key "affectations", "tasks"
+  add_foreign_key "affectations", "users"
 end

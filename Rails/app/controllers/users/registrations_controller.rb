@@ -17,7 +17,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
             id: resource.id,
             email: resource.email,
             name: resource.name,
-            role: resource.role,
+            type: resource.type,
             phone_number: resource.phone_number,
             ability: resource.ability
           }

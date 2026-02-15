@@ -1,54 +1,86 @@
 <mat-card class="auth-card">
   <h2>{{ 'AUTH.SIGNUP_TITLE' | translate }}</h2>
+  <form [formGroup]="signupForm" (ngSubmit)="submit()">
+    
+    @if (errorMessage()) {
+      <div class="form-error" style="color: #f44336; margin-bottom: 1rem; font-size: 0.9rem; text-align: center;">
+        {{ errorMessage() }}
+      </div>
+    }
 
-  <form (ngSubmit)="submit()">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'AUTH.NAME_LABEL' | translate }}</mat-label>
-      <input matInput>
-      <mat-error>{{ 'AUTH.NAME_ERROR' | translate }}</mat-error>
+      <input matInput formControlName="name">
+      @if (signupForm.get('name')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.NAME_ERROR' | translate }}</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'AUTH.EMAIL_LABEL' | translate }}</mat-label>
-      <input matInput type="email">
-      <mat-error>{{ 'AUTH.EMAIL_ERROR' | translate }}</mat-error>
+      <input matInput type="email" formControlName="email">
+      @if (signupForm.get('email')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.EMAIL_REQUIRED' | translate }}</mat-error>
+      }
+      @if (signupForm.get('email')?.hasError('email')) {
+        <mat-error>{{ 'AUTH.EMAIL_ERROR' | translate }}</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'AUTH.PHONE_LABEL' | translate }}</mat-label>
-      <input matInput type="tel">
-      <mat-error>{{ 'AUTH.PHONE_ERROR' | translate }}</mat-error>
+      <input matInput type="tel" formControlName="phone_number">
+      @if (signupForm.get('phone_number')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.PHONE_ERROR' | translate }}</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'AUTH.PASSWORD_LABEL' | translate }}</mat-label>
-      <input matInput [type]="hidePassword ? 'password' : 'text'">
-      <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
-        <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+      <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
+      @if (signupForm.get('password')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.PASSWORD_REQUIRED' | translate }}</mat-error>
+      }
+      @if (signupForm.get('password')?.hasError('minlength')) {
+        <mat-error>Le mot de passe doit contenir au moins 6 caractères</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'AUTH.CONFIRM_PASSWORD_LABEL' | translate }}</mat-label>
-      <input matInput [type]="hideConfirmPassword ? 'password' : 'text'">
-      <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
-        <mat-icon>{{ hideConfirmPassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+      <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="password_confirmation">
+      <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPassword">
+        <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
+      @if (signupForm.get('password_confirmation')?.hasError('required')) {
+        <mat-error>{{ 'AUTH.PASSWORD_REQUIRED' | translate }}</mat-error>
+      }
+      @if (signupForm.hasError('passwordMismatch') && signupForm.get('password_confirmation')?.touched) {
+        <mat-error>Les mots de passe ne correspondent pas</mat-error>
+      }
     </mat-form-field>
+   @if (is_admin==='ADMIN') {
+      <mat-checkbox formControlName="is_staff" class="checkbox">
+        {{ 'AUTH.IS_EXPERT' | translate }}
+      </mat-checkbox>
 
-    <mat-checkbox [checked]="is_staff" class="checkbox">
-      {{ 'AUTH.IS_EXPERT' | translate }}
-    </mat-checkbox>
-
-    @if (is_staff) {
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'AUTH.SPECIALTY_LABEL' | translate }}</mat-label>
-        <input matInput>
-      </mat-form-field>
+      @if (is_staff) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'AUTH.SPECIALTY_LABEL' | translate }}</mat-label>
+          <input matInput formControlName="specialty">
+        </mat-form-field>
+      }
     }
 
-    <button mat-flat-button color="primary" class="full-width" type="submit">
-      {{ 'AUTH.SUBMIT_SIGNUP' | translate }}
+    <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="signupForm.invalid || isLoading()">
+      @if (isLoading()) {
+        <span>Inscription...</span> 
+      } @else {
+        {{ 'AUTH.SUBMIT_SIGNUP' | translate }}
+      }
     </button>
   </form>
 

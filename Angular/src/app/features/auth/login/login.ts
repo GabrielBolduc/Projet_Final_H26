@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from "@angular/router";
 import { CommonModule } from '@angular/common';
@@ -21,8 +21,8 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  isLoading = false;
-  errorMessage = '';
+  isLoading = signal(false);
+  errorMessage = signal('');
   hidePassword = true;
 
   loginForm = this.fb.group({
@@ -32,21 +32,21 @@ export class Login {
 
   submit() {
     if (this.loginForm.valid) {
-      this.isLoading = true;
-      this.errorMessage = '';
+      this.isLoading.set(true);
+      this.errorMessage.set('');
       
       this.authService.login(this.loginForm.value as any).subscribe({
         next: (success) => {
-          this.isLoading = false;
+          this.isLoading.set(false);
           if (success) {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/']);
           } else {
-            this.errorMessage = 'Identifiants invalides';
+            this.errorMessage.set('Identifiants invalides');
           }
         },
         error: () => {
-          this.isLoading = false;
-          this.errorMessage = 'Erreur serveur';
+          this.isLoading.set(false);
+          this.errorMessage.set('Erreur serveur');
         }
       });
     }

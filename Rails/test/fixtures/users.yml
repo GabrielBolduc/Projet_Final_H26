@@ -6,12 +6,12 @@
 #
 one:
   name: "user"
-  role: "CLIENT"
+  type: Client
   email: user_one@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
 
 two:
   name: "client"
-  role: "CLIENT"
+  type: Staff
   email: user_two@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>

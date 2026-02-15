@@ -9,7 +9,11 @@ Rails.application.routes.draw do
   namespace :api, constraints: { format: 'json' } do
   end
 
-  match '*url', to: "angular#index", via: :get
-  
   root to: "angular#index"
+  get '*path', to: 'angular#index', constraints: ->(req) do
+
+    !req.xhr? && 
+    req.format.html? && 
+    !req.path.include?('.')
+  end
 end

@@ -3,27 +3,28 @@ export class User {
   public email: string;
   public name: string;
   public phone_number: string;
-  public role: 'ADMIN' | 'STAFF' | 'CLIENT';
+  public type: 'Admin' | 'Staff' | 'Client'; 
+  public ability?: string;
 
   constructor(
     id: number,
     email: string,
     name: string,
     phone_number: string,
-    role: string
+    type: string,
+    ability?: string
   ) {
     this.id = id;
     this.email = email;
     this.name = name;
     this.phone_number = phone_number;
     
-    // 👇 LA CORRECTION EST ICI
-    // On utilise '?.' pour éviter le crash si 'role' est vide
-    // On utilise '||' pour mettre 'CLIENT' par défaut si le rôle est manquant
-    this.role = (role?.toUpperCase() || 'CLIENT') as 'ADMIN' | 'STAFF' | 'CLIENT';
+    this.type = (type || 'Client') as 'Admin' | 'Staff' | 'Client';
+    
+    this.ability = ability;
   }
 
-  get isAdmin(): boolean { return this.role === 'ADMIN'; }
-  get isStaff(): boolean { return this.role === 'STAFF'; }
-  get isClient(): boolean { return this.role === 'CLIENT'; }
+  get isAdmin(): boolean { return this.type === 'Admin'; }
+  get isStaff(): boolean { return this.type === 'Staff'; }
+  get isClient(): boolean { return this.type === 'Client'; }
 }

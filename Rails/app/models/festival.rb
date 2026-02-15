@@ -1,4 +1,8 @@
 class Festival < ApplicationRecord
+
+  has_many :affectations, dependent: :destroy
+  
+  
   enum :statut, { 
     draft: 'DRAFT', 
     ongoing: 'ONGOING', 

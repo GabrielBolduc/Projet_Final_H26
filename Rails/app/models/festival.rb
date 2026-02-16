@@ -1,25 +1,15 @@
 class Festival < ApplicationRecord
 
-  has_many :affectations, dependent: :destroy
-  
-  
-  enum :statut, { 
-    draft: 'DRAFT', 
-    ongoing: 'ONGOING', 
-    completed: 'COMPLETED' 
-  }, default: :draft, validate: true
+  has_many :performances, dependent: :destroy
 
-  validates :start_at, :end_at, :coordinates, :daily_capacity, :address, :statut, presence: true
+  enum :status, { draft: 'DRAFT', ongoing: 'ONGOING',  completed: 'COMPLETED'}, default: :draft, validate: true
 
-  validates :address, length: { maximum: 250 }
-  validates :daily_capacity, numericality: { only_integer: true, greater_than: 0 }
+  validates :name, presence: true, length: { maximum: 100 }
+  validates :start_at, :end_at, :coordinates, :status, :address, presence: true
+
+  validates :daily_capacity, presence: true, numericality: { only_integer: true, greater_than: 0 }
   
-  validates :satisfaction, numericality: { 
-    only_integer: true, 
-    greater_than_or_equal_to: 0, 
-    less_than_or_equal_to: 5, 
-    allow_nil: true 
-  }
+  validates :satisfaction, numericality: {  only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5, allow_nil: true }
 
   validates :other_income, :other_expense, numericality: { allow_nil: true }
 
@@ -31,7 +21,7 @@ class Festival < ApplicationRecord
     return if end_at.blank? || start_at.blank?
 
     if end_at < start_at
-      errors.add(:end_at, "doit être postérieure ou égale à la date de début")
+      errors.add(:end_at, "doit etre apres la date de debut")
     end
   end
 end

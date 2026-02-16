@@ -46,6 +46,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.index ["user_id"], name: "index_affectations_on_user_id"
   end
 
+  create_table "artists", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.text "bio"
+    t.datetime "created_at", null: false
+    t.string "genre", limit: 50, null: false
+    t.string "name", limit: 100, null: false
+    t.integer "popularity", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_artists_on_name", unique: true
+  end
+
   create_table "festivals", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", limit: 250, null: false
     t.text "comment"
@@ -53,16 +63,38 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.datetime "created_at", null: false
     t.integer "daily_capacity", null: false
     t.date "end_at", null: false
-    t.decimal "other_expense", precision: 10
-    t.decimal "other_income", precision: 10
+    t.string "name", limit: 100, null: false
+    t.decimal "other_expense", precision: 10, scale: 2
+    t.decimal "other_income", precision: 10, scale: 2
     t.integer "satisfaction", limit: 1
     t.date "start_at", null: false
-    t.string "statut", default: "DRAFT", null: false
+    t.string "status", limit: 20, null: false
     t.datetime "updated_at", null: false
-    t.check_constraint "`daily_capacity` > 0", name: "check_festivals_daily_capacity_positive"
-    t.check_constraint "`satisfaction` >= 0 and `satisfaction` <= 5", name: "check_festivals_satisfaction_range"
-    t.check_constraint "`start_at` <= `end_at`", name: "check_festivals_dates_chronology"
-    t.check_constraint "`statut` in ('DRAFT','ONGOING','COMPLETED')", name: "check_festivals_statut_enum"
+  end
+
+  create_table "performances", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "artist_id", null: false
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.datetime "end_at", null: false
+    t.bigint "festival_id", null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.bigint "stage_id", null: false
+    t.datetime "start_at", null: false
+    t.string "title", limit: 20
+    t.datetime "updated_at", null: false
+    t.index ["artist_id"], name: "index_performances_on_artist_id"
+    t.index ["festival_id"], name: "index_performances_on_festival_id"
+    t.index ["stage_id"], name: "index_performances_on_stage_id"
+  end
+
+  create_table "stages", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.integer "capacity", null: false
+    t.datetime "created_at", null: false
+    t.string "environment", limit: 50, null: false
+    t.string "name", limit: 100, null: false
+    t.text "technical_specs"
+    t.datetime "updated_at", null: false
   end
 
   create_table "reservations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|

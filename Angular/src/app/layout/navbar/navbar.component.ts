@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatMenuModule } from '@angular/material/menu'; 
 import { AuthService } from '@core/services/auth.service'; // Utilise ton alias @core si configuré, sinon le chemin relatif
 
 @Component({
@@ -14,7 +15,8 @@ import { AuthService } from '@core/services/auth.service'; // Utilise ton alias 
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    TranslateModule
+    TranslateModule,
+    MatMenuModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'   

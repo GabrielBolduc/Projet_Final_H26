@@ -65,13 +65,9 @@
 
 [Reservations] :
 
-- user_id : ON UPDATE CASCADE, ON DELETE SET NULL
+- user_id : ON UPDATE CASCADE, ON DELETE CASCADE
 - unit_id : ON UPDATE CASCADE, ON DELETE RESTRICT
 - festival_id : ON UPDATE CASCADE, ON DELETE CASCADE
-
-[Audits] :
-
-- reservation_id : ON UPDATE CASCADE, ON DELETE CASCADE
 
 [Units] :
 

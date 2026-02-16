@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Task } from '@core/models/task';
+import { TaskService } from '@core/services/task';
 
 @Component({
   selector: 'app-list',
@@ -7,5 +9,19 @@ import { Component } from '@angular/core';
   styleUrl: './list.css',
 })
 export class taskListComponent {
+
+  private taskService = inject(TaskService);
+
+  tasks: Task[] = [];
+
+  ngOnInit() {
+    this.taskService.listTasks().subscribe((data: any) => {
+      this.tasks = data;
+    });
+  }
+
+
+
+
 
 }

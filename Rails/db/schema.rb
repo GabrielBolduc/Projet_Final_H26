@@ -57,7 +57,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
   end
 
   create_table "festivals", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.string "address", limit: 250, null: false
+    t.string "address", null: false
     t.text "comment"
     t.integer "coordinates", null: false
     t.datetime "created_at", null: false

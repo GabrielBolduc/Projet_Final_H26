@@ -4,19 +4,18 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers 
 
   setup do
-    @user = User.create!(
+    @user = Client.create!(
       email: "test@test.com",
       password: "qwerty",
       password_confirmation: "qwerty",
       name: "test",
-      role: "CLIENT",
       phone_number: "444-444-4444"
     )
   end
 
   # Signup
   test "should signup a new user successfully" do
-    assert_difference("User.count", 1) do
+    assert_difference("Client.count", 1) do
       post user_registration_url, params: {
         user: {
           email: "user@user.com",
@@ -24,7 +23,7 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
           password_confirmation: "qwerty",
           name: "Bob",
           phone_number: "222-222-2222",
-          role: "CLIENT"
+          type: "Client"
         }
       }
     end
@@ -37,7 +36,7 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
     assert_equal "success", json["status"]
     assert_equal "user@user.com", json["data"]["email"]
     assert_equal "Bob", json["data"]["name"]
-    assert_equal "CLIENT", json["data"]["role"]
+    assert_equal "Client", json["data"]["type"]
   end
 
   # Login
@@ -56,7 +55,7 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
 
     assert_equal "success", json["status"]
     assert_equal @user.email, json["data"]["user"]["email"]
-    assert_equal "CLIENT", json["data"]["user"]["role"]
+    assert_equal "Client", json["data"]["user"]["type"]
   end
 
   # Logout

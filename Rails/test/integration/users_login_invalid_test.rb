@@ -2,12 +2,11 @@ require "test_helper"
 
 class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
   setup do
-    @user = User.create!(
+    @user = Client.create!(
       email: "test@test.com",
       password: "qwerty",
       password_confirmation: "qwerty",
       name: "test",
-      role: "CLIENT",
       phone_number: "444-444-4444"
     )
   end

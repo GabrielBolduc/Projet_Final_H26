@@ -4,5 +4,5 @@ export interface SignupCredentials {
   password_confirmation: string; 
   name: string;
   phone_number: string;
-  role: 'CLIENT'; 
+  type: string; 
 }

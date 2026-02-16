@@ -8,11 +8,12 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.destroy_all
 Performance.destroy_all
 Stage.destroy_all
 Artist.destroy_all
 Festival.destroy_all
+Task.destroy_all
+User.destroy_all
 
 Client.create!(
     email: "client@test.com",
@@ -97,4 +98,17 @@ Staff.create!(
     name: "hight admiral Brash",
     phone_number: "666-666-6666",
     ability: "Gestion de la sécurité, coordination des forces de l'ordre, gestion des menaces"
+)
+
+f = Festival.create!(
+  name: "Festify 2026",
+  start_at: Date.new(2026, 7, 15),
+  end_at: Date.new(2026, 7, 20),
+  daily_capacity: 5000,
+  address: "123 Rue rue, Shawinigan, QC",
+  status: "DRAFT",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival"
 )

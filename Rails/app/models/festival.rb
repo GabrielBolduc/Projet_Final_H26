@@ -5,7 +5,7 @@ class Festival < ApplicationRecord
   enum :status, { draft: 'DRAFT', ongoing: 'ONGOING',  completed: 'COMPLETED'}, default: :draft, validate: true
 
   validates :name, presence: true, length: { maximum: 100 }
-  validates :start_at, :end_at, :coordinates, :status, :address, presence: true
+  validates :start_at, :end_at, :status, :address, presence: true
 
   validates :daily_capacity, presence: true, numericality: { only_integer: true, greater_than: 0 }
   

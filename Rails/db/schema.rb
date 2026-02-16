@@ -14,7 +14,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
   create_table "accommodations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
-    t.decimal "commission", precision: 4, scale: 2, default: "0.0", null: false, unsigned: true
+    t.decimal "commission", precision: 4, scale: 2, default: "0.0", null: false
     t.integer "coordinates", null: false
     t.datetime "created_at", null: false
     t.bigint "festival_id", null: false
@@ -88,15 +88,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.index ["stage_id"], name: "index_performances_on_stage_id"
   end
 
-  create_table "stages", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.integer "capacity", null: false
-    t.datetime "created_at", null: false
-    t.string "environment", limit: 50, null: false
-    t.string "name", limit: 100, null: false
-    t.text "technical_specs"
-    t.datetime "updated_at", null: false
-  end
-
   create_table "reservations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.date "arrival_at", null: false
     t.datetime "created_at", null: false
@@ -115,6 +106,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.check_constraint "`nb_of_people` > 0", name: "chk_guests"
     t.check_constraint "`phone_number` regexp '^[0-9]{8,15}$'", name: "chk_phone_numeric"
     t.check_constraint "trim(`reservation_name`) <> ''", name: "chk_name_not_empty"
+  end
+
+  create_table "stages", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.integer "capacity", null: false
+    t.datetime "created_at", null: false
+    t.string "environment", limit: 50, null: false
+    t.string "name", limit: 100, null: false
+    t.text "technical_specs"
+    t.datetime "updated_at", null: false
   end
 
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -164,6 +164,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
   add_foreign_key "affectations", "festivals"
   add_foreign_key "affectations", "tasks"
   add_foreign_key "affectations", "users"
+  add_foreign_key "performances", "artists"
+  add_foreign_key "performances", "festivals"
+  add_foreign_key "performances", "stages"
   add_foreign_key "reservations", "festivals"
   add_foreign_key "reservations", "units"
   add_foreign_key "reservations", "users"

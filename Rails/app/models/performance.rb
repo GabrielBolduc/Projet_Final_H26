@@ -12,10 +12,12 @@ class Performance < ApplicationRecord
   validate :no_stage_overlap
   validate :no_artist_overlap
 
-  ef end_at_after_start_at
+  private
+
+  def end_at_after_start_at
     return if end_at.blank? || start_at.blank?
     if end_at <= start_at
-      errors.add(:end_at, "Doit etre apres l'heure de debut")
+      errors.add(:end_at, "doit être strictement après l'heure de début")
     end
   end
 
@@ -30,7 +32,7 @@ class Performance < ApplicationRecord
   def no_stage_overlap
     return unless stage && start_at && end_at
     if overlapping_query(stage_id: stage_id).exists?
-      errors.add(:stage, "Deja utiliser sur ce creanau")
+      errors.add(:stage, "est déjà occupée sur ce créneau")
     end
   end
 

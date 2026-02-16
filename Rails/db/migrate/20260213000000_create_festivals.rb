@@ -10,7 +10,7 @@ class CreateFestivals < ActiveRecord::Migration[8.1]
       t.decimal :other_income, precision: 10, scale: 2
       t.decimal :other_expense, precision: 10, scale: 2
       t.integer :daily_capacity, null: false
-      t.string :address, null: false, limit: 250
+      t.string :address, null: false
       t.string :status, null: false, limit: 20
       
       t.timestamps

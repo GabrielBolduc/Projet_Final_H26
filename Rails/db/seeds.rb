@@ -9,6 +9,10 @@
 #   end
 
 User.destroy_all
+Performance.destroy_all
+Stage.destroy_all
+Artist.destroy_all
+Festival.destroy_all
 
 Client.create!(
     email: "client@test.com",

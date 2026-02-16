@@ -3,12 +3,11 @@ require "test_helper"
 class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
  
   setup do
-    @existing_user = User.create!(
+    @existing_user = Client.create!(
       email: "existant@test.com",
       password: "qwerty",
       password_confirmation: "qwerty",
       name: "NOM",
-      role: "CLIENT",
       phone_number: "111-111-1111"
     )
   end
@@ -47,7 +46,7 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
         user: {
           email: "mismatch@test.com",
           name: "Mismatch Test",
-          role: "CLIENT",
+          type: "Client",
           phone_number: "555-555-5555",
           password: "qwerty",
           password_confirmation: "asdfgh" 
@@ -75,7 +74,7 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
         user: {
           email: @existing_user.email, 
           name: "Jean",
-          role: "CLIENT",
+          type: "Client",
           phone_number: "222-222-2222",
           password: "qwerty",
           password_confirmation: "qwerty"

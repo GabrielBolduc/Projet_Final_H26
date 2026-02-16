@@ -34,7 +34,7 @@ export class Signup {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  is_admin = JSON.parse(localStorage.getItem('festify_user') || 'false').role;
+  is_admin = JSON.parse(localStorage.getItem('festify_user') || 'false').type;
   isLoading = signal(false);
   errorMessage = signal('');
   hidePassword = true;
@@ -77,7 +77,7 @@ export class Signup {
         password_confirmation: formValue.password_confirmation!,
         name: formValue.name!,
         phone_number: formValue.phone_number!,
-        role: (formValue.is_staff ? 'STAFF' : 'CLIENT') as 'CLIENT',
+        type: formValue.is_staff ? 'Staff' : 'Client',
         ability: formValue.is_staff ? formValue.specialty : null
       };
 

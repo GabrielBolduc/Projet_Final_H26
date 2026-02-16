@@ -10,7 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_16_134308) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
+  create_table "accommodations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "address", null: false
+    t.integer "category", limit: 1, null: false
+    t.decimal "commission", precision: 4, scale: 2, default: "0.0", null: false, unsigned: true
+    t.integer "coordinates", null: false
+    t.datetime "created_at", null: false
+    t.bigint "festival_id", null: false
+    t.string "name", limit: 100, null: false
+    t.boolean "shuttle", default: false, null: false
+    t.time "time_car", null: false
+    t.time "time_walk", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coordinates"], name: "index_accommodations_on_coordinates", length: 32, type: :spatial
+    t.index ["festival_id"], name: "index_accommodations_on_festival_id"
+    t.check_constraint "`commission` >= 0 and `commission` < 30", name: "chk_commission"
+    t.check_constraint "trim(`address`) <> ''", name: "chk_address_not_empty"
+    t.check_constraint "trim(`name`) <> ''", name: "chk_name_not_empty"
+  end
+
   create_table "affectations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "end"
@@ -78,6 +97,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_134308) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "reservations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.date "arrival_at", null: false
+    t.datetime "created_at", null: false
+    t.date "departure_at", null: false
+    t.bigint "festival_id", null: false
+    t.integer "nb_of_people", limit: 1, null: false, unsigned: true
+    t.string "phone_number", limit: 20, null: false
+    t.string "reservation_name", limit: 100, null: false
+    t.bigint "unit_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["festival_id"], name: "index_reservations_on_festival_id"
+    t.index ["unit_id"], name: "index_reservations_on_unit_id"
+    t.index ["user_id"], name: "index_reservations_on_user_id"
+    t.check_constraint "`arrival_at` < `departure_at`", name: "chk_dates"
+    t.check_constraint "`nb_of_people` > 0", name: "chk_guests"
+    t.check_constraint "`phone_number` regexp '^[0-9]{8,15}$'", name: "chk_phone_numeric"
+    t.check_constraint "trim(`reservation_name`) <> ''", name: "chk_name_not_empty"
+  end
+
   create_table "tasks", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
@@ -86,6 +125,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_134308) do
     t.boolean "reusable"
     t.string "title"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "units", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "accommodation_id", null: false
+    t.decimal "cost_person_per_night", precision: 6, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.boolean "electricity", default: false
+    t.column "food_options", "set('None','Canteen','Room service','Restaurant')", default: "None"
+    t.decimal "parking_cost", precision: 4, scale: 2, default: "0.0", null: false, unsigned: true
+    t.integer "quantity", limit: 1, null: false, unsigned: true
+    t.column "type", "enum('SimpleRoom','DoubleRoom','FamilyRoom','SmallTerrain','StandardTerrain','DeluxeTerrain')", null: false
+    t.datetime "updated_at", null: false
+    t.integer "water", limit: 1, default: 0
+    t.boolean "wifi", default: false, null: false
+    t.index ["accommodation_id"], name: "index_units_on_accommodation_id"
+    t.check_constraint "`quantity` > 0", name: "chk_quantity"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -105,10 +160,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_134308) do
     t.index ["type"], name: "index_users_on_type"
   end
 
+  add_foreign_key "accommodations", "festivals"
   add_foreign_key "affectations", "festivals"
   add_foreign_key "affectations", "tasks"
   add_foreign_key "affectations", "users"
-  add_foreign_key "performances", "artists"
-  add_foreign_key "performances", "festivals"
-  add_foreign_key "performances", "stages"
+  add_foreign_key "reservations", "festivals"
+  add_foreign_key "reservations", "units"
+  add_foreign_key "reservations", "users"
+  add_foreign_key "units", "accommodations"
 end

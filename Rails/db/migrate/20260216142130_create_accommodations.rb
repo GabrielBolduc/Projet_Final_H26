@@ -4,11 +4,11 @@ class CreateAccommodations < ActiveRecord::Migration[7.1]
       t.string :name, limit: 100, null: false
       t.integer :category, limit: 1, null: false 
       t.string :address, null: false
-      t.column :coordinates, :point, null: false
+      t.column :coordinates, :point, null: false 
       t.boolean :shuttle, default: false, null: false
       t.time :time_car, null: false
       t.time :time_walk, null: false
-      t.decimal :commission, precision: 4, scale: 2, unsigned: true, default: 0.0, null: false
+      t.decimal :commission, precision: 4, scale: 2, default: 0.0, null: false
       t.references :festival, null: false, foreign_key: true
 
       t.timestamps

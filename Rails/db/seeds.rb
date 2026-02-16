@@ -9,6 +9,10 @@
 #   end
 
 User.destroy_all
+Festival.destroy_all
+Package.destroy_all
+Ticket.destroy_all
+Order.destroy_all
 
 Client.create!(
     email: "client@test.com",
@@ -34,3 +38,29 @@ Staff.create!(
     phone_number: "666-666-6666",
     ability: "Gestion des réservations"
 )
+
+festival = Festival.create!(
+  start_at:     DateTime.parse("2026-02-20"),
+  end_at:       DateTime.parse("2026-02-27"),
+  satisfaction:   5,
+  comment:        "TEST",
+  coordinates:    "POINT(-79.349 43.667)",
+  other_income:   105256.89,
+  other_expense:  40678.16,
+  daily_capacity: 15000,
+  address:        "001 main street",
+  statut:         "ONGOING"
+)
+
+5.times do |i|
+  Package.create!(
+    title:        "Billet ##{i + 1}",
+    description:  "Un billet de spectacle",
+    category: "GENERAL",
+    price:        75.0,
+    quota:        1500,
+    valid_at:   DateTime.parse("2026-02-20 10:00"),
+    expired_at:  DateTime.parse("2026-02-20 22:00"),
+    festival:     festival
+  )
+end

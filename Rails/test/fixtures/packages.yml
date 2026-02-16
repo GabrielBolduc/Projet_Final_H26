@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  category: MyString
+  price: 9.99
+  quota: 1
+  valid_at: 2026-02-16 09:26:37
+  invalid_at: 2026-02-16 09:26:37
+  festival: one
+
+two:
+  title: MyString
+  description: MyText
+  category: MyString
+  price: 9.99
+  quota: 1
+  valid_at: 2026-02-16 09:26:37
+  invalid_at: 2026-02-16 09:26:37
+  festival: two

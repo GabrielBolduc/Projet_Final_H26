@@ -41,15 +41,6 @@
                 <a href="#" class="comment-link">Consulter les commentaires</a>
               </div>
               
-              <div class="side-info">
-                <p><strong>Revenu :</strong> {{ f.other_income | currency:'CAD' }}</p>
-                <p><strong>Dépense :</strong> {{ f.other_expense | currency:'CAD' }}</p>
-                <div class="stars">
-                  @for (s of [1,2,3,4,5]; track s) {
-                    <mat-icon>{{ s <= (f.satisfaction || 0) ? 'star' : 'star_border' }}</mat-icon>
-                  }
-                </div>
-              </div>
             </mat-card-content>
           </mat-card>
         }

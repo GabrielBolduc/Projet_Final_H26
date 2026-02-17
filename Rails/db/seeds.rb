@@ -98,17 +98,3 @@ Staff.create!(
     phone_number: "666-666-6666",
     ability: "Gestion de la sécurité, coordination des forces de l'ordre, gestion des menaces"
 )
-
-festival = Festival.create!(
-  start_at:     DateTime.parse("2026-02-20"),
-  end_at:       DateTime.parse("2026-02-27"),
-  satisfaction:   5,
-  comment:        "TEST",
-  coordinates:    "POINT(45.5017 -73.5673)", 
-  other_income:   105256.89,
-  other_expense:  40678.16,
-  daily_capacity: 15000,
-  address:        "001 main street",
-  status:         "ONGOING",
-  name: "Festival 1"
-)

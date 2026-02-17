@@ -8,11 +8,12 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.destroy_all
 Performance.destroy_all
 Stage.destroy_all
 Artist.destroy_all
 Festival.destroy_all
+Task.destroy_all
+User.destroy_all
 
 Client.create!(
     email: "client@test.com",
@@ -99,16 +100,41 @@ Staff.create!(
     ability: "Gestion de la sécurité, coordination des forces de l'ordre, gestion des menaces"
 )
 
-festival = Festival.create!(
-  start_at:     DateTime.parse("2026-02-20"),
-  end_at:       DateTime.parse("2026-02-27"),
-  satisfaction:   5,
-  comment:        "TEST",
-  coordinates:    "POINT(45.5017 -73.5673)", 
-  other_income:   105256.89,
-  other_expense:  40678.16,
-  daily_capacity: 15000,
-  address:        "001 main street",
-  status:         "ONGOING",
-  name: "Festival 1"
+f = Festival.create!(
+  name: "Festify 2026",
+  start_at: Date.new(2026, 7, 15),
+  end_at: Date.new(2026, 7, 20),
+  daily_capacity: 5000,
+  address: "123 Rue rue, Shawinigan, QC",
+  status: "ONGOING",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival"
+)
+
+f1 = Festival.create!(
+  name: "Festify 2025",
+  start_at: Date.new(2025, 7, 15),
+  end_at: Date.new(2025, 7, 20),
+  daily_capacity: 5000,
+  address: "123 Rue rue, Shawinigan, QC",
+  status: "COMPLETED",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival"
+)
+
+f2 = Festival.create!(
+  name: "Festify 2024",
+  start_at: Date.new(2024, 7, 15),
+  end_at: Date.new(2024, 7, 20),
+  daily_capacity: 5000,
+  address: "123 Rue rue, Shawinigan, QC",
+  status: "COMPLETED",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival"
 )

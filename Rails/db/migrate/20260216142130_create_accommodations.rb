@@ -4,6 +4,7 @@ class CreateAccommodations < ActiveRecord::Migration[7.1]
       t.string :name, limit: 100, null: false
       t.integer :category, limit: 1, null: false 
       t.string :address, null: false
+      t.column :coordinates, :point, null: false
       t.column :coordinates, :point, null: false 
       t.boolean :shuttle, default: false, null: false
       t.time :time_car, null: false

@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
     standalone: true,
     templateUrl: './dashboard.html',
     styleUrls: ['./dashboard.css'],
-    imports: [CommonModule, RouterLink, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule, TranslateModule]
+    imports: [CommonModule, MatFormFieldModule, MatInputModule, MatButtonModule, ReactiveFormsModule, MatCardModule, MatIconModule, TranslateModule]
 })
 export class Dashboard {
     

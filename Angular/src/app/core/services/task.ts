@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Task } from '@core/models/task';
-import { Router } from 'node_modules/@angular/router/types/_router_module-chunk';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/internal/Observable';
 import { catchError } from 'rxjs/internal/operators/catchError';
 

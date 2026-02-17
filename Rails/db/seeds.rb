@@ -7,13 +7,23 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+begin
+  Affectation.destroy_all 
+rescue NameError, ActiveRecord::StatementInvalid
+  #continue si aucune affectation
+end
+
 
 Performance.destroy_all
 Stage.destroy_all
 Artist.destroy_all
 Festival.destroy_all
 Task.destroy_all
+Client.destroy_all
+Admin.destroy_all
+Staff.destroy_all
 User.destroy_all
+
 
 Client.create!(
     email: "client@test.com",
@@ -117,8 +127,8 @@ f = Festival.create!(
 
 f1 = Festival.create!(
   name: "Festify 2025",
-  start_at: Date.new(2025, 7, 15),
-  end_at: Date.new(2025, 7, 20),
+  start_at: Date.new(2025, 7, 10),
+  end_at: Date.new(2025, 7, 12),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582, 
@@ -143,4 +153,81 @@ f2 = Festival.create!(
   other_income: 15000.00,
   other_expense: 5000.00,
   comment: "Bon festival"
+)
+
+main_stage = Stage.create!(
+    name: "Main stage",
+    capacity: 15000,
+    environment: "outdoor",
+    technical_specs: "Big speaker"
+)
+
+b_stage = Stage.create!(
+    name: "Secondary stage",
+    capacity: 8000,
+    environment: "indoor",
+    technical_specs: "Medium stage"
+)
+
+c_stage = Stage.create!(
+    name: "Small stage",
+    capacity: 2000,
+    environment: "covered",
+    technical_specs: "Small speaker"
+)
+
+
+artist1 = Artist.create!(
+    name: "Bob",
+    genre: "Rock",
+    popularity: 4,
+    bio: "Good music"
+)
+
+artist2 = Artist.create!(
+    name: "Louis",
+    genre: "Hip hop",
+    popularity: 3,
+    bio: "Good music"
+)
+
+artist3 = Artist.create!(
+    name: "Alice",
+    genre: "Pop",
+    popularity: 4,
+    bio: "Good music"
+)
+
+
+Performance.create!(
+  title: "First show",
+  description: "Bon show.",
+  price: 55.00,
+  start_at: f.start_at.to_time.change(hour: 20, min: 0), 
+  end_at: f.start_at.to_time.change(hour: 22, min: 0),
+  festival: f, 
+  stage: main_stage,
+  artist: artist1 
+)
+
+Performance.create!(
+  title: "Second show",
+  description: "Good show",
+  price: 45.00,
+  start_at: f.start_at.to_time.change(hour: 21, min: 0), 
+  end_at: f.start_at.to_time.change(hour: 23, min: 59),
+  festival: f,
+  stage: b_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last show",
+  description: "Good show",
+  price: 60.00,
+  start_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 0), 
+  end_at: (f.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f,
+  stage: main_stage,
+  artist: artist2
 )

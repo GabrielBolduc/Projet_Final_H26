@@ -1,15 +1,13 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
+  name: ArtistA
   genre: MyString
   bio: MyText
   popularity: 1
-  deleted_at: 2026-02-16 08:42:47
 
 two:
-  name: MyString
+  name: ArtistB
   genre: MyString
   bio: MyText
   popularity: 1
-  deleted_at: 2026-02-16 08:42:47

@@ -6,7 +6,7 @@ class CreateFestivals < ActiveRecord::Migration[8.1]
       t.date :end_at, null: false
       t.integer :satisfaction, limit: 1
       t.text :comment
-      t.column :coordinates, :point, null: false
+      t.column :coordinates, :point
       t.decimal :other_income, precision: 10, scale: 2
       t.decimal :other_expense, precision: 10, scale: 2
       t.integer :daily_capacity, null: false

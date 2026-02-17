@@ -35,5 +35,6 @@ module Projet
     config.middleware.use ActionDispatch::Session::CookieStore
 
     config.railties_order = [ ActiveStorage::Engine, :main_app, :all ]
+    config.active_record.schema_format = :sql
   end
 end

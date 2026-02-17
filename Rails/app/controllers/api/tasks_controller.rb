@@ -1,12 +1,15 @@
 class Api::TasksController < ApiController
-    before_action :authenticate_user
+    before_action :authenticate_user!
     before_action :set_task, only: %i[show update destroy]
 
     def index
 
         @tasks = Task.all
 
-        render json: @tasks.as_json(task_json)
+        render json: {
+        status: "success",
+        data: @tasks.as_json(task_json)
+        }, status: :ok
 
         
     end 
@@ -22,15 +25,13 @@ class Api::TasksController < ApiController
         
     end 
     def create
-
         @task = Task.new(task_params)
         if @task.save
             render json: @task.as_json(task_json).merge(success: true), status: :ok
         else
-            render json: { success: false, "la creation de la tache n'a pas fonctionné" }, status: :ok
+            render json: { success: false, errors: ["La création de la tâche n'a pas fonctionné"] }, status: :ok
         end
-        
-    end 
+    end
     def update
 
         if @task.update(task_params)

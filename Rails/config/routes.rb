@@ -6,14 +6,14 @@ Rails.application.routes.draw do
 
   get "up" => "rails/health#show", as: :rails_health_check
 
-  namespace :api, constraints: { format: 'json' } do
+  namespace :api, defaults: { format: :json } do
+    resources :festivals, only: [:index, :show]
+    resources :users 
   end
 
   root to: "angular#index"
+  
   get '*path', to: 'angular#index', constraints: ->(req) do
-
-    !req.xhr? && 
-    req.format.html? && 
-    !req.path.include?('.')
+    !req.xhr? && req.format.html?
   end
 end

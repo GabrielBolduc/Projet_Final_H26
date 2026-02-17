@@ -1,0 +1,59 @@
+<div class="admin-wrapper">
+  <header class="admin-header">
+    <button mat-stroked-button color="basic" class="btn-new">Nouveau Festival</button>
+    <h1 class="main-title">Administration</h1>
+    <span class="user-greeting">Bonjour Gabriel</span> </header>
+
+  <main class="admin-content">
+    
+    <section class="section-group">
+      <h2 class="group-title">Festival Actuel</h2>
+      @if (currentFestival(); as f) {
+        <mat-card class="card-custom">
+          <mat-card-content>
+            <h3>{{ f.name }}</h3>
+            <p class="date-row">
+              <mat-icon>calendar_today</mat-icon>
+              {{ f.start_at | date:'d Juillet' }} - {{ f.end_at | date:'d Juillet yyyy' }}
+            </p>
+            <p class="address">Adresse : {{ f.address }}</p>
+            <div class="card-actions">
+              <button mat-stroked-button class="btn-dashboard">Acceder au dashboard</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </section>
+
+    <section class="section-group">
+      <h2 class="group-title">Archive</h2>
+      <div class="archive-grid">
+        @for (f of archives(); track f.id) {
+          <mat-card class="card-custom archive-card">
+            <mat-card-content>
+              <h3>{{ f.name }} (Terminer)</h3>
+              <p class="date-row">
+                <mat-icon>calendar_today</mat-icon>
+                {{ f.start_at | date:'d Juillet' }} - {{ f.end_at | date:'d Juillet yyyy' }}
+              </p>
+              <p>Depense : {{ f.other_expense | currency:'CAD':'symbol':'1.0-0' }}</p>
+              <p>Revenue : {{ f.other_income | currency:'CAD':'symbol':'1.0-0' }}</p>
+              <p>Adresse : {{ f.address }}</p>
+              
+              <div class="satisfaction-row">
+                <span>Satisfaction : </span>
+                @for (star of [1,2,3,4,5]; track star) {
+                  <mat-icon [color]="star <= (f.satisfaction || 0) ? 'warn' : ''" class="star-icon">
+                    {{ star <= (f.satisfaction || 0) ? 'star' : 'star_border' }}
+                  </mat-icon>
+                }
+              </div>
+              <a href="#" class="comment-link">Commentaires</a>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </section>
+
+  </main>
+</div>

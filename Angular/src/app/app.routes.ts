@@ -4,6 +4,7 @@ import { Signup } from './features/auth/signup/signup';
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
 import { Ticketing } from './features/ticketing/ticketing';
+import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { Dashboard} from './features/admin/performance/dashboard/dashboard'
 import {AdministrationComponent} from './features/admin/festival/administration/administration'
@@ -28,7 +29,10 @@ export const routes: Routes = [
                 path: 'ticketing',
                 component: Ticketing
             },
-
+            {
+                path: 'reservations',
+                component: Reservation
+            },
             {
                 path: 'login',
                 component: Login,

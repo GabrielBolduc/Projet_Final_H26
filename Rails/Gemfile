@@ -51,5 +51,3 @@ end
 
 gem "devise", "~> 5.0"
 gem "rack-cors"
-gem 'rgeo'  
-gem 'rgeo-activerecord'

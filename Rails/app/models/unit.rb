@@ -2,7 +2,7 @@
 class Unit < ApplicationRecord
   belongs_to :accommodation
   has_many :reservations
-  has_many_attached :images
+  has_one_attached :image
 
   CAPACITIES = {
     'SimpleRoom'      => 1,
@@ -17,8 +17,8 @@ class Unit < ApplicationRecord
 
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validates :cost_person_per_night, :parking_cost, numericality: { greater_than_or_equal_to: 0 }
-  validates :images, presence: true
-  validate :must_have_at_one_image
+  validates :image, presence: true
+  validate :must_have_image
 
 
   def max_capacity
@@ -35,9 +35,9 @@ class Unit < ApplicationRecord
 
   private
 
-  def must_have_at_one_image
-    unless images.attached?
-      errors.add(:images, "must be uploaded (at least one image is required)")
+  def must_have_image
+    unless image.attached?
+      errors.add(:image, "must be uploaded")
     end
   end
 end

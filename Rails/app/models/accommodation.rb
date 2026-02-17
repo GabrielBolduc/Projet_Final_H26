@@ -6,6 +6,7 @@ class Accommodation < ApplicationRecord
   validates :name, presence: true, length: { maximum: 100 }
   validates :address, presence: true
   validates :commission, numericality: { greater_than_or_equal_to: 0, less_than: 30 }
+  composed_of :coordinates, class_name: 'GeoPoint', mapping: [%w(latitude latitude), %w(longitude longitude)]
   
   before_validation :strip_fields
 

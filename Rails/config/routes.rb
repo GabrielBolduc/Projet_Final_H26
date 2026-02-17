@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :festivals, only: [:index, :show]
-    resources :tasks, only: [:index, :show, :create, :destroy, :update,]
+
   end
 
   root to: "angular#index"

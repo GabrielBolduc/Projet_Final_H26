@@ -112,3 +112,29 @@ f = Festival.create!(
   other_expense: 5000.00,
   comment: "Bon festival"
 )
+
+f1 = Festival.create!(
+  name: "Festify 2025",
+  start_at: Date.new(2025, 7, 15),
+  end_at: Date.new(2025, 7, 20),
+  daily_capacity: 5000,
+  address: "123 Rue rue, Shawinigan, QC",
+  status: "DRAFT",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival"
+)
+
+f2 = Festival.create!(
+  name: "Festify 2024",
+  start_at: Date.new(2024, 7, 15),
+  end_at: Date.new(2024, 7, 20),
+  daily_capacity: 5000,
+  address: "123 Rue rue, Shawinigan, QC",
+  status: "DRAFT",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival"
+)

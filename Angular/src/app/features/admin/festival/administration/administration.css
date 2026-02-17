@@ -1,66 +1,71 @@
-.admin-wrapper {
-  padding: 20px;
-  font-family: sans-serif;
+.admin-page {
+  padding: 20px 40px;
+  max-width: 1000px; 
+  margin: 0 auto;    
 }
 
-
-
-.admin-header {
+.admin-top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 }
 
-.main-title { font-weight: bold; font-size: 24px; }
-
-.section-group {
-  margin-bottom: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.admin-section {
+  margin-bottom: 60px;
+  width: 100%;
 }
 
-.group-title { font-size: 18px; margin-bottom: 15px; }
+.section-label {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: var(--sunset-muted);
+  font-weight: 700;
+  border-left: 5px solid var(--sunset-primary); 
+  padding-left: 15px;
+}
 
-.card-custom {
-  width: 320px;
-  border: 2px solid #333 !important;
+
+.fest-card {
+  width: 100%; 
+  margin-bottom: 25px;
+  background: var(--sunset-card) !important;
+  border: 2px solid var(--sunset-text) !important;
   border-radius: 15px !important;
-  box-shadow: none !important;
+  box-shadow: 6px 6px 0px var(--sunset-text) !important;
+  transition: all 0.2s ease;
+}
+
+.fest-card:hover {
+  transform: translateX(5px); 
+  box-shadow: 8px 8px 0px var(--sunset-primary) !important;
 }
 
 .archive-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 30px;
-  width: 100%;
-  max-width: 800px;
-}
-
-.date-row {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 15px 0;
+  flex-direction: column;
+  width: 100%;
 }
 
-.btn-dashboard {
-  border: 2px solid #333 !important;
-  border-radius: 10px !important;
-  margin-top: 20px;
+.card-content-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
 }
 
-.star-icon {
+.main-info {
+  flex: 2;
+}
+
+.side-info {
+  flex: 1;
+  text-align: right;
+  border-left: 1px dashed var(--sunset-border);
+  padding-left: 20px;
+}
+
+.stars mat-icon {
   font-size: 20px;
-  width: 20px;
-  height: 20px;
-  color: orange;
-}
-
-.comment-link {
-  display: block;
-  margin-top: 10px;
-  color: #0056b3;
-  text-decoration: underline;
+  color: var(--sunset-secondary);
 }

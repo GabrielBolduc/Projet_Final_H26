@@ -1,59 +1,59 @@
-<div class="admin-wrapper">
-  <header class="admin-header">
-    <button mat-stroked-button color="basic" class="btn-new">Nouveau Festival</button>
-    <h1 class="main-title">Administration</h1>
-    <span class="user-greeting">Bonjour Gabriel</span> </header>
+<div class="admin-page">
+  <header class="admin-top-bar">
+    <button mat-stroked-button class="btn-new">
+      <mat-icon>add</mat-icon> Nouveau Festival
+    </button>
+    <h1 class="header-title">Administration</h1>
+    <span class="greeting">Bonjour Gabriel</span>
+  </header>
 
-  <main class="admin-content">
-    
-    <section class="section-group">
-      <h2 class="group-title">Festival Actuel</h2>
+  <main>
+    <section class="admin-section">
+      <h2 class="section-label">En cours</h2>
       @if (currentFestival(); as f) {
-        <mat-card class="card-custom">
-          <mat-card-content>
-            <h3>{{ f.name }}</h3>
-            <p class="date-row">
-              <mat-icon>calendar_today</mat-icon>
-              {{ f.start_at | date:'d Juillet' }} - {{ f.end_at | date:'d Juillet yyyy' }}
-            </p>
-            <p class="address">Adresse : {{ f.address }}</p>
-            <div class="card-actions">
-              <button mat-stroked-button class="btn-dashboard">Acceder au dashboard</button>
+        <mat-card class="fest-card" appearance="outlined">
+          <mat-card-content class="card-content-layout">
+            <div class="main-info">
+              <h3>{{ f.name }}</h3>
+              <div class="meta-info">
+                <mat-icon>event</mat-icon>
+                <span>{{ f.start_at | date:'longDate' }}</span>
+              </div>
+              <p><strong>Lieu :</strong> {{ f.address }}</p>
+              <button mat-flat-button class="btn-dash">Tableau de bord</button>
             </div>
           </mat-card-content>
         </mat-card>
       }
     </section>
 
-    <section class="section-group">
-      <h2 class="group-title">Archive</h2>
-      <div class="archive-grid">
+    <section class="admin-section">
+      <h2 class="section-label">Archives</h2>
+      <div class="archive-list">
         @for (f of archives(); track f.id) {
-          <mat-card class="card-custom archive-card">
-            <mat-card-content>
-              <h3>{{ f.name }} (Terminer)</h3>
-              <p class="date-row">
-                <mat-icon>calendar_today</mat-icon>
-                {{ f.start_at | date:'d Juillet' }} - {{ f.end_at | date:'d Juillet yyyy' }}
-              </p>
-              <p>Depense : {{ f.other_expense | currency:'CAD':'symbol':'1.0-0' }}</p>
-              <p>Revenue : {{ f.other_income | currency:'CAD':'symbol':'1.0-0' }}</p>
-              <p>Adresse : {{ f.address }}</p>
-              
-              <div class="satisfaction-row">
-                <span>Satisfaction : </span>
-                @for (star of [1,2,3,4,5]; track star) {
-                  <mat-icon [color]="star <= (f.satisfaction || 0) ? 'warn' : ''" class="star-icon">
-                    {{ star <= (f.satisfaction || 0) ? 'star' : 'star_border' }}
-                  </mat-icon>
-                }
+          <mat-card class="fest-card">
+            <mat-card-content class="card-content-layout">
+              <div class="main-info">
+                <h3>{{ f.name }}</h3>
+                <div class="meta-info">
+                  <mat-icon>history</mat-icon>
+                  <span>{{ f.start_at | date:'MMMM yyyy' }}</span>
+                </div>
+                <a href="#" class="mat-button">Voir les commentaires</a>
               </div>
-              <a href="#" class="comment-link">Commentaires</a>
+              
+              <div class="side-info">
+                <p><strong>Revenu :</strong> {{ f.other_income | currency:'CAD' }}</p>
+                <div class="stars">
+                  @for (s of [1,2,3,4,5]; track s) {
+                    <mat-icon>{{ s <= (f.satisfaction || 0) ? 'star' : 'star_border' }}</mat-icon>
+                  }
+                </div>
+              </div>
             </mat-card-content>
           </mat-card>
         }
       </div>
     </section>
-
   </main>
 </div>

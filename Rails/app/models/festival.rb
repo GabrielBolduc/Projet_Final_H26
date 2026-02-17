@@ -15,9 +15,6 @@ class Festival < ApplicationRecord
 
   validate :end_at_after_start_at
 
-  validates :latitude, presence: true
-  validates :longitude, presence: true
-
   private
 
   def end_at_after_start_at

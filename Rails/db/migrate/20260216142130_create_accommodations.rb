@@ -4,8 +4,7 @@ class CreateAccommodations < ActiveRecord::Migration[7.1]
       t.string :name, limit: 100, null: false
       t.integer :category, limit: 1, null: false 
       t.string :address, null: false
-      t.column :coordinates, :point, null: false
-      t.column :coordinates, :point, null: false 
+      t.column :coordinates, :point
       t.boolean :shuttle, default: false, null: false
       t.time :time_car, null: false
       t.time :time_walk, null: false
@@ -18,7 +17,5 @@ class CreateAccommodations < ActiveRecord::Migration[7.1]
       t.check_constraint "TRIM(name) <> ''", name: "chk_name_not_empty"
       t.check_constraint "TRIM(address) <> ''", name: "chk_address_not_empty"
     end
-
-    add_index :accommodations, :coordinates, type: :spatial
   end
 end

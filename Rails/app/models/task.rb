@@ -7,4 +7,6 @@ class Task < ApplicationRecord
     validates :priority, presence: true
 
     has_many :affectations, dependent: :destroy
+
+    has_one_attached :file
 end

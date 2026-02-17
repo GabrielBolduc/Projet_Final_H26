@@ -50,6 +50,5 @@ group :development, :test do
 end
 
 gem "devise", "~> 5.0"
-gem "rgeo"
+gem "rack-cors"
 gem 'rgeo-activerecord'
-gem 'activerecord-mysql2spatial-adapter'

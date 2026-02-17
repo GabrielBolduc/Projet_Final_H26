@@ -1,0 +1,15 @@
+one:
+  name: "Festival Shawinigan"
+  start_at: 2025-07-04 12:00:00
+  end_at: 2025-07-14 23:00:00
+  status: "completed"
+  address: "Rue Shawinigan, qc, Canada"
+  daily_capacity: 1 000 000
+
+two:
+  name: "Festival de St-titre"
+  start_at: 2026-08-01 12:00:00
+  end_at: 2026-08-03 23:00:00
+  status: "ongoing"
+  address: "Village de St-Titre, qc, Canada"
+  daily_capacity: 40 000

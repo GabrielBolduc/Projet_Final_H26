@@ -1,104 +1,49 @@
-.admin-page {
-  padding: 40px 20px;
-  max-width: 1000px;
-  margin: 0 auto;
-  /* On utilise le fond de surface défini dans ton body */
-  background-color: var(--mat-sys-surface);
-}
-
-.admin-top-bar {
+.brand-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 48px;
-}
-
-.header-title {
-  /* Utilise la couleur Rose (Primary) de ton thème */
-  color: var(--mat-sys-primary);
-  font: var(--mat-sys-display-small);
-  margin: 0;
-  font-weight: 900;
-}
-
-.greeting {
-  color: var(--mat-sys-on-surface-variant);
-  font: var(--mat-sys-label-large);
-}
-
-/* --- SECTION & CARDS --- */
-
-.admin-section {
-  margin-bottom: 40px;
-}
-
-.section-label {
-  color: var(--mat-sys-secondary);
-  font: var(--mat-sys-title-medium);
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.fest-card {
   width: 100%;
-  margin-bottom: 24px;
-  /* Utilise le nouveau système de conteneurs M3 */
-  background-color: var(--mat-sys-surface-container-low) !important;
-  border-radius: 24px !important; 
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid var(--mat-sys-outline-variant) !important;
+    
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+  transition: box-shadow 0.2s ease-in-out;
 }
 
-.fest-card:hover {
-  transform: scale(1.01);
-  background-color: var(--mat-sys-surface-container-high) !important;
-  box-shadow: var(--mat-sys-level2) !important;
+.header-actions {
+  display: flex; 
+  align-items: center; 
+  gap: 20px; 
 }
 
-/* Mise en page interne */
-.card-content-layout {
-  display: flex;
+.toolbar-logo {
+  height: 50px; 
+  width: auto; 
+  margin-right: 12px; 
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.logo-link {
+  text-decoration: none;
+  color: var(--mat-sys-primary);
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.content {
+  padding: 20px;
+}
+
+.header-actions {
   justify-content: space-between;
-  padding: 16px;
-  gap: 24px;
 }
 
-.main-info h3 {
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-headline-small);
-  margin-top: 0;
-}
-
-.meta-info {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--mat-sys-primary); /* Rose pour les icônes de dates */
-  margin-bottom: 12px;
-}
-
-.side-info {
-  text-align: right;
-  min-width: 200px;
-  /* Utilise la couleur Orange (Tertiary) pour les infos financières */
-  color: var(--mat-sys-tertiary);
-}
-
-.stars mat-icon {
-  color: var(--mat-sys-tertiary); /* Orange pour les étoiles */
-}
-
-/* Boutons */
-.btn-new {
-  /* S'adapte automatiquement au Primary (Rose) */
-  border-color: var(--mat-sys-primary) !important;
-  color: var(--mat-sys-primary) !important;
-}
-
-.btn-dash {
-  background-color: var(--mat-sys-primary-container) !important;
-  color: var(--mat-sys-on-primary-container) !important;
-  border: none !important;
-  font-weight: 600 !important;
+button mat-icon {
+  margin-right: 8px;
 }

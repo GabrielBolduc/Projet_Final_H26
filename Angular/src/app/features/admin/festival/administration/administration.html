@@ -1,26 +1,24 @@
 <div class="admin-page">
   <header class="admin-top-bar">
-    <button mat-stroked-button class="btn-new">
-      <mat-icon>add</mat-icon> Nouveau Festival
-    </button>
+    <button mat-stroked-button class="btn-new">Nouveau Festival</button>
     <h1 class="header-title">Administration</h1>
     <span class="greeting">Bonjour Gabriel</span>
   </header>
 
   <main>
     <section class="admin-section">
-      <h2 class="section-label">En cours</h2>
+      <h2 class="section-label">Festival Actuel</h2>
       @if (currentFestival(); as f) {
-        <mat-card class="fest-card" appearance="outlined">
+        <mat-card class="fest-card">
           <mat-card-content class="card-content-layout">
             <div class="main-info">
               <h3>{{ f.name }}</h3>
               <div class="meta-info">
-                <mat-icon>event</mat-icon>
-                <span>{{ f.start_at | date:'longDate' }}</span>
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
               </div>
-              <p><strong>Lieu :</strong> {{ f.address }}</p>
-              <button mat-flat-button class="btn-dash">Tableau de bord</button>
+              <p><strong>Adresse :</strong> {{ f.address }}</p>
+              <button mat-stroked-button class="btn-dash">Acceder au dashboard</button>
             </div>
           </mat-card-content>
         </mat-card>
@@ -28,22 +26,24 @@
     </section>
 
     <section class="admin-section">
-      <h2 class="section-label">Archives</h2>
-      <div class="archive-list">
+      <h2 class="section-label">Archive</h2>
+      <div class="archive-grid">
         @for (f of archives(); track f.id) {
           <mat-card class="fest-card">
             <mat-card-content class="card-content-layout">
               <div class="main-info">
-                <h3>{{ f.name }}</h3>
+                <h3>{{ f.name }} <small>(Terminé)</small></h3>
                 <div class="meta-info">
-                  <mat-icon>history</mat-icon>
-                  <span>{{ f.start_at | date:'MMMM yyyy' }}</span>
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
                 </div>
-                <a href="#" class="mat-button">Voir les commentaires</a>
+                <p><strong>Adresse :</strong> {{ f.address }}</p>
+                <a href="#" class="comment-link">Consulter les commentaires</a>
               </div>
               
               <div class="side-info">
                 <p><strong>Revenu :</strong> {{ f.other_income | currency:'CAD' }}</p>
+                <p><strong>Dépense :</strong> {{ f.other_expense | currency:'CAD' }}</p>
                 <div class="stars">
                   @for (s of [1,2,3,4,5]; track s) {
                     <mat-icon>{{ s <= (f.satisfaction || 0) ? 'star' : 'star_border' }}</mat-icon>

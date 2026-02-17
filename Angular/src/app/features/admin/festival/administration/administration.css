@@ -1,3 +1,5 @@
+/* administration.css */
+
 .admin-page {
   padding: 20px 40px;
   max-width: 1000px; 
@@ -19,26 +21,30 @@
 .section-label {
   font-size: 1.4rem;
   margin-bottom: 20px;
-  color: var(--sunset-muted);
+  /* Utilisation de la couleur de variante pour le texte secondaire */
+  color: var(--mat-sys-on-surface-variant);
   font-weight: 700;
-  border-left: 5px solid var(--sunset-primary); 
+  /* Utilisation de la palette Rose (Primary) pour la bordure décorative */
+  border-left: 5px solid var(--mat-sys-primary); 
   padding-left: 15px;
 }
-
 
 .fest-card {
   width: 100%; 
   margin-bottom: 25px;
-  background: var(--sunset-card) !important;
-  border: 2px solid var(--sunset-text) !important;
+  /* Utilisation des couleurs de surface et de texte du système */
+  background: var(--mat-sys-surface-container-low) !important;
+  border: 2px solid var(--mat-sys-on-surface) !important;
   border-radius: 15px !important;
-  box-shadow: 6px 6px 0px var(--sunset-text) !important;
+  /* Conserve l'ombre solide rétro avec la couleur de texte système */
+  box-shadow: 6px 6px 0px var(--mat-sys-on-surface) !important;
   transition: all 0.2s ease;
 }
 
 .fest-card:hover {
   transform: translateX(5px); 
-  box-shadow: 8px 8px 0px var(--sunset-primary) !important;
+  /* L'ombre au survol passe au Rose (Primary) */
+  box-shadow: 8px 8px 0px var(--mat-sys-primary) !important;
 }
 
 .archive-grid {
@@ -51,7 +57,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 10px;
+  padding: 20px; /* Un peu plus d'espace pour le confort */
 }
 
 .main-info {
@@ -61,11 +67,27 @@
 .side-info {
   flex: 1;
   text-align: right;
-  border-left: 1px dashed var(--sunset-border);
+  /* Utilisation de la couleur de bordure système */
+  border-left: 1px dashed var(--mat-sys-outline-variant);
   padding-left: 20px;
 }
 
 .stars mat-icon {
   font-size: 20px;
-  color: var(--sunset-secondary);
+  /* Utilisation de la palette Orange (Tertiary) pour les icônes */
+  color: var(--mat-sys-tertiary);
+}
+
+/* Boutons et liens additionnels pour compléter le style */
+.btn-new {
+  border: 2px solid var(--mat-sys-primary) !important;
+  color: var(--mat-sys-primary) !important;
+  font-weight: bold !important;
+}
+
+.btn-dash {
+  background-color: var(--mat-sys-primary-container) !important;
+  color: var(--mat-sys-on-primary-container) !important;
+  border: 2px solid var(--mat-sys-on-surface) !important;
+  box-shadow: 4px 4px 0px var(--mat-sys-on-surface) !important;
 }

@@ -7,6 +7,7 @@ import { Hospitality } from './features/hospitality/hospitality';
 import { Ticketing } from './features/ticketing/ticketing';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { Dashboard} from './features/admin/performance/dashboard/dashboard'
+import {AdministrationComponent} from './features/admin/festival/administration/administration'
 import { AuthGuard } from './core/guards/auth-guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin-guard';
@@ -46,7 +47,10 @@ export const routes: Routes = [
             {
                 path: 'dashboard',
                 component: Dashboard,
-                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin',
+                component: AdministrationComponent,
             },
 
             {

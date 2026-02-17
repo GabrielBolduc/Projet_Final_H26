@@ -1,7 +1,7 @@
 class Festival < ApplicationRecord
-
   has_many :performances, dependent: :destroy
   has_many :affectations, dependent: :destroy
+  has_many :accommodations
 
 
   enum :status, { draft: 'DRAFT', ongoing: 'ONGOING',  completed: 'COMPLETED'}, default: :draft, validate: true
@@ -16,6 +16,8 @@ class Festival < ApplicationRecord
   validates :other_income, :other_expense, numericality: { allow_nil: true }
 
   validate :end_at_after_start_at
+
+  composed_of :coordinates, class_name: 'GeoPoint', mapping: [%w(latitude latitude), %w(longitude longitude)]
 
   private
 

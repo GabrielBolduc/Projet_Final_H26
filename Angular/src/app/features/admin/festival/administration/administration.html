@@ -1,0 +1,50 @@
+<div class="admin-page">
+  <header class="admin-top-bar">
+    <button mat-stroked-button class="btn-new">Nouveau Festival</button>
+    <h1 class="header-title">Administration</h1>
+    <span class="greeting">Bonjour Gabriel</span>
+  </header>
+
+  <main>
+    <section class="admin-section">
+      <h2 class="section-label">Festival Actuel</h2>
+      @if (currentFestival(); as f) {
+        <mat-card class="fest-card">
+          <mat-card-content class="card-content-layout">
+            <div class="main-info">
+              <h3>{{ f.name }}</h3>
+              <div class="meta-info">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+              </div>
+              <p><strong>Adresse :</strong> {{ f.address }}</p>
+              <button mat-stroked-button class="btn-dash">Acceder au dashboard</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </section>
+
+    <section class="admin-section">
+      <h2 class="section-label">Archive</h2>
+      <div class="archive-grid">
+        @for (f of archives(); track f.id) {
+          <mat-card class="fest-card">
+            <mat-card-content class="card-content-layout">
+              <div class="main-info">
+                <h3>{{ f.name }} <small>(Terminé)</small></h3>
+                <div class="meta-info">
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+                </div>
+                <p><strong>Adresse :</strong> {{ f.address }}</p>
+                <a href="#" class="comment-link">Consulter les commentaires</a>
+              </div>
+              
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+    </section>
+  </main>
+</div>

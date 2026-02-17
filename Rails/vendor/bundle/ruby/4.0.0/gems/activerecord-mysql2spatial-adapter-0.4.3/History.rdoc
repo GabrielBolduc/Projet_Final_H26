@@ -1,0 +1,53 @@
+=== 0.4.3 / 2012-08-02
+
+* The gemspec no longer includes the timestamp in the version, so that bundler can pull from github. (Reported by corneverbruggen)
+* Fix for compatibility with ActiveRecord >= 3.2.2. (Pull request by janv)
+
+=== 0.4.2 / 2012-02-22
+
+* Some compatibility fixes for Rails 3.2. (Reported by Nicholas Zaillian and Ryan Williams with implementation help from Radek Paviensky.)
+* Now requires rgeo-activerecord 0.4.3.
+
+=== 0.4.1 / 2011-09-07
+
+* Now requests mysql2 >= 0.2.x instead of >= 0.3.x since the latter requires Rails 3.1. (Reported by Greg Hazel)
+
+=== 0.4.0 / 2011-08-15
+
+* Various fixes for Rails 3.1 compatibility. 
+* Now requires rgeo-activerecord 0.4.0.
+* INCOMPATIBLE CHANGE: simple queries (e.g. MyClass.where(:latlon => my_point)) use an objective rather than spatial equality test. Earlier versions transformed this form to use st_equals, but now if you need to test for spatial equality, you'll need to call st_equals explicitly. I'm still evaluating which direction we want to go with this in the future, but we may be stuck with the current behavior because the hack required to transform these queries to use spatial equality was egregious and broke in Rails 3.1 with no clear workaround.
+
+=== 0.3.3 / 2011-06-21
+
+* Require latest rgeo-activerecord to get some fixes.
+* Support hex format for attribute setting.
+* No longer raises exceptions if parse fails on attribute setting. (Reported by Daniel Hackney)
+
+=== 0.3.2 / 2011-04-11
+
+* A .gemspec file is now available for gem building and bundler git integration.
+
+=== 0.3.1 / 2011-02-28
+
+* Now requires rgeo-activerecord 0.3.1 (which brings a critical fix involving declaring multiple spatial columns in migration).
+
+=== 0.3.0 / 2011-01-26
+
+* Reworked type and constraint handling, which should result in a large number of bug fixes, especially related to schema dumps.
+* Experimental support for complex spatial queries. (Requires Arel 2.1, which is expected to be released with Rails 3.1.)
+* The path to the Railtie is now different (see the README), though a compatibility wrapper has been left in the old location.
+* Reorganized the code a bit for better clarity.
+
+=== 0.2.1 / 2010-12-27
+
+* Support for basic spatial equality queries. e.g. constructs such as:
+    MyClass.where(:geom_column => factory.point(1, 2))
+    MyClass.where(:geom_column => 'POINT(1 2)')
+
+=== 0.2.0 / 2010-12-07
+
+* Initial public alpha release. Spun activerecord-mysql2spatial-adapter off from the core rgeo gem.
+* You can now set the factory for a specific column by name.
+
+For earlier history, see the History file for the rgeo gem.

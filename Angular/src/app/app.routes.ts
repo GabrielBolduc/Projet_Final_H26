@@ -3,10 +3,18 @@ import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
-import { Hospitality } from './features/hospitality/hospitality';
 import { Ticketing } from './features/ticketing/ticketing';
+import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { Dashboard} from './features/admin/performance/dashboard/dashboard'
+import {AdministrationComponent} from './features/admin/festival/administration/administration'
+import { AuthGuard } from './core/guards/auth-guard';
+import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
+import { adminGuard } from './core/guards/admin-guard';
+import path from 'path';
+import { taskListComponent } from '@features/laurent/task/list/list';
+import { TaskShowComponent } from '@features/laurent/task/show/show';
+import { TaskFormComponent } from '@features/laurent/task/form/form';
 export const routes: Routes = [
     {
         path: '',
@@ -18,31 +26,63 @@ export const routes: Routes = [
                 component: Home
             },
             {
-                path: 'hospitality',
-                component: Hospitality
-            },
-            {
                 path: 'ticketing',
                 component: Ticketing
             },
-
+            {
+                path: 'reservations',
+                component: Reservation
+            },
             {
                 path: 'login',
-                component: Login
+                component: Login,
+                canActivate: [restrictionLoginGuard]
             },
             {
                 path: 'signup',
-                component: Signup
+                component: Signup,
+                canActivate: [restrictionLoginGuard]
             },
             {
                 path: 'dashboard',
-                component: Dashboard
+                component: Dashboard,
+            },
+            {
+                path: 'admin',
+                component: AdministrationComponent,
             },
 
             {
                 path: '**',
                 component: Notfound
+            },
+
+            {
+                path: 'tasks',
+                component: taskListComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+
+            {
+                path: 'tasks/:id',
+                component: TaskShowComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+
+            {
+                path: 'tasks/new',
+                component: TaskFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+
+            {
+                path: 'tasks/:id/edit',
+                component: TaskFormComponent,
+                canActivate: [AuthGuard, adminGuard]
             }
+
+
+
         ]
     }
 ]

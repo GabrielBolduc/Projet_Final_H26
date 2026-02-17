@@ -1,14 +1,36 @@
-<mat-toolbar color="primary" class="brand-header"> 
-  <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
-  <a [routerLink]="['/']" class="logo-link">
-    <span>{{ 'NAV.HOME' | translate }}</span>
-  </a>
+<mat-toolbar color="primary" class="brand-header">
+  
+  <div style="display: flex; align-items: center;">
+    <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
+    
+    <a [routerLink]="['/']" class="logo-link">
+      <span>{{ 'NAV.HOME' | translate }}</span>
+    </a>
+
+    @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
+      <button mat-button [matMenuTriggerFor]="adminMenu" style="margin-left: 20px;">
+        Administration
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #adminMenu="matMenu">
+        <button mat-menu-item [routerLink]="['admin']">
+          <mat-icon>dashboard</mat-icon>
+          <span>Festivals</span>
+        </button>
+        <button mat-menu-item [routerLink]="['dashboard']">
+          <mat-icon>event</mat-icon>
+          <span>Programmation</span>
+        </button>
+      </mat-menu>
+    }
+    </div>
 
   <span class="spacer"></span>
 
   <div class="header-actions">
-    <a [routerLink]="['/hospitality']" class="logo-link">
-      <span>{{ 'NAV.HOSPITALITY' | translate }}</span>
+    <a [routerLink]="['/reservation']" class="logo-link">
+      <span>{{ 'NAV.RESERVATION' | translate }}</span>
     </a>
     <a [routerLink]="['/ticketing']" class="logo-link">
       <span>{{ 'NAV.TICKETING' | translate }}</span>
@@ -18,7 +40,7 @@
       <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
     </a>
     
-      @if (auth.isLoggedIn()) {
+    @if (auth.isLoggedIn()) {
       <button mat-flat-button color="accent" (click)="auth.logout()">
         <mat-icon>logout</mat-icon>
         Disconnect
@@ -29,6 +51,6 @@
         Connect
       </button>
     }
-    
   </div>
+
 </mat-toolbar>

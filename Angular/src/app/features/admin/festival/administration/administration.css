@@ -1,0 +1,74 @@
+.admin-page {
+  padding: 20px 40px;
+  max-width: 1000px; 
+  margin: 0 auto;    
+}
+
+.admin-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.admin-section {
+  margin-bottom: 60px;
+  width: 100%;
+}
+
+.section-label {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  border-left: 5px solid var(--mat-sys-primary); 
+  padding-left: 15px;
+}
+
+.fest-card {
+  width: 100%; 
+  margin-bottom: 25px;
+  background: var(--mat-sys-surface-container-low);
+  border: 2px solid var(--mat-sys-on-surface);
+  border-radius: 15px;
+  transition: all 0.2s ease;
+}
+
+.fest-card:hover {
+  transform: translateX(5px); 
+  box-shadow: 8px 8px 0px var(--mat-sys-primary);
+}
+
+.archive-grid {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-content-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px; 
+}
+
+.main-info {
+  flex: 2;
+}
+
+
+.stars mat-icon {
+  font-size: 20px;
+  color: var(--mat-sys-tertiary);
+}
+
+.btn-new {
+  border: 2px solid var(--mat-sys-primary);
+  color: var(--mat-sys-primary);
+  font-weight: bold;
+}
+
+.btn-dash {
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  border: 2px solid var(--mat-sys-on-surface);
+}

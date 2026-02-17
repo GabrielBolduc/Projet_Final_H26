@@ -1,30 +1,24 @@
 class Festival < ApplicationRecord
-
+  has_many :performances, dependent: :destroy
   has_many :affectations, dependent: :destroy
   has_many :packages, dependent: :destroy
-  
-  
-  enum :statut, { 
-    draft: 'DRAFT', 
-    ongoing: 'ONGOING', 
-    completed: 'COMPLETED' 
-  }, default: :draft, validate: true
+  has_many :accommodations
 
-  validates :start_at, :end_at, :coordinates, :daily_capacity, :address, :statut, presence: true
 
-  validates :address, length: { maximum: 250 }
-  validates :daily_capacity, numericality: { only_integer: true, greater_than: 0 }
+  enum :status, { draft: 'DRAFT', ongoing: 'ONGOING',  completed: 'COMPLETED'}, default: :draft, validate: true
+
+  validates :name, presence: true, length: { maximum: 100 }
+  validates :start_at, :end_at, :status, :address, presence: true
+
+  validates :daily_capacity, presence: true, numericality: { only_integer: true, greater_than: 0 }
   
-  validates :satisfaction, numericality: { 
-    only_integer: true, 
-    greater_than_or_equal_to: 0, 
-    less_than_or_equal_to: 5, 
-    allow_nil: true 
-  }
+  validates :satisfaction, numericality: {  only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5, allow_nil: true }
 
   validates :other_income, :other_expense, numericality: { allow_nil: true }
 
   validate :end_at_after_start_at
+
+  composed_of :coordinates, class_name: 'GeoPoint', mapping: [%w(latitude latitude), %w(longitude longitude)]
 
   private
 
@@ -32,7 +26,7 @@ class Festival < ApplicationRecord
     return if end_at.blank? || start_at.blank?
 
     if end_at < start_at
-      errors.add(:end_at, "doit être postérieure ou égale à la date de début")
+      errors.add(:end_at, "doit etre apres la date de debut")
     end
   end
 end

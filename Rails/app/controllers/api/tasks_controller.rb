@@ -6,15 +6,23 @@ class Api::TasksController < ApiController
 
         @tasks = Task.all
 
+        
         render json: {
         status: "success",
         data: @tasks.as_json(task_json)
         }, status: :ok
-
-        
+            
+       
     end 
     def show
-        render json: @task.as_json(task_json) 
+
+        
+
+       render json: {
+        status: "success",
+        data: @task.as_json(task_json)
+        }, status: :ok
+
     end  
     def destroy
         if @task.destroy
@@ -43,7 +51,7 @@ class Api::TasksController < ApiController
     end  
     
     def set_task
-        @task = Task.includes(:title, :description, :reusable, :difficulty,:priority, :file).find(params[:id])
+        @task = Task.find(params[:id])
         unless @task.present?
             render json: { success: false, errors: [ { base: "Tache non trouver ou inexistante" } ] }, status: :ok
         end

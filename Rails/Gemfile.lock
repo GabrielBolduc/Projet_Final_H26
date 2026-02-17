@@ -56,6 +56,9 @@ GEM
       activemodel (= 8.1.2)
       activesupport (= 8.1.2)
       timeout (>= 0.4.0)
+    activerecord-mysql2spatial-adapter (0.2.1)
+      mysql2 (>= 0.2.6)
+      rgeo-activerecord (>= 0.2.1)
     activestorage (8.1.2)
       actionpack (= 8.1.2)
       activejob (= 8.1.2)
@@ -208,9 +211,6 @@ GEM
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.2.5)
-    rack-cors (3.0.0)
-      logger
-      rack (>= 3.0.14)
     rack-session (2.1.1)
       base64 (>= 0.1.0)
       rack (>= 3.0.0)
@@ -352,6 +352,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  activerecord-mysql2spatial-adapter
   bootsnap
   brakeman
   bundler-audit
@@ -361,7 +362,6 @@ DEPENDENCIES
   kamal
   mysql2 (~> 0.5)
   puma (>= 5.0)
-  rack-cors
   rails (~> 8.1.2)
   rgeo-activerecord
   rubocop-rails-omakase
@@ -382,6 +382,7 @@ CHECKSUMS
   activejob (8.1.2) sha256=908dab3713b101859536375819f4156b07bdf4c232cc645e7538adb9e302f825
   activemodel (8.1.2) sha256=e21358c11ce68aed3f9838b7e464977bc007b4446c6e4059781e1d5c03bcf33e
   activerecord (8.1.2) sha256=acfbe0cadfcc50fa208011fe6f4eb01cae682ebae0ef57145ba45380c74bcc44
+  activerecord-mysql2spatial-adapter (0.2.1) sha256=42a23eccb45c31311c18dc943f67b40da49dd6e14e8726732ddc5ec048f7579b
   activestorage (8.1.2) sha256=8a63a48c3999caeee26a59441f813f94681fc35cc41aba7ce1f836add04fba76
   activesupport (8.1.2) sha256=88842578ccd0d40f658289b0e8c842acfe9af751afee2e0744a7873f50b6fdae
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
@@ -456,7 +457,6 @@ CHECKSUMS
   raabro (1.4.0) sha256=d4fa9ff5172391edb92b242eed8be802d1934b1464061ae5e70d80962c5da882
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rack (3.2.5) sha256=4cbd0974c0b79f7a139b4812004a62e4c60b145cba76422e288ee670601ed6d3
-  rack-cors (3.0.0) sha256=7b95be61db39606906b61b83bd7203fa802b0ceaaad8fcb2fef39e097bf53f68
   rack-session (2.1.1) sha256=0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rackup (2.3.1) sha256=6c79c26753778e90983761d677a48937ee3192b3ffef6bc963c0950f94688868

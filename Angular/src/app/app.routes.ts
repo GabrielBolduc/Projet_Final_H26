@@ -3,7 +3,6 @@ import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
-import { Hospitality } from './features/hospitality/hospitality';
 import { Ticketing } from './features/ticketing/ticketing';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { Dashboard} from './features/admin/performance/dashboard/dashboard'
@@ -24,10 +23,6 @@ export const routes: Routes = [
             {
                 path: '',
                 component: Home
-            },
-            {
-                path: 'hospitality',
-                component: Hospitality
             },
             {
                 path: 'ticketing',

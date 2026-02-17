@@ -15,9 +15,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
     t.decimal "commission", precision: 4, scale: 2, default: "0.0", null: false
-    t.integer "coordinates"
     t.datetime "created_at", null: false
     t.bigint "festival_id", null: false
+    t.decimal "latitude", precision: 10, scale: 8, null: false
+    t.decimal "longitude", precision: 11, scale: 8, null: false
     t.string "name", limit: 100, null: false
     t.boolean "shuttle", default: false, null: false
     t.time "time_car", null: false
@@ -58,10 +59,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
   create_table "festivals", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", null: false
     t.text "comment"
-    t.integer "coordinates"
     t.datetime "created_at", null: false
     t.integer "daily_capacity", null: false
     t.date "end_at", null: false
+    t.decimal "latitude", precision: 10, scale: 8, null: false
+    t.decimal "longitude", precision: 11, scale: 8, null: false
     t.string "name", limit: 100, null: false
     t.decimal "other_expense", precision: 10, scale: 2
     t.decimal "other_income", precision: 10, scale: 2

@@ -6,8 +6,6 @@ class Accommodation < ApplicationRecord
   validates :name, presence: true, length: { maximum: 100 }
   validates :address, presence: true
   validates :commission, numericality: { greater_than_or_equal_to: 0, less_than: 30 }
-  validates :latitude, presence: true
-  validates :longitude, presence: true
   
   before_validation :strip_fields
 

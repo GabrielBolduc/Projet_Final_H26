@@ -10,7 +10,7 @@ import { Festival } from '../../../../core/models/festival';
 @Component({
   selector: 'app-administration',
   standalone: true,
-  imports: [CommonModule, DatePipe, CurrencyPipe, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, DatePipe, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './administration.html',
   styleUrls: ['./administration.css']
 })
@@ -20,11 +20,11 @@ export class AdministrationComponent implements OnInit {
   festivals = signal<Festival[]>([]);
 
   currentFestival = computed(() => 
-    this.festivals().find(f => f.status === 'draft')
+    this.festivals().find(f => f.status === 'draft' || f.status === 'ongoing')
   );
 
   archives = computed(() => 
-    this.festivals().filter(f => f.status !== 'draft')
+    this.festivals().filter(f => f.status === 'completed')
   );
 
   ngOnInit(): void {

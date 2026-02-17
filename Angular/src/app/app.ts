@@ -1,10 +1,6 @@
-import { Component, signal, inject  } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../app/core/services/auth.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Component, inject  } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -19,9 +15,15 @@ export class App {
 
   constructor() {
     this.translate.addLangs(['en', 'fr']);
-    this.translate.setDefaultLang('en');
+    this.translate.setFallbackLang('en');
+
+    const savedLang = localStorage.getItem('userLanguage');
     
-    const browserLang = this.translate.getBrowserLang();
-    this.translate.use(browserLang?.match(/en|fr/) ? browserLang : 'en');
+    if (savedLang) {
+      this.translate.use(savedLang);
+    } else {
+      const browserLang = this.translate.getBrowserLang();
+      this.translate.use(browserLang?.match(/en|fr/) ? browserLang : 'en');
+    }
   }
 }

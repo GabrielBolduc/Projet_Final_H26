@@ -29,6 +29,7 @@ export class NavbarComponent {
     const current = this.translate.currentLang; 
     const targetLang = current === 'en' ? 'fr' : 'en';
     this.translate.use(targetLang);
+    localStorage.setItem('userLanguage', targetLang); 
   }
   onLogout() {
     this.auth.logout();

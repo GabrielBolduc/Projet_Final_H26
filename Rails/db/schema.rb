@@ -15,7 +15,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
     t.decimal "commission", precision: 4, scale: 2, default: "0.0", null: false
-    t.integer "coordinates", null: false
+    t.integer "coordinates"
     t.datetime "created_at", null: false
     t.bigint "festival_id", null: false
     t.string "name", limit: 100, null: false
@@ -23,7 +23,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_16_142155) do
     t.time "time_car", null: false
     t.time "time_walk", null: false
     t.datetime "updated_at", null: false
-    t.index ["coordinates"], name: "index_accommodations_on_coordinates", length: 32, type: :spatial
     t.index ["festival_id"], name: "index_accommodations_on_festival_id"
     t.check_constraint "`commission` >= 0 and `commission` < 30", name: "chk_commission"
     t.check_constraint "trim(`address`) <> ''", name: "chk_address_not_empty"

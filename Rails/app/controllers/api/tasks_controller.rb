@@ -37,7 +37,7 @@ class Api::TasksController < ApiController
         if @task.save
             render json: @task.as_json(task_json).merge(success: true), status: :ok
         else
-            render json: { success: false, errors: ["La création de la tâche n'a pas fonctionné"] }, status: :ok
+            render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity
         end
     end
     def update

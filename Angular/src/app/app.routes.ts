@@ -53,10 +53,7 @@ export const routes: Routes = [
             {
                 path: 'admin',
                 component: AdministrationComponent,
-<<<<<<< HEAD
-=======
                 canActivate: [AuthGuard, adminGuard]
->>>>>>> GabrielB
             },
 
             {
@@ -81,29 +78,9 @@ export const routes: Routes = [
             },
 
             {
-<<<<<<< HEAD
-                path: 'tasks/new',
-                component: TaskFormComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-
-            {
-                path: 'tasks/:id/edit',
-                component: TaskFormComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-
-            {
-                path: '**',
-                component: Notfound
-            },
-
-
-=======
                 path: '**',
                 component: Notfound
             }
->>>>>>> GabrielB
         ]
     }
 ];

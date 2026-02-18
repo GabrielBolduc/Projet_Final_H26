@@ -24,7 +24,7 @@ class Performance < ApplicationRecord
   def within_festival_dates
     return unless festival && start_at && end_at
     
-    if start_at.to_date < festival.start_date || end_at.to_date > festival.end_date
+    if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at
       errors.add(:base, "La performance doit avoir lieu pendant les dates du festival")
     end
   end
@@ -41,5 +41,11 @@ class Performance < ApplicationRecord
     if overlapping_query(artist_id: artist_id).exists?
       errors.add(:artist, "joue déjà ailleurs sur ce créneau")
     end
+  end
+
+  def overlapping_query(conditions)
+    Performance.where(conditions)
+               .where.not(id: id)
+               .where("start_at < ? AND end_at > ?", end_at, start_at)
   end
 end

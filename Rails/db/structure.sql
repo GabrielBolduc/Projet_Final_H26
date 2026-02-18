@@ -104,7 +104,7 @@ CREATE TABLE `affectations` (
   CONSTRAINT `fk_rails_2fd2be21ba` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`),
   CONSTRAINT `fk_rails_b00abc9c5e` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `fk_rails_dac0cf9d95` FOREIGN KEY (`festival_id`) REFERENCES `festivals` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `ar_internal_metadata`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -130,7 +130,7 @@ CREATE TABLE `artists` (
   `updated_at` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_artists_on_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `festivals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -179,7 +179,7 @@ CREATE TABLE `performances` (
   CONSTRAINT `fk_rails_0fa967d632` FOREIGN KEY (`festival_id`) REFERENCES `festivals` (`id`),
   CONSTRAINT `fk_rails_4843d3e300` FOREIGN KEY (`artist_id`) REFERENCES `artists` (`id`),
   CONSTRAINT `fk_rails_6e89b70e12` FOREIGN KEY (`stage_id`) REFERENCES `stages` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `reservations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -229,7 +229,7 @@ CREATE TABLE `stages` (
   `created_at` datetime(6) NOT NULL,
   `updated_at` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=980190963 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `tasks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

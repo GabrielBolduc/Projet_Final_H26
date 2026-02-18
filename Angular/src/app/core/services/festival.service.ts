@@ -2,7 +2,19 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Festival } from '../models/festival';
-import { ApiResponse } from '../models/api-response'; 
+
+
+interface ApiResponse<T> {
+  status: 'success' | 'error';
+  data: T;
+  meta?: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  message?: string;
+  code?: number;   
+}
 
 @Injectable({ providedIn: 'root' })
 export class FestivalService {

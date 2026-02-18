@@ -6,7 +6,7 @@ import { Home } from './features/home/home';
 import { Ticketing } from './features/ticketing/ticketing';
 import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-import { Dashboard} from './features/admin/performance/dashboard/dashboard'
+import { DashboardComponent} from './features/admin/performance/dashboard/dashboard'
 import {AdministrationComponent} from './features/admin/festival/administration/administration'
 import { AuthGuard } from './core/guards/auth-guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
@@ -45,7 +45,7 @@ export const routes: Routes = [
             },
             {
                 path: 'dashboard',
-                component: Dashboard,
+                component: DashboardComponent,
             },
             {
                 path: 'admin',

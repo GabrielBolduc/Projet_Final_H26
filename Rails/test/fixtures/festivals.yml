@@ -5,6 +5,8 @@ one:
   status: "completed"
   address: "Rue Shawinigan, qc, Canada"
   daily_capacity: 1 000 000
+  latitude: 46.8033
+  longitude: -71.2172
 
 two:
   name: "Festival de St-titre"
@@ -13,3 +15,5 @@ two:
   status: "ongoing"
   address: "Village de St-Titre, qc, Canada"
   daily_capacity: 40 000
+  latitude: 46.8033
+  longitude: -71.2172

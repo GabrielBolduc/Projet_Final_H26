@@ -6,7 +6,7 @@ class Api::FestivalsController < ApiController
     
     render json: {
       status: "success",
-      data: festivals.as_json(except: [:coordinates])
+      data: festivals.as_json
     }, status: :ok
   end
 
@@ -16,7 +16,7 @@ class Api::FestivalsController < ApiController
     if festival
       render json: {
         status: "success",
-        data: festival.as_json(except: [:coordinates])
+        data: festival.as_json
       }, status: :ok
     else
       render json: {

@@ -8,5 +8,5 @@ class Task < ApplicationRecord
 
     has_many :affectations, dependent: :destroy
 
-    has_one_attached :file
+    #has_one_attached :file
 end

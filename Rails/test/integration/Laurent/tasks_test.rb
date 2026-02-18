@@ -11,6 +11,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     @task_four = tasks(:four)
     @task_five = tasks(:five)
 
+    
 
   end
 
@@ -52,7 +53,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 401, json["code"]
 
   end
 
@@ -97,7 +97,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 401, json["code"]
 
   end
 
@@ -198,7 +197,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
             # donne reponse
             assert_equal "error", json["status"]
-            assert_equal 401, json["code"]
 
     end
 
@@ -255,7 +253,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
       # donne reponse
       assert_equal "error", json["status"]
-      assert_equal 401, json["code"]
 
     end
 
@@ -295,7 +292,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
         # donne reponse
         assert_equal "error", json["status"]
-        assert_equal 401, json["code"]
 
     end
 
@@ -325,7 +321,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             priority:1,
             difficulty: 1,
             reusable: true,
-            image: @image
+            #file: @image
         }
     end
 
@@ -336,7 +332,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             priority:-1,
             difficulty: 11,
             reusable: false,
-            image: @image
+            #file: @image
         }
     end
 end

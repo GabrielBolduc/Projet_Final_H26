@@ -2,8 +2,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Task } from '@core/models/task';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable, map } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { ApiResponse } from '../models/api-response'; 
+
 
 @Injectable({
   providedIn: 'root',
@@ -14,12 +16,15 @@ export class TaskService {
 
   listTasks(): Observable<Task[]> {
     console.log()
-          return this.http.get<Task[]>('api/tasks/' ).pipe(
-              catchError((response: HttpErrorResponse) => {
-                  console.log(response,"ok")
-                  throw response;
-              })
-          );
+        return this.http.get<ApiResponse<Task[]>>('api/tasks/' ).pipe(
+             map(response => {
+              if (response.status === 'success') {
+                return response.data;
+              } else {
+                throw new Error(response.message || 'erreur api');
+              }
+        })
+      );
     }
 
   getTask(id: number) {

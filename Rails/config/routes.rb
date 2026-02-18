@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
     resources :performances
     resources :reservations
-    resources :accommodation 
+    resources :accommodations 
   end
 
   root to: "angular#index"

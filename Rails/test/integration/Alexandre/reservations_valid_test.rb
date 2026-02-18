@@ -8,7 +8,6 @@ class ReservationValidTest < ActionDispatch::IntegrationTest
     @unit = units(:three) 
     @festival = festivals(:one)
     
-    # Authenticate the user
     sign_in @user
   end
 

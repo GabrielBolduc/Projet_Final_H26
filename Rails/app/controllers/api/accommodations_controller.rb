@@ -6,18 +6,21 @@ class Api::AccommodationsController < ApiController
     render json: { status: "success", data: format_units(@units) }
   end
 
-  def show
-    @unit = Unit.find(params[:id])
+def show
+  @unit = Unit.find_by(id: params[:id])
 
+  if @unit
     unit_data = @unit.as_json(include: {
       accommodation: { methods: [ :coordinates ] }
-    })
-
-    render json: {
-      status: "success",
-      data: @unit.as_json.merge(image_url: url_for(@unit.image))
-    }
+    }).merge(
+      "image_url" => @unit.image.attached? ? url_for(@unit.image) : nil
+    )
+    render json: { status: "success", data: unit_data }
+  else
+    # This ensures a 200 OK with your custom error format
+    render json: { status: "error", message: "Unit not found" }, status: :ok
   end
+end
 
   private
 

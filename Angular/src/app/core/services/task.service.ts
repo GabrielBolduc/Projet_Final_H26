@@ -28,6 +28,7 @@ export class TaskService {
     console.log()
         return this.http.get<ApiResponse<Task[]>>('api/tasks/' ).pipe(
              map(response => {
+              console.log(response)
               if (response.status === 'success') {
                 return response.data;
               } else {

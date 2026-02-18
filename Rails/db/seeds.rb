@@ -72,9 +72,9 @@ task_tow = Task.create!(
     reusable: false
 )
 task_tow.file.attach(
-  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
-  filename: 'téléchargement (1).jpg',
-  content_type: 'téléchargement (1)/jpg'
+  io: File.open(Rails.root.join('db/files/test.txt')),
+  filename: 'test.txt',
+  content_type: 'test/txt'
 )
 
 task_three = Task.create!(

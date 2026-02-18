@@ -53,7 +53,8 @@ class Api::TasksController < ApiController
     def task_json
         {
             success: true,
-            only: [ :id, :title, :description, :reusable, :difficulty, :priority, :file ]
+            only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
+             methods: [ :file_url]
         }
     end
 

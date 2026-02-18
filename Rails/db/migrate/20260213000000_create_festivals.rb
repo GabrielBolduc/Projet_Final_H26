@@ -13,7 +13,7 @@ class CreateFestivals < ActiveRecord::Migration[8.1]
       t.integer :daily_capacity, null: false
       t.string :address, null: false
       t.string :status, null: false, limit: 20
-      
+
       t.timestamps
     end
   end

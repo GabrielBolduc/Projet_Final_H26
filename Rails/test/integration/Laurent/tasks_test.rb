@@ -1,7 +1,6 @@
 require "test_helper"
 
 class TasksTest < ActionDispatch::IntegrationTest
-  
   setup do
     @user_one = users(:one)
 
@@ -10,42 +9,38 @@ class TasksTest < ActionDispatch::IntegrationTest
     @task_three = tasks(:three)
     @task_four = tasks(:four)
     @task_five = tasks(:five)
-
-
   end
 
-  #get /api/tasks
+  # get /api/tasks
   test "should get tasks list and return JSON" do
     sign_in users(:one)
-    #la base de donnée n'a pas changer
+    # la base de donnée n'a pas changer
     assert_no_difference("Task.count") do
      get api_tasks_path
     end
-    
+
     # code http
     assert_response :success
-    
+
     # format de reponse en JSON
     assert_nothing_raised { JSON.parse(response.body) }
       json_response = JSON.parse(response.body)
 
-    #format de donné aproprié
+    # format de donné aproprié
     assert json_response.is_a?(Hash)
     assert_equal "success", json_response["status"]
     assert json_response["data"].is_a?(Array), "data should be an array"
-
   end
 
-   #get /api/tasks
+  # get /api/tasks
   test "should not get tasks list but and return JSON" do
-    
-    #la base de donnée n'a pas changer
+    # la base de donnée n'a pas changer
     assert_no_difference("Task.count") do
      get api_tasks_path
     end
-    
+
     # code http
-    assert_response :success 
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -53,7 +48,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     # donne reponse
     assert_equal "error", json["status"]
     assert_equal 401, json["code"]
-
   end
 
 
@@ -62,7 +56,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     # base de donnees
     assert_no_difference("Task.count") do
       get api_task_path(@task_one)
-
     end
 
     # code http
@@ -72,7 +65,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     assert_nothing_raised { JSON.parse(response.body) }
     json_response = JSON.parse(response.body)
 
-    # contenu de reponse
+     # contenu de reponse
      assert_equal @task_one.id, json_response["data"]["id"]
     assert_equal @task_one.title, json_response["data"]["title"]
     assert_equal @task_one.description, json_response["data"]["description"]
@@ -82,11 +75,9 @@ class TasksTest < ActionDispatch::IntegrationTest
   end
 
   test "should not show one task  and return 401 user not connect" do
-    
     # base de donnees
     assert_no_difference("Task.count") do
       get api_task_path(@task_one)
-
     end
 
     # code http
@@ -98,7 +89,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     # donne reponse
     assert_equal "error", json["status"]
     assert_equal 401, json["code"]
-
   end
 
   test "should not show one task  and return 401 not found " do
@@ -106,7 +96,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     # base de donnees
     assert_no_difference("Task.count") do
       get api_task_path(7)
-
     end
 
     # code http
@@ -117,8 +106,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "not_found", json["error"]
-    
-
   end
 
   test "can create task" do
@@ -139,7 +126,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
         # contenu de reponse
         assert_equal true, json_response["success"], "Success flag should be true"
-        
     end
 
     test "can create anime" do
@@ -160,7 +146,6 @@ class TasksTest < ActionDispatch::IntegrationTest
 
         # contenu de reponse
         assert_equal true, json_response["success"], "Success flag should be true"
-        
     end
 
 
@@ -184,13 +169,12 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "can not create task while log out" do
-
         # base de donnees
         assert_no_difference "Task.count" do
             post api_tasks_path, params: { task: valid_task_params }
           # puts response.body
         end
-        # code http
+            # code http
             assert_response :success
 
             # format reponse
@@ -199,10 +183,9 @@ class TasksTest < ActionDispatch::IntegrationTest
             # donne reponse
             assert_equal "error", json["status"]
             assert_equal 401, json["code"]
-
     end
 
-    #a voir pour l'image elle crée une erreur-----------------------------------------------------
+     # a voir pour l'image elle crée une erreur-----------------------------------------------------
      test " can delete task" do
         sign_in users(:one)
 
@@ -241,7 +224,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "should not destroy one task  and return 401 user not connect" do
-    
       # base de donnees
       assert_no_difference "Task.count" do
             delete api_task_path(@task_three)
@@ -256,7 +238,6 @@ class TasksTest < ActionDispatch::IntegrationTest
       # donne reponse
       assert_equal "error", json["status"]
       assert_equal 401, json["code"]
-
     end
 
     test "can update task" do
@@ -277,11 +258,9 @@ class TasksTest < ActionDispatch::IntegrationTest
 
         # contenu de reponse
         assert_equal true, json_response["success"], "Success flag should be true"
-        
     end
 
     test "can not update task user logout" do
-
         # base de donnees
         assert_no_difference "Task.count" do
             patch  api_task_path(@task_one), params: { task: valid_task_params }
@@ -296,7 +275,6 @@ class TasksTest < ActionDispatch::IntegrationTest
         # donne reponse
         assert_equal "error", json["status"]
         assert_equal 401, json["code"]
-
     end
 
     test "can not update task params invalide" do
@@ -306,7 +284,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             patch  api_task_path(@task_one), params: { task: invalid_task_params }
           # puts response.body
         end
-       # code http
+        # code http
         assert_response :unprocessable_entity
 
         # format de reponse
@@ -322,7 +300,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         {
             title: "creation de task",
             description: "description de tache valide",
-            priority:1,
+            priority: 1,
             difficulty: 1,
             reusable: true,
             image: @image
@@ -331,9 +309,9 @@ class TasksTest < ActionDispatch::IntegrationTest
 
     def invalid_task_params
         {
-            title:nil,
+            title: nil,
             description: nil,
-            priority:-1,
+            priority: -1,
             difficulty: 11,
             reusable: false,
             image: @image

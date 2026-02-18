@@ -1,0 +1,23 @@
+one:
+  name: "Grand Festival Hotel"
+  category: 1
+  address: "123 Music Lane, Montreal, QC"
+  latitude: 45.5017
+  longitude: -73.5673
+  shuttle: true
+  time_car: "00:15:00"
+  time_walk: "00:45:00"
+  commission: 10.50
+  festival: one
+
+two:
+  name: "Official Site Camping"
+  category: 0 
+  address: "Field B, Festival Grounds"
+  latitude: 45.5088
+  longitude: -73.5540
+  shuttle: false
+  time_car: "00:05:00"
+  time_walk: "00:10:00"
+  commission: 0.00
+  festival: one

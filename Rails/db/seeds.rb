@@ -8,9 +8,9 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 begin
-  Affectation.destroy_all 
+  Affectation.destroy_all
 rescue NameError, ActiveRecord::StatementInvalid
-  #continue si aucune affectation
+  # continue si aucune affectation
 end
 
 
@@ -25,8 +25,8 @@ Staff.destroy_all
 User.destroy_all
 
 
-Client.create!(
-    email: "client@test.com",
+c = Client.create!(
+    email: "client@gmail.com",
     password: "qwerty",
     password_confirmation: "qwerty",
     name: "Client #1",
@@ -116,7 +116,7 @@ f = Festival.create!(
   end_at: Date.new(2026, 7, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  latitude: 46.52673340326582, 
+  latitude: 46.52673340326582,
   longitude: -72.73930869816652,
   status: "ONGOING",
   satisfaction: 4,
@@ -145,7 +145,7 @@ f2 = Festival.create!(
   end_at: Date.new(2024, 7, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  latitude: 46.52673340326582, 
+  latitude: 46.52673340326582,
   longitude: -72.73930869816652,
   status: "COMPLETED",
   satisfaction: 4,
@@ -202,18 +202,18 @@ Performance.create!(
   title: "First show",
   description: "Bon show.",
   price: 55.00,
-  start_at: f.start_at.to_time.change(hour: 20, min: 0), 
+  start_at: f.start_at.to_time.change(hour: 20, min: 0),
   end_at: f.start_at.to_time.change(hour: 22, min: 0),
-  festival: f, 
+  festival: f,
   stage: main_stage,
-  artist: artist1 
+  artist: artist1
 )
 
 Performance.create!(
   title: "Second show",
   description: "Good show",
   price: 45.00,
-  start_at: f.start_at.to_time.change(hour: 21, min: 0), 
+  start_at: f.start_at.to_time.change(hour: 21, min: 0),
   end_at: f.start_at.to_time.change(hour: 23, min: 59),
   festival: f,
   stage: b_stage,
@@ -224,9 +224,119 @@ Performance.create!(
   title: "Last show",
   description: "Good show",
   price: 60.00,
-  start_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 0), 
+  start_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f.start_at + 1.day).to_time.change(hour: 20, min: 30),
   festival: f,
   stage: main_stage,
   artist: artist2
+)
+
+acc1 = Accommodation.create!(
+  name: "Grand Royal Hotel",
+  category: :hotel,
+  address: "123 Festival Lane, Palm Springs, CA",
+  latitude: 33.8121,
+  longitude: -116.5165,
+  shuttle: true,
+  time_car: Time.parse("00:15:00"),
+  time_walk: Time.parse("01:00:00"),
+  commission: 12.50,
+  festival: f
+)
+
+acc2 = Accommodation.create!(
+  name: "Wildwood Luxury Camping",
+  category: :camping,
+  address: "North Gate, Sector B, Glastonbury",
+  latitude: 51.1557,
+  longitude: -2.5859,
+  shuttle: false,
+  time_car: Time.parse("00:05:00"),
+  time_walk: Time.parse("00:10:00"),
+  commission: 5.00,
+  festival: f
+)
+
+unit1 = Unit.create!(
+  type: "SimpleRoom",
+  cost_person_per_night: 55.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options_list: ["Room service", "Restaurant"],
+  accommodation: acc1,
+  image: {
+    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
+    filename: "placeholder-image.png",
+    content_type: "image/png"
+  }
+)
+
+unit2 = Unit.create!(
+  type: "StandardTerrain",
+  cost_person_per_night: 20.00,
+  quantity: 30,
+  wifi: false,
+  water: :undrinkable,
+  electricity: true,
+  parking_cost: 15.00,
+  food_options_list: ["Canteen"],
+  accommodation: acc2,
+  image: {
+    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
+    filename: "placeholder-image.png",
+    content_type: "image/png"
+  }
+)
+
+unit3 = Unit.create!(
+  type: "FamilyRoom",
+  cost_person_per_night: 110.00,
+  quantity: 4,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options_list: ["None"],
+  accommodation: acc1,
+  image: {
+    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
+    filename: "placeholder-image.png",
+    content_type: "image/png"
+  }
+)
+
+Reservation.create!(
+  reservation_name: "Jean Dupont",
+  phone_number: "0612345678",
+  nb_of_people: 1,
+  arrival_at: f.start_at,
+  departure_at: f.start_at + 3.days,
+  festival: f,
+  user: c,
+  unit: unit1
+)
+
+Reservation.create!(
+  reservation_name: "Marie Curie",
+  phone_number: "0788990011",
+  nb_of_people: [unit2.max_capacity, 2].min,
+  arrival_at: f.start_at + 1.day,
+  departure_at: f.start_at + 4.days,
+  festival: f,
+  user: c,
+  unit: unit2
+)
+
+Reservation.create!(
+  reservation_name: "Marc Smith",
+  phone_number: "0102030405",
+  nb_of_people: 1,
+  arrival_at: f.end_at - 2.days,
+  departure_at: f.end_at + 1.day,
+  festival: f,
+  user: c,
+  unit: unit3
 )

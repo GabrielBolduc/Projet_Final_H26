@@ -1,6 +1,6 @@
 class Artist < ApplicationRecord
     has_one_attached :image
-    
+
     has_many :performances, dependent: :restrict_with_error
 
     validates :name, presence: true, length: { maximum: 100 }, uniqueness: true

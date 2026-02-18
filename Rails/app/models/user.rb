@@ -14,4 +14,8 @@ class User < ApplicationRecord
   def client?
     is_a?(Client)
   end
+
+  def admin?
+    is_a?(Admin)
+  end
 end

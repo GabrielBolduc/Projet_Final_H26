@@ -23,6 +23,10 @@ Client.destroy_all
 Admin.destroy_all
 Staff.destroy_all
 User.destroy_all
+Festival.destroy_all
+Package.destroy_all
+Ticket.destroy_all
+Order.destroy_all
 
 
 c = Client.create!(

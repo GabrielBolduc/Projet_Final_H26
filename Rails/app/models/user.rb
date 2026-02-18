@@ -5,6 +5,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_many :orders
+
   validates :name, presence: true
   validates :phone_number, presence: true
 

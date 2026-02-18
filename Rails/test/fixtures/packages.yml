@@ -1,21 +1,19 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 one:
-  title: MyString
-  description: MyText
-  category: MyString
-  price: 9.99
-  quota: 1
-  valid_at: 2026-02-16 09:26:37
-  invalid_at: 2026-02-16 09:26:37
-  festival: one
+  title: "Passe VIP"
+  description: "Accès VIP complet"
+  price: 150.0
+  quota: 100
+  category: "general" # Doit matcher ton enum (minuscule)
+  valid_at: 2025-07-05 10:00:00
+  expired_at: 2026-07-05 23:00:00
+  festival: one # Référence au festival: one
 
 two:
-  title: MyString
-  description: MyText
-  category: MyString
-  price: 9.99
-  quota: 1
-  valid_at: 2026-02-16 09:26:37
-  invalid_at: 2026-02-16 09:26:37
-  festival: two
+  title: "Billet Journalier"
+  description: "Tarif réduit"
+  price: 50.0
+  quota: 500
+  category: "daily"
+  valid_at: 2025-07-04 10:00:00
+  expired_at: 2026-07-21 16:00:00
+  festival: one

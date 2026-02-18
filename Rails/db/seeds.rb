@@ -360,3 +360,46 @@ Reservation.create!(
   user: c,
   unit: unit3
 )
+
+# Packages (Billetterie)
+
+festival = Festival.first
+
+p_general = Package.create!(
+  title: "Passeport Festival",
+  description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
+  price: 150.00,
+  quota: 500,
+  category: "general",
+  valid_at: festival.start_at,
+  expired_at: festival.end_at,
+  festival: festival
+)
+
+p_daily = Package.create!(
+  title: "Billet Journalier",
+  description: "Accès pour une seule journée de festivités.",
+  price: 60.00,
+  quota: 1000,
+  category: "daily",
+  valid_at: festival.start_at,
+  expired_at: festival.start_at + 1.day,
+  festival: festival
+)
+
+# Attachement des images
+images = {
+  p_general => 'general-ticket.webp',
+  p_daily   => 'daily-ticket.webp'
+}
+
+images.each do |package, filename|
+  path = Rails.root.join('public', 'assets', filename)
+  if File.exist?(path)
+    package.image.attach(
+      io: File.open(path),
+      filename: filename,
+      content_type: 'image/webp'
+    )
+  end
+end

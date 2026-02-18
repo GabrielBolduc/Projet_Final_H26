@@ -1,0 +1,95 @@
+<div class="dashboard-layout">
+
+
+  <main class="admin-page">
+    
+    <header class="admin-top-bar">
+      <div>
+        <h1 class="header-title">Tableau de bord</h1>
+        <span class="greeting">Vue d'ensemble de la programmation</span>
+      </div>
+      <button mat-stroked-button class="btn-new" (click)="['AdministrationComponent']">
+        <mat-icon>add</mat-icon> Nouvelle Performance
+      </button>
+    </header>
+
+    @if (isLoading()) {
+      <div class="loading-state"><p>Chargement du planning...</p></div>
+    }
+
+    @if (!isLoading() && performanceGroups().length === 0) {
+      <div class="empty-state">
+        <p>Aucune performance n'est programmée.</p>
+        <button mat-button color="primary" (click)="navigateToAdd()">Ajouter</button>
+      </div>
+    }
+
+    @for (group of performanceGroups(); track group.date) {
+      
+      <section class="admin-section">
+        
+        <h3 class="day-title">
+          {{ group.date | date:'EEEE d MMMM' : undefined : currentLang() | titlecase }}
+        </h3>
+        
+        <div class="grid-table-container">
+          <table mat-table [dataSource]="group.performances" class="festify-grid-table">
+
+            <ng-container matColumnDef="artist">
+              <th mat-header-cell *matHeaderCellDef> Artiste </th>
+              <td mat-cell *matCellDef="let perf" class="bold-text"> 
+                {{ perf.artist?.name || 'Inconnu' }} 
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef> Titre du Show </th>
+              <td mat-cell *matCellDef="let perf"> {{ perf.title }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="stage">
+              <th mat-header-cell *matHeaderCellDef> Scène </th>
+              <td mat-cell *matCellDef="let perf"> {{ perf.stage?.name || 'N/A' }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="start_at">
+              <th mat-header-cell *matHeaderCellDef> Début </th>
+              <td mat-cell *matCellDef="let perf"> 
+                {{ perf.start_at | date:'HH:mm' : undefined : currentLang() }} 
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="end_at">
+              <th mat-header-cell *matHeaderCellDef> Fin </th>
+              <td mat-cell *matCellDef="let perf"> 
+                {{ perf.end_at | date:'HH:mm' : undefined : currentLang() }} 
+              </td>
+            </ng-container>
+
+             <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef> Notes </th>
+              <td mat-cell *matCellDef="let perf" class="desc-cell">
+                {{ perf.description | slice:0:25 }}{{ perf.description && perf.description.length > 25 ? '...' : '' }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef class="text-center"> Actions </th>
+              <td mat-cell *matCellDef="let perf" class="action-cell">
+                <button class="icon-btn edit" (click)="navigateToEdit(perf.id!)" title="Modifier">
+                  <mat-icon>edit_square</mat-icon>
+                </button>
+                <button class="icon-btn trash" (click)="deletePerformance(perf.id!)" title="Supprimer">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </section>
+    }
+  </main>
+</div>

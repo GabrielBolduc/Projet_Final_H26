@@ -11,7 +11,8 @@ class TasksTest < ActionDispatch::IntegrationTest
     @task_four = tasks(:four)
     @task_five = tasks(:five)
 
-    
+    @image = fixture_file_upload(Rails.root.join("test/fixtures/files/images.jpg"), "image/jpeg")
+
 
   end
 
@@ -321,7 +322,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             priority:1,
             difficulty: 1,
             reusable: true,
-            #file: @image
+            file: @image
         }
     end
 
@@ -332,7 +333,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             priority:-1,
             difficulty: 11,
             reusable: false,
-            #file: @image
+            file: @image
         }
     end
 end

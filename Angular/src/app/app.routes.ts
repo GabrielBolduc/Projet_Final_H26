@@ -6,21 +6,21 @@ import { Home } from './features/home/home';
 import { Ticketing } from './features/ticketing/ticketing';
 import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-import { Dashboard} from './features/admin/performance/dashboard/dashboard'
-import {AdministrationComponent} from './features/admin/festival/administration/administration'
-import { AuthGuard } from './core/guards/auth-guard';
-import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
-import { adminGuard } from './core/guards/admin-guard';
-import path from 'path';
+import { DashboardComponent } from './features/admin/performance/dashboard/dashboard';
+import { AdministrationComponent } from './features/admin/festival/administration/administration';
 import { taskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
+
+import { AuthGuard } from './core/guards/auth.guard';
+import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
+import { adminGuard } from './core/guards/admin.guard';
+
 export const routes: Routes = [
     {
         path: '',
         component: MainLayoutComponent, 
         children: [
-
             {
                 path: '',
                 component: Home
@@ -33,6 +33,7 @@ export const routes: Routes = [
                 path: 'reservations',
                 component: Reservation
             },
+            
             {
                 path: 'login',
                 component: Login,
@@ -43,18 +44,16 @@ export const routes: Routes = [
                 component: Signup,
                 canActivate: [restrictionLoginGuard]
             },
+
             {
                 path: 'dashboard',
-                component: Dashboard,
+                component: DashboardComponent,
+                canActivate: [AuthGuard, adminGuard]
             },
             {
                 path: 'admin',
                 component: AdministrationComponent,
-            },
-
-            {
-                path: '**',
-                component: Notfound
+                canActivate: [AuthGuard, adminGuard]
             },
 
             {
@@ -62,27 +61,26 @@ export const routes: Routes = [
                 component: taskListComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-
-            {
-                path: 'tasks/:id',
-                component: TaskShowComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-
             {
                 path: 'tasks/new',
                 component: TaskFormComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-
             {
                 path: 'tasks/:id/edit',
                 component: TaskFormComponent,
                 canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'tasks/:id', 
+                component: TaskShowComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+
+            {
+                path: '**',
+                component: Notfound
             }
-
-
-
         ]
     }
-]
+];

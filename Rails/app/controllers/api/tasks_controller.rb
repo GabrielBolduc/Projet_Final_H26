@@ -3,38 +3,28 @@ class Api::TasksController < ApiController
     before_action :set_task, only: %i[show update destroy]
 
     def index
-
         @tasks = Task.all
 
-        
+
         render json: {
         status: "success",
         data: @tasks.as_json(task_json)
         }, status: :ok
-            
-       
-    end 
+    end
     def show
-
-        
-
        render json: {
         status: "success",
         data: @task.as_json(task_json)
         }, status: :ok
-
-    end  
+    end
 
     def destroy
-
-        
         if @task.destroy
             render json: { success: true }, status: :ok
         else
-            render json: { success: false, errors: [ { base: "Une erreur s'est produite lors de la suppression de la tache" } ] }, status: :ok       
+            render json: { success: false, errors: [ { base: "Une erreur s'est produite lors de la suppression de la tache" } ] }, status: :ok
         end
-        
-    end 
+    end
 
     def create
         @task = Task.new(task_params)
@@ -45,18 +35,16 @@ class Api::TasksController < ApiController
         end
     end
     def update
-
         if @task.update(task_params)
             render json: @task.as_json(task_json).merge(success: true), status: :ok
         else
             render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity
         end
-        
-    end  
-    
+    end
+
     def set_task
         @task = Task.find(params[:id])
-        
+
         unless @task.present?
             render json: { success: false, errors: [ { base: "Tache non trouver ou inexistante" } ] }, status: :ok
         end
@@ -65,7 +53,8 @@ class Api::TasksController < ApiController
     def task_json
         {
             success: true,
-            only: [ :id, :title, :description, :reusable, :difficulty, :priority, :file ]
+            only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
+             methods: [ :file_url]
         }
     end
 
@@ -79,6 +68,4 @@ class Api::TasksController < ApiController
         :file
         )
     end
-  
-
 end

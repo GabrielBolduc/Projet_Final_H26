@@ -7,20 +7,30 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+begin
+  Affectation.destroy_all
+rescue NameError, ActiveRecord::StatementInvalid
+  # continue si aucune affectation
+end
+
 
 Performance.destroy_all
 Stage.destroy_all
 Artist.destroy_all
 Festival.destroy_all
 Task.destroy_all
+Client.destroy_all
+Admin.destroy_all
+Staff.destroy_all
 User.destroy_all
 Festival.destroy_all
 Package.destroy_all
 Ticket.destroy_all
 Order.destroy_all
 
-Client.create!(
-    email: "client@test.com",
+
+c = Client.create!(
+    email: "client@gmail.com",
     password: "qwerty",
     password_confirmation: "qwerty",
     name: "Client #1",
@@ -44,53 +54,44 @@ Staff.create!(
     ability: "Gestion des réservations"
 )
 
-festival = Festival.create!(
-  start_at:     DateTime.parse("2026-02-20"),
-  end_at:       DateTime.parse("2026-02-27"),
-  satisfaction:   5,
-  comment:        "TEST",
-  coordinates:    "POINT(-79.349 43.667)",
-  other_income:   105256.89,
-  other_expense:  40678.16,
-  daily_capacity: 15000,
-  address:        "001 main street",
-  statut:         "ONGOING"
-)
-
-5.times do |i|
-  Package.create!(
-    title:        "Billet ##{i + 1}",
-    description:  "Un billet de spectacle",
-    category: "GENERAL",
-    price:        75.0,
-    quota:        1500,
-    valid_at:   DateTime.parse("2026-02-20 10:00"),
-    expired_at:  DateTime.parse("2026-02-20 22:00"),
-    festival:     festival
-  )
-end
-Task.create!(
+task_one = Task.create!(
     title: "Task #1",
     description: "Description of Task #1",
     difficulty: 3,
     priority: 1,
     reusable: true
+
+)
+task_one.file.attach(
+  io: File.open(Rails.root.join('db/files/images.jpg')),
+  filename: 'images.jpg',
+  content_type: 'images/jpg'
 )
 
-Task.create!(
+task_tow = Task.create!(
     title: "installation de la scène",
     description: "Installation de la scène pour le concert",
     difficulty: 5,
     priority: 3,
     reusable: false
 )
+task_tow.file.attach(
+  io: File.open(Rails.root.join('db/files/test.txt')),
+  filename: 'test.txt',
+  content_type: 'test/txt'
+)
 
-Task.create!(
+task_three = Task.create!(
     title: "reception du materiel",
     description: "receptionné la commande de projecteur de projecteur & co",
     difficulty: 1,
     priority: 5,
     reusable: true
+)
+task_tow.file.attach(
+  io: File.open(Rails.root.join('db/files/meme-carre-chat-vibrant-simple_742173-4493.avif')),
+  filename: 'meme-carre-chat-vibrant-simple_742173-4493.avif',
+  content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
 )
 
 Staff.create!(
@@ -135,7 +136,7 @@ f = Festival.create!(
   end_at: Date.new(2026, 7, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  latitude: 46.52673340326582, 
+  latitude: 46.52673340326582,
   longitude: -72.73930869816652,
   status: "ONGOING",
   satisfaction: 4,
@@ -146,8 +147,8 @@ f = Festival.create!(
 
 f1 = Festival.create!(
   name: "Festify 2025",
-  start_at: Date.new(2025, 7, 15),
-  end_at: Date.new(2025, 7, 20),
+  start_at: Date.new(2025, 7, 10),
+  end_at: Date.new(2025, 7, 12),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
   coordinates: GeoPoint.new(46.52673340326582, -72.73930869816652),
@@ -164,11 +165,198 @@ f2 = Festival.create!(
   end_at: Date.new(2024, 7, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  latitude: 46.52673340326582, 
+  latitude: 46.52673340326582,
   longitude: -72.73930869816652,
   status: "COMPLETED",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
   comment: "Bon festival"
+)
+
+main_stage = Stage.create!(
+    name: "Main stage",
+    capacity: 15000,
+    environment: "outdoor",
+    technical_specs: "Big speaker"
+)
+
+b_stage = Stage.create!(
+    name: "Secondary stage",
+    capacity: 8000,
+    environment: "indoor",
+    technical_specs: "Medium stage"
+)
+
+c_stage = Stage.create!(
+    name: "Small stage",
+    capacity: 2000,
+    environment: "covered",
+    technical_specs: "Small speaker"
+)
+
+
+artist1 = Artist.create!(
+    name: "Bob",
+    genre: "Rock",
+    popularity: 4,
+    bio: "Good music"
+)
+
+artist2 = Artist.create!(
+    name: "Louis",
+    genre: "Hip hop",
+    popularity: 3,
+    bio: "Good music"
+)
+
+artist3 = Artist.create!(
+    name: "Alice",
+    genre: "Pop",
+    popularity: 4,
+    bio: "Good music"
+)
+
+
+Performance.create!(
+  title: "First show",
+  description: "Bon show.",
+  price: 55.00,
+  start_at: f.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f.start_at.to_time.change(hour: 22, min: 0),
+  festival: f,
+  stage: main_stage,
+  artist: artist1
+)
+
+Performance.create!(
+  title: "Second show",
+  description: "Good show",
+  price: 45.00,
+  start_at: f.start_at.to_time.change(hour: 21, min: 0),
+  end_at: f.start_at.to_time.change(hour: 23, min: 59),
+  festival: f,
+  stage: b_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last show",
+  description: "Good show",
+  price: 60.00,
+  start_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f,
+  stage: main_stage,
+  artist: artist2
+)
+
+acc1 = Accommodation.create!(
+  name: "Grand Royal Hotel",
+  category: :hotel,
+  address: "123 Festival Lane, Palm Springs, CA",
+  latitude: 33.8121,
+  longitude: -116.5165,
+  shuttle: true,
+  time_car: Time.parse("00:15:00"),
+  time_walk: Time.parse("01:00:00"),
+  commission: 12.50,
+  festival: f
+)
+
+acc2 = Accommodation.create!(
+  name: "Wildwood Luxury Camping",
+  category: :camping,
+  address: "North Gate, Sector B, Glastonbury",
+  latitude: 51.1557,
+  longitude: -2.5859,
+  shuttle: false,
+  time_car: Time.parse("00:05:00"),
+  time_walk: Time.parse("00:10:00"),
+  commission: 5.00,
+  festival: f
+)
+
+unit1 = Unit.create!(
+  type: "SimpleRoom",
+  cost_person_per_night: 55.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options_list: ["Room service", "Restaurant"],
+  accommodation: acc1,
+  image: {
+    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
+    filename: "placeholder-image.png",
+    content_type: "image/png"
+  }
+)
+
+unit2 = Unit.create!(
+  type: "StandardTerrain",
+  cost_person_per_night: 20.00,
+  quantity: 30,
+  wifi: false,
+  water: :undrinkable,
+  electricity: true,
+  parking_cost: 15.00,
+  food_options_list: ["Canteen"],
+  accommodation: acc2,
+  image: {
+    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
+    filename: "placeholder-image.png",
+    content_type: "image/png"
+  }
+)
+
+unit3 = Unit.create!(
+  type: "FamilyRoom",
+  cost_person_per_night: 110.00,
+  quantity: 4,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options_list: ["None"],
+  accommodation: acc1,
+  image: {
+    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
+    filename: "placeholder-image.png",
+    content_type: "image/png"
+  }
+)
+
+Reservation.create!(
+  reservation_name: "Jean Dupont",
+  phone_number: "0612345678",
+  nb_of_people: 1,
+  arrival_at: f.start_at,
+  departure_at: f.start_at + 3.days,
+  festival: f,
+  user: c,
+  unit: unit1
+)
+
+Reservation.create!(
+  reservation_name: "Marie Curie",
+  phone_number: "0788990011",
+  nb_of_people: [unit2.max_capacity, 2].min,
+  arrival_at: f.start_at + 1.day,
+  departure_at: f.start_at + 4.days,
+  festival: f,
+  user: c,
+  unit: unit2
+)
+
+Reservation.create!(
+  reservation_name: "Marc Smith",
+  phone_number: "0102030405",
+  nb_of_people: 1,
+  arrival_at: f.end_at - 2.days,
+  departure_at: f.end_at + 1.day,
+  festival: f,
+  user: c,
+  unit: unit3
 )

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :reservations, dependent: :destroy
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -15,5 +16,9 @@ class User < ApplicationRecord
 
   def client?
     is_a?(Client)
+  end
+
+  def admin?
+    is_a?(Admin)
   end
 end

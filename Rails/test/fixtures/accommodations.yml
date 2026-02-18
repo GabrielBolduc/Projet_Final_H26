@@ -1,0 +1,23 @@
+one:
+  festival: f1
+  name: "Grand Hotel"
+  category: 1 
+  address: "123 Jazz St"
+  latitude: 45.5017
+  longitude: -73.5673
+  shuttle: true
+  time_car: "00:15:00"
+  time_walk: "01:00:00"
+  commission: 15.00
+
+two:
+  festival: f2
+  name: "Forest Camping"
+  category: 0 
+  address: "North Woods"
+  latitude: 46.8139
+  longitude: -71.2080
+  shuttle: false
+  time_car: "00:05:00"
+  time_walk: "00:10:00"
+  commission: 5.00

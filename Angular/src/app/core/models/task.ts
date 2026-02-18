@@ -5,6 +5,7 @@ export class Task {
     difficulty: number
     priority: number
     reusable: boolean
+    file_url: string
     
     constructor(
         title: string,
@@ -12,7 +13,8 @@ export class Task {
         difficulty: number,
         priority: number,
         reusable: boolean,
-        id: number
+        id: number,
+        file_url: string
     ) {
         this.title = title;
         this.description = description;
@@ -20,6 +22,7 @@ export class Task {
         this.priority = priority;
         this.reusable = reusable;
         this.id = id;
+        this.file_url = file_url;
         
     }
 }

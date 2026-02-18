@@ -24,7 +24,7 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success 
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -47,7 +47,7 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success 
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -69,7 +69,7 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success 
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -91,7 +91,7 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success 
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)

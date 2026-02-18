@@ -7,6 +7,8 @@ export interface Festival {
   
   address?: string;
   comment?: string;
+  latitude?: number;
+  longitude?: number;
   daily_capacity?: number;
 
   other_expense?: string | number; 

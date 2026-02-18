@@ -1,12 +1,12 @@
 class Api::FestivalsController < ApiController
-  skip_before_action :authenticate_user!, only: [:index, :show], raise: false
+  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
 
   def index
     festivals = Festival.all
-    
+
     render json: {
       status: "success",
-      data: festivals.as_json(except: [:coordinates])
+      data: festivals.as_json
     }, status: :ok
   end
 
@@ -16,7 +16,7 @@ class Api::FestivalsController < ApiController
     if festival
       render json: {
         status: "success",
-        data: festival.as_json(except: [:coordinates])
+        data: festival.as_json
       }, status: :ok
     else
       render json: {

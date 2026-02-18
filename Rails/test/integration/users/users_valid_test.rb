@@ -1,7 +1,7 @@
 require "test_helper"
 
 class UsersValidFlowTest < ActionDispatch::IntegrationTest
-  include Devise::Test::IntegrationHelpers 
+  include Devise::Test::IntegrationHelpers
 
   setup do
     @user = Client.create!(
@@ -27,9 +27,9 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    
+
     assert_response :success
-    
+
     assert_match "application/json", response.media_type # Vérifie que c'est bien du JSON
     json = JSON.parse(response.body)
 
@@ -49,7 +49,7 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
         }
       }
     end
-    
+
     assert_response :success
     json = JSON.parse(response.body)
 
@@ -60,7 +60,7 @@ class UsersValidFlowTest < ActionDispatch::IntegrationTest
 
   # Logout
   test "should logout successfully" do
-    sign_in @user 
+    sign_in @user
 
     delete destroy_user_session_url
 

@@ -19,7 +19,7 @@ class Reservation < ApplicationRecord
 
   def capacity_within_limits
     return unless unit && nb_of_people
-    
+
     if nb_of_people > unit.max_capacity
       errors.add(:nb_of_people, "exceeds maximum capacity of #{unit.max_capacity} for a #{unit.type.titleize}")
     end
@@ -27,10 +27,10 @@ class Reservation < ApplicationRecord
 
   def no_overlapping_bookings
     return unless unit && arrival_at && departure_at
-    
+
     overlaps = Reservation.where(unit_id: unit_id)
                           .where.not(id: id)
-                          .where('arrival_at < ? AND departure_at > ?', departure_at, arrival_at)
+                          .where("arrival_at < ? AND departure_at > ?", departure_at, arrival_at)
 
     if overlaps.exists?
       errors.add(:base, "This unit is already booked for the selected dates.")
@@ -40,11 +40,11 @@ class Reservation < ApplicationRecord
   def dates_within_festival_window
     return unless festival && arrival_at && departure_at
 
-    if arrival_at < festival.start_date - 3.days
+    if arrival_at < festival.start_at - 3.days
       errors.add(:arrival_at, "cannot be more than 3 days before the festival starts")
     end
 
-    if departure_at > festival.end_date + 3.days
+    if departure_at > festival.end_at + 3.days
       errors.add(:departure_at, "cannot be more than 3 days after the festival ends")
     end
   end

@@ -4,19 +4,19 @@ class Festival < ApplicationRecord
   has_many :accommodations
 
 
-  enum :status, { draft: 'DRAFT', ongoing: 'ONGOING',  completed: 'COMPLETED'}, default: :draft, validate: true
+  enum :status, { draft: "DRAFT", ongoing: "ONGOING",  completed: "COMPLETED" }, default: :draft, validate: true
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :start_at, :end_at, :status, :address, presence: true
 
   validates :daily_capacity, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  
+
   validates :satisfaction, numericality: {  only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5, allow_nil: true }
 
   validates :other_income, :other_expense, numericality: { allow_nil: true }
 
   validate :end_at_after_start_at
-  composed_of :coordinates, class_name: 'GeoPoint', mapping: [%w(latitude latitude), %w(longitude longitude)]
+  composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
 
 
   private

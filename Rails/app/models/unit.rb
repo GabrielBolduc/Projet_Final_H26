@@ -5,12 +5,12 @@ class Unit < ApplicationRecord
   has_one_attached :image
 
   CAPACITIES = {
-    'SimpleRoom'      => 1,
-    'DoubleRoom'      => 2,
-    'FamilyRoom'      => 6,
-    'SmallTerrain'    => 2,
-    'StandardTerrain' => 4,
-    'DeluxeTerrain'   => 8
+    "SimpleRoom"      => 1,
+    "DoubleRoom"      => 2,
+    "FamilyRoom"      => 6,
+    "SmallTerrain"    => 2,
+    "StandardTerrain" => 4,
+    "DeluxeTerrain"   => 8
   }.freeze
 
   enum :water, { no_water: 0, undrinkable: 1, drinkable: 2 }
@@ -26,11 +26,11 @@ class Unit < ApplicationRecord
   end
 
   def food_options_list
-    food_options&.split(',') || []
+    food_options&.split(",") || []
   end
 
   def food_options_list=(values)
-    self.food_options = Array(values).reject(&:blank?).join(',')
+    self.food_options = Array(values).reject(&:blank?).join(",")
   end
 
   private

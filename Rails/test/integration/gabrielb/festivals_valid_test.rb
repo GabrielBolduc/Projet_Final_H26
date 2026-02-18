@@ -11,10 +11,10 @@ class FestivalValidTest < ActionDispatch::IntegrationTest
             get api_festivals_url(page: 1, perpage: 10), as: :json
         end
 
-        #code http
+        # code http
         assert_response :success
 
-        #format reponse
+        # format reponse
         json = JSON.parse(response.body)
 
         # donne reponse
@@ -23,18 +23,18 @@ class FestivalValidTest < ActionDispatch::IntegrationTest
     end
 
     test "should show festival with valid id" do
-        #modif ou non
+        # modif ou non
         assert_no_difference("Festival.count") do
             get api_festival_url(@festival), as: :json
         end
 
-        #code http
+        # code http
         assert_response :success
 
-        #format reponse
+        # format reponse
         json = JSON.parse(response.body)
 
-        #donne reponse
+        # donne reponse
         assert_equal "success", json["status"]
         assert_equal @festival.id, json["data"]["id"]
         assert_equal @festival.name, json["data"]["name"]

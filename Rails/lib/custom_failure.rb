@@ -1,11 +1,12 @@
 class CustomFailure < Devise::FailureApp
   def respond
-    if request.format == :json || request.content_type == 'application/json'
-      self.status = 200 
-      self.content_type = 'application/json'
+    if request.format == :json || request.content_type == "application/json"
+      self.status = 200
+      self.content_type = "application/json"
       self.response_body = {
-        status: 'error',
-        message: i18n_message
+        status: "error",
+        message: i18n_message,
+        code: 401
       }.to_json
     else
       super

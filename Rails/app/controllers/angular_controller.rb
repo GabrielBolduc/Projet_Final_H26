@@ -1,5 +1,5 @@
 class AngularController < ApplicationController
   def index
-    render file: Rails.root.join('public', 'index.html'), layout: false
+    render file: Rails.root.join("public", "index.html"), layout: false
   end
 end

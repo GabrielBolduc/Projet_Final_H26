@@ -1,7 +1,6 @@
 require "test_helper"
 
 class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
- 
   setup do
     @existing_user = Client.create!(
       email: "existant@test.com",
@@ -26,7 +25,7 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success 
+    assert_response :success
 
     # format reponse
     assert_match "application/json", response.media_type
@@ -34,7 +33,7 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
 
     # donne repomse
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"] 
+    assert_equal 422, json["code"]
     assert_includes json["errors"].to_s, "Name can't be blank"
   end
 
@@ -49,7 +48,7 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
           type: "Client",
           phone_number: "555-555-5555",
           password: "qwerty",
-          password_confirmation: "asdfgh" 
+          password_confirmation: "asdfgh"
         }
       }
     end
@@ -72,7 +71,7 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
     assert_no_difference("User.count") do
       post user_registration_url, params: {
         user: {
-          email: @existing_user.email, 
+          email: @existing_user.email,
           name: "Jean",
           type: "Client",
           phone_number: "222-222-2222",

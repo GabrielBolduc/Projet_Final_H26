@@ -303,7 +303,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             priority: 1,
             difficulty: 1,
             reusable: true,
-            image: @image
+            file: @image
         }
     end
 
@@ -314,7 +314,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             priority: -1,
             difficulty: 11,
             reusable: false,
-            image: @image
+            file: @image
         }
     end
 end

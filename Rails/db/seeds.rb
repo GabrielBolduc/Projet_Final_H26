@@ -50,28 +50,44 @@ Staff.create!(
     ability: "Gestion des réservations"
 )
 
-Task.create!(
+task_one = Task.create!(
     title: "Task #1",
     description: "Description of Task #1",
     difficulty: 3,
     priority: 1,
     reusable: true
+
+)
+task_one.file.attach(
+  io: File.open(Rails.root.join('db/files/images.jpg')),
+  filename: 'images.jpg',
+  content_type: 'images/jpg'
 )
 
-Task.create!(
+task_tow = Task.create!(
     title: "installation de la scène",
     description: "Installation de la scène pour le concert",
     difficulty: 5,
     priority: 3,
     reusable: false
 )
+task_tow.file.attach(
+  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
+  filename: 'téléchargement (1).jpg',
+  content_type: 'téléchargement (1)/jpg'
+)
 
-Task.create!(
+task_three = Task.create!(
     title: "reception du materiel",
     description: "receptionné la commande de projecteur de projecteur & co",
     difficulty: 1,
     priority: 5,
     reusable: true
+)
+task_tow.file.attach(
+  io: File.open(Rails.root.join('db/files/meme-carre-chat-vibrant-simple_742173-4493.avif')),
+  filename: 'meme-carre-chat-vibrant-simple_742173-4493.avif',
+  content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
 )
 
 Staff.create!(

@@ -1,4 +1,5 @@
-import { Injectable, signal, inject, afterNextRender } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common'; 
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -11,24 +12,32 @@ import { User } from '../models/user';
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private platformId = inject(PLATFORM_ID);
+
   private readonly API_URL = '/users'; 
   private readonly STORAGE_KEY = 'festify_user';
 
-  isLoggedIn = signal(false);
-  currentUser = signal<User | null>(null);
+  currentUser = signal<User | null>(this.getUserFromStorage());
+  
+  isLoggedIn = signal<boolean>(!!this.currentUser());
 
   constructor() {
-    afterNextRender(() => {
+
+  }
+
+  private getUserFromStorage(): User | null {
+    if (isPlatformBrowser(this.platformId)) {
       const savedUser = localStorage.getItem(this.STORAGE_KEY);
       if (savedUser) {
         try {
           const data = JSON.parse(savedUser);
-          const user = new User(data.id, data.email, data.name, data.phone_number, data.type, data.ability);
-          this.currentUser.set(user);
-          this.isLoggedIn.set(true);
-        } catch { this.logout(); }
+          return new User(data.id, data.email, data.name, data.phone_number, data.type, data.ability);
+        } catch {
+          return null;
+        }
       }
-    });
+    }
+    return null;
   }
 
   login(credentials: LoginCredentials): Observable<boolean> {
@@ -38,12 +47,9 @@ export class AuthService {
 
         if (response.status === 'success' && response.data?.user) {
           const u = response.data.user; 
-          
           const user = new User(u.id, u.email, u.name, u.phone_number, u.type, u.ability);
           
-          this.isLoggedIn.set(true);
-          this.currentUser.set(user);
-          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+          this.setSession(user);
           return true;
         }
         return false;
@@ -55,34 +61,46 @@ export class AuthService {
   signup(credentials: SignupCredentials): Observable<boolean> {
     return this.http.post<any>(`${this.API_URL}`, { user: credentials }).pipe(
       map(response => {
-        if (response.status === 'error') {
-          return false;
-        }
+        if (response.status === 'error') return false;
         
         if (response.status === 'success' && response.data) {
           const u = response.data.user || response.data;
-          
           const user = new User(u.id, u.email, u.name, u.phone_number, u.type, u.ability);
           
-          this.isLoggedIn.set(true);
-          this.currentUser.set(user);
-          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+          this.setSession(user);
           return true;
         }
-        
         return false;
       }),
-      catchError((error) => {
-        return of(false);
-      })
+      catchError(() => of(false))
     );
   }
 
   logout() {
     this.http.delete(`${this.API_URL}/sign_out`).subscribe();
+    this.clearSession();
+    this.router.navigate(['/login']);
+  }
+
+
+  private setSession(user: User) {
+    this.isLoggedIn.set(true);
+    this.currentUser.set(user);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(user));
+    }
+  }
+
+  private clearSession() {
     this.isLoggedIn.set(false);
     this.currentUser.set(null);
-    localStorage.removeItem(this.STORAGE_KEY);
-    this.router.navigate(['/login']);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
+  }
+
+  isAdmin(): boolean {
+    const user = this.currentUser();
+    return !!(user && user.type === 'Admin');
   }
 }

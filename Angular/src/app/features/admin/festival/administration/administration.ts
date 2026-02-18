@@ -28,6 +28,9 @@ export class AdministrationComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    this.festivalService.getFestivals().subscribe(data => this.festivals.set(data));
+    this.festivalService.getFestivals().subscribe(data =>{ 
+      console.log('festivals recu : ', data)
+      this.festivals.set(data)
+    });
   }
 }

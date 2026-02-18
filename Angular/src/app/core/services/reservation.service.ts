@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-// Interface matching your Rails render_success structure
 export interface ApiResponse<T> {
   status: string;
   data: T;
@@ -14,12 +13,8 @@ export interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
   private http = inject(HttpClient);
-  private readonly API_URL = '/api/reservations'; // Matches your Rails namespace
+  private readonly API_URL = '/api/reservations';
 
-  /**
-   * Fetches all reservations for the current user.
-   * Rails: index action
-   */
   getReservations(): Observable<ApiResponse<any[]>> {
     return this.http.get<ApiResponse<any[]>>(this.API_URL).pipe(
       catchError(error => {
@@ -29,10 +24,6 @@ export class ReservationService {
     );
   }
 
-  /**
-   * Creates a new reservation.
-   * Rails: create action
-   */
   create(reservationData: any): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(this.API_URL, { reservation: reservationData }).pipe(
       catchError(error => {
@@ -42,10 +33,6 @@ export class ReservationService {
     );
   }
 
-  /**
-   * Updates an existing reservation.
-   * Rails: update action
-   */
   update(id: number, reservationData: any): Observable<ApiResponse<any>> {
     return this.http.put<ApiResponse<any>>(`${this.API_URL}/${id}`, { reservation: reservationData }).pipe(
       catchError(error => {
@@ -55,10 +42,6 @@ export class ReservationService {
     );
   }
 
-  /**
-   * Deletes (cancels) a reservation.
-   * Rails: destroy action
-   */
   delete(id: number): Observable<boolean> {
     return this.http.delete<ApiResponse<any>>(`${this.API_URL}/${id}`).pipe(
       map(response => response.status === 'success'),

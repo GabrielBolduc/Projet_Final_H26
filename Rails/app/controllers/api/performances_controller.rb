@@ -1,14 +1,14 @@
 class Api::PerformancesController < ApiController
-  skip_before_action :authenticate_user!, only: [:index, :show], raise: false
-  before_action :set_performance, only: [:show, :update, :destroy]
-  before_action :require_admin!, only: [:create, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  before_action :set_performance, only: [ :show, :update, :destroy ]
+  before_action :require_admin!, only: [ :create, :update, :destroy ]
 
   def index
     performances = Performance.includes(:artist, :stage, :festival).all
 
     render json: {
       status: "success",
-      data: performances.as_json(include: [:artist, :stage, :festival])
+      data: performances.as_json(include: [ :artist, :stage, :festival ])
     }, status: :ok
   end
 
@@ -16,7 +16,7 @@ class Api::PerformancesController < ApiController
     if @performance
       render json: {
         status: "success",
-        data: @performance.as_json(include: [:artist, :stage, :festival])
+        data: @performance.as_json(include: [ :artist, :stage, :festival ])
       }, status: :ok
     else
       render json: {
@@ -26,14 +26,14 @@ class Api::PerformancesController < ApiController
       }, status: :ok
     end
   end
-  
+
   def create
     performance = Performance.new(performance_params)
 
     if performance.save
       render json: {
         status: "success",
-        data: performance.as_json(include: [:artist, :stage, :festival])
+        data: performance.as_json(include: [ :artist, :stage, :festival ])
       }, status: :ok
     else
       render json: {
@@ -50,7 +50,7 @@ class Api::PerformancesController < ApiController
       if @performance.update(performance_params)
         render json: {
           status: "success",
-          data: @performance.as_json(include: [:artist, :stage, :festival])
+          data: @performance.as_json(include: [ :artist, :stage, :festival ])
         }, status: :ok
       else
         render json: {
@@ -59,7 +59,7 @@ class Api::PerformancesController < ApiController
           message: "Validation failed",
           errors: @performance.errors
         }, status: :ok
-      end 
+      end
     else
       render json: {
         status: "error",
@@ -94,7 +94,7 @@ class Api::PerformancesController < ApiController
 
   def performance_params
     params.require(:performance).permit(
-      :title, :description, :price, :start_at, :end_at, 
+      :title, :description, :price, :start_at, :end_at,
       :artist_id, :stage_id, :festival_id
     )
   end

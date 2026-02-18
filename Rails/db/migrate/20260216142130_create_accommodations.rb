@@ -2,7 +2,7 @@ class CreateAccommodations < ActiveRecord::Migration[7.1]
   def change
     create_table :accommodations do |t|
       t.string :name, limit: 100, null: false
-      t.integer :category, limit: 1, null: false 
+      t.integer :category, limit: 1, null: false
       t.string :address, null: false
       t.decimal :latitude, precision: 10, scale: 8, null: false
       t.decimal :longitude, precision: 11, scale: 8, null: false

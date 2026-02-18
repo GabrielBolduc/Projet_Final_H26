@@ -5,7 +5,7 @@ class CreateUnits < ActiveRecord::Migration[7.1]
       t.column :type, "ENUM('SimpleRoom','DoubleRoom','FamilyRoom','SmallTerrain','StandardTerrain','DeluxeTerrain')", null: false
       t.integer :quantity, limit: 1, unsigned: true, null: false
       t.boolean :wifi, default: false, null: false
-      t.integer :water, limit: 1, default: 0 
+      t.integer :water, limit: 1, default: 0
       t.boolean :electricity, default: false
       t.decimal :parking_cost, precision: 4, scale: 2, unsigned: true, default: 0.0, null: false
       t.column :food_options, "SET('None', 'Canteen', 'Room service', 'Restaurant')", default: 'None'

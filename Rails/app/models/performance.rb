@@ -23,7 +23,7 @@ class Performance < ApplicationRecord
 
   def within_festival_dates
     return unless festival && start_at && end_at
-    
+
     if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at
       errors.add(:base, "La performance doit avoir lieu pendant les dates du festival")
     end

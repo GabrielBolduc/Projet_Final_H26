@@ -1,0 +1,19 @@
+one:
+  user: one
+  unit: unit1
+  festival: f1
+  reservation_name: "Jean Dupont"
+  phone_number: "0612345678"
+  nb_of_people: 1
+  arrival_at: <%= 2.months.from_now.to_date %>
+  departure_at: <%= (2.months.from_now + 2.days).to_date %>
+
+two:
+  user: one
+  unit: unit2
+  festival: f2
+  reservation_name: "Marie Curie"
+  phone_number: "0788990011"
+  nb_of_people: 2
+  arrival_at: <%= 6.months.from_now.to_date %>
+  departure_at: <%= (6.months.from_now + 3.days).to_date %>

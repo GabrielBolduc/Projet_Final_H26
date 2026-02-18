@@ -1,24 +1,24 @@
 class Api::ReservationsController < ApiController
   skip_before_action :authenticate_user!, only: [ :index ], raise: false
-  before_action :set_reservation, only: [ :show, :update, :destroy ]
+  before_action :set_reservation, only: [ :update, :destroy ]
 
   def index
     if current_user
-      reservations = current_user.reservations.includes(unit: { image_attachment: :blob })
+      @reservations = current_user.reservations.includes(unit: { image_attachment: :blob })
     else
-      reservations = Reservation.none
+      @reservations = Reservation.none
     end
 
-    render_success(format_reservations(reservations))
+    render_success(format_reservations(@reservations))
   end
 
   def create
     @reservation = current_user.reservations.build(reservation_params)
 
-    if reservation.save
-      render_success(reservation.as_json(include: :unit), :created)
+    if @reservation.save
+      render_success(@reservation.as_json(include: :unit), :created)
     else
-      render_error(reservation.errors.full_messages, 422)
+      render_error(@reservation.errors.full_messages, 422)
     end
   end
 

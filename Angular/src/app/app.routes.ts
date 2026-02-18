@@ -62,7 +62,7 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'tasks/new', 
+                path: 'tasks/new',
                 component: TaskFormComponent,
                 canActivate: [AuthGuard, adminGuard]
             },

@@ -25,7 +25,7 @@ export class TaskService {
   private router = inject(Router);
 
   listTasks(): Observable<Task[]> {
-    console.log()
+    
         return this.http.get<ApiResponse<Task[]>>('api/tasks/' ).pipe(
              map(response => {
               console.log(response)
@@ -38,9 +38,18 @@ export class TaskService {
       );
     }
 
-  getTask(id: number) {
-    return this.http.get(`/tasks/${id}`);
-  }
+  getTask(id: number): Observable<Task> {
+        return this.http.get<ApiResponse<Task>>(`/tasks/${id}` ).pipe(
+             map(response => {
+              console.log(response)
+              if (response.status === 'success') {
+                return response.data;
+              } else {
+                throw new Error(response.message || 'erreur api');
+              }
+        })
+      );  
+    }
 
   createTask(task: any) {
     return this.http.post('/tasks', { task });

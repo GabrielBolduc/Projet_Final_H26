@@ -6,7 +6,11 @@
     </header>
 
     <main>
+        <section>
+           @for (task of tasks(); track task.id) {
+            <app-list-badge [task]="task" (detailsClick)="handletaskClicked($event)">   </app-list-badge>
+           }
+        </section>
 
-        
     </main>
 </div>

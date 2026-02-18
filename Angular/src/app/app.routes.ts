@@ -53,11 +53,6 @@ export const routes: Routes = [
             },
 
             {
-                path: '**',
-                component: Notfound
-            },
-
-            {
                 path: 'tasks',
                 component: taskListComponent,
                 canActivate: [AuthGuard, adminGuard]
@@ -79,8 +74,12 @@ export const routes: Routes = [
                 path: 'tasks/:id/edit',
                 component: TaskFormComponent,
                 canActivate: [AuthGuard, adminGuard]
-            }
+            },
 
+            {
+                path: '**',
+                component: Notfound
+            },
 
 
         ]

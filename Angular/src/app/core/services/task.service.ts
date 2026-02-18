@@ -4,8 +4,18 @@ import { Task } from '@core/models/task';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators/catchError';
-import { ApiResponse } from '../models/api-response'; 
 
+interface ApiResponse<T> {
+  status: 'success' | 'error';
+  data: T;
+  meta?: {
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+  };
+  message?: string;
+  code?: number;   
+}
 
 @Injectable({
   providedIn: 'root',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Task } from '@core/models/task';
 import { TaskService } from '@core/services/task.service';
 
@@ -12,9 +12,14 @@ export class taskListComponent {
 
   private taskService = inject(TaskService);
 
-  tasks: Task[] = [];
+  tasks = signal<Task[]>([]);
 
   ngOnInit() {
+
+    this.taskService.listTasks().subscribe(data =>{ 
+      console.log('taches reçu : ', data)
+      this.tasks.set(data)
+    });
     
   }
 

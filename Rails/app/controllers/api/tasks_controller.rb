@@ -24,7 +24,10 @@ class Api::TasksController < ApiController
         }, status: :ok
 
     end  
+
     def destroy
+
+        
         if @task.destroy
             render json: { success: true }, status: :ok
         else
@@ -32,6 +35,7 @@ class Api::TasksController < ApiController
         end
         
     end 
+
     def create
         @task = Task.new(task_params)
         if @task.save
@@ -45,13 +49,14 @@ class Api::TasksController < ApiController
         if @task.update(task_params)
             render json: @task.as_json(task_json).merge(success: true), status: :ok
         else
-            render json: { success: false, errors: format_errors(@task) }, status: :ok
+            render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity
         end
         
     end  
     
     def set_task
         @task = Task.find(params[:id])
+        
         unless @task.present?
             render json: { success: false, errors: [ { base: "Tache non trouver ou inexistante" } ] }, status: :ok
         end

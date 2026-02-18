@@ -10,6 +10,8 @@ class TasksTest < ActionDispatch::IntegrationTest
     @task_three = tasks(:three)
     @task_four = tasks(:four)
     @task_five = tasks(:five)
+
+
   end
 
   #get /api/tasks
@@ -198,9 +200,123 @@ class TasksTest < ActionDispatch::IntegrationTest
             assert_equal "error", json["status"]
             assert_equal 401, json["code"]
 
+    end
+
+    #a voir pour l'image elle crée une erreur-----------------------------------------------------
+     test " can delete task" do
+        sign_in users(:one)
+
+        # base de donnees
+        assert_difference "Task.count", -1 do
+            delete api_task_path(@task_three)
+        end
+
+        # format de reponse
+        assert_nothing_raised { JSON.parse(response.body) }
+
+        # code http
+        assert_response :success
+        json_response = JSON.parse(response.body)
+
+        # contenu de reponse
+        assert_equal true, json_response["success"], "Task should be deleted"
+    end
+
+    test "delete non-existent task" do
+        sign_in users(:one)
+
+        # base de donnees
+        assert_no_difference "Task.count" do
+          delete api_task_path(-1)
+        end
+
+        # code http
+        assert_response :not_found
+
+        # format reponse
+        json = JSON.parse(response.body)
+
+        # donne reponse
+        assert_equal "not_found", json["error"]
+    end
+
+    test "should not destroy one task  and return 401 user not connect" do
+    
+      # base de donnees
+      assert_no_difference "Task.count" do
+            delete api_task_path(@task_three)
+        end
+
+      # code http
+      assert_response :success
+
+      # format reponse
+      json = JSON.parse(response.body)
+
+      # donne reponse
+      assert_equal "error", json["status"]
+      assert_equal 401, json["code"]
+
+    end
+
+    test "can update task" do
+        sign_in users(:one)
+
+        # base de donnees
+        assert_no_difference "Task.count" do
+            patch  api_task_path(@task_one), params: { task: valid_task_params }
+          # puts response.body
+        end
+
+        # format de reponse
+        assert_nothing_raised { JSON.parse(response.body) }
+        json_response = JSON.parse(response.body)
+
+        # code http
+        assert_response :success
+
+        # contenu de reponse
+        assert_equal true, json_response["success"], "Success flag should be true"
         
     end
 
+    test "can not update task user logout" do
+
+        # base de donnees
+        assert_no_difference "Task.count" do
+            patch  api_task_path(@task_one), params: { task: valid_task_params }
+          # puts response.body
+        end
+        # code http
+        assert_response :success
+
+        # format reponse
+        json = JSON.parse(response.body)
+
+        # donne reponse
+        assert_equal "error", json["status"]
+        assert_equal 401, json["code"]
+
+    end
+
+    test "can not update task params invalide" do
+      sign_in users(:one)
+        # base de donnees
+        assert_no_difference "Task.count" do
+            patch  api_task_path(@task_one), params: { task: invalid_task_params }
+          # puts response.body
+        end
+       # code http
+        assert_response :unprocessable_entity
+
+        # format de reponse
+        assert_nothing_raised { JSON.parse(response.body) }
+        json_response = JSON.parse(response.body)
+
+        # contenu de reponse
+        assert_equal false, json_response["success"], "Creation should fail for invalid param"
+        assert json_response["errors"].any?, "Errors should be present for invalid param"
+    end
 
      def valid_task_params
         {

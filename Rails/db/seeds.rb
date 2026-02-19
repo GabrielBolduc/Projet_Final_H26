@@ -363,17 +363,15 @@ Reservation.create!(
 
 # Packages (Billetterie)
 
-festival = Festival.first
-
 p_general = Package.create!(
   title: "Passeport Festival",
   description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
   price: 150.00,
   quota: 500,
   category: "general",
-  valid_at: festival.start_at,
-  expired_at: festival.end_at,
-  festival: festival
+  valid_at: f.start_at,
+  expired_at: f.end_at,
+  festival: f
 )
 
 p_daily = Package.create!(
@@ -382,24 +380,43 @@ p_daily = Package.create!(
   price: 60.00,
   quota: 1000,
   category: "daily",
-  valid_at: festival.start_at,
-  expired_at: festival.start_at + 1.day,
-  festival: festival
+  valid_at: f.start_at,
+  expired_at: f.start_at,
+  festival: f
+)
+
+p_evening = Package.create!(
+  title: "Billet Soirée",
+  description: "Pour les spectacles du soir !",
+  price: 72.99,
+  quota: 2400,
+  category: "evening",
+  valid_at: f.start_at,
+  expired_at: f.start_at,
+  festival: f
 )
 
 # Attachement des images
 images = {
   p_general => 'general-ticket.webp',
-  p_daily   => 'daily-ticket.webp'
+  p_daily   => 'daily-ticket.webp',
+  p_evening => 'evening-ticket.jpg'
 }
 
 images.each do |package, filename|
   path = Rails.root.join('db', 'files', filename)
+  
   if File.exist?(path)
+    # Détermine le type MIME dynamiquement (webp ou jpeg)
+    content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
+
     package.image.attach(
       io: File.open(path),
       filename: filename,
-      content_type: 'image/webp'
+      content_type: content_type 
     )
+    puts "Image attachée à #{package.title} (#{content_type})"
+  else
+    puts "⚠️ Image non trouvée : #{filename}"
   end
 end

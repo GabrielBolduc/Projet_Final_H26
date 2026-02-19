@@ -3,7 +3,6 @@ import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
-import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
@@ -13,7 +12,7 @@ import { MainLayoutComponent } from './layout/main-layout/main-layout.component'
 import { DashboardComponent } from './features/admin/performance/dashboard';
 import { AdministrationComponent } from './features/admin/festival/administration';
 import { AddPerformanceComponent } from './features/admin/performance/add_performance';
-import { taskListComponent } from '@features/laurent/task/list/list';
+import { TaskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
@@ -107,7 +106,7 @@ export const routes: Routes = [
             },
             {
                 path: 'tasks',
-                component: taskListComponent,
+                component: TaskListComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

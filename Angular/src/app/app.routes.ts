@@ -3,6 +3,7 @@ import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
+import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
@@ -87,7 +88,7 @@ export const routes: Routes = [
             },
             {
                 path: 'admin/ticketing',
-                component: AdminTicketingComponent,
+                component: Ticketing,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

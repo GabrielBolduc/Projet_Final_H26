@@ -65,7 +65,7 @@
 
 .ticket-card:hover {
   transform: translateX(5px);
-  box-shadow: 8px 8px 0px var(--mat-sys-tertiary);
+  box-shadow: 8px 8px 0px var(--mat-sys-primary);
 }
 
 .card-content-layout {

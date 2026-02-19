@@ -41,8 +41,8 @@ export class TaskService {
       );
     }
 
-  getTask(id: number|null): Observable<Task> {
-        return this.http.get<ApiResponse<Task>>(`api/tasks/${id}` ).pipe(
+  getTask(id: number|null): Observable<Task[]> {
+        return this.http.get<ApiResponse<Task[]>>(`api/tasks/${id}` ).pipe(
              map(response => {
               console.log(response)
               if (response.status === 'success') {

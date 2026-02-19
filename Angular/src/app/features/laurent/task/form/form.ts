@@ -18,8 +18,7 @@ export class TaskFormComponent {
    taskId: number |null=null;
    isEditMode = false;
 
-   task = signal<Task | null>(null);
-
+    task = signal<Task[]>([]);
    editTask: TaskPayload = new TaskPayload(
         "Edited title",
         "Edited description",

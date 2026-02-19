@@ -19,8 +19,16 @@ class Package < ApplicationRecord
 
   validate :expired_date_after_valid_date
   validate :image_format_validation
+  validate :quota_cannot_exceed_daily_capacity
 
   private
+
+  def quota_cannot_exceed_daily_capacity
+    return unless festival && quota
+    if quota > festival.daily_capacity
+      errors.add(:quota, "ne peut pas dépasser la capacité journalière du festival (#{festival.daily_capacity})")
+    end
+  end
 
   # Validation du format d'image (JPEG, PNG, WEBP)
   def image_format_validation

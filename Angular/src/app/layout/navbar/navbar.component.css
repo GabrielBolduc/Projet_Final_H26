@@ -1,14 +1,26 @@
+/* ========================================= */
+/* --- STRUCTURE GLOBALE --- */
+/* ========================================= */
+
 .brand-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-    
   position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
   transition: box-shadow 0.2s ease-in-out;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }
 
 .header-actions {
@@ -17,33 +29,93 @@
   gap: 20px; 
 }
 
+/* ========================================= */
+/* --- LOGO ET LIENS --- */
+/* ========================================= */
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--mat-sys-primary);
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-right: 20px;
+}
+
 .toolbar-logo {
   height: 50px; 
   width: auto; 
   margin-right: 12px; 
   object-fit: contain;
-  vertical-align: middle;
 }
 
-.logo-link {
+.nav-link {
   text-decoration: none;
   color: var(--mat-sys-primary);
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
 }
 
-.spacer {
-  flex: 1 1 auto;
+.nav-link:hover {
+  color: var(--mat-sys-secondary);
 }
 
-.content {
-  padding: 20px;
-}
-
-.header-actions {
-  justify-content: space-between;
+.admin-btn {
+  margin-left: 20px;
+  font-weight: bold;
 }
 
 button mat-icon {
   margin-right: 8px;
+}
+
+/* ========================================= */
+/* --- BOUTON DE LANGUE (Web & Mobile) --- */
+/* ========================================= */
+
+.lang-btn, .lang-btn-mobile {
+  border-radius: 20px !important; /* Crée l'effet pilule arrondi */
+  font-weight: bold !important;
+  color: var(--mat-sys-primary) !important;
+  border-color: var(--mat-sys-outline-variant) !important;
+}
+
+.lang-btn:hover, .lang-btn-mobile:hover {
+  background-color: var(--mat-sys-surface-container-highest) !important;
+}
+
+.lang-btn-mobile {
+  margin-right: 10px;
+  padding: 0 12px !important;
+  min-width: auto !important; /* Empêche le bouton d'être trop large sur un petit écran */
+}
+
+/* Réduit légèrement l'espacement de l'icône sur mobile pour gagner de la place */
+.lang-btn-mobile mat-icon {
+  margin-right: 4px; 
+}
+
+/* --- Par défaut (Version Web), on cache le conteneur mobile --- */
+.show-on-mobile {
+  display: none; 
+}
+
+
+
+@media screen and (max-width: 850px) {
+  
+  .hide-on-mobile {
+    display: none !important; 
+  }
+
+  .show-on-mobile {
+    display: flex; 
+    align-items: center;
+  }
+
+  .home-text {
+    display: none;
+  }
 }

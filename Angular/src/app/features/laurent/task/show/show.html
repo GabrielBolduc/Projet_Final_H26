@@ -1,25 +1,46 @@
-<mat-card class="task-card">
-    <mat-card-header>
-        <mat-card-title>{{ task()[0].title }}</mat-card-title>
-        
-    </mat-card-header>
-    <mat-card-content>
-        <p><strong>Description:</strong> {{ task()[0].description }}</p>
+@if (task()) {
 
-        
-        <p><strong>Priority:</strong> {{ task()[0].priority }}</p>
-        <div If="task()[0].file_url">
-            <p><strong>File:</strong></p>
-            <div If="isImageFile(task()[0].file_url); else downloadLink">
-                <img [src]="task()[0].file_url" alt="Task file" style="max-width: 100%; max-height: 300px;">
-            </div>
-            <ng-template #downloadLink>
-                <a [href]="task()[0].file_url" download>Download File</a>
-            </ng-template>
+  <mat-card class="task-card">
+    <mat-card-header>
+      <mat-card-title>{{ task()?.title }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p><strong>Description:</strong> {{ task()?.description }}</p>
+      <div class="priority-stars">
+        <strong>Difficulty:</strong>
+
+        @for (star of getStars(task()?.difficulty); track $index) {
+            <mat-icon class="star filled">star</mat-icon>
+        }
+
+        @for (star of getEmptyStars(task()?.difficulty); track $index) {
+            <mat-icon class="star empty">star_border</mat-icon>
+        }
         </div>
+      
+      <p><strong>Priority:</strong> {{ task()?.priority }}</p>
+
+      @if (task()?.file_url) {
+
+        <p><strong>File:</strong></p>
+
+        @if (isImage(task()?.file_url)) {
+          <img [src]="task()?.file_url"
+               alt="Task file"
+               style="max-width: 100%; max-height: 300px;">
+        } @else {
+          <a [href]="task()?.file_url" download>Download File</a>
+        }
+
+      }
+
     </mat-card-content>
+
     <mat-card-actions>
-        <button mat-button (click)="handleEditClick()">Edit</button>
-        <button mat-button color="warn" (click)="handleClick()">Delete</button>
+      <button mat-button (click)="handleEditClick()">Edit</button>
+      <button mat-button color="warn" (click)="handleClick()">Delete</button>
     </mat-card-actions>
-</mat-card>
+  </mat-card>
+
+}

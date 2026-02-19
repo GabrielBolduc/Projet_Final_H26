@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { PerformanceService } from '../../../core/services/performance.service';
 import { Performance } from '../../../core/models/performance';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -21,7 +21,8 @@ interface DayGroup {
     CommonModule, 
     MatButtonModule, 
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    TranslateModule
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']

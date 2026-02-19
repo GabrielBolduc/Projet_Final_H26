@@ -7,9 +7,10 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api, defaults: { format: :json } do
-    resources :festivals, only: [ :index, :show ]
-    resources :tasks, only: [ :index, :show, :create, :update, :destroy ]
-
+    resources :festivals, only: [:index, :show]
+    resources :tasks, only: [:index, :show,:create,:update, :destroy]
+    resources :artists, only: [:index]
+    resources :stages, only: [:index]
     resources :performances
     resources :reservations
     resources :accommodations

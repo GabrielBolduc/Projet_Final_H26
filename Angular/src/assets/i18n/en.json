@@ -26,5 +26,24 @@
     "SIGNUP_LINK": "Sign up",
     "ALREADY_ACCOUNT": "Already have an account?",
     "LOGIN_LINK": "Connect"
+  },
+  "SERVER_ERRORS": {
+    "END_BEFORE_START": "End time must be strictly after start time.",
+    "OUTSIDE_FESTIVAL_DATES": "The performance must take place during the festival dates.",
+    "STAGE_OVERLAP": "This stage is already booked for this time slot.",
+    "ARTIST_OVERLAP": "This artist is already performing elsewhere at this time.",
+    "FESTIVAL_COMPLETED": "This festival is completed.",
+    "blank": "This field is required."
+  },
+  "FESTIVAL":{
+    "ADMINISTRATION": "Administration",
+    "HELLO": "Hello",
+    "CURRENT_FESTIVAL": "Current Festival",
+    "ACCESS_DASHBOARD": "Access the dashboard",
+    "ARCHIVE": "Archive :",
+    "ADRESS": "Adress :",
+    "VIEW_COMMENT": "View comments",
+    "FINISHED": "(Finished)",
+    "NEW_FESTIVAL": "New Festival"
   }
 }

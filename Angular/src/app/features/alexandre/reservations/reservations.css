@@ -1,16 +1,22 @@
 .full-height {
-  height: 100vh;
-}
-
-mat-sidenav {
-  width: min-content !important;
-  padding: 10px;
+  height: 80vh;
 }
 
 ::ng-deep .mat-mdc-list-item {
-  height: auto !important;
-  padding: 0 !important;
-  margin-bottom: 20px !important;
+  height: auto ;
+  padding: 0 ;
+  margin-bottom: 20px;
+}
+
+.mat-nav-list {
+  display: flex ;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 ;
+}
+
+.mat-nav-list a {
+  text-decoration: none;
 }
 
 .fest-card {
@@ -35,7 +41,23 @@ mat-sidenav {
 
 .nav-label {
   padding: 10px;
+  margin-top: -5px;
   font-weight: 700;
   text-align: center;
   font-size: 0.9rem;
+  color: black;
+}
+
+.main-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+
+.main-display p {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--mat-sys-on-surface-variant);
 }

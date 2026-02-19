@@ -3,6 +3,11 @@ class Api::AccommodationsController < ApiController
 
   def index
     @units = Unit.all.includes(:accommodation, image_attachment: :blob)
+
+    if params[:category].present? && params[:category] != 'all'
+      @units = @units.joins(:accommodation).where(accommodations: { category: params[:category] })
+    end
+
     render json: { status: "success", data: format_units(@units) }
   end
 
@@ -17,7 +22,6 @@ def show
     )
     render json: { status: "success", data: unit_data }
   else
-    # This ensures a 200 OK with your custom error format
     render json: { status: "error", message: "Unit not found" }, status: :ok
   end
 end

@@ -54,11 +54,13 @@ export const routes: Routes = [
             },
             {
                 path: 'performances/new',
-                component: AddPerformanceComponent
+                component: AddPerformanceComponent,
+                canActivate: [AuthGuard, adminGuard]
             },
             {
                 path: 'performances/:id/edit',
-                component: AddPerformanceComponent
+                component: AddPerformanceComponent,
+                canActivate: [AuthGuard, adminGuard]
             },
             {
                 path: 'admin',

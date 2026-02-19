@@ -15,25 +15,20 @@ end
 
 puts "Nettoyage de la base de données..."
 
-# 1. Détruire les réservations (les enfants ultimes)
 Reservation.destroy_all
 Order.destroy_all
 Ticket.destroy_all
 
-# 2. Détruire les unités et les packages (qui dépendent de Accommodation ou Festival)
 Unit.destroy_all
 Package.destroy_all
 
-# 3. Détruire les hébergements et les performances (qui dépendent de Festival, Stage, Artist)
 Accommodation.destroy_all
 Performance.destroy_all
 
-# 4. Détruire les parents de premier niveau
 Stage.destroy_all
 Artist.destroy_all
 Task.destroy_all
 
-# 5. Détruire les entités maîtresses (Festivals et Utilisateurs)
 Festival.destroy_all
 Client.destroy_all
 Admin.destroy_all

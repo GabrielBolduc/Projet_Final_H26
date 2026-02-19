@@ -1,0 +1,27 @@
+<mat-sidenav-container class="full-height">
+  <mat-sidenav mode="side" opened class="custom-sidebar">
+    
+    <mat-nav-list>
+      <!-- Camping Button -->
+      <a mat-list-item 
+         [routerLink]="['/Accommodations']" 
+         [queryParams]="{ type: 'camping' }"
+         routerLinkActive="active-selection">
+        <div class="fest-card">
+          <img src="assets/camping-photo.jpeg" alt="Camping" class="nav-image">
+          <div class="nav-label">Reserve Camping</div>
+        </div>
+      </a>
+
+      <a mat-list-item 
+         [routerLink]="['/Accommodations']" 
+         [queryParams]="{ type: 'hotel' }"
+         routerLinkActive="active-selection">
+        <div class="fest-card">
+          <img src="assets/hotel-photo.jpg" alt="Hotel" class="nav-image">
+          <div class="nav-label">Reserve Hotel</div>
+        </div>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  unique_code: MyString
+  refunded: false
+  refunded_at: 2026-02-16 10:22:09
+  holder_name: MyString
+  holder_phone: MyString
+  holder_email: MyString
+  price: 9.99
+  order: one
+  package: one
+
+two:
+  unique_code: MyString
+  refunded: false
+  refunded_at: 2026-02-16 10:22:09
+  holder_name: MyString
+  holder_phone: MyString
+  holder_email: MyString
+  price: 9.99
+  order: two
+  package: two

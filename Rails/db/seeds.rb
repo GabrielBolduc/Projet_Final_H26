@@ -390,7 +390,6 @@ images.each do |package, filename|
       filename: filename,
       content_type: content_type 
     )
-    puts "Image attachée à #{package.title} (#{content_type})"
   else
     puts "Image non trouvée : #{filename}"
   end

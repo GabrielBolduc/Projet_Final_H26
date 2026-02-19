@@ -1,0 +1,27 @@
+<div class="accommodations-grid">
+  <mat-card class="fest-card" *ngFor="let unit of accommodations$ | async">
+    <div class="card-image-container">
+      <img mat-card-image [src]="unit.image_url" [alt]="unit.name" class="card-image">
+    </div>
+    
+    <mat-card-header>
+      <mat-card-title class="card-title">{{ unit.name }}</mat-card-title>
+      <mat-card-subtitle class="card-location">
+        {{ unit.accommodation?.name }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p class="card-description">{{ unit.description }}</p>
+      <div class="price-tag">
+        {{ unit.price_per_night | currency }}/night
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+        <button mat-button class="btn-dash" [routerLink]="['/accommodations-details', unit.id]">
+            Details
+        </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

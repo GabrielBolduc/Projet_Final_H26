@@ -1,0 +1,63 @@
+.full-height {
+  height: 80vh;
+}
+
+::ng-deep .mat-mdc-list-item {
+  height: auto ;
+  padding: 0 ;
+  margin-bottom: 20px;
+}
+
+.mat-nav-list {
+  display: flex ;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 ;
+}
+
+.mat-nav-list a {
+  text-decoration: none;
+}
+
+.fest-card {
+  width: 150px; 
+  background: var(--mat-sys-surface-container-low);
+  border: 2px solid var(--mat-sys-on-surface);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.fest-card:hover {
+  transform: translateX(5px); 
+  box-shadow: 8px 8px 0px var(--mat-sys-primary);
+}
+
+.nav-image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+.nav-label {
+  padding: 10px;
+  margin-top: -5px;
+  font-weight: 700;
+  text-align: center;
+  font-size: 0.9rem;
+  color: black;
+}
+
+.main-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+
+.main-display p {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--mat-sys-on-surface-variant);
+}

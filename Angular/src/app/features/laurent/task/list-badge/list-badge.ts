@@ -1,11 +1,11 @@
 import { Component, input, output } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-
+import { RouterLink } from '@angular/router';
 import { Task } from '@core/models/task';
 
 @Component({
   selector: 'app-list-badge',
-  imports: [MatCardModule],
+  imports: [MatCardModule, RouterLink],
   templateUrl: './list-badge.html',
   styleUrl: './list-badge.css',
 })

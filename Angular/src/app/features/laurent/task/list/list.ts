@@ -1,48 +1,27 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
-import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
+import { RouterLink } from '@angular/router';
 import { Task } from '@core/models/task';
 import { TaskService } from '@core/services/task.service';
-import { ListBadgeComponent } from '../list-badge/list-badge';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
-  imports: [ListBadgeComponent,CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './list.html',
   styleUrl: './list.css',
 })
-export class taskListComponent {
-
-
-
+export class TaskListComponent implements OnInit {
 
   private taskService = inject(TaskService);
-
   tasks = signal<Task[]>([]);
 
-  constructor (private router: Router){
-
-  }
-
-  
   ngOnInit() {
-
-    this.taskService.listTasks().subscribe(data =>{ 
-      console.log('taches reçu : ', data)
-      this.tasks.set(data)
+    this.taskService.listTasks().subscribe(data => { 
+      console.log('Tâches reçues : ', data);
+      this.tasks.set(data);
     });
-    
   }
-
-  handletaskClicked(id: number) {
-      this.router.navigate(['/tasks', id])
-
-  }
-
-
-
 }

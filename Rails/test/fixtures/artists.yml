@@ -1,10 +1,10 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: ArtistA
-  genre: MyString
-  bio: MyText
-  popularity: 1
+  name: One
+  genre: "Hip hop"
+  bio: "Bio"
+  popularity: 5
 
 two:
   name: ArtistB

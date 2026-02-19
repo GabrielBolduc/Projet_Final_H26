@@ -8,9 +8,9 @@
 
         
         <p><strong>Priority:</strong> {{ task()[0].priority }}</p>
-        <div *ngIf="task()[0].file_url">
+        <div If="task()[0].file_url">
             <p><strong>File:</strong></p>
-            <div *ngIf="isImageFile(task()[0].file_url); else downloadLink">
+            <div If="isImageFile(task()[0].file_url); else downloadLink">
                 <img [src]="task()[0].file_url" alt="Task file" style="max-width: 100%; max-height: 300px;">
             </div>
             <ng-template #downloadLink>

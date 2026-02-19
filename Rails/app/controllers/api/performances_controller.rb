@@ -33,13 +33,8 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-<<<<<<< HEAD
-        data: performance.as_json(include: [ :artist, :stage, :festival ])
-      }, status: :ok
-=======
         data: performance.as_json(include: [:artist, :stage, :festival])
       }, status: :created
->>>>>>> GabrielB
     else
       render json: {
         status: "error",
@@ -62,15 +57,9 @@ class Api::PerformancesController < ApiController
           status: "error",
           code: 422,
           message: "Validation failed",
-<<<<<<< HEAD
-          errors: @performance.errors
-        }, status: :ok
-      end
-=======
           errors: @performance.errors.messages
         }, status: :unprocessable_entity
       end 
->>>>>>> GabrielB
     else
       render json: {
         status: "error",

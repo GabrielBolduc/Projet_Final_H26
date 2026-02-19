@@ -13,20 +13,32 @@ rescue NameError, ActiveRecord::StatementInvalid
   # continue si aucune affectation
 end
 
+puts "Nettoyage de la base de données..."
 
+# 1. Détruire les réservations (les enfants ultimes)
+Reservation.destroy_all
+Order.destroy_all
+Ticket.destroy_all
+
+# 2. Détruire les unités et les packages (qui dépendent de Accommodation ou Festival)
+Unit.destroy_all
+Package.destroy_all
+
+# 3. Détruire les hébergements et les performances (qui dépendent de Festival, Stage, Artist)
+Accommodation.destroy_all
 Performance.destroy_all
+
+# 4. Détruire les parents de premier niveau
 Stage.destroy_all
 Artist.destroy_all
-Festival.destroy_all
 Task.destroy_all
+
+# 5. Détruire les entités maîtresses (Festivals et Utilisateurs)
+Festival.destroy_all
 Client.destroy_all
 Admin.destroy_all
 Staff.destroy_all
 User.destroy_all
-Festival.destroy_all
-Package.destroy_all
-Ticket.destroy_all
-Order.destroy_all
 
 
 c = Client.create!(
@@ -277,89 +289,6 @@ acc2 = Accommodation.create!(
   festival: f
 )
 
-unit1 = Unit.create!(
-  type: "SimpleRoom",
-  cost_person_per_night: 55.00,
-  quantity: 12,
-  wifi: true,
-  water: :drinkable,
-  electricity: true,
-  parking_cost: 0.00,
-  food_options_list: ["Room service", "Restaurant"],
-  accommodation: acc1,
-  image: {
-    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
-    filename: "placeholder-image.png",
-    content_type: "image/png"
-  }
-)
-
-unit2 = Unit.create!(
-  type: "StandardTerrain",
-  cost_person_per_night: 20.00,
-  quantity: 30,
-  wifi: false,
-  water: :undrinkable,
-  electricity: true,
-  parking_cost: 15.00,
-  food_options_list: ["Canteen"],
-  accommodation: acc2,
-  image: {
-    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
-    filename: "placeholder-image.png",
-    content_type: "image/png"
-  }
-)
-
-unit3 = Unit.create!(
-  type: "FamilyRoom",
-  cost_person_per_night: 110.00,
-  quantity: 4,
-  wifi: true,
-  water: :drinkable,
-  electricity: true,
-  parking_cost: 10.00,
-  food_options_list: ["None"],
-  accommodation: acc1,
-  image: {
-    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
-    filename: "placeholder-image.png",
-    content_type: "image/png"
-  }
-)
-
-Reservation.create!(
-  reservation_name: "Jean Dupont",
-  phone_number: "0612345678",
-  nb_of_people: 1,
-  arrival_at: f.start_at,
-  departure_at: f.start_at + 3.days,
-  festival: f,
-  user: c,
-  unit: unit1
-)
-
-Reservation.create!(
-  reservation_name: "Marie Curie",
-  phone_number: "0788990011",
-  nb_of_people: [unit2.max_capacity, 2].min,
-  arrival_at: f.start_at + 1.day,
-  departure_at: f.start_at + 4.days,
-  festival: f,
-  user: c,
-  unit: unit2
-)
-
-Reservation.create!(
-  reservation_name: "Marc Smith",
-  phone_number: "0102030405",
-  nb_of_people: 1,
-  arrival_at: f.end_at - 2.days,
-  departure_at: f.end_at + 1.day,
-  festival: f,
-  user: c,
-  unit: unit3
-)
 
 # Packages (Billetterie)
 

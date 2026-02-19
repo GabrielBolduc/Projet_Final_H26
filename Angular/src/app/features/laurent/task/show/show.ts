@@ -3,10 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { Task } from '@core/models/task';
 import { TaskPayload } from '@core/models/task-payload';
 import { TaskService } from '@core/services/task.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
+
 
 @Component({
   selector: 'app-show',
-  imports: [],
+  imports: [MatCardModule, MatButtonModule, ],
   templateUrl: './show.html',
   styleUrl: './show.css',
 })
@@ -25,8 +29,7 @@ export class TaskShowComponent {
   );
 
 
-  task = signal<Task | null>(null);
-
+  task = signal<Task[]>([]);
    constructor(private route: ActivatedRoute){}
 
   ngOnInit() {
@@ -39,7 +42,7 @@ export class TaskShowComponent {
     this.taskService.getTask(id).subscribe(data =>{ 
       console.log('tache reçu : ', data)
       this.task.set(data)
-       console.log('tache initialisé : ', this.task)
+       console.log('tache initialisé : ', this.task())
     });
     
   }

@@ -10,7 +10,7 @@ export const restrictionLoginGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if(auth.isLoggedIn()) {
-    if(JSON.parse(localStorage.getItem('festify_user') || 'false').type !== "admin") {
+    if(JSON.parse(localStorage.getItem('festify_user') || 'false').type !== "Admin") {
       router.navigate(['/']);
       return false;
     }

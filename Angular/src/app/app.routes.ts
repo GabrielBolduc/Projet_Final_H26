@@ -90,6 +90,10 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
+                path: 'ticketing',
+                component: Ticketing
+            },
+            {
                 path: 'tasks',
                 component: taskListComponent,
                 canActivate: [AuthGuard, adminGuard]

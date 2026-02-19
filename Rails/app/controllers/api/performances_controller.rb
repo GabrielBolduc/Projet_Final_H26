@@ -23,7 +23,7 @@ class Api::PerformancesController < ApiController
         status: "error",
         code: 404,
         message: "Performance not found"
-      }, status: :ok
+      }, status: :not_found
     end
   end
   
@@ -34,14 +34,14 @@ class Api::PerformancesController < ApiController
       render json: {
         status: "success",
         data: performance.as_json(include: [:artist, :stage, :festival])
-      }, status: :ok
+      }, status: :created
     else
       render json: {
         status: "error",
         code: 422,
         message: "Validation failed",
-        errors: performance.errors
-      }, status: :ok
+        errors: performance.errors.messages
+      }, status: :unprocessable_entity
     end
   end
 
@@ -57,15 +57,15 @@ class Api::PerformancesController < ApiController
           status: "error",
           code: 422,
           message: "Validation failed",
-          errors: @performance.errors
-        }, status: :ok
+          errors: @performance.errors.messages
+        }, status: :unprocessable_entity
       end 
     else
       render json: {
         status: "error",
         code: 404,
         message: "Performance not found"
-      }, status: :ok
+      }, status: :not_found
     end
   end
 
@@ -82,7 +82,7 @@ class Api::PerformancesController < ApiController
         status: "error",
         code: 404,
         message: "Performance not found"
-      }, status: :ok
+      }, status: :not_found # 404
     end
   end
 
@@ -105,7 +105,7 @@ class Api::PerformancesController < ApiController
         status: "error",
         code: 403,
         message: "Access denied: Admin privileges required."
-      }, status: :ok
+      }, status: :forbidden # 403
     end
   end
 end

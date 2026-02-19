@@ -10,7 +10,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar'; // preview vente
-import { Package } from '../../../../core/models/package';
+import { Package } from '../../../../../core/models/package';
 
 @Component({
   selector: 'app-package-form',
@@ -112,7 +112,7 @@ import { Package } from '../../../../core/models/package';
           <div class="card-content-layout">
             
             <div class="ticket-visual">
-              <img [src]="previewUrl || data.image_url || 'https://placehold.co/150x150/orange/white.png?text=Billet'" alt="ticket">
+              <img [src]="previewUrl || data?.image_url || 'https://placehold.co/150x150/orange/white.png?text=Billet'" alt="ticket">
               <span class="category-badge" [class]="form.get('category')?.value">
                 {{ form.get('category')?.value || 'TYPE' }}
               </span>
@@ -165,7 +165,6 @@ import { Package } from '../../../../core/models/package';
     .preview-section { flex: 1; background: #f5f5f5; border-radius: 8px; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
     .preview-note { margin-top: 10px; font-size: 0.8rem; color: #888; font-style: italic; }
 
-    /* --- Styles réutilisés de la carte (Ticketing.css) --- */
     .ticket-card-preview {
       width: 100%;
       background: var(--mat-sys-surface-container-low, white);

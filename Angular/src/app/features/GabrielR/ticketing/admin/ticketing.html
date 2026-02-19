@@ -33,7 +33,7 @@
             
             <div class="ticket-visual">
               <img [src]="pkg.image_url || 'assets/placeholder-ticket.png'" alt="ticket">
-              <span class="category-badge" [class]="pkg.category.toLowerCase()">
+              <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
                 {{ pkg.category }}
               </span>
             </div>

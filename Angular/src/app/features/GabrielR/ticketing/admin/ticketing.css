@@ -93,11 +93,9 @@
   text-transform: uppercase;
 }
 
-.category-badge.vip { background: #FFD700; color: black; }
-.category-badge.general { background: #E0E0E0; color: black; }
-.category-badge.etudiant { background: #ADD8E6; color: black; }
-
-
+.category-badge.general { background: #FFD700; color: black; }
+.category-badge.daily { background: #E0E0E0; color: black; }
+.category-badge.evening { background: #ADD8E6; color: black; }
 
 .ticket-info {
   flex: 1;

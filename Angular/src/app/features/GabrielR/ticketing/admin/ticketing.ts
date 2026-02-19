@@ -10,8 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms'; 
 
-import { PackageService } from '../../../core/services/package.service';
-import { Package } from '../../../core/models/package';
+import { PackageService } from '../../../../core/services/package.service';
+import { Package } from '../../../../core/models/package';
 import { PackageFormComponent } from './package-form/package-form.component';
 
 @Component({

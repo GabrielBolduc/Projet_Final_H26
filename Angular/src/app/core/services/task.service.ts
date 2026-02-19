@@ -41,8 +41,8 @@ export class TaskService {
       );
     }
 
-  getTask(id: number|null): Observable<Task> {
-        return this.http.get<ApiResponse<Task>>(`api/tasks/${id}` ).pipe(
+  getTask(id: number|null): Observable<Task[]> {
+        return this.http.get<ApiResponse<Task[]>>(`api/tasks/${id}` ).pipe(
              map(response => {
               console.log(response)
               if (response.status === 'success') {
@@ -55,7 +55,7 @@ export class TaskService {
     }
 
   createTask(task: TaskPayload) {
-    return this.http.patch<ApiResponse<Task>>(`/tasks`, { task }).pipe(
+    return this.http.patch<ApiResponse<Task>>(`api/tasks`, { task }).pipe(
 
       map(response => {
                 console.log(response)
@@ -70,7 +70,7 @@ export class TaskService {
   }
   
   updateTask(id: number|null, task: TaskPayload) {
-    return this.http.patch<ApiResponse<Task>>(`/tasks/${id}`, { task }).pipe(
+    return this.http.patch<ApiResponse<Task>>(`api/tasks/${id}`, { task }).pipe(
 
       map(response => {
                 console.log(response)

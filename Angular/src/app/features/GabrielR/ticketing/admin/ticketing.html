@@ -1,12 +1,9 @@
 <div class="admin-page">
   <header class="admin-top-bar">
-    <div class="header-left">
+      <button mat-stroked-button class="btn-new" (click)="openForm()">
+        <mat-icon>add</mat-icon> Nouveau Forfait
+      </button>
       <h1 class="header-title">Billetterie</h1>
-      <span class="subtitle">Gestion des forfaits et tarifs</span>
-    </div>
-    <button mat-flat-button class="btn-new" (click)="openForm()">
-      <mat-icon>add</mat-icon> Nouveau Forfait
-    </button>
   </header>
 
   <section class="filters-section">

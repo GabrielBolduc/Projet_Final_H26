@@ -1,10 +1,10 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,14 +12,13 @@ import { FormsModule } from '@angular/forms';
 
 import { PackageService } from '../../../../core/services/package.service';
 import { Package } from '../../../../core/models/package';
-import { PackageFormComponent } from './package-form/package-form.component';
 
 @Component({
   selector: 'app-admin-ticketing',
   standalone: true,
   imports: [
     CommonModule, MatCardModule, MatButtonModule, MatIconModule, 
-    MatProgressBarModule, CurrencyPipe, DatePipe, MatDialogModule,
+    MatProgressBarModule, CurrencyPipe, DatePipe, 
     MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule
   ],
   templateUrl: './ticketing.html',
@@ -27,7 +26,7 @@ import { PackageFormComponent } from './package-form/package-form.component';
 })
 export class AdminTicketingComponent implements OnInit {
   private packageService = inject(PackageService);
-  private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   packages = signal<Package[]>([]);
   searchQuery = signal<string>('');
@@ -59,32 +58,11 @@ export class AdminTicketingComponent implements OnInit {
   }
 
   openForm(pkg?: Package) {
-    const dialogRef = this.dialog.open(PackageFormComponent, {
-      data: pkg,
-      width: '600px'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        const { file, ...packageData } = result;
-        
-        if (pkg?.id) {
-          // UPDATE
-          this.packageService.updatePackage(pkg.id, packageData, file).subscribe({
-            next: () => {
-              this.loadPackages();
-            },
-            error: (err) => alert(err.message || 'Erreur lors de la modification')
-          });
-        } else {
-          // CREATE
-          this.packageService.createPackage(packageData, file).subscribe({
-            next: () => this.loadPackages(),
-            error: (err) => alert(err.message || 'Erreur lors de la création')
-          });
-        }
-      }
-    });
+    if (pkg && pkg.id) {
+      this.router.navigate(['packages', pkg.id, 'edit'])
+    } else {
+      this.router.navigate(['packages/new']);
+    }
   }
 
   deletePackage(pkg: Package) {
@@ -92,7 +70,6 @@ export class AdminTicketingComponent implements OnInit {
       this.packageService.deletePackage(pkg.id!).subscribe({
         next: () => this.loadPackages(),
         error: (err) => {
-          // renvoie l'objet erreur complet (message + errors)
           const msg = err.message || 'Impossible de supprimer ce forfait.';
           alert(msg);
         }

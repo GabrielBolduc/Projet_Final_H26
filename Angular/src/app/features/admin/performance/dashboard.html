@@ -1,16 +1,12 @@
 <div class="dashboard-layout">
-
-
   <main class="admin-page">
     
     <header class="admin-top-bar">
-      <div>
-        <h1 class="header-title">Tableau de bord</h1>
-        <span class="greeting">Vue d'ensemble de la programmation</span>
-      </div>
       <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
         <mat-icon>add</mat-icon> Nouvelle Performance
       </button>
+      
+      <h1 class="header-title">Tableau de bord</h1>
     </header>
 
     @if (isLoading()) {
@@ -25,12 +21,11 @@
     }
 
     @for (group of performanceGroups(); track group.date) {
-      
       <section class="admin-section">
         
-        <h3 class="day-title">
+        <h2 class="section-label">
           {{ group.date | date:'EEEE d MMMM' : undefined : currentLang() | titlecase }}
-        </h3>
+        </h2>
         
         <div class="grid-table-container">
           <table mat-table [dataSource]="group.performances" class="festify-grid-table">

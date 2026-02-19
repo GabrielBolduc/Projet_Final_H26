@@ -26,5 +26,25 @@
     "SIGNUP_LINK": "S'inscrire",
     "ALREADY_ACCOUNT": "Déjà un compte ?",
     "LOGIN_LINK": "Se connecter"
+  },
+  "SERVER_ERRORS": {
+    "END_BEFORE_START": "L'heure de fin doit être strictement après l'heure de début.",
+    "OUTSIDE_FESTIVAL_DATES": "La performance doit avoir lieu pendant les dates du festival.",
+    "STAGE_OVERLAP": "Cette scène est déjà occupée sur ce créneau.",
+    "ARTIST_OVERLAP": "Cet artiste joue déjà ailleurs sur ce créneau.",
+    "FESTIVAL_COMPLETED": "Ce festival est terminé.",
+    "blank": "Ce champ est requis."
+  },
+  "FESTIVAL":{
+    "ADMINISTRATION": "Administration",
+    "HELLO": "Bonjour",
+    "CURRENT_FESTIVAL": "Festival Actuel",
+    "ACCESS_DASHBOARD": "Acceder au dashboard",
+    "ARCHIVE": "Archive :",
+    "ADRESS": "Adresse :",
+    "VIEW_COMMENT": "Consulter les commentaires",
+    "FINISHED": "(Terminé)",
+    "NEW_FESTIVAL": "Nouveau Festival"
   }
+  
 }

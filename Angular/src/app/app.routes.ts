@@ -3,11 +3,13 @@ import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
-import { Ticketing } from './features/ticketing/ticketing';
+import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
+import { AdminTicketingComponent } from './features/GabrielR/ticketing/admin/ticketing'
 import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-import { DashboardComponent } from './features/admin/performance/dashboard/dashboard';
-import { AdministrationComponent } from './features/admin/festival/administration/administration';
+import { DashboardComponent } from './features/admin/performance/dashboard';
+import { AdministrationComponent } from './features/admin/festival/administration';
+import { AddPerformanceComponent } from './features/admin/performance/add_performance';
 import { taskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
@@ -51,11 +53,25 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
+                path: 'performances/new',
+                component: AddPerformanceComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'performances/:id/edit',
+                component: AddPerformanceComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
                 path: 'admin',
                 component: AdministrationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-
+            {
+                path: 'admin/ticketing',
+                component: AdminTicketingComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
             {
                 path: 'tasks',
                 component: taskListComponent,

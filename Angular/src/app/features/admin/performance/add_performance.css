@@ -1,0 +1,104 @@
+/* La carte principale, élargie pour accepter les colonnes, mais centrée comme le login */
+.perf-card {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.perf-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Grille à 2 colonnes */
+.grid-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Grille à 3 colonnes (Date plus large, heures plus petites) */
+.grid-row-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 8px; /* Léger espace sous les champs */
+}
+
+/* Styles pour les messages d'erreur serveur */
+.form-error {
+  color: #f44336;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Style pour l'erreur d'heures inversées */
+.time-error {
+  color: #f44336;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  text-align: left;
+  padding-left: 16px;
+}
+
+/* Zone des boutons en bas du formulaire */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; /* Aligne les boutons à droite */
+  gap: 16px; /* Espace entre les deux boutons */
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0; /* Ligne de séparation subtile */
+}
+
+/* Taille standardisée pour les boutons d'action */
+.action-btn {
+  padding: 0 32px;
+  font-size: 1rem;
+  height: 44px; /* Hauteur confortable */
+}
+
+/* Responsive pour mobile : on repasse en 1 seule colonne verticale */
+@media (max-width: 768px) {
+  .grid-row-2, 
+  .grid-row-3 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .perf-card {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+  }
+
+  /* Sur mobile, on empile les boutons et ils prennent toute la largeur */
+  .form-actions {
+    flex-direction: column-reverse; /* Annuler en bas, Enregistrer en haut */
+    gap: 12px;
+  }
+  
+  .action-btn {
+    width: 100%; 
+  }
+}

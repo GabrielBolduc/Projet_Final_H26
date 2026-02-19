@@ -13,5 +13,6 @@ module ActiveSupport
     # Add more helper methods to be used by all tests here...
     # Ajout des test Devise
     include Devise::Test::IntegrationHelpers
+    Rails.application.routes.default_url_options[:host] = 'localhost:3000'
   end
 end

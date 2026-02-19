@@ -4,13 +4,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
-import { FestivalService } from '../../../../core/services/festival.service';
-import { Festival } from '../../../../core/models/festival';
+import { FestivalService } from '../../../core/services/festival.service';
+import { Festival } from '../../../core/models/festival';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-administration',
   standalone: true,
-  imports: [CommonModule, DatePipe, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule],
+  imports: [CommonModule, DatePipe, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, TranslateModule],
   templateUrl: './administration.html',
   styleUrls: ['./administration.css']
 })

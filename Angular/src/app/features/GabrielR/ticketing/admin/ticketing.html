@@ -1,0 +1,76 @@
+<div class="admin-page">
+  <header class="admin-top-bar">
+    <div class="header-left">
+      <h1 class="header-title">Billetterie</h1>
+      <span class="subtitle">Gestion des forfaits et tarifs</span>
+    </div>
+    <button mat-flat-button class="btn-new" (click)="openForm()">
+      <mat-icon>add</mat-icon> Nouveau Forfait
+    </button>
+  </header>
+
+  <section class="filters-section">
+    <mat-form-field appearance="outline" class="search-bar">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput placeholder="Titre" [(ngModel)]="searchQuery">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="sort-select">
+      <mat-label>Trier par quantité</mat-label>
+      <mat-select [(ngModel)]="sortOption">
+        <mat-option value="all">Tous</mat-option>
+        <mat-option value="qty_asc">Quantité croissante</mat-option>
+        <mat-option value="qty_desc">Quantité décroissante</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <main>
+    <div class="packages-grid">
+      @for (pkg of filteredPackages(); track pkg.id) {
+        <mat-card class="ticket-card">
+          <div class="card-content-layout">
+            
+            <div class="ticket-visual">
+              <img [src]="pkg.image_url || 'assets/placeholder-ticket.png'" alt="ticket">
+              <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
+                {{ pkg.category }}
+              </span>
+            </div>
+
+            <div class="ticket-info">
+              <div class="info-header">
+                <h3>{{ pkg.title }}</h3>
+                <span class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</span>
+              </div>
+              
+              <div class="date-info">
+                <strong>Date:</strong> {{ pkg.valid_at | date:'yyyy-MM-dd' }}
+              </div>
+              
+              <p class="description">{{ pkg.description }}</p>
+
+              <div class="quota-section">
+                <div class="quota-labels">
+                  <span>Ventes</span>
+                  <span>{{ pkg.sold || 0 }} / {{ pkg.quota }}</span>
+                </div>
+                <mat-progress-bar mode="determinate" [value]="((pkg.sold || 0) / (pkg.quota || 1)) * 100"></mat-progress-bar>
+              </div>
+            </div>
+
+            <div class="ticket-actions">
+              <button mat-icon-button class="action-btn" (click)="openForm(pkg)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button class="action-btn delete" (click)="deletePackage(pkg)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+
+          </div>
+        </mat-card>
+      }
+    </div>
+  </main>
+</div>

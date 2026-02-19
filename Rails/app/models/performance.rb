@@ -24,7 +24,7 @@ class Performance < ApplicationRecord
 
   def within_festival_dates
     return unless festival && start_at && end_at
-
+    
     if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at
       errors.add(:base, "OUTSIDE_FESTIVAL_DATES")
     end
@@ -49,9 +49,6 @@ class Performance < ApplicationRecord
                .where.not(id: id)
                .where("start_at < ? AND end_at > ?", end_at, start_at)
   end
-<<<<<<< HEAD
-end
-=======
 
   def festival_must_be_active
     if festival&.completed?
@@ -59,4 +56,3 @@ end
     end
   end
 end
->>>>>>> GabrielB

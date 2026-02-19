@@ -47,8 +47,8 @@
                   {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
                   ({{ pkg.valid_at | date:'HH:mm' }} - {{ pkg.expired_at | date:'HH:mm' }})
                 } @else {
-                  Du {{ pkg.valid_at | date:'yyyy-MM-dd HH:mm' }} 
-                  au {{ pkg.expired_at | date:'yyyy-MM-dd HH:mm' }}
+                  Du {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                  au {{ pkg.expired_at | date:'yyyy-MM-dd' }}
                 }
               </div>
               

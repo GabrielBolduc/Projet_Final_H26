@@ -3,9 +3,11 @@ import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
-import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
-import { AdminTicketingComponent } from './features/GabrielR/ticketing/admin/ticketing'
-import { Reservation } from '@features/alexandre/reservation/reservation';
+import { Reservations } from '@features/alexandre/reservations/reservations';
+import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
+import { Accommodations } from '@features/alexandre/accommodations/accommodations';
+import { AccommodationsDetails } from '@features/alexandre/accommodations-details/accommodations-details';
+import { AccommodationsForm } from '@features/alexandre/accommodations-form/accommodations-form';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/admin/performance/dashboard';
 import { AdministrationComponent } from './features/admin/festival/administration';
@@ -13,6 +15,8 @@ import { AddPerformanceComponent } from './features/admin/performance/add_perfor
 import { taskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
+import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
+import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
@@ -28,14 +32,27 @@ export const routes: Routes = [
                 component: Home
             },
             {
-                path: 'ticketing',
-                component: Ticketing
+                path: 'reservations',
+                component: Reservations
             },
             {
-                path: 'reservations',
-                component: Reservation
+                path: 'reservations-form',
+                component: ReservationsForm,
+                canActivate: [AuthGuard]
             },
-            
+            {
+                path: 'accommodations',
+                component: Accommodations
+            },
+            {
+                path: 'accommodations-details',
+                component: AccommodationsDetails
+            },
+            {
+                path: 'accommodations-form',
+                component: AccommodationsForm,
+                canActivate: [AuthGuard, adminGuard]
+            },
             {
                 path: 'login',
                 component: Login,
@@ -73,6 +90,10 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
+                path: 'ticketing',
+                component: Ticketing
+            },
+            {
                 path: 'tasks',
                 component: taskListComponent,
                 canActivate: [AuthGuard, adminGuard]
@@ -92,7 +113,6 @@ export const routes: Routes = [
                 component: TaskShowComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-
             {
                 path: '**',
                 component: Notfound

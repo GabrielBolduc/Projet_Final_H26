@@ -10,6 +10,6 @@
             />
             
         </div>
-        <a href="#" class="comment-link" (click)="handleClick()">show la Tache</a>
+        <a class="comment-link" [routerLink]="['/tasks', task().id]">show la Tache</a>
     </mat-card-content>
 </mat-card>

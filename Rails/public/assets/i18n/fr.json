@@ -1,0 +1,50 @@
+{
+  "NAV": {
+    "HOME": "Accueil",
+    "RESERVATION": "Réservation",
+    "TICKETING": "Billetterie"
+  },
+  "AUTH": {
+    "LOGOUT": "Déconnexion",
+    "LOGIN": "Connexion",
+    "LOGIN_TITLE": "Connexion",
+    "SIGNUP_TITLE": "Créer un compte",
+    "NAME_LABEL": "Nom",
+    "NAME_ERROR": "Nom requis",
+    "EMAIL_LABEL": "Email",
+    "EMAIL_ERROR": "Email invalide",
+    "EMAIL_REQUIRED": "Email requis",
+    "PHONE_LABEL": "Téléphone",
+    "PHONE_ERROR": "Numéro invalide",
+    "PASSWORD_LABEL": "Mot de passe",
+    "CONFIRM_PASSWORD_LABEL": "Confirmer le mot de passe",
+    "PASSWORD_REQUIRED": "Mot de passe requis",
+    "IS_EXPERT": "Compte staff?",
+    "SPECIALTY_LABEL": "Spécialité",
+    "SUBMIT_SIGNUP": "S'inscrire",
+    "NO_ACCOUNT": "Pas encore de compte ?",
+    "SIGNUP_LINK": "S'inscrire",
+    "ALREADY_ACCOUNT": "Déjà un compte ?",
+    "LOGIN_LINK": "Se connecter"
+  },
+  "SERVER_ERRORS": {
+    "END_BEFORE_START": "L'heure de fin doit être strictement après l'heure de début.",
+    "OUTSIDE_FESTIVAL_DATES": "La performance doit avoir lieu pendant les dates du festival.",
+    "STAGE_OVERLAP": "Cette scène est déjà occupée sur ce créneau.",
+    "ARTIST_OVERLAP": "Cet artiste joue déjà ailleurs sur ce créneau.",
+    "FESTIVAL_COMPLETED": "Ce festival est terminé.",
+    "blank": "Ce champ est requis."
+  },
+  "FESTIVAL":{
+    "ADMINISTRATION": "Administration",
+    "HELLO": "Bonjour",
+    "CURRENT_FESTIVAL": "Festival Actuel",
+    "ACCESS_DASHBOARD": "Acceder au dashboard",
+    "ARCHIVE": "Archive :",
+    "ADRESS": "Adresse :",
+    "VIEW_COMMENT": "Consulter les commentaires",
+    "FINISHED": "(Terminé)",
+    "NEW_FESTIVAL": "Nouveau Festival"
+  }
+  
+}

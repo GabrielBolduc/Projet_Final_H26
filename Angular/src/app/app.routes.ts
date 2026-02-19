@@ -17,7 +17,7 @@ import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing';
-import {PackageFormComponent} from './features/GabrielR/ticketing/admin/package-form/package-form'
+import {PackageFormComponent} from './features/GabrielR/ticketing/admin/package-form/package-form';
 
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
@@ -87,7 +87,7 @@ export const routes: Routes = [
             },
             {
                 path: 'admin/ticketing',
-                component: Ticketing,
+                component: AdminTicketingComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

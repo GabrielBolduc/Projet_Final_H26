@@ -1,16 +1,24 @@
 <div class="task-list-page">
     <header class="task-top-bar">
-        <button mat-stroked-button class="btn-new">Nouvelle tâche</button>
+    <button mat-stroked-button class="btn-new" >nouvelle tache</button>
         <h1 class="header-title">Tableau des tâches</h1>
         <span class="greeting">Bonjour Laurent</span>
     </header>
 
     <main>
-        <section>
-           @for (task of tasks(); track task.id) {
-            <app-list-badge [task]="task" (detailsClick)="handletaskClicked($event)">   </app-list-badge>
-           }
+      <div class="page-container">
+
+        <section class="task-grid">
+            @for (task of tasks(); track task.id) {
+            <mat-card class="task-card">
+                <app-list-badge
+                [task]="task"
+                (detailsClick)="handletaskClicked($event)">
+                </app-list-badge>
+            </mat-card>
+            }
         </section>
 
+        </div>
     </main>
 </div>

@@ -45,6 +45,73 @@
     "VIEW_COMMENT": "Consulter les commentaires",
     "FINISHED": "(Terminé)",
     "NEW_FESTIVAL": "Nouveau Festival"
+  },
+  "DASHBOARD":{
+    "NEW_PERFORMANCE": "Nouvelle Performance",
+    "DASHBOARD": "Tableau de bord",
+    "LOADING": "Chargement du planning...",
+    "NOTHING": "Aucune performance n'est programmée.",
+    "ADD": "Ajouter",
+    "ARTIST": "Artiste",
+    "TITLE": "Titre du Show",
+    "STAGE": "Scène",
+    "START": "Début",
+    "END": "Fin",
+    "NOTE": "Notes",
+    "ACTION": "Actions"
+  },
+  "FORM_ADD_PERFORMANCES":{
+    "EDIT_PERFORMANCE": "Modifier la performance",
+    "NEW_PERFORMANCE": "Nouvelle performance",
+    "FESTIVAL": "Festival",
+    "STAGE": "Scène",
+    "REQUIRE": "Requis",
+    "ARTIST": "Artiste",
+    "TITLE": "Titre du show",
+    "MAXIMUM": "Maximum 20 caractères",
+    "DATE": "Date",
+    "START": "Début",
+    "END": "Fin",
+    "ERROR_HOURS": "L'heure de fin doit être strictement après l'heure de début.",
+    "PRICE": "Prix",
+    "PRICE_ERROR": "Le prix ne peut pas être négatif",
+    "NOTE": "Notes",
+    "CANCEL": "Annuler",
+    "UPDATE": "Mettre à jour",
+    "SAVE": "Enregistrer",
+    "LOADING": "Traitement..."
+  },
+  "ADMIN_NAV":{
+    "FESTIVAL": "Festivals",
+    "PROG": "Programmation",
+    "TASK": "Tâches",
+    "TICKET": "Billetterie"
+  },
+  "TACHES": {
+    "TITLE": "Tâches",
+    "DESCRIPTION": "Description",
+    "DIFFICULTY": "Difficulté",
+    "REUSABLE": "Réutilisable",
+    "ACTIONS": "Actions",
+    "EDIT": "Modifier",
+    "DELETE": "Supprimer",
+    "ADD_TASK": "Ajouter une tâche",
+    "TABLEAU": "Tableau des tâches",
+    "current_tasks": "Tâches actuelles",
+    "SHOW": "Voir la tâche",
+    "PRIORITY": "Priorité",
+    "FILE": "Fichier",
+    "REUSABLE_TASKS": "Tâches réutilisables",
+    "TACHES_TITLE": "Titre de la tâche",
+    "CHOSE_FILE": "Choisir un fichier",
+    "CANCEL": "Annuler",
+    "SAVE": "Enregistrer",
+    "CREATE": "Créer",
+    "UPDATE": "Mettre à jour",
+    "TITLE_UPDATE": "Mettre à jour la tâche",
+    "TITLE_CREATE": "Créer une nouvelle tâche",
+    "SELECT_REUSABLE": "Tâches réutilisables"
   }
+
   
 }

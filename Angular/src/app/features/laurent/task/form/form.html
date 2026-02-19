@@ -1,1 +1,112 @@
-<p>form works!</p>
+<mat-card class="perf-card">
+  <h2>{{ isEditMode ? ('TACHES.TITLE_UPDATE' | translate) : ('TACHES.TITLE_CREATE' | translate) }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="perf-form">
+    
+    
+
+    <div class="grid-row-2">
+      
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'TACHES.SELECT_REUSABLE' | translate }}</mat-label>
+        <mat-select formControlName="reusable_task_id">
+          @for (t of reusableTasks(); track t.id) {
+            <mat-option [value]="t.id">{{ t.title }}</mat-option>
+          }
+        </mat-select>
+       
+      </mat-form-field>
+
+      <mat-checkbox formControlName="reusable">
+        {{ 'TACHES.REUSABLE_TASKS' | translate }}
+
+      </mat-checkbox>
+
+    </div>
+
+    <div class="grid-row-2">
+      
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'TACHES.TACHES_TITLE' | translate }}</mat-label>
+        <input matInput formControlName="title" placeholder="Ex: Concert live">
+        @if (form.get('title')?.hasError('required')) {
+          <mat-error>Requis</mat-error>
+        }
+        
+      </mat-form-field>
+      <div class="difficulty-section">
+        <label>{{ 'TACHES.DIFFICULTY' | translate }}</label>
+
+        <div class="star-input">
+            @for (star of getStarArray(); track star) {
+            <mat-icon
+                (click)="setDifficulty(star)"
+                [class.filled]="star <= form.value.difficulty"
+                class="star-icon">
+                {{ star <= form.value.difficulty ? 'star' : 'star_border' }}
+            </mat-icon>
+            }
+        </div>
+      </div>
+
+    </div>
+
+    
+
+    <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'TACHES.PRIORITY' | translate }}</mat-label>
+            <input 
+                matInput 
+                type="number"
+                formControlName="priority"
+                min="1"
+                step="1"
+                pattern="[0-9]*"
+            >
+            @if (form.get('priority')?.hasError('min')) {
+                <mat-error>Minimum 1</mat-error>
+            }
+    </mat-form-field>
+   
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'TACHES.DESCRIPTION' | translate }}</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <div class="file-upload">
+
+  <button mat-stroked-button type="button" (click)="fileInput.click()">
+        <mat-icon>attach_file</mat-icon>
+        {{ 'TACHES.CHOSE_FILE' | translate }}
+        </button>
+
+        <span class="file-name" *ngIf="selectedFile">
+            {{ selectedFile.name }}
+        </span>
+
+        <input
+            #fileInput
+            type="file"
+            hidden
+            (change)="onFileSelected($event)"
+            accept="image/*,application/pdf"
+        />
+
+    </div>
+
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/tasks" class="action-btn cancel-btn">
+        {{ 'TACHES.CANCEL' | translate }}
+      </button>
+      
+      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid">
+        {{ isEditMode ? ('TACHES.UPDATE' | translate) : ('TACHES.CREATE' | translate) }}
+      </button>
+    </div>
+
+  </form>
+</mat-card>

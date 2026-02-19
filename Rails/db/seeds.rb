@@ -13,8 +13,6 @@ rescue NameError, ActiveRecord::StatementInvalid
   # continue si aucune affectation
 end
 
-puts "Nettoyage de la base de données..."
-
 Reservation.destroy_all
 Order.destroy_all
 Ticket.destroy_all
@@ -102,6 +100,59 @@ task_tow.file.attach(
   filename: 'meme-carre-chat-vibrant-simple_742173-4493.avif',
   content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
 )
+
+task_four = Task.create!(
+    title: "nettoyage du site",
+    description: "nettoyer le site après le festival",  
+    difficulty: 2,
+    priority: 4,
+    reusable: false
+)
+task_four.file.attach(
+  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
+  filename: 'téléchargement (1).jpg',
+  content_type: 'téléchargement (1)/jpg'
+)
+
+task_five = Task.create!(
+    title: "gestion des déchets",
+    description: "gérer les déchets pendant et après le festival",
+    difficulty: 4,
+    priority: 2,
+    reusable: true
+)
+task_five.file.attach(
+  io: File.open(Rails.root.join('db/files/téléchargement.jpg')),
+  filename: 'téléchargement.jpg',
+  content_type: 'téléchargement/jpg'
+)
+
+task_six = Task.create!(
+    title: "sécurité du site",
+    description: "assurer la sécurité du site pendant le festival",
+    difficulty: 5,
+    priority: 1,
+    reusable: true
+)
+task_six.file.attach(
+  io: File.open(Rails.root.join('db/files/images.jpg')),
+  filename: 'images.jpg',
+  content_type: 'images/jpg'
+)
+
+task_seven = Task.create!(
+    title: "coordination des bénévoles",
+    description: "coordonner les bénévoles pendant le festival",
+    difficulty: 3,
+    priority: 3,
+    reusable: true
+)
+task_seven.file.attach(
+  io: File.open(Rails.root.join('db/files/test.txt')),
+  filename: 'test.txt',
+  content_type: 'test/txt'
+) 
+
 
 Staff.create!(
     email: "cuisto@staff.com",
@@ -319,8 +370,8 @@ p_daily = Package.create!(
   price: 60.00,
   quota: 1000,
   category: "daily",
-  valid_at: f.start_at,
-  expired_at: f.start_at,
+  valid_at: f.start_at.to_time.change(hour: 10),
+  expired_at: f.start_at.to_time.change(hour: 17),
   festival: f
 )
 
@@ -330,8 +381,8 @@ p_evening = Package.create!(
   price: 72.99,
   quota: 2400,
   category: "evening",
-  valid_at: f.start_at,
-  expired_at: f.start_at,
+  valid_at: f.start_at.to_time.change(hour: 19),
+  expired_at: f.start_at.to_time.change(hour: 23),
   festival: f
 )
 
@@ -347,7 +398,7 @@ images.each do |package, filename|
   path = Rails.root.join('db', 'files', filename)
   
   if File.exist?(path)
-    # Détermine le type MIME dynamiquement (webp ou jpeg)
+    # Détermine le type d'image
     content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
 
     package.image.attach(
@@ -357,7 +408,7 @@ images.each do |package, filename|
     )
     puts "Image attachée à #{package.try(:title) || package.class.name} (#{content_type})"
   else
-    puts "⚠️ Image non trouvée : #{filename}"
+    puts "Image non trouvée : #{filename}"
   end
 end
 

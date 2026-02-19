@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { AuthService } from '@core/services/auth.service';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +17,8 @@ import { AuthService } from '@core/services/auth.service';
     MatButtonModule,
     MatIconModule,
     TranslateModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDividerModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'   

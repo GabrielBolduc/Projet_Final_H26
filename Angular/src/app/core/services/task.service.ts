@@ -41,8 +41,22 @@ export class TaskService {
       );
     }
 
-  getTask(id: number|null): Observable<Task[]> {
-        return this.http.get<ApiResponse<Task[]>>(`api/tasks/${id}` ).pipe(
+     listReusableTasks(): Observable<Task[]> {
+    
+        return this.http.get<ApiResponse<Task[]>>('api/tasks/get_reusable' ).pipe(
+             map(response => {
+              console.log(response)
+              if (response.status === 'success') {
+                return response.data;
+              } else {
+                throw new Error(response.message || 'erreur api');
+              }
+        })
+      );
+    }
+
+  getTask(id: number|null): Observable<Task> {
+        return this.http.get<ApiResponse<Task>>(`api/tasks/${id}` ).pipe(
              map(response => {
               console.log(response)
               if (response.status === 'success') {
@@ -55,7 +69,7 @@ export class TaskService {
     }
 
   createTask(task: TaskPayload) {
-    return this.http.patch<ApiResponse<Task>>(`api/tasks`, { task }).pipe(
+    return this.http.post<ApiResponse<Task>>(`api/tasks`, { task }).pipe(
 
       map(response => {
                 console.log(response)

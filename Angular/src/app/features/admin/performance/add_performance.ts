@@ -21,6 +21,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const start = control.get('start_time')?.value;
@@ -38,7 +39,8 @@ const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
   imports: [
     CommonModule, ReactiveFormsModule, RouterLink,
     MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule
+    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,
+    TranslateModule
   ],
   templateUrl: './add_performance.html',
   styleUrls: ['./add_performance.css']

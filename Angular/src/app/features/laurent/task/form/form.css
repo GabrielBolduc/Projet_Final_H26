@@ -1,0 +1,128 @@
+.perf-card {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.perf-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.grid-row-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 24px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.form-error {
+  color: #f44336;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.time-error {
+  color: #f44336;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  text-align: left;
+  padding-left: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 16px; 
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f0f0f0; 
+}
+
+.action-btn {
+  padding: 0 32px;
+  font-size: 1rem;
+  height: 44px;
+}
+
+@media (max-width: 768px) {
+  .grid-row-2, 
+  .grid-row-3 {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .perf-card {
+    margin: 2rem 1rem;
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+  
+  .action-btn {
+    width: 100%; 
+  }
+}
+
+.star-input {
+  display: flex;
+  flex-wrap: wrap; /* allow wrapping if needed */
+  gap: 4px;
+}
+
+.star-icon {
+  font-size: 24px;
+}
+
+
+.star-icon:hover {
+  transform: scale(1.2);
+}
+
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.file-name {
+  font-size: 14px;
+  color: #555;
+}
+.difficulty-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0; /* prevents overflow in grid */
+}

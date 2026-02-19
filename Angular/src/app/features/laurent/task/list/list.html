@@ -1,24 +1,46 @@
-<div class="task-list-page">
-    <header class="task-top-bar">
-    <button mat-stroked-button class="btn-new" >nouvelle tache</button>
-        <h1 class="header-title">Tableau des tâches</h1>
-        <span class="greeting">Bonjour Laurent</span>
-    </header>
+<div class="admin-page">
+  
+  <header class="admin-top-bar">
+    <button mat-stroked-button class="btn-new" [routerLink]="['/tasks/new']">
+      <mat-icon>add</mat-icon>{{ 'TACHES.ADD_TASK' | translate }}
+    </button>
+    <h1 class="header-title">{{ 'TACHES.TABLEAU' | translate }}</h1>
+    
+  </header>
 
-    <main>
-      <div class="page-container">
+  <main>
+    <section class="admin-section">
+      <h2 class="section-label">{{ 'TACHES.current_tasks' | translate }}</h2>
+      
+      <div class="task-list">
+        @for (task of tasks(); track task.id) {
+          
+          <mat-card class="fest-card">
+            <mat-card-content class="card-content-layout">
+              
+              <div class="main-info">
+                <h3>{{ task.title }}</h3>
+                
+                <button mat-stroked-button class="btn-dash" [routerLink]="['/tasks', task.id]">
+                  {{ 'TACHES.SHOW' | translate }}
+                </button>
+              </div>
+              @if (isImage(task.file_url)) {
+                    <div class="image-container">
+                        <img 
+                        [src]="task.file_url"
+                        class="task-thumbnail"
+                        alt="Image de la tâche"
+                        />
+                    </div>
+                }
 
-        <section class="task-grid">
-            @for (task of tasks(); track task.id) {
-            <mat-card class="task-card">
-                <app-list-badge
-                [task]="task"
-                (detailsClick)="handletaskClicked($event)">
-                </app-list-badge>
-            </mat-card>
-            }
-        </section>
+              
+            </mat-card-content>
+          </mat-card>
 
-        </div>
-    </main>
+        }
+      </div>
+    </section>
+  </main>
 </div>

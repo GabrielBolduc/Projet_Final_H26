@@ -1,0 +1,176 @@
+<mat-card class="perf-card package-card">
+  <h2>{{ isEditMode() ? 'Modifier le Billet' : 'Nouveau Billet' }}</h2>
+
+  <div class="package-layout">
+    
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
+      
+      @if (serverErrors().length > 0) {
+        <div class="form-error">
+          @for (error of serverErrors(); track $index) {
+            <div>{{ error }}</div>
+          }
+        </div>
+      }
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="title" placeholder="Ex: Billet Journalier">
+        @if (form.get('title')?.hasError('required')) {
+          <mat-error>Requis</mat-error>
+        }
+        @if (form.get('title')?.hasError('maxlength')) {
+          <mat-error>Maximum 50 caractères</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+        @if (form.get('description')?.hasError('maxlength')) {
+          <mat-error>Maximum 100 caractères</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Prix ($)</mat-label>
+          <input matInput type="number" formControlName="price">
+          @if (form.get('price')?.hasError('required')) {
+            <mat-error>Requis</mat-error>
+          }
+          @if (form.get('price')?.hasError('min')) {
+            <mat-error>Prix invalide</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Quota</mat-label>
+          <input matInput type="number" formControlName="quota">
+          @if (form.get('quota')?.hasError('required')) {
+            <mat-error>Requis</mat-error>
+          }
+          @if (form.get('quota')?.hasError('max')) {
+            <mat-error>Max {{ festivalCapacity() }} places</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Date début</mat-label>
+          <input matInput [matDatepicker]="pickerStart" formControlName="valid_date">
+          <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
+          <mat-datepicker #pickerStart></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Heure</mat-label>
+          <input matInput type="time" formControlName="valid_time">
+        </mat-form-field>
+      </div>
+
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Date fin</mat-label>
+          <input matInput [matDatepicker]="pickerEnd" formControlName="expired_date">
+          <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Heure</mat-label>
+          <input matInput type="time" formControlName="expired_time">
+        </mat-form-field>
+      </div>
+
+      @if (form.hasError('dateRangeInvalid') && (form.get('expired_date')?.touched || form.get('expired_time')?.touched)) {
+        <div class="time-error">
+          L'heure de fin doit être strictement après le début.
+        </div>
+      }
+      @if (form.hasError('validBeforeFestival') && (form.get('valid_date')?.touched || form.get('valid_time')?.touched)) {
+        <div class="time-error">
+          Début impossible avant l'ouverture ({{ festivalStartLimit() | date:'shortDate' }}).
+        </div>
+      }
+      @if (form.hasError('expiredAfterFestival') && (form.get('expired_date')?.touched || form.get('expired_time')?.touched)) {
+        <div class="time-error">
+          Fin impossible après la fermeture ({{ festivalEndLimit() | date:'shortDate' }}).
+        </div>
+      }
+
+      <div class="grid-row-2 file-category-row">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="category">
+            <mat-option value="general">Général</mat-option>
+            <mat-option value="daily">Journalier</mat-option>
+            <mat-option value="evening">Soirée</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="file-input-container">
+          <button type="button" mat-stroked-button (click)="fileInput.click()">
+            <mat-icon>image</mat-icon> Image de fond
+          </button>
+          <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
+          <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button mat-stroked-button type="button" routerLink="/admin/ticketing" class="action-btn cancel-btn">
+          Annuler
+        </button>
+        
+        <button mat-flat-button color="primary" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
+          @if (isLoading()) {
+            <span>Traitement...</span> 
+          } @else {
+            {{ isEditMode() ? 'Mettre à jour' : 'Enregistrer' }}
+          }
+        </button>
+      </div>
+    </form>
+
+    <div class="preview-section">
+      <h3>Aperçu</h3>
+      <div class="ticket-card-preview">
+        <div class="card-content-layout">
+          
+          <div class="ticket-visual">
+            <img [src]="previewUrl || existingImageUrl || 'https://placehold.co/150x150/orange/white.png?text=Billet'" alt="ticket">
+            <span class="category-badge" [class]="form.get('category')?.value">
+              {{ form.get('category')?.value || 'TYPE' }}
+            </span>
+          </div>
+
+          <div class="ticket-info">
+            <div class="info-header">
+              <h3>{{ form.get('title')?.value || 'Titre du billet' }}</h3>
+              <span class="price">{{ (form.get('price')?.value || 0) | currency:'CAD':'symbol-narrow' }}</span>
+            </div>
+            
+            <div class="date-info">
+              <strong>Valide:</strong> {{ form.get('valid_date')?.value | date:'shortDate' }}
+              {{ form.get('valid_time')?.value }}
+            </div>
+            
+            <p class="description">{{ form.get('description')?.value || 'Description du billet...' }}</p>
+
+            <div class="quota-section">
+              <div class="quota-labels">
+                <span>Ventes</span>
+                <span>0 / {{ form.get('quota')?.value }}</span>
+              </div>
+              <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="preview-note">* Ceci est un aperçu visuel</p>
+    </div>
+
+  </div>
+</mat-card>

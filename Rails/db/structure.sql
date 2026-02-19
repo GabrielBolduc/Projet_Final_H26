@@ -171,8 +171,8 @@ DROP TABLE IF EXISTS `packages`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `packages` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL,
-  `description` text DEFAULT NULL,
+  `title` varchar(50) NOT NULL,
+  `description` tinytext DEFAULT NULL,
   `category` varchar(255) NOT NULL DEFAULT 'GENERAL',
   `price` decimal(10,2) NOT NULL,
   `quota` int(11) NOT NULL,

@@ -2,8 +2,8 @@ class CreatePackages < ActiveRecord::Migration[8.1]
   def change
     create_table :packages do |t|
 
-      t.string :title, limit: 100, null: false
-      t.text :description
+      t.string :title, limit: 50, null: false
+      t.text :description, limit: 100
 
       t.string :category, null: false, default: "GENERAL"
       t.decimal :price, null: false, precision: 10, scale: 2

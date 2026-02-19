@@ -4,6 +4,7 @@ import { Task } from '@core/models/task';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators/catchError';
+import { TaskPayload } from '@core/models/task-payload';
 
 interface ApiResponse<T> {
   status: 'success' | 'error';
@@ -17,6 +18,8 @@ interface ApiResponse<T> {
   code?: number;   
 }
 
+
+
 @Injectable({
   providedIn: 'root',
 })
@@ -25,9 +28,10 @@ export class TaskService {
   private router = inject(Router);
 
   listTasks(): Observable<Task[]> {
-    console.log()
+    
         return this.http.get<ApiResponse<Task[]>>('api/tasks/' ).pipe(
              map(response => {
+              console.log(response)
               if (response.status === 'success') {
                 return response.data;
               } else {
@@ -37,20 +41,62 @@ export class TaskService {
       );
     }
 
-  getTask(id: number) {
-    return this.http.get(`/tasks/${id}`);
-  }
+  getTask(id: number|null): Observable<Task> {
+        return this.http.get<ApiResponse<Task>>(`api/tasks/${id}` ).pipe(
+             map(response => {
+              console.log(response)
+              if (response.status === 'success') {
+                return response.data;
+              } else {
+                throw new Error(response.message || 'erreur api');
+              }
+        })
+      );  
+    }
 
-  createTask(task: any) {
-    return this.http.post('/tasks', { task });
+  createTask(task: TaskPayload) {
+    return this.http.patch<ApiResponse<Task>>(`/tasks`, { task }).pipe(
+
+      map(response => {
+                console.log(response)
+                if (response.status === 'success') {
+                  return response.data;
+                } else {
+                  throw new Error(response.message || 'erreur api');
+                }
+          })
+        );  
+
   }
   
-  updateTask(id: number, task: any) {
-    return this.http.put(`/tasks/${id}`, { task });
+  updateTask(id: number|null, task: TaskPayload) {
+    return this.http.patch<ApiResponse<Task>>(`/tasks/${id}`, { task }).pipe(
+
+      map(response => {
+                console.log(response)
+                if (response.status === 'success') {
+                  return response.data;
+                } else {
+                  throw new Error(response.message || 'erreur api');
+                }
+          })
+        );  
+
   }
 
-  deleteTask(id: number) {
-    return this.http.delete(`/tasks/${id}`);
+  deleteTask(id: number|null) {
+    return this.http.delete<ApiResponse<Task>>(`api/tasks/${id}`).pipe(
+             map(response => {
+              console.log(response)
+              if (response.status === 'success') {
+                return response.data;
+              } else {
+                throw new Error(response.message || 'erreur api');
+              }
+        })
+      );  
   }
-  
+
+
+   
 }

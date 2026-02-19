@@ -1,1 +1,15 @@
-<p>list-badge works!</p>
+<mat-card class="fest-card">
+    <mat-card-content class="card-content-layout">
+        <div class="main-info">
+            <h3>{{ task().title }}</h3>
+            <img mat-card-image
+                [src]="task().file_url"
+            
+                crossorigin
+                style="height: 230px;"
+            />
+            
+        </div>
+        <a href="#" class="comment-link" (click)="handleClick()">show la Tache</a>
+    </mat-card-content>
+</mat-card>

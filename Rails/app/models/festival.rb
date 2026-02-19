@@ -1,6 +1,7 @@
 class Festival < ApplicationRecord
   has_many :performances, dependent: :destroy
   has_many :affectations, dependent: :destroy
+  has_many :packages, dependent: :destroy
   has_many :accommodations
 
 

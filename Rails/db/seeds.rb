@@ -13,12 +13,23 @@ rescue NameError, ActiveRecord::StatementInvalid
   # continue si aucune affectation
 end
 
+puts "Nettoyage de la base de données..."
 
+Reservation.destroy_all
+Order.destroy_all
+Ticket.destroy_all
+
+Unit.destroy_all
+Package.destroy_all
+
+Accommodation.destroy_all
 Performance.destroy_all
+
 Stage.destroy_all
 Artist.destroy_all
-Festival.destroy_all
 Task.destroy_all
+
+Festival.destroy_all
 Client.destroy_all
 Admin.destroy_all
 Staff.destroy_all
@@ -72,9 +83,9 @@ task_tow = Task.create!(
     reusable: false
 )
 task_tow.file.attach(
-  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
-  filename: 'téléchargement (1).jpg',
-  content_type: 'téléchargement (1)/jpg'
+  io: File.open(Rails.root.join('db/files/test.txt')),
+  filename: 'test.txt',
+  content_type: 'test/txt'
 )
 
 task_three = Task.create!(
@@ -273,86 +284,63 @@ acc2 = Accommodation.create!(
   festival: f
 )
 
-unit1 = Unit.create!(
-  type: "SimpleRoom",
-  cost_person_per_night: 55.00,
-  quantity: 12,
-  wifi: true,
-  water: :drinkable,
-  electricity: true,
-  parking_cost: 0.00,
-  food_options_list: ["Room service", "Restaurant"],
-  accommodation: acc1,
-  image: {
-    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
-    filename: "placeholder-image.png",
-    content_type: "image/png"
-  }
+
+# Packages (Billetterie)
+
+p_general = Package.create!(
+  title: "Passeport Festival",
+  description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
+  price: 150.00,
+  quota: 500,
+  category: "general",
+  valid_at: f.start_at,
+  expired_at: f.end_at,
+  festival: f
 )
 
-unit2 = Unit.create!(
-  type: "StandardTerrain",
-  cost_person_per_night: 20.00,
-  quantity: 30,
-  wifi: false,
-  water: :undrinkable,
-  electricity: true,
-  parking_cost: 15.00,
-  food_options_list: ["Canteen"],
-  accommodation: acc2,
-  image: {
-    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
-    filename: "placeholder-image.png",
-    content_type: "image/png"
-  }
+p_daily = Package.create!(
+  title: "Billet Journalier",
+  description: "Accès pour une seule journée de festivités.",
+  price: 60.00,
+  quota: 1000,
+  category: "daily",
+  valid_at: f.start_at,
+  expired_at: f.start_at,
+  festival: f
 )
 
-unit3 = Unit.create!(
-  type: "FamilyRoom",
-  cost_person_per_night: 110.00,
-  quantity: 4,
-  wifi: true,
-  water: :drinkable,
-  electricity: true,
-  parking_cost: 10.00,
-  food_options_list: ["None"],
-  accommodation: acc1,
-  image: {
-    io: File.open(Rails.root.join("public/assets/placeholder-image.png")),
-    filename: "placeholder-image.png",
-    content_type: "image/png"
-  }
+p_evening = Package.create!(
+  title: "Billet Soirée",
+  description: "Pour les spectacles du soir !",
+  price: 72.99,
+  quota: 2400,
+  category: "evening",
+  valid_at: f.start_at,
+  expired_at: f.start_at,
+  festival: f
 )
 
-Reservation.create!(
-  reservation_name: "Jean Dupont",
-  phone_number: "0612345678",
-  nb_of_people: 1,
-  arrival_at: f.start_at,
-  departure_at: f.start_at + 3.days,
-  festival: f,
-  user: c,
-  unit: unit1
-)
+# Attachement des images
+images = {
+  p_general => 'general-ticket.webp',
+  p_daily   => 'daily-ticket.webp',
+  p_evening => 'evening-ticket.jpg'
+}
 
-Reservation.create!(
-  reservation_name: "Marie Curie",
-  phone_number: "0788990011",
-  nb_of_people: [unit2.max_capacity, 2].min,
-  arrival_at: f.start_at + 1.day,
-  departure_at: f.start_at + 4.days,
-  festival: f,
-  user: c,
-  unit: unit2
-)
+images.each do |package, filename|
+  path = Rails.root.join('db', 'files', filename)
+  
+  if File.exist?(path)
+    # Détermine le type MIME dynamiquement (webp ou jpeg)
+    content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
 
-Reservation.create!(
-  reservation_name: "Marc Smith",
-  phone_number: "0102030405",
-  nb_of_people: 1,
-  arrival_at: f.end_at - 2.days,
-  departure_at: f.end_at + 1.day,
-  festival: f,
-  user: c,
-  unit: unit3
-)
+    package.image.attach(
+      io: File.open(path),
+      filename: filename,
+      content_type: content_type 
+    )
+    puts "Image attachée à #{package.title} (#{content_type})"
+  else
+    puts "⚠️ Image non trouvée : #{filename}"
+  end
+end

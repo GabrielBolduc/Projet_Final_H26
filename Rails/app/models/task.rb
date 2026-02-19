@@ -7,5 +7,9 @@ class Task < ApplicationRecord
 
     has_many :affectations, dependent: :destroy
 
-  # has_one_attached :file
+    has_one_attached :file
+
+    def file_url
+        Rails.application.routes.url_helpers.rails_blob_path(file, only_path: true) if file.attached?
+    end
 end

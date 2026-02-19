@@ -152,6 +152,40 @@ CREATE TABLE `festivals` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `orders` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `purchased_at` datetime(6) NOT NULL DEFAULT current_timestamp(6),
+  `user_id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_orders_on_user_id` (`user_id`),
+  CONSTRAINT `fk_rails_f868b47f6a` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `packages`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `packages` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `description` tinytext DEFAULT NULL,
+  `category` varchar(255) NOT NULL DEFAULT 'GENERAL',
+  `price` decimal(10,2) NOT NULL,
+  `quota` int(11) NOT NULL,
+  `valid_at` datetime(6) NOT NULL,
+  `expired_at` datetime(6) NOT NULL,
+  `festival_id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_packages_on_festival_id` (`festival_id`),
+  CONSTRAINT `fk_rails_62b1a47e4a` FOREIGN KEY (`festival_id`) REFERENCES `festivals` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `performances`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -241,6 +275,29 @@ CREATE TABLE `tasks` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `tickets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tickets` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `unique_code` varchar(255) NOT NULL,
+  `refunded` tinyint(1) DEFAULT 0,
+  `refunded_at` datetime(6) DEFAULT NULL,
+  `holder_name` varchar(100) NOT NULL,
+  `holder_phone` varchar(20) NOT NULL,
+  `holder_email` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `order_id` bigint(20) NOT NULL,
+  `package_id` bigint(20) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  `updated_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_tickets_on_order_id` (`order_id`),
+  KEY `index_tickets_on_package_id` (`package_id`),
+  CONSTRAINT `fk_rails_671cf524b4` FOREIGN KEY (`package_id`) REFERENCES `packages` (`id`),
+  CONSTRAINT `fk_rails_c6410ba81d` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `units`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8mb4 */;
@@ -297,6 +354,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `schema_migrations` (version) VALUES
 ('20260217202552'),
+('20260216152209'),
+('20260216151112'),
+('20260216142637'),
 ('20260216142155'),
 ('20260216142146'),
 ('20260216142130'),

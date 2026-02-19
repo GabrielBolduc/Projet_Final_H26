@@ -131,5 +131,30 @@
     "SAVE": "Enregistrer",
     "PROCESSING": "Traitement...",
     "GENERIC_ERROR": "Une erreur s'est produite."
-  }
+  },
+  "TACHES": {
+    "TITLE": "Tâches",
+    "DESCRIPTION": "Description",
+    "DIFFICULTY": "Difficulté",
+    "REUSABLE": "Réutilisable",
+    "ACTIONS": "Actions",
+    "EDIT": "Modifier",
+    "DELETE": "Supprimer",
+    "ADD_TASK": "Ajouter une tâche",
+    "TABLEAU": "Tableau des tâches",
+    "current_tasks": "Tâches actuelles",
+    "SHOW": "Voir la tâche",
+    "PRIORITY": "Priorité",
+    "FILE": "Fichier",
+    "REUSABLE_TASKS": "Tâches réutilisables",
+    "TACHES_TITLE": "Titre de la tâche",
+    "CHOSE_FILE": "Choisir un fichier",
+    "CANCEL": "Annuler",
+    "SAVE": "Enregistrer",
+    "CREATE": "Créer",
+    "UPDATE": "Mettre à jour",
+    "TITLE_UPDATE": "Mettre à jour la tâche",
+    "TITLE_CREATE": "Créer une nouvelle tâche",
+    "SELECT_REUSABLE": "Tâches réutilisables"
+  }  
 }

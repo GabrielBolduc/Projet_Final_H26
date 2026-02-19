@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 
@@ -22,7 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   imports: [
     CommonModule, ReactiveFormsModule, RouterLink,
     MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule,
-    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,MatCheckboxModule
+    MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,MatCheckboxModule, TranslateModule
   ], 
   templateUrl: './form.html',
   styleUrl: './form.css',
@@ -109,6 +110,15 @@ export class TaskFormComponent {
 
 
     save() {
+
+         //const formData = new FormData();
+
+          //  formData.append("file", this.selectedFile!);
+           // formData.append("title", this.form.value.title);
+          //  formData.append("description", this.form.value.description);
+          //  formData.append("difficulty", this.form.value.difficulty);
+          //  formData.append("priority", this.form.value.priority);
+          //  formData.append("reusable", this.form.value.reusable);
         
         this.editTask = {
           title: this.form.value.title,
@@ -118,19 +128,19 @@ export class TaskFormComponent {
           reusable: this.form.value.reusable
         };
 
-        if (this.selectedFile) {
-            this.editTask.file = this.selectedFile;
-        }
+      
 
         console.log('Données à envoyer : ', this.editTask);
         if (this.isEditMode && this.taskId) {
             this.taskService.updateTask(this.taskId, this.editTask).subscribe(() => {
-            this.router.navigate(['/taches']);
+           
             });
+             this.router.navigate(['/tasks']);
         } else {
             this.taskService.createTask(this.editTask).subscribe(() => {
-            this.router.navigate(['/taches']);
+           
             });
+             this.router.navigate(['/tasks']);
         }
     }
 

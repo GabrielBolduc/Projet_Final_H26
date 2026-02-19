@@ -6,9 +6,9 @@
     </mat-card-header>
 
     <mat-card-content>
-      <p><strong>Description:</strong> {{ task()?.description }}</p>
+      <p><strong>{{ 'TACHES.DESCRIPTION' | translate }}:</strong> {{ task()?.description }}</p>
       <div class="priority-stars">
-        <strong>Difficulty:</strong>
+        <strong>{{ 'TACHES.DIFFICULTY' | translate }}:</strong>
 
         @for (star of getStars(task()?.difficulty); track $index) {
             <mat-icon class="star filled">star</mat-icon>
@@ -19,11 +19,11 @@
         }
         </div>
       
-      <p><strong>Priority:</strong> {{ task()?.priority }}</p>
+      <p><strong>{{ 'TACHES.PRIORITY' | translate }}:</strong> {{ task()?.priority }}</p>
 
       @if (task()?.file_url) {
 
-        <p><strong>File:</strong></p>
+        <p><strong>{{ 'TACHES.FILE' | translate }}:</strong></p>
 
         @if (isImage(task()?.file_url)) {
           <img [src]="task()?.file_url"
@@ -38,8 +38,8 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-button (click)="handleEditClick()">Edit</button>
-      <button mat-button color="warn" (click)="handleClick()">Delete</button>
+      <button mat-button (click)="handleEditClick()">{{ 'TACHES.EDIT' | translate }}</button>
+      <button mat-button color="warn" (click)="handleClick()">{{ 'TACHES.DELETE' | translate }}</button>
     </mat-card-actions>
   </mat-card>
 

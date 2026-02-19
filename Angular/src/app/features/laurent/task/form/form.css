@@ -6,7 +6,6 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 h2 {
   text-align: center;
   margin-bottom: 2rem;
@@ -96,14 +95,14 @@ mat-form-field {
 
 .star-input {
   display: flex;
-  gap: 6px;
-  cursor: pointer;
+  flex-wrap: wrap; /* allow wrapping if needed */
+  gap: 4px;
 }
 
 .star-icon {
-  font-size: 28px;
-  transition: transform 0.2s ease;
+  font-size: 24px;
 }
+
 
 .star-icon:hover {
   transform: scale(1.2);
@@ -120,4 +119,10 @@ mat-form-field {
 .file-name {
   font-size: 14px;
   color: #555;
+}
+.difficulty-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0; /* prevents overflow in grid */
 }

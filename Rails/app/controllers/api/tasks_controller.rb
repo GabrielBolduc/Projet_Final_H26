@@ -37,6 +37,9 @@ class Api::TasksController < ApiController
     def create
         @task = Task.new(task_params)
         if @task.save
+            if params[:file]
+              @task.image.attach(params[:file])
+            end
             render json: @task.as_json(task_json).merge(success: true), status: :ok
         else
             render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity
@@ -44,6 +47,9 @@ class Api::TasksController < ApiController
     end
     def update
         if @task.update(task_params)
+            if params[:file]
+              @task.image.attach(params[:file])
+            end
             render json: @task.as_json(task_json).merge(success: true), status: :ok
         else
             render json: { success: false, errors: @task.errors.full_messages }, status: :unprocessable_entity

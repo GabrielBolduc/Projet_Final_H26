@@ -7,10 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-show',
-  imports: [MatCardModule, MatButtonModule,MatIconModule,CommonModule ],
+  imports: [MatCardModule, MatButtonModule,MatIconModule,CommonModule, TranslateModule],
   templateUrl: './show.html',
   styleUrl: './show.css',
 })

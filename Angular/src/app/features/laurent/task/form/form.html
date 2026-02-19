@@ -1,5 +1,5 @@
 <mat-card class="perf-card">
-  <h2>{{ isEditMode ? 'Modifier la tâche' : 'Nouvelle tâche' }}</h2>
+  <h2>{{ isEditMode ? ('TACHES.TITLE_UPDATE' | translate) : ('TACHES.TITLE_CREATE' | translate) }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="save()" class="perf-form">
     
@@ -9,7 +9,7 @@
       
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Tâches reautilisable</mat-label>
+        <mat-label>{{ 'TACHES.SELECT_REUSABLE' | translate }}</mat-label>
         <mat-select formControlName="reusable_task_id">
           @for (t of reusableTasks(); track t.id) {
             <mat-option [value]="t.id">{{ t.title }}</mat-option>
@@ -19,7 +19,8 @@
       </mat-form-field>
 
       <mat-checkbox formControlName="reusable">
-        Tâche réutilisable
+        {{ 'TACHES.REUSABLE_TASKS' | translate }}
+
       </mat-checkbox>
 
     </div>
@@ -28,7 +29,7 @@
       
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Titre de la tâche</mat-label>
+        <mat-label>{{ 'TACHES.TACHES_TITLE' | translate }}</mat-label>
         <input matInput formControlName="title" placeholder="Ex: Concert live">
         @if (form.get('title')?.hasError('required')) {
           <mat-error>Requis</mat-error>
@@ -36,7 +37,7 @@
         
       </mat-form-field>
       <div class="difficulty-section">
-        <label>Difficulté</label>
+        <label>{{ 'TACHES.DIFFICULTY' | translate }}</label>
 
         <div class="star-input">
             @for (star of getStarArray(); track star) {
@@ -55,7 +56,7 @@
     
 
     <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Priorité</mat-label>
+        <mat-label>{{ 'TACHES.PRIORITY' | translate }}</mat-label>
             <input 
                 matInput 
                 type="number"
@@ -71,7 +72,7 @@
    
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Description</mat-label>
+      <mat-label>{{ 'TACHES.DESCRIPTION' | translate }}</mat-label>
       <textarea matInput formControlName="description" rows="3"></textarea>
     </mat-form-field>
 
@@ -79,7 +80,7 @@
 
   <button mat-stroked-button type="button" (click)="fileInput.click()">
         <mat-icon>attach_file</mat-icon>
-            Choisir un fichier
+        {{ 'TACHES.CHOSE_FILE' | translate }}
         </button>
 
         <span class="file-name" *ngIf="selectedFile">
@@ -99,11 +100,11 @@
 
     <div class="form-actions">
       <button mat-stroked-button type="button" routerLink="/tasks" class="action-btn cancel-btn">
-        Annuler
+        {{ 'TACHES.CANCEL' | translate }}
       </button>
       
       <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid">
-        {{ isEditMode ? 'Enregistrer' : 'Créer' }}
+        {{ isEditMode ? ('TACHES.UPDATE' | translate) : ('TACHES.CREATE' | translate) }}
       </button>
     </div>
 

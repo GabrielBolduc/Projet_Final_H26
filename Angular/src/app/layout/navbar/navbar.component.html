@@ -1,14 +1,14 @@
 <mat-toolbar color="primary" class="brand-header">
   
-  <div style="display: flex; align-items: center;">
-    <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
+  <div class="header-left">
     
-    <a [routerLink]="['/']" class="logo-link">
-      <span>{{ 'NAV.HOME' | translate }}</span>
+    <a [routerLink]="['/']" class="brand-link">
+      <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
+      <span class="home-text">{{ 'NAV.HOME' | translate }}</span>
     </a>
 
     @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
-      <button mat-button [matMenuTriggerFor]="adminMenu" style="margin-left: 20px;">
+      <button mat-button [matMenuTriggerFor]="adminMenu" class="admin-btn hide-on-mobile">
         Administration
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
@@ -16,49 +16,104 @@
       <mat-menu #adminMenu="matMenu">
         <button mat-menu-item [routerLink]="['admin']">
           <mat-icon>dashboard</mat-icon>
-          <span>Festivals</span>
+          <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
         <button mat-menu-item [routerLink]="['dashboard']">
           <mat-icon>event</mat-icon>
-          <span>Programmation</span>
+          <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
         <button mat-menu-item [routerLink]="['tasks']">
           <mat-icon>assignment</mat-icon>
-          <span>Tâches</span>
+          <span>{{'ADMIN_NAV.TASK' | translate}}</span>
         </button>
         <button mat-menu-item [routerLink]="['/admin/ticketing']">
           <mat-icon>local_activity</mat-icon>
-          <span>Billetterie</span>
+          <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
         </button>
       </mat-menu>
     }
-    </div>
+  </div>
 
   <span class="spacer"></span>
 
-  <div class="header-actions">
-    <a [routerLink]="['/reservations']" class="logo-link">
+  <div class="header-actions hide-on-mobile">
+    <a [routerLink]="['/reservations']" class="nav-link">
       <span>{{ 'NAV.RESERVATION' | translate }}</span>
     </a>
-    <a [routerLink]="['/ticketing']" class="logo-link">
+    <a [routerLink]="['/ticketing']" class="nav-link">
       <span>{{ 'NAV.TICKETING' | translate }}</span>
     </a>
     
-    <a (click)="toggleLanguage()" class="logo-link" style="cursor: pointer;">
-      <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
-    </a>
+    <button mat-stroked-button (click)="toggleLanguage()" class="lang-btn">
+      <mat-icon>language</mat-icon>
+      {{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}
+    </button>
     
     @if (auth.isLoggedIn()) {
       <button mat-flat-button color="accent" (click)="auth.logout()">
-        <mat-icon>logout</mat-icon>
-        Disconnect
+        <mat-icon>logout</mat-icon> Disconnect
       </button>
     } @else {
       <button mat-flat-button color="accent" routerLink="/login">
-        <mat-icon>login</mat-icon>
-        Connect
+        <mat-icon>login</mat-icon> Connect
       </button>
     }
+  </div>
+
+  <div class="mobile-menu-container show-on-mobile">
+    <a (click)="toggleLanguage()" class="nav-link lang-btn" style="margin-right: 10px;">
+      <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
+    </a>
+
+    <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #mobileMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/reservations']">
+        <mat-icon>book_online</mat-icon>
+        <span>{{ 'NAV.RESERVATION' | translate }}</span>
+      </button>
+      <button mat-menu-item [routerLink]="['/ticketing']">
+        <mat-icon>confirmation_number</mat-icon>
+        <span>{{ 'NAV.TICKETING' | translate }}</span>
+      </button>
+
+      @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
+        <mat-divider></mat-divider>
+        <div mat-subheader style="color: var(--mat-sys-primary); font-weight: bold; padding: 0 16px;">Administration</div>
+        <button mat-menu-item [routerLink]="['admin']">
+          <mat-icon>dashboard</mat-icon>
+          <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
+        </button>
+        <button mat-menu-item [routerLink]="['dashboard']">
+          <mat-icon>event</mat-icon>
+          <span>{{'ADMIN_NAV.PROG' | translate}}</span>
+        </button>
+        <button mat-menu-item [routerLink]="['tasks']">
+          <mat-icon>assignment</mat-icon>
+          <span>{{'ADMIN_NAV.TASK' | translate}}</span>
+        </button>
+        <button mat-menu-item [routerLink]="['/admin/ticketing']">
+          <mat-icon>local_activity</mat-icon>
+          <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
+        </button>
+      }
+
+      <mat-divider></mat-divider>
+
+      @if (auth.isLoggedIn()) {
+        <button mat-menu-item (click)="auth.logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Disconnect</span>
+        </button>
+      } @else {
+        <button mat-menu-item routerLink="/login">
+          <mat-icon>login</mat-icon>
+          <span>Connect</span>
+        </button>
+      }
+    </mat-menu>
   </div>
 
 </mat-toolbar>

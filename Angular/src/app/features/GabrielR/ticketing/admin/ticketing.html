@@ -42,7 +42,14 @@
               </div>
               
               <div class="date-info">
-                <strong>Date:</strong> {{ pkg.valid_at | date:'yyyy-MM-dd' }}
+                <strong>Date:</strong> 
+                @if ((pkg.valid_at | date:'yyyy-MM-dd') === (pkg.expired_at | date:'yyyy-MM-dd')) {
+                  {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                  ({{ pkg.valid_at | date:'HH:mm' }} - {{ pkg.expired_at | date:'HH:mm' }})
+                } @else {
+                  Du {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                  au {{ pkg.expired_at | date:'yyyy-MM-dd' }}
+                }
               </div>
               
               <p class="description">{{ pkg.description }}</p>

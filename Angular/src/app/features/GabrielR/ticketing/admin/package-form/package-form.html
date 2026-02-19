@@ -110,12 +110,20 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="file-input-container">
-          <button type="button" mat-stroked-button (click)="fileInput.click()">
-            <mat-icon>image</mat-icon> Image de fond
-          </button>
-          <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
-          <span *ngIf="selectedFile" class="file-name">{{ selectedFile.name }}</span>
+        <div class="image-upload-wrapper">
+          <div class="file-input-container">
+            <button type="button" mat-stroked-button (click)="fileInput.click()">
+              <mat-icon>image</mat-icon> Image de fond
+            </button>
+            <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
+            @if (selectedFile) { <span class="file-name">{{ selectedFile.name }}</span> }
+          </div>
+
+          @if (previewUrl || existingImageUrl) {
+            <div class="image-thumbnail">
+              <img [src]="previewUrl || existingImageUrl" alt="Aperçu de l'image du billet">
+            </div>
+          }
         </div>
       </div>
 
@@ -133,44 +141,5 @@
         </button>
       </div>
     </form>
-
-    <div class="preview-section">
-      <h3>Aperçu</h3>
-      <div class="ticket-card-preview">
-        <div class="card-content-layout">
-          
-          <div class="ticket-visual">
-            <img [src]="previewUrl || existingImageUrl || 'https://placehold.co/150x150/orange/white.png?text=Billet'" alt="ticket">
-            <span class="category-badge" [class]="form.get('category')?.value">
-              {{ form.get('category')?.value || 'TYPE' }}
-            </span>
-          </div>
-
-          <div class="ticket-info">
-            <div class="info-header">
-              <h3>{{ form.get('title')?.value || 'Titre du billet' }}</h3>
-              <span class="price">{{ (form.get('price')?.value || 0) | currency:'CAD':'symbol-narrow' }}</span>
-            </div>
-            
-            <div class="date-info">
-              <strong>Valide:</strong> {{ form.get('valid_date')?.value | date:'shortDate' }}
-              {{ form.get('valid_time')?.value }}
-            </div>
-            
-            <p class="description">{{ form.get('description')?.value || 'Description du billet...' }}</p>
-
-            <div class="quota-section">
-              <div class="quota-labels">
-                <span>Ventes</span>
-                <span>0 / {{ form.get('quota')?.value }}</span>
-              </div>
-              <mat-progress-bar mode="determinate" value="0"></mat-progress-bar>
-            </div>
-          </div>
-        </div>
-      </div>
-      <p class="preview-note">* Ceci est un aperçu visuel</p>
-    </div>
-
   </div>
 </mat-card>

@@ -24,4 +24,11 @@ export class TaskListComponent implements OnInit {
       this.tasks.set(data);
     });
   }
+
+  isImage(fileUrl: string | undefined): boolean {
+  if (!fileUrl) return false;
+
+  return /\.(jpg|jpeg|png|gif|webp|bmp|svg|avif)$/i.test(fileUrl);
+  }
+
 }

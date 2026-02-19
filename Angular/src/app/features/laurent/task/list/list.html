@@ -1,7 +1,7 @@
 <div class="admin-page">
   
   <header class="admin-top-bar">
-    <button mat-stroked-button class="btn-new">
+    <button mat-stroked-button class="btn-new" [routerLink]="['/tasks/new']">
       <mat-icon>add</mat-icon> Nouvelle tâche
     </button>
     <h1 class="header-title">Tableau des tâches</h1>
@@ -25,13 +25,16 @@
                   Voir la tâche
                 </button>
               </div>
+              @if (isImage(task.file_url)) {
+                    <div class="image-container">
+                        <img 
+                        [src]="task.file_url"
+                        class="task-thumbnail"
+                        alt="Image de la tâche"
+                        />
+                    </div>
+                }
 
-              <div class="image-container">
-                <img [src]="task.file_url" 
-                     crossorigin 
-                     class="task-thumbnail" 
-                     alt="Image de la tâche" />
-              </div>
               
             </mat-card-content>
           </mat-card>

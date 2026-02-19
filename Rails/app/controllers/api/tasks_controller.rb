@@ -18,6 +18,14 @@ class Api::TasksController < ApiController
         }, status: :ok
     end
 
+    def get_reusable
+        @tasks = Task.where(reusable: true)
+        render json: {
+        status: "success",
+        data: @tasks.as_json(task_json)
+        }, status: :ok
+    end
+
     def destroy
         if @task.destroy
             render json: { success: true }, status: :ok

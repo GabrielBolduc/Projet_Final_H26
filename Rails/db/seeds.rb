@@ -101,6 +101,59 @@ task_tow.file.attach(
   content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
 )
 
+task_four = Task.create!(
+    title: "nettoyage du site",
+    description: "nettoyer le site après le festival",  
+    difficulty: 2,
+    priority: 4,
+    reusable: false
+)
+task_four.file.attach(
+  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
+  filename: 'téléchargement (1).jpg',
+  content_type: 'téléchargement (1)/jpg'
+)
+
+task_five = Task.create!(
+    title: "gestion des déchets",
+    description: "gérer les déchets pendant et après le festival",
+    difficulty: 4,
+    priority: 2,
+    reusable: true
+)
+task_five.file.attach(
+  io: File.open(Rails.root.join('db/files/téléchargement.jpg')),
+  filename: 'téléchargement.jpg',
+  content_type: 'téléchargement/jpg'
+)
+
+task_six = Task.create!(
+    title: "sécurité du site",
+    description: "assurer la sécurité du site pendant le festival",
+    difficulty: 5,
+    priority: 1,
+    reusable: true
+)
+task_six.file.attach(
+  io: File.open(Rails.root.join('db/files/images.jpg')),
+  filename: 'images.jpg',
+  content_type: 'images/jpg'
+)
+
+task_seven = Task.create!(
+    title: "coordination des bénévoles",
+    description: "coordonner les bénévoles pendant le festival",
+    difficulty: 3,
+    priority: 3,
+    reusable: true
+)
+task_seven.file.attach(
+  io: File.open(Rails.root.join('db/files/test.txt')),
+  filename: 'test.txt',
+  content_type: 'test/txt'
+) 
+
+
 Staff.create!(
     email: "cuisto@staff.com",
     password: "qwerty",

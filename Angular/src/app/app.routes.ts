@@ -4,6 +4,7 @@ import { Signup } from './features/auth/signup/signup';
 import { Notfound } from './core/notfound/notfound';
 import { Home } from './features/home/home';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
+import { AdminTicketingComponent } from './features/GabrielR/ticketing/admin/ticketing'
 import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/admin/performance/dashboard';
@@ -62,6 +63,11 @@ export const routes: Routes = [
             {
                 path: 'admin',
                 component: AdministrationComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/ticketing',
+                component: AdminTicketingComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

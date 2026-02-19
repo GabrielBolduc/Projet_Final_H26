@@ -6,9 +6,9 @@ import { Home } from './features/home/home';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { Reservation } from '@features/alexandre/reservation/reservation';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-import { DashboardComponent } from './features/admin/performance/dashboard/dashboard';
-import { AdministrationComponent } from './features/admin/festival/administration/administration';
-import { AdminTicketingComponent } from './features/GabrielR/ticketing/admin/ticketing';
+import { DashboardComponent } from './features/admin/performance/dashboard';
+import { AdministrationComponent } from './features/admin/festival/administration';
+import { AddPerformanceComponent } from './features/admin/performance/add_performance';
 import { taskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
@@ -52,13 +52,16 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'admin',
-                component: AdministrationComponent,
-                canActivate: [AuthGuard, adminGuard]
+                path: 'performances/new',
+                component: AddPerformanceComponent
             },
             {
-                path: 'admin/ticketing',
-                component: AdminTicketingComponent,
+                path: 'performances/:id/edit',
+                component: AddPerformanceComponent
+            },
+            {
+                path: 'admin',
+                component: AdministrationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

@@ -2,8 +2,8 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { PerformanceService } from '../../../../core/services/performance.service';
-import { Performance } from '../../../../core/models/performance';
+import { PerformanceService } from '../../../core/services/performance.service';
+import { Performance } from '../../../core/models/performance';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
   
-  currentLang = signal<string>(this.formatLang(this.translate.currentLang));
+  currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
 
@@ -49,6 +49,14 @@ export class DashboardComponent implements OnInit {
   private formatLang(lang: string | undefined): string {
     if (!lang) return 'en'; 
     return lang.split('-')[0];
+  }
+
+  navigateToAdd(): void { 
+    this.router.navigate(['/performances/new']); 
+  }
+
+  navigateToEdit(id: number): void {
+    this.router.navigate(['/performances', id, 'edit'])
   }
 
   loadPerformances(): void {
@@ -78,9 +86,6 @@ export class DashboardComponent implements OnInit {
       performances: groups[key]
     }));
   }
-
-  navigateToAdd(): void { this.router.navigate(['/admin/performances/new']); }
-  navigateToEdit(id: number): void { this.router.navigate(['/admin/performances', id, 'edit']); }
   
   deletePerformance(id: number): void {
     if(confirm('Supprimer ?')) {

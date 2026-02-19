@@ -1,40 +1,42 @@
-/* --- LAYOUT GLOBAL --- */
-.dashboard-layout { display: flex; min-height: 100vh; font-family: Roboto, sans-serif; }
-.sidebar { width: 280px; padding: 30px; border-right: 2px solid #333; background: #f9f9f9; }
-.admin-page { flex: 1; padding: 40px; }
 
-/* --- SIDEBAR COMPONENTS --- */
-.filter-group { margin-bottom: 25px; }
-.filter-group h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; border-bottom: 2px solid #ccc; padding-bottom: 5px; }
-.filter-options label { display: flex; align-items: center; margin-bottom: 8px; font-weight: 500; cursor: pointer; }
-.filter-options input { margin-right: 10px; }
+.dashboard-layout { 
+  display: flex; 
+  min-height: 100vh; 
+  font-family: Roboto, sans-serif; 
+}
+.sidebar { 
+  width: 280px; 
+  padding: 30px; 
+  border-right: 2px solid #333; 
+  background: #f9f9f9; 
+}
+.admin-page { 
+  flex: 1; 
+  padding: 40px; 
+}
 
-.status-point { width: 10px; height: 10px; border-radius: 50%; background: #ccc; margin: 0 8px; display: inline-block; }
-.status-point.active { background: #2ecc71; box-shadow: 0 0 5px #2ecc71; }
 
 .btn-danger { width: 100%; margin-top: 20px; border: 2px solid #d32f2f !important; color: #d32f2f !important; font-weight: bold; }
 
-/* --- HEADER --- */
+
 .admin-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
 .header-title { font-weight: 800; font-size: 2.2rem; margin: 0; line-height: 1; }
 .greeting { color: #666; font-weight: 500; display: block; margin-top: 5px; }
 
 .btn-new { border: 2px solid #C2185B !important; color: #C2185B !important; font-weight: 700; height: 45px; }
 
-/* --- TITRE JOUR --- */
 .day-title {
   margin-top: 40px;
   font-size: 1.3rem;
   font-weight: 700;
-  border-bottom: 3px solid #333; /* Soulignement épais */
+  border-bottom: 3px solid #333; 
   padding-bottom: 8px;
   margin-bottom: 15px;
   color: #000;
 }
 
-/* --- LE TABLEAU (STYLE GRILLE) --- */
 .grid-table-container {
-  border: 2px solid #333; /* Cadre extérieur épais */
+  border: 2px solid #333; 
   overflow: hidden;
 }
 
@@ -43,22 +45,20 @@
   border-collapse: collapse; 
 }
 
-/* En-tête */
 .festify-grid-table th.mat-header-cell {
-  background-color: #e0e0e0; /* Gris clair */
+  background-color: #e0e0e0;
   color: #000;
   font-weight: 800;
   font-size: 0.95rem;
-  border-right: 1px solid #333; /* Ligne verticale */
+  border-right: 1px solid #333; 
   border-bottom: 2px solid #333;
   padding: 12px 10px;
   text-transform: uppercase;
 }
 
-/* Cellules */
 .festify-grid-table td.mat-cell {
   color: #000;
-  border-right: 1px solid #999; /* Ligne verticale plus fine */
+  border-right: 1px solid #999; 
   border-bottom: 1px solid #ccc;
   padding: 10px;
   font-size: 0.95rem;
@@ -69,11 +69,9 @@
   border-right: none;
 }
 
-/* Zébrage */
 .festify-grid-table tr.mat-mdc-row:nth-child(even) { background-color: #f5f5f5; }
 .festify-grid-table tr.mat-mdc-row:nth-child(odd) { background-color: #ffffff; }
 
-/* --- ACTIONS --- */
 .action-cell { white-space: nowrap; text-align: center; }
 .icon-btn { background: none; border: none; cursor: pointer; padding: 4px; margin: 0 2px; transition: transform 0.2s; }
 .icon-btn:hover { transform: scale(1.1); }

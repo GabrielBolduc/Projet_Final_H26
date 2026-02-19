@@ -13,8 +13,6 @@ rescue NameError, ActiveRecord::StatementInvalid
   # continue si aucune affectation
 end
 
-puts "Nettoyage de la base de données..."
-
 Reservation.destroy_all
 Order.destroy_all
 Ticket.destroy_all

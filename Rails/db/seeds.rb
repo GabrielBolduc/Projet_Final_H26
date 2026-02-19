@@ -394,7 +394,7 @@ images = {
 }
 
 images.each do |package, filename|
-  path = Rails.root.join('public', 'assets', filename)
+  path = Rails.root.join('db', 'files', filename)
   if File.exist?(path)
     package.image.attach(
       io: File.open(path),

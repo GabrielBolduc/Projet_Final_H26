@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms'; 
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 import { PackageService } from '../../../../core/services/package.service';
 import { Package } from '../../../../core/models/package';
@@ -19,10 +20,11 @@ import { Package } from '../../../../core/models/package';
   imports: [
     CommonModule, MatCardModule, MatButtonModule, MatIconModule, 
     MatProgressBarModule, CurrencyPipe, DatePipe, 
-    MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule
+    MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule,
+    TranslateModule
   ],
-  templateUrl: './ticketing.html',
-  styleUrls: ['./ticketing.css']
+  templateUrl: './ticketing-admin.html',
+  styleUrls: ['./ticketing-admin.css']
 })
 export class AdminTicketingComponent implements OnInit {
   private packageService = inject(PackageService);

@@ -2,15 +2,15 @@
   
   <header class="admin-top-bar">
     <button mat-stroked-button class="btn-new" [routerLink]="['/tasks/new']">
-      <mat-icon>add</mat-icon> Nouvelle tâche
+      <mat-icon>add</mat-icon>{{ 'TACHES.ADD_TASK' | translate }}
     </button>
-    <h1 class="header-title">Tableau des tâches</h1>
-    <span class="greeting">Bonjour Laurent</span>
+    <h1 class="header-title">{{ 'TACHES.TABLEAU' | translate }}</h1>
+    
   </header>
 
   <main>
     <section class="admin-section">
-      <h2 class="section-label">Tâches en cours</h2>
+      <h2 class="section-label">{{ 'TACHES.current_tasks' | translate }}</h2>
       
       <div class="task-list">
         @for (task of tasks(); track task.id) {
@@ -22,7 +22,7 @@
                 <h3>{{ task.title }}</h3>
                 
                 <button mat-stroked-button class="btn-dash" [routerLink]="['/tasks', task.id]">
-                  Voir la tâche
+                  {{ 'TACHES.SHOW' | translate }}
                 </button>
               </div>
               @if (isImage(task.file_url)) {

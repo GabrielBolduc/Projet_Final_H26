@@ -86,5 +86,30 @@
     "PROG": "Schedule",
     "TASK": "Tasks",
     "TICKET": "Ticketing"
+  },
+  "TACHES": {
+    "TITLE": "Tasks",
+    "DESCRIPTION": "Description",
+    "DIFFICULTY": "Difficulty",
+    "REUSABLE": "Reusable",
+    "ACTIONS": "Actions",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "ADD_TASK": "Add Task",
+    "TABLEAU": "Task List",
+    "current_tasks": "Current Tasks",
+    "SHOW": "Show Task",  
+    "PRIORITY": "Priority",
+    "FILE": "File",
+    "TACHES_TITLE": "Task Title",
+    "CHOSE_FILE": "Choose a file",
+    "CANCEL": "Cancel",
+    "CREATE": "Create",
+    "SAVE": "Save",
+    "UPDATE": "Update",
+    "TITLE_CREATE": "New Task",
+    "TITLE_UPDATE": "Edit Task",
+    "REUSABLE_TASKS": "Reusable Tasks",
+    "SELECT_REUSABLE": "Select reusable tasks"
   }
 }

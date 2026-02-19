@@ -6,10 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 import { Task } from '@core/models/task';
 import { TaskService } from '@core/services/task.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list',
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [TranslateModule,CommonModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './list.html',
   styleUrl: './list.css',
 })

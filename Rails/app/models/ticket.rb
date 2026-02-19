@@ -11,7 +11,6 @@ class Ticket < ApplicationRecord
 
   before_validation :set_defaults, on: :create
   validate :check_package_quota, on: :create
-  validate :check_festival_capacity, on: :create
 
   def valid_for_entry?
     return false if refunded?
@@ -30,15 +29,6 @@ class Ticket < ApplicationRecord
     return unless package
     if package.tickets.count >= package.quota
       errors.add(:base, "Le quota pour ce forfait est atteint (Sold Out).")
-    end
-  end
-
-  def check_festival_capacity
-    return unless package
-    total_tickets_sold = Ticket.joins(:package).where(packages: { festival_id: package.festival_id }).count
-
-    if total_tickets_sold >= package.festival.daily_capacity
-      errors.add(:base, "La capacité maximale du festival est atteinte.")
     end
   end
 end

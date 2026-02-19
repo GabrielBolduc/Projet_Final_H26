@@ -304,8 +304,8 @@ p_daily = Package.create!(
   price: 60.00,
   quota: 1000,
   category: "daily",
-  valid_at: f.start_at,
-  expired_at: f.start_at,
+  valid_at: f.start_at.to_time.change(hour: 10),
+  expired_at: f.start_at.to_time.change(hour: 17),
   festival: f
 )
 
@@ -315,8 +315,8 @@ p_evening = Package.create!(
   price: 72.99,
   quota: 2400,
   category: "evening",
-  valid_at: f.start_at,
-  expired_at: f.start_at,
+  valid_at: f.start_at.to_time.change(hour: 19),
+  expired_at: f.start_at.to_time.change(hour: 23),
   festival: f
 )
 
@@ -331,7 +331,7 @@ images.each do |package, filename|
   path = Rails.root.join('db', 'files', filename)
   
   if File.exist?(path)
-    # Détermine le type MIME dynamiquement (webp ou jpeg)
+    # Détermine le type d'image
     content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
 
     package.image.attach(
@@ -341,6 +341,6 @@ images.each do |package, filename|
     )
     puts "Image attachée à #{package.title} (#{content_type})"
   else
-    puts "⚠️ Image non trouvée : #{filename}"
+    puts "Image non trouvée : #{filename}"
   end
 end

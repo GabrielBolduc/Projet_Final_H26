@@ -12,11 +12,7 @@ class TasksTest < ActionDispatch::IntegrationTest
   end
 
   # get /api/tasks
-<<<<<<< HEAD
-  test "should get tasks list" do
-=======
   test "should get rhe reusables tasks list and return JSON" do
->>>>>>> main
     sign_in users(:one)
     # la base de donnée n'a pas changer
     assert_no_difference("Task.count") do
@@ -37,11 +33,7 @@ class TasksTest < ActionDispatch::IntegrationTest
   end
 
   # get /api/tasks
-<<<<<<< HEAD
-  test "should not get tasks list but" do
-=======
   test "should not get reusables tasks list but and return JSON" do
->>>>>>> main
     # la base de donnée n'a pas changer
     assert_no_difference("Task.count") do
      get get_reusable_api_tasks_path

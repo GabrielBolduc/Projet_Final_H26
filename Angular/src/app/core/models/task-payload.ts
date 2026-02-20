@@ -4,7 +4,7 @@ export class TaskPayload {
     difficulty: number
     priority: number
     reusable: boolean
-    file?: File
+    file?: string
     
     constructor(
         title: string,
@@ -12,7 +12,7 @@ export class TaskPayload {
         difficulty: number,
         priority: number,
         reusable: boolean,
-        file?: File
+        file?: string
     ) {
         this.title = title;
         this.description = description;

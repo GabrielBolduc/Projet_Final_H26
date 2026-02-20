@@ -1,7 +1,6 @@
 <mat-toolbar color="primary" class="brand-header">
   
   <div class="header-left">
-    
     <a [routerLink]="['/']" class="brand-link">
       <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
       <span class="home-text">{{ 'NAV.HOME' | translate }}</span>
@@ -37,6 +36,10 @@
   <span class="spacer"></span>
 
   <div class="header-actions hide-on-mobile">
+    <a [routerLink]="['/programmation']" class="nav-link">
+      <span>{{ 'NAV.SCHEDULE' | translate }}</span>
+    </a>
+
     <a [routerLink]="['/reservations']" class="nav-link">
       <span>{{ 'NAV.RESERVATION' | translate }}</span>
     </a>
@@ -70,6 +73,11 @@
     </button>
 
     <mat-menu #mobileMenu="matMenu">
+      <button mat-menu-item [routerLink]="['/programmation']">
+        <mat-icon>event</mat-icon>
+        <span>{{ 'NAV.SCHEDULE' | translate }}</span>
+      </button>
+
       <button mat-menu-item [routerLink]="['/reservations']">
         <mat-icon>book_online</mat-icon>
         <span>{{ 'NAV.RESERVATION' | translate }}</span>
@@ -115,5 +123,4 @@
       }
     </mat-menu>
   </div>
-
 </mat-toolbar>

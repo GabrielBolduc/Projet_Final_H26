@@ -7,7 +7,7 @@ one:
   technical_specs: "Big speaker"
 
 two:
-  name: MyString
-  capacity: 1
-  environment: MyString
-  technical_specs: MyText
+  name: "Second stage"
+  capacity: 6000
+  environment: "indoor"
+  technical_specs: "Small speaker"

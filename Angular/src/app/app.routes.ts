@@ -16,7 +16,7 @@ import { TaskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
-import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing';
+import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
 import {PackageFormComponent} from './features/GabrielR/ticketing/admin/package-form/package-form';
 
 import { AuthGuard } from './core/guards/auth.guard';

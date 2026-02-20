@@ -1,5 +1,5 @@
 <mat-card class="perf-card package-card">
-  <h2>{{ isEditMode() ? 'Modifier le Billet' : 'Nouveau Billet' }}</h2>
+  <h2>{{ isEditMode() ? ('PACKAGE_FORM.EDIT_TITLE' | translate) : ('PACKAGE_FORM.NEW_TITLE' | translate) }}</h2>
 
   <div class="package-layout">
     
@@ -14,106 +14,106 @@
       }
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Titre</mat-label>
-        <input matInput formControlName="title" placeholder="Ex: Billet Journalier">
+        <mat-label>{{ 'PACKAGE_FORM.PACKAGE_TITLE' | translate }}</mat-label>
+        <input matInput formControlName="title" [placeholder]="'PACKAGE_FORM.TITLE_PLACEHOLDER' | translate">
         @if (form.get('title')?.hasError('required')) {
-          <mat-error>Requis</mat-error>
+          <mat-error>{{ 'PACKAGE_FORM.REQUIRED' | translate }}</mat-error>
         }
         @if (form.get('title')?.hasError('maxlength')) {
-          <mat-error>Maximum 50 caractères</mat-error>
+          <mat-error>{{ 'PACKAGE_FORM.MAX_50' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Description</mat-label>
+        <mat-label>{{ 'PACKAGE_FORM.DESCRIPTION' | translate }}</mat-label>
         <textarea matInput formControlName="description" rows="3"></textarea>
         @if (form.get('description')?.hasError('maxlength')) {
-          <mat-error>Maximum 100 caractères</mat-error>
+          <mat-error>{{ 'PACKAGE_FORM.MAX_100' | translate }}</mat-error>
         }
       </mat-form-field>
 
       <div class="grid-row-2">
         <mat-form-field appearance="outline">
-          <mat-label>Prix ($)</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.PRICE' | translate }}</mat-label>
           <input matInput type="number" formControlName="price">
           @if (form.get('price')?.hasError('required')) {
-            <mat-error>Requis</mat-error>
+            <mat-error>{{ 'PACKAGE_FORM.REQUIRED' | translate }}</mat-error>
           }
           @if (form.get('price')?.hasError('min')) {
-            <mat-error>Prix invalide</mat-error>
+            <mat-error>{{ 'PACKAGE_FORM.PRICE_INVALID' | translate }}</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Quota</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.QUOTA' | translate }}</mat-label>
           <input matInput type="number" formControlName="quota">
           @if (form.get('quota')?.hasError('required')) {
-            <mat-error>Requis</mat-error>
+            <mat-error>{{ 'PACKAGE_FORM.REQUIRED' | translate }}</mat-error>
           }
           @if (form.get('quota')?.hasError('max')) {
-            <mat-error>Max {{ festivalCapacity() }} places</mat-error>
+            <mat-error>{{ 'PACKAGE_FORM.MAX_PLACES' | translate:{cap: festivalCapacity()} }}</mat-error>
           }
         </mat-form-field>
       </div>
 
       <div class="grid-row-2">
         <mat-form-field appearance="outline">
-          <mat-label>Date début</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.START_DATE' | translate }}</mat-label>
           <input matInput [matDatepicker]="pickerStart" formControlName="valid_date">
           <mat-datepicker-toggle matIconSuffix [for]="pickerStart"></mat-datepicker-toggle>
           <mat-datepicker #pickerStart></mat-datepicker>
         </mat-form-field>
         
         <mat-form-field appearance="outline">
-          <mat-label>Heure</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.TIME' | translate }}</mat-label>
           <input matInput type="time" formControlName="valid_time">
         </mat-form-field>
       </div>
 
       <div class="grid-row-2">
         <mat-form-field appearance="outline">
-          <mat-label>Date fin</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.END_DATE' | translate }}</mat-label>
           <input matInput [matDatepicker]="pickerEnd" formControlName="expired_date">
           <mat-datepicker-toggle matIconSuffix [for]="pickerEnd"></mat-datepicker-toggle>
           <mat-datepicker #pickerEnd></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Heure</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.TIME' | translate }}</mat-label>
           <input matInput type="time" formControlName="expired_time">
         </mat-form-field>
       </div>
 
       @if (form.hasError('dateRangeInvalid') && (form.get('expired_date')?.touched || form.get('expired_time')?.touched)) {
         <div class="time-error">
-          L'heure de fin doit être strictement après le début.
+          {{ 'PACKAGE_FORM.END_AFTER_START' | translate }}
         </div>
       }
       @if (form.hasError('validBeforeFestival') && (form.get('valid_date')?.touched || form.get('valid_time')?.touched)) {
         <div class="time-error">
-          Début impossible avant l'ouverture ({{ festivalStartLimit() | date:'shortDate' }}).
+          {{ 'PACKAGE_FORM.START_BEFORE_FESTIVAL' | translate:{ date: (festivalStartLimit() | date:'shortDate') } }}
         </div>
       }
       @if (form.hasError('expiredAfterFestival') && (form.get('expired_date')?.touched || form.get('expired_time')?.touched)) {
         <div class="time-error">
-          Fin impossible après la fermeture ({{ festivalEndLimit() | date:'shortDate' }}).
+          {{ 'PACKAGE_FORM.END_AFTER_FESTIVAL' | translate:{ date: (festivalEndLimit() | date:'shortDate') } }}
         </div>
       }
 
       <div class="grid-row-2 file-category-row">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Type</mat-label>
+          <mat-label>{{ 'PACKAGE_FORM.TYPE' | translate }}</mat-label>
           <mat-select formControlName="category">
-            <mat-option value="general">Général</mat-option>
-            <mat-option value="daily">Journalier</mat-option>
-            <mat-option value="evening">Soirée</mat-option>
+            <mat-option value="general">{{ 'PACKAGE_FORM.TYPE_GENERAL' | translate }}</mat-option>
+            <mat-option value="daily">{{ 'PACKAGE_FORM.TYPE_DAILY' | translate }}</mat-option>
+            <mat-option value="evening">{{ 'PACKAGE_FORM.TYPE_EVENING' | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <div class="image-upload-wrapper">
           <div class="file-input-container">
             <button type="button" mat-stroked-button (click)="fileInput.click()">
-              <mat-icon>image</mat-icon> Image de fond
+              <mat-icon>image</mat-icon> {{ 'PACKAGE_FORM.BACKGROUND_IMAGE' | translate }}
             </button>
             <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
             @if (selectedFile) { <span class="file-name">{{ selectedFile.name }}</span> }
@@ -129,14 +129,14 @@
 
       <div class="form-actions">
         <button mat-stroked-button type="button" routerLink="/admin/ticketing" class="action-btn cancel-btn">
-          Annuler
+          {{ 'PACKAGE_FORM.CANCEL' | translate }}
         </button>
         
         <button mat-flat-button color="primary" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
           @if (isLoading()) {
-            <span>Traitement...</span> 
+            <span>{{ 'PACKAGE_FORM.PROCESSING' | translate }}</span> 
           } @else {
-            {{ isEditMode() ? 'Mettre à jour' : 'Enregistrer' }}
+            {{ isEditMode() ? ('PACKAGE_FORM.UPDATE' | translate) : ('PACKAGE_FORM.SAVE' | translate) }}
           }
         </button>
       </div>

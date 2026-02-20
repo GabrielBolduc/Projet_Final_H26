@@ -5,7 +5,7 @@ class Performance < ApplicationRecord
 
   validates :start_at, :end_at, :price, presence: true
   validates :title, length: { maximum: 20 }
-  validates :price, numericality: { greater_than_or_equal_to: 0 }
+  validates :price, numericality: { greater_than_or_equal_to: 0 }, presence: true
   validates :title, presence: true
   validate :end_at_after_start_at
   validate :within_festival_dates

@@ -12,8 +12,8 @@ one:
 
 two:
   title: MyString
-  start_at: 2026-02-16 08:43:08
-  end_at: 2026-02-16 08:43:08
+  start_at: 2026-08-01 10:00:00
+  end_at: 2026-08-01 12:00:00
   description: MyText
   price: 9.99
   artist: two

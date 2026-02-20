@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
+
 import { FestivalService } from '../../../../../core/services/festival.service';
 import { PackageService } from '../../../../../core/services/package.service';
 import { Package } from '@core/models/package';
@@ -46,7 +48,7 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     CommonModule, ReactiveFormsModule, RouterLink,
     MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, 
     MatDatepickerModule, MatNativeDateModule, MatButtonModule, 
-    MatIconModule, MatProgressBarModule
+    MatIconModule, MatProgressBarModule, TranslateModule
   ],
   templateUrl: './package-form.html',
   styleUrls: ['./package-form.css']
@@ -58,6 +60,7 @@ export class PackageFormComponent implements OnInit {
   
   private festivalService = inject(FestivalService);
   private packageService = inject(PackageService); 
+  private translate = inject(TranslateService);
 
   form!: FormGroup;
   selectedFile: File | null = null;
@@ -293,7 +296,7 @@ export class PackageFormComponent implements OnInit {
           });
           this.serverErrors.set(errorsArray);
         } else {
-          this.serverErrors.set(["Une erreur s'est produite."]);
+          this.serverErrors.set([this.translate.instant('PACKAGE_FORM.GENERIC_ERROR')]);
         }
       }
     });

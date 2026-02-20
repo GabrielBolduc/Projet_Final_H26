@@ -1,23 +1,24 @@
 <div class="admin-page">
   <header class="admin-top-bar">
       <button mat-stroked-button class="btn-new" (click)="openForm()">
-        <mat-icon>add</mat-icon> Nouveau Forfait
+        <mat-icon>add</mat-icon> {{ 'TICKETING_ADMIN.NEW_PACKAGE' | translate }}
       </button>
-      <h1 class="header-title">Billetterie</h1>
+      <h1 class="header-title">{{ 'TICKETING_ADMIN.TITLE' | translate }}</h1>
+      <div class="spacer-right" style="flex: 1; max-width: 250px;"></div>
   </header>
 
   <section class="filters-section">
     <mat-form-field appearance="outline" class="search-bar">
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput placeholder="Titre" [(ngModel)]="searchQuery">
+      <input matInput [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate" [(ngModel)]="searchQuery">
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="sort-select">
-      <mat-label>Trier par quantité</mat-label>
+      <mat-label>{{ 'TICKETING_ADMIN.SORT_BY' | translate }}</mat-label>
       <mat-select [(ngModel)]="sortOption">
-        <mat-option value="all">Tous</mat-option>
-        <mat-option value="qty_asc">Quantité croissante</mat-option>
-        <mat-option value="qty_desc">Quantité décroissante</mat-option>
+        <mat-option value="all">{{ 'TICKETING_ADMIN.SORT_ALL' | translate }}</mat-option>
+        <mat-option value="qty_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
+        <mat-option value="qty_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </section>
@@ -31,7 +32,7 @@
             <div class="ticket-visual">
               <img [src]="pkg.image_url || 'assets/placeholder-ticket.png'" alt="ticket">
               <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
-                {{ pkg.category }}
+                {{ 'PACKAGE_FORM.TYPE_' + (pkg.category | uppercase) | translate }}
               </span>
             </div>
 
@@ -42,13 +43,13 @@
               </div>
               
               <div class="date-info">
-                <strong>Date:</strong> 
+                <strong>{{ 'TICKETING_ADMIN.DATE' | translate }}</strong> 
                 @if ((pkg.valid_at | date:'yyyy-MM-dd') === (pkg.expired_at | date:'yyyy-MM-dd')) {
                   {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
                   ({{ pkg.valid_at | date:'HH:mm' }} - {{ pkg.expired_at | date:'HH:mm' }})
                 } @else {
-                  Du {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
-                  au {{ pkg.expired_at | date:'yyyy-MM-dd' }}
+                  {{ 'TICKETING_ADMIN.FROM' | translate }} {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                  {{ 'TICKETING_ADMIN.TO' | translate }} {{ pkg.expired_at | date:'yyyy-MM-dd' }}
                 }
               </div>
               
@@ -56,7 +57,7 @@
 
               <div class="quota-section">
                 <div class="quota-labels">
-                  <span>Ventes</span>
+                  <span>{{ 'TICKETING_ADMIN.SALES' | translate }}</span>
                   <span>{{ pkg.sold || 0 }} / {{ pkg.quota }}</span>
                 </div>
                 <mat-progress-bar mode="determinate" [value]="((pkg.sold || 0) / (pkg.quota || 1)) * 100"></mat-progress-bar>

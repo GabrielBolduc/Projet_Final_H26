@@ -406,7 +406,6 @@ images.each do |package, filename|
       filename: filename,
       content_type: content_type 
     )
-    puts "Image attachée à #{package.try(:title) || package.class.name} (#{content_type})"
   else
     puts "Image non trouvée : #{filename}"
   end

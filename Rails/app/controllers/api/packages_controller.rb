@@ -1,11 +1,6 @@
 class Api::PackagesController < ApiController
-  # 1. On authentifie tout le monde via Devise par défaut
-  before_action :authenticate_user!, except: [:index, :show]
-  
-  # 2. On charge le package pour les actions spécifiques
+  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :set_package, only: [:show, :update, :destroy]
-  
-  # 3. Barrière de sécurité : Seul un Admin peut Créer, Modifier ou Supprimer
   before_action :require_admin!, only: [:create, :update, :destroy]
 
   # GET /api/packages

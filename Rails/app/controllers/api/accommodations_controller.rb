@@ -1,90 +1,68 @@
 class Api::AccommodationsController < ApiController
-  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  skip_before_action :authenticate_user!, only: [:index, :show], raise: false
+  before_action :set_accommodation, only: [:show, :update, :destroy]
+  before_action :require_admin!, only: [:create, :update, :destroy]
 
-  def index
-    @units = Unit.all.includes(:accommodation, image_attachment: :blob)
-
-    if params[:category].present? && params[:category] != 'all'
-      @units = @units.joins(:accommodation).where(accommodations: { category: params[:category] })
-    end
-
-    render json: { status: "success", data: format_units(@units) }
+  def show
+    render json: { 
+      status: "success", 
+      data: @accommodation.as_json(except: [:created_at, :updated_at]) 
+    }, status: :ok
   end
 
   def show
-    if @unit
-      render json: { status: "success", data: format_unit(@unit) }, status: :ok
-    else
-      render json: { status: "error", code: 404, message: "Unit not found" }, status: :not_found
-    end
+    render json: { 
+      status: "success", 
+      data: @accommodation.as_json(except: [:created_at, :updated_at]) 
+    }
   end
 
   def create
-    unit = Unit.new(unit_params)
-    if unit.save
-      render json: { status: "success", data: format_unit(unit) }, status: :created
+    @accommodation = Accommodation.new(accommodation_params)
+    if @accommodation.save
+      render json: { status: "success", data: @accommodation }, status: :ok
     else
-      render json: { status: "error", code: 422, message: "Validation failed", errors: unit.errors.messages }, status: :unprocessable_entity
+      render_logic_error(@accommodation.errors.full_messages, 422)
     end
   end
 
   def update
-    if @unit
-      if @unit.update(unit_params)
-        render json: { status: "success", data: format_unit(@unit) }, status: :ok
-      else
-        render json: { status: "error", code: 422, message: "Validation failed", errors: @unit.errors.messages }, status: :unprocessable_entity
-      end
+    if @accommodation.update(accommodation_params)
+      render json: { status: "success", data: @accommodation }, status: :ok
     else
-      render json: { status: "error", code: 404, message: "Unit not found" }, status: :not_found
+      render_logic_error(@accommodation.errors.full_messages, 422)
     end
   end
 
   def destroy
-    if @unit
-      @unit.destroy
-      render json: { status: "success", message: "Unit deleted successfully", data: nil }, status: :ok
-    else
-      render json: { status: "error", code: 404, message: "Unit not found" }, status: :not_found
-    end
+    @accommodation.destroy
+    render json: { status: "success", message: "Accommodation deleted" }, status: :ok
   end
 
   private
-  def set_unit
-    @unit = Unit.includes(:accommodation, image_attachment: :blob).find_by(id: params[:id])
+  def set_accommodation
+    @accommodation = Accommodation.find_by(id: params[:id])
+    render_logic_error("Accommodation not found", 404) unless @accommodation
   end
 
-  def unit_params
-    params.require(:unit).permit(
-      :cost_person_per_night, :type, :quantity, :wifi, :water, 
-      :electricity, :parking_cost, :food_options, :accommodation_id, :image
+  def accommodation_params
+    params.require(:accommodation).permit(
+      :name, :category, :address, :latitude, :longitude, 
+      :shuttle, :time_car, :time_walk, :commission, :festival_id
     )
   end
   
+  def render_logic_error(message, code)
+    render json: { 
+      status: "error", 
+      code: code, 
+      message: message 
+    }, status: :ok
+  end
+
   def require_admin!
-    unless current_user.is_a?(Admin)
-      render json: {
-        status: "error",
-        code: 403,
-        message: "Access denied: Admin privileges required."
-      }, status: :forbidden
+    unless current_user&.is_a?(Admin)
+      render_logic_error("Access denied: Admin privileges required.", 403)
     end
-  end
-
-  def format_unit(unit)
-    unit.as_json(
-      include: { 
-        accommodation: { 
-          only: [:name, :category, :address, :shuttle], 
-          methods: [:coordinates] 
-        } 
-      }
-    ).merge(
-      "image_url" => unit.image.attached? ? url_for(unit.image) : nil
-    )
-  end
-
-  def format_units(units)
-    units.map { |unit| format_unit(unit) }
   end
 end

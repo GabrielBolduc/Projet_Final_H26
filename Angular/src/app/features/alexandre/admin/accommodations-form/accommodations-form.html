@@ -1,0 +1,100 @@
+<mat-card class="perf-card">
+  <h2>{{ isEditMode() ? 'Modifier l\'hébergement' : 'Nouvel hébergement' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
+    
+    @if (serverErrors().length > 0) {
+      <div class="form-error">
+        @for (error of serverErrors(); track $index) {
+          <div>{{ error }}</div>
+        }
+      </div>
+    }
+
+    <!-- Row 1: Name and Category -->
+    <div class="grid-row-2">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom de l'hébergement</mat-label>
+        <input matInput formControlName="name" placeholder="Ex: Grand Hôtel">
+        @if (form.get('name')?.hasError('required')) { <mat-error>Requis</mat-error> }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Catégorie</mat-label>
+        <mat-select formControlName="category">
+          <mat-option [value]="0">Hôtel</mat-option>
+          <mat-option [value]="1">Camping</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Row 2: Full Width Address -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Adresse</mat-label>
+      <input matInput formControlName="address">
+      @if (form.get('address')?.hasError('required')) { <mat-error>Requis</mat-error> }
+    </mat-form-field>
+
+    <!-- Row 3: Coordinates and Shuttle (using grid-row-3: 2fr 1fr 1fr) -->
+    <div class="grid-row-3">
+      <div class="grid-row-2"> <!-- Nested to split the 2fr section -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Latitude</mat-label>
+          <input matInput type="number" formControlName="latitude">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Longitude</mat-label>
+          <input matInput type="number" formControlName="longitude">
+        </mat-form-field>
+      </div>
+
+      <div class="toggle-container">
+        <mat-slide-toggle formControlName="shuttle">Navette</mat-slide-toggle>
+      </div>
+      <div></div> <!-- Spacer for the 1fr slot -->
+    </div>
+
+    <!-- Row 4: Timing and Commission (using grid-row-3: 2fr 1fr 1fr) -->
+    <div class="grid-row-3">
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Temps (Voiture)</mat-label>
+          <input matInput type="time" formControlName="time_car">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Temps (Marche)</mat-label>
+          <input matInput type="time" formControlName="time_walk">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Commission (%)</mat-label>
+        <input matInput type="number" formControlName="commission">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Festival</mat-label>
+        <mat-select formControlName="festival_id">
+          @for (f of festivals(); track f.id) {
+            <mat-option [value]="f.id">{{ f.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/accommodations" class="action-btn cancel-btn">
+        Annuler
+      </button>
+      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
+        @if (isLoading()) {
+          <span>Traitement...</span> 
+        } @else {
+          {{ isEditMode() ? 'Mettre à jour' : 'Enregistrer' }}
+        }
+      </button>
+    </div>
+  </form>
+</mat-card>

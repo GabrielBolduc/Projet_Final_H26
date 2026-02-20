@@ -29,6 +29,7 @@ import { Package } from '../../../../core/models/package';
 export class AdminTicketingComponent implements OnInit {
   private packageService = inject(PackageService);
   private router = inject(Router);
+  private translate = inject(TranslateService);
 
   packages = signal<Package[]>([]);
   searchQuery = signal<string>('');
@@ -68,11 +69,13 @@ export class AdminTicketingComponent implements OnInit {
   }
 
   deletePackage(pkg: Package) {
-    if(confirm(`Supprimer ${pkg.title} ?`)) {
+    const confirmMessage = this.translate.instant('TICKETING_ADMIN.DELETE_CONFIRM', { title: pkg.title });
+    
+    if(confirm(confirmMessage)) {
       this.packageService.deletePackage(pkg.id!).subscribe({
         next: () => this.loadPackages(),
         error: (err) => {
-          const msg = err.message || 'Impossible de supprimer ce forfait.';
+          const msg = err.message || this.translate.instant('TICKETING_ADMIN.DELETE_ERROR');
           alert(msg);
         }
       });

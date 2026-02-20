@@ -1,4 +1,14 @@
 <mat-card class="perf-card">
+
+  @if (isEditMode()) {
+    <button mat-flat-button 
+            type="button" 
+            class="delete-btn-top" 
+            (click)="onDelete()"
+            [disabled]="isLoading()">
+      <mat-icon>delete_forever</mat-icon> SUPPRIMER
+    </button>
+  }
   <h2>{{ isEditMode() ? 'Modifier l\'hébergement' : 'Nouvel hébergement' }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">

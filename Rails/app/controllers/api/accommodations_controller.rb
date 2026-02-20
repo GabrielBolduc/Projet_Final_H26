@@ -3,11 +3,14 @@ class Api::AccommodationsController < ApiController
   before_action :set_accommodation, only: [:show, :update, :destroy]
   before_action :require_admin!, only: [:create, :update, :destroy]
 
-  def show
-    render json: { 
-      status: "success", 
-      data: @accommodation.as_json(except: [:created_at, :updated_at]) 
-    }, status: :ok
+  def index
+    @accommodations = Accommodation.all
+
+    if params[:category].present? && params[:category] != 'all'
+      @accommodations = @accommodations.where(category: params[:category])
+    end
+
+    render json: { status: "success", data: @accommodations }, status: :ok
   end
 
   def show

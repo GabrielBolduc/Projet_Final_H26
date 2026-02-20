@@ -68,7 +68,7 @@ mat-form-field {
 
 @media (max-width: 768px) {
   .grid-row-2, .grid-row-3 {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr ;
     gap: 8px;
   }
   
@@ -76,4 +76,16 @@ mat-form-field {
     margin: 1rem;
     padding: 1.25rem;
   }
+}
+
+.delete-btn-top {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  background-color: var(--mat-sys-on-surface) ;
+  color: white ;
+  border: 2px solid black ;
+  font-weight: 900 ;
+  box-shadow: 4px 4px 0px black;
+  z-index: 10;
 }

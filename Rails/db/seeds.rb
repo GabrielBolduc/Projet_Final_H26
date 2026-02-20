@@ -211,7 +211,8 @@ f1 = Festival.create!(
   end_at: Date.new(2025, 7, 12),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  coordinates: GeoPoint.new(46.52673340326582, -72.73930869816652),
+  latitude: 46.52673340326582,
+  longitude: -72.73930869816652,
   status: "COMPLETED",
   satisfaction: 4,
   other_income: 15000.00,
@@ -412,3 +413,17 @@ images.each do |package, filename|
 end
 
 unit1.save!
+
+#f1 = Festival.create!(
+ # name: "Festify 2025",
+  #start_at: Date.new(2025, 7, 10),
+  #end_at: Date.new(2025, 7, 12),
+  #daily_capacity: 5000,
+  #address: "123 Rue rue, Shawinigan, QC",
+  #coordinates: GeoPoint.new(46.52673340326582, -72.73930869816652),
+  #status: "COMPLETED",
+  #satisfaction: 4,
+  #other_income: 15000.00,
+  #other_expense: 5000.00,
+  #comment: "Bon festival"
+#)

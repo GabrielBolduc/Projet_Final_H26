@@ -7,7 +7,7 @@ import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
 import { AccommodationsDetails } from '@features/alexandre/accommodations-details/accommodations-details';
-import { AccommodationsForm } from '@features/alexandre/accommodations-form/accommodations-form';
+import { AccommodationsForm } from '@features/alexandre/admin/accommodations-form/accommodations-form';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/admin/performance/dashboard';
 import { AdministrationComponent } from './features/admin/festival/administration';
@@ -46,11 +46,16 @@ export const routes: Routes = [
                 component: Accommodations
             },
             {
-                path: 'accommodations-details',
+                path: 'accommodations-details/:id',
                 component: AccommodationsDetails
             },
             {
                 path: 'accommodations-form',
+                component: AccommodationsForm,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'accommodations-form/:id',
                 component: AccommodationsForm,
                 canActivate: [AuthGuard, adminGuard]
             },

@@ -21,6 +21,8 @@ Unit.destroy_all
 Package.destroy_all
 
 Accommodation.destroy_all
+Unit.destroy_all
+Reservation.destroy_all
 Performance.destroy_all
 
 Stage.destroy_all
@@ -335,6 +337,19 @@ acc2 = Accommodation.create!(
   festival: f
 )
 
+unit1 = Unit.new(
+  type: "SimpleRoom",
+  accommodation: acc1,
+  cost_person_per_night: 55.00,
+  quantity: 10,
+  wifi: true,
+  water: 2 ,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+
 
 # Packages (Billetterie)
 
@@ -375,7 +390,8 @@ p_evening = Package.create!(
 images = {
   p_general => 'general-ticket.webp',
   p_daily   => 'daily-ticket.webp',
-  p_evening => 'evening-ticket.jpg'
+  p_evening => 'evening-ticket.jpg',
+  unit1 => 'placeholder-image.jpg'
 }
 
 images.each do |package, filename|
@@ -394,3 +410,5 @@ images.each do |package, filename|
     puts "Image non trouvée : #{filename}"
   end
 end
+
+unit1.save!

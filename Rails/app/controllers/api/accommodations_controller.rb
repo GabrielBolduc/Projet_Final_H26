@@ -1,40 +1,71 @@
 class Api::AccommodationsController < ApiController
-  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  skip_before_action :authenticate_user!, only: [:index, :show], raise: false
+  before_action :set_accommodation, only: [:show, :update, :destroy]
+  before_action :require_admin!, only: [:create, :update, :destroy]
 
   def index
-    @units = Unit.all.includes(:accommodation, image_attachment: :blob)
+    @accommodations = Accommodation.all
 
     if params[:category].present? && params[:category] != 'all'
-      @units = @units.joins(:accommodation).where(accommodations: { category: params[:category] })
+      @accommodations = @accommodations.where(category: params[:category])
     end
 
-    render json: { status: "success", data: format_units(@units) }
+    render json: { status: "success", data: @accommodations }, status: :ok
   end
 
-def show
-  @unit = Unit.find_by(id: params[:id])
-
-  if @unit
-    unit_data = @unit.as_json(include: {
-      accommodation: { methods: [ :coordinates ] }
-    }).merge(
-      "image_url" => @unit.image.attached? ? url_for(@unit.image) : nil
-    )
-    render json: { status: "success", data: unit_data }
-  else
-    render json: { status: "error", message: "Unit not found" }, status: :ok
+  def show
+    render json: { 
+      status: "success", 
+      data: @accommodation.as_json(except: [:created_at, :updated_at]) 
+    }
   end
-end
+
+  def create
+    @accommodation = Accommodation.new(accommodation_params)
+    if @accommodation.save
+      render json: { status: "success", data: @accommodation }, status: :ok
+    else
+      render_logic_error(@accommodation.errors.full_messages, 422)
+    end
+  end
+
+  def update
+    if @accommodation.update(accommodation_params)
+      render json: { status: "success", data: @accommodation }, status: :ok
+    else
+      render_logic_error(@accommodation.errors.full_messages, 422)
+    end
+  end
+
+  def destroy
+    @accommodation.destroy
+    render json: { status: "success", message: "Accommodation deleted" }, status: :ok
+  end
 
   private
+  def set_accommodation
+    @accommodation = Accommodation.find_by(id: params[:id])
+    render_logic_error("Accommodation not found", 404) unless @accommodation
+  end
 
-  def format_units(units)
-    units.map do |unit|
-      unit.as_json(
-        include: { accommodation: { only: [ :name ], methods: [ :coordinates ] } }
-      ).merge(
-        "image_url" => unit.image.attached? ? url_for(unit.image) : nil
-      )
+  def accommodation_params
+    params.require(:accommodation).permit(
+      :name, :category, :address, :latitude, :longitude, 
+      :shuttle, :time_car, :time_walk, :commission, :festival_id
+    )
+  end
+  
+  def render_logic_error(message, code)
+    render json: { 
+      status: "error", 
+      code: code, 
+      message: message 
+    }, status: :ok
+  end
+
+  def require_admin!
+    unless current_user&.is_a?(Admin)
+      render_logic_error("Access denied: Admin privileges required.", 403)
     end
   end
 end

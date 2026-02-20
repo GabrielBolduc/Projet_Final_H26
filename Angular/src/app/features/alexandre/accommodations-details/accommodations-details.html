@@ -1,1 +1,85 @@
-<p>accommodations-details works!</p>
+<div class="details-container" *ngIf="accommodation$ | async as acc; else loading">
+  
+<button mat-button class="back-btn" 
+        [routerLink]="['/accommodations']" 
+        [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
+  <mat-icon>arrow_back</mat-icon> 
+  Back to {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'Hotel' : 'Camping' }}
+</button>
+
+  <mat-card class="detail-card horizontal-layout">
+    <div class="info-section">
+      <mat-card-content class="content-padding">
+        <div class="badge-row">
+          <span class="category-tag">{{ acc.category === 1 ? 'HOTEL' : 'CAMPING' }}</span>
+        </div>
+        
+        <h1 class="acc-name">{{ acc.name }}</h1>
+        
+        <div class="info-row">
+          <mat-icon>place</mat-icon>
+          <span class="address-text">{{ acc.address }}</span>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <mat-icon>directions_walk</mat-icon>
+                <div class="stat-label">Walk</div>
+                <div class="stat-value">{{ formatTime(acc.time_walk) }}</div>
+            </div>
+
+            <div class="stat-box">
+                <mat-icon>directions_car</mat-icon>
+                <div class="stat-label">Drive</div>
+                <div class="stat-value">{{ formatTime(acc.time_car) }}</div>
+            </div>
+
+          <div class="stat-box" [class.active]="acc.shuttle">
+            <mat-icon>directions_bus</mat-icon>
+            <div class="stat-label">Shuttle</div>
+            <div class="stat-value">{{ acc.shuttle ? 'YES' : 'NO' }}</div>
+          </div>
+
+          <div class="stat-box" *ngIf="acc.commission > 0">
+            <mat-icon>payments</mat-icon>
+            <div class="stat-label">Fee</div>
+            <div class="stat-value">{{ acc.commission }}%</div>
+          </div>
+        </div>
+
+        <mat-card-actions class="action-footer">
+        
+        <div *ngIf="isAdmin; else userView" class="admin-actions">
+            <button mat-button 
+                    class="book-btn edit-btn" 
+                    [routerLink]="['/accommodations-form', acc.id]">
+            <mat-icon>edit</mat-icon> EDIT ACCOMMODATION
+            </button>
+        </div>
+
+        <ng-template #userView>
+            <button mat-flat-button 
+                    color="primary" 
+                    class="book-btn" 
+                    [routerLink]="['/reservations-form']" 
+                    [queryParams]="{ accommodationId: acc.id }">
+            BOOK THIS ACCOMMODATION
+            </button>
+        </ng-template>
+
+        </mat-card-actions>
+      </mat-card-content>
+    </div>
+
+    <div class="image-section">
+      <img [src]="'assets/placeholder-image.png'" [alt]="acc.name" class="side-image">
+    </div>
+
+  </mat-card>
+</div>
+
+<ng-template #loading>
+  <div class="main-display">
+    <p>Loading details...</p>
+  </div>
+</ng-template>

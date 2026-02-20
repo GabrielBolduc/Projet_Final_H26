@@ -46,7 +46,7 @@ export const routes: Routes = [
                 component: Accommodations
             },
             {
-                path: 'accommodations-details',
+                path: 'accommodations-details/:id',
                 component: AccommodationsDetails
             },
             {

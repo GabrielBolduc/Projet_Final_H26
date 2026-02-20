@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Accommodation } from '../models/accommodation';
 
+
 interface ApiResponse<T> {
   status: 'success' | 'error';
   data: T;

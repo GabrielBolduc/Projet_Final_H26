@@ -54,11 +54,11 @@
     
     @if (auth.isLoggedIn()) {
       <button mat-flat-button color="accent" (click)="auth.logout()">
-        <mat-icon>logout</mat-icon> Disconnect
+        <mat-icon>logout</mat-icon> {{'AUTH.DISCONNECT' | translate}}
       </button>
     } @else {
       <button mat-flat-button color="accent" routerLink="/login">
-        <mat-icon>login</mat-icon> Connect
+        <mat-icon>login</mat-icon> {{'AUTH.CONNECT' | translate}}
       </button>
     }
   </div>
@@ -113,12 +113,12 @@
       @if (auth.isLoggedIn()) {
         <button mat-menu-item (click)="auth.logout()">
           <mat-icon>logout</mat-icon>
-          <span>Disconnect</span>
+          <span>{{'AUTH.DISCONNECT' | translate}}</span>
         </button>
       } @else {
         <button mat-menu-item routerLink="/login">
-          <mat-icon>login</mat-icon>
-          <span>Connect</span>
+          <mat-icon>{{'AUTH.CONNECT' | translate}}</mat-icon>
+          <span>Salut</span>
         </button>
       }
     </mat-menu>

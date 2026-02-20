@@ -85,28 +85,25 @@ export class PackageFormComponent implements OnInit {
       this.packageId = +id;
       this.loadPackageData(this.packageId);
     } else {
-      this.loadFestivalData(1); 
+      this.loadFestivalData();
     }
   }
 
   private initForm() {
-    const startDate = new Date();
-    const endDate = new Date();
-
     this.form = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(50)]],
       description: ['', [Validators.maxLength(100)]],
       price: [0, [Validators.required, Validators.min(0)]],
       quota: [100, [Validators.required, Validators.min(1)]],
       category: ['general', Validators.required],
-      
-      valid_date: [startDate, Validators.required],
-      valid_time: [this.formatTime(startDate), Validators.required],
-      
-      expired_date: [endDate, Validators.required],
-      expired_time: [this.formatTime(endDate), Validators.required],
 
-      festival_id: [1] 
+      valid_date: [null, Validators.required],
+      valid_time: ['', Validators.required],
+      
+      expired_date: [null, Validators.required],
+      expired_time: ['', Validators.required],
+
+      festival_id: [null, Validators.required]
     }, { 
       validators: [dateRangeValidator, this.festivalBoundsValidator()] 
     });
@@ -127,14 +124,14 @@ export class PackageFormComponent implements OnInit {
           price: data.price,
           quota: data.quota,
           category: data.category,
-          festival_id: data.festival_id || 1,
+          festival_id: data.festival_id,
           valid_date: validAt,
           valid_time: this.formatTime(validAt),
           expired_date: expiredAt,
           expired_time: this.formatTime(expiredAt)
         });
 
-        this.loadFestivalData(data.festival_id || 1);
+        this.loadFestivalData(data.festival_id);
         this.isLoading.set(false);
       },
       error: () => {
@@ -143,22 +140,17 @@ export class PackageFormComponent implements OnInit {
     });
   }
 
-  private loadFestivalData(festivalId: number) {
+  private loadFestivalData(festivalId?: number) {
     this.festivalService.getFestivals().subscribe({
-      next: (festivals) => {
-        const festival = festivals.find(f => f.id === festivalId);
-        
+      next: (festivals: any[]) => {
+        let festival = festivalId 
+          ? festivals.find(f => f.id === festivalId)
+          : festivals.find(f => f.status === 'ONGOING' || f.status === 'ongoing');
+
         if (festival) {
-          if (festival.daily_capacity) {
-            this.festivalCapacity.set(festival.daily_capacity);
-            const quotaControl = this.form.get('quota');
-            quotaControl?.setValidators([
-              Validators.required,
-              Validators.min(1),
-              Validators.max(festival.daily_capacity)
-            ]);
-            quotaControl?.updateValueAndValidity();
-          }
+          console.log("Festival trouvé :", festival);
+          
+          this.form.patchValue({ festival_id: festival.id });
 
           const fStart = this.parseDateWithoutTimezone(festival.start_at);
           fStart.setHours(0, 0, 0, 0); 
@@ -169,6 +161,7 @@ export class PackageFormComponent implements OnInit {
           this.festivalEndLimit.set(fEnd);
 
           if (!this.isEditMode()) {
+            console.log("Application des dates du festival au formulaire...");
             this.form.patchValue({
               valid_date: fStart,
               valid_time: '00:00',
@@ -177,7 +170,17 @@ export class PackageFormComponent implements OnInit {
             });
           }
 
+          if (festival.daily_capacity) {
+            this.festivalCapacity.set(festival.daily_capacity);
+            const quotaControl = this.form.get('quota');
+            quotaControl?.setValidators([
+              Validators.required, Validators.min(1), Validators.max(festival.daily_capacity)
+            ]);
+          }
+
           this.form.updateValueAndValidity();
+        } else {
+          console.error("ERREUR : Aucun festival 'ONGOING' n'a été trouvé. Le formulaire gardera les dates d'aujourd'hui.");
         }
       }
     });

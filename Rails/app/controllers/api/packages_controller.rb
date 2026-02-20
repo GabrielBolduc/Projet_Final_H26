@@ -98,7 +98,7 @@ class Api::PackagesController < ApiController
   def format_package(package)
     json = package.as_json(include: :festival)
     if package.image.attached?
-      json.merge(image_url: url_for(package.image))
+      json.merge(image_url: rails_blob_url(package.image, host: request.base_url))
     else
       json.merge(image_url: nil)
     end

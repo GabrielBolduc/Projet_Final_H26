@@ -21,7 +21,6 @@
       </div>
     }
 
-    <!-- Row 1: Name and Category -->
     <div class="grid-row-2">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Nom de l'hébergement</mat-label>
@@ -32,22 +31,20 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Catégorie</mat-label>
         <mat-select formControlName="category">
-          <mat-option [value]="0">Hôtel</mat-option>
-          <mat-option [value]="1">Camping</mat-option>
+          <mat-option [value]="0">Camping</mat-option>
+          <mat-option [value]="1">Hotel</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <!-- Row 2: Full Width Address -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Adresse</mat-label>
       <input matInput formControlName="address">
       @if (form.get('address')?.hasError('required')) { <mat-error>Requis</mat-error> }
     </mat-form-field>
 
-    <!-- Row 3: Coordinates and Shuttle (using grid-row-3: 2fr 1fr 1fr) -->
     <div class="grid-row-3">
-      <div class="grid-row-2"> <!-- Nested to split the 2fr section -->
+      <div class="grid-row-2">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Latitude</mat-label>
           <input matInput type="number" formControlName="latitude">
@@ -62,10 +59,9 @@
       <div class="toggle-container">
         <mat-slide-toggle formControlName="shuttle">Navette</mat-slide-toggle>
       </div>
-      <div></div> <!-- Spacer for the 1fr slot -->
+      <div></div> 
     </div>
 
-    <!-- Row 4: Timing and Commission (using grid-row-3: 2fr 1fr 1fr) -->
     <div class="grid-row-3">
       <div class="grid-row-2">
         <mat-form-field appearance="outline" class="full-width">
@@ -82,15 +78,6 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Commission (%)</mat-label>
         <input matInput type="number" formControlName="commission">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Festival</mat-label>
-        <mat-select formControlName="festival_id">
-          @for (f of festivals(); track f.id) {
-            <mat-option [value]="f.id">{{ f.name }}</mat-option>
-          }
-        </mat-select>
       </mat-form-field>
     </div>
 

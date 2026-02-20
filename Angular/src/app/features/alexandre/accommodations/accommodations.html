@@ -1,4 +1,13 @@
 <div class="full-height">
+  <div class="admin-header" *ngIf="isAdmin">
+    <button mat-flat-button 
+            class="brutalist-add-btn" 
+            [routerLink]="['/accommodations-form']">
+      <mat-icon>add_circle</mat-icon> 
+      <span>AJOUTER</span>
+    </button>
+  </div>
+
   <div class="accommodations-grid">
     <a *ngFor="let acc of accommodations$ | async" 
        [routerLink]="['/accommodations-details', acc.id]"
@@ -14,7 +23,6 @@
           <span class="sub-label">{{ acc.address }}</span>
         </div>
       </mat-card>
-      
     </a>
   </div>
 

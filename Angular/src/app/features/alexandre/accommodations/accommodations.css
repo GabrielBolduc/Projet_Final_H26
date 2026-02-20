@@ -1,4 +1,5 @@
 .full-height {
+  position: relative; 
   height: 80vh;
   overflow-y: auto;
 }
@@ -65,3 +66,39 @@
   align-items: center;
   height: 50vh;
 }
+
+.admin-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 40px 10px 0; 
+}
+
+.brutalist-add-btn {
+  background-color: #FFF ;
+  color: var(--mat-sys-primary) ;
+  border: 2px solid black ;
+  border-radius: 12px ;
+  font-weight: 900 ;
+  height: 50px ;
+  padding: 0 25px ;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brutalist-add-btn:hover {
+  background-color: var(--mat-sys-surface-container-low) ;
+}
+
+.brutalist-add-btn mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+
+.accommodations-grid {
+  margin-top: 0px;
+}
+

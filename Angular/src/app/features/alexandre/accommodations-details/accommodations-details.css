@@ -126,16 +126,10 @@
 }
 
 .edit-btn {
-  background-color: var(--mat-sys-primary) ; 
-  color: #000 ;
+  background-color: #FFF ; 
+  color: var(--mat-sys-primary) ;
   border: 2px solid #000 ;
   width: 100%;
-}
-
-.edit-btn:hover {
-  background-color: var(--mat-sys-primary) ;
-  box-shadow: 6px 6px 0px #000 ;
-  transform: translate(-2px, -2px);
 }
 
 .admin-actions {

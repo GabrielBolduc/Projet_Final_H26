@@ -28,6 +28,7 @@ export class AccommodationsDetails implements OnInit {
   private authService = inject(AuthService);
 
   accommodation$!: Observable<Accommodation>;
+  Category = AccommodationCategory; 
 
   ngOnInit(): void {
     this.accommodation$ = this.route.paramMap.pipe(

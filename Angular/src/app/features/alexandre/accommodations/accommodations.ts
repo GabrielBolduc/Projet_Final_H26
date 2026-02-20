@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Observable, switchMap } from 'rxjs';
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { Accommodation } from '@core/models/accommodation';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-accommodations',
@@ -24,6 +25,7 @@ export class Accommodations implements OnInit {
 
   private route = inject(ActivatedRoute);
   private service = inject(AccommodationsService);
+  private authService = inject(AuthService);
 
   ngOnInit() {
     this.accommodations$ = this.route.queryParamMap.pipe(
@@ -32,5 +34,9 @@ export class Accommodations implements OnInit {
         return this.service.getAccommodations(category);
       })
     );
+  }
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

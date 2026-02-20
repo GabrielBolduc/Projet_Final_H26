@@ -1,11 +1,11 @@
 <div class="details-container" *ngIf="accommodation$ | async as acc; else loading">
   
-  <button mat-button class="back-btn" 
-          [routerLink]="['/accommodations']" 
-          [queryParams]="{ category: acc.category === 1 ? 'hotel' : 'camping' }">
-    <mat-icon>arrow_back</mat-icon> 
-    Back to {{ acc.category === 1 ? 'Hotel' : 'Camping' }}
-  </button>
+<button mat-button class="back-btn" 
+        [routerLink]="['/accommodations']" 
+        [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
+  <mat-icon>arrow_back</mat-icon> 
+  Back to {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'Hotel' : 'Camping' }}
+</button>
 
   <mat-card class="detail-card horizontal-layout">
     <div class="info-section">
@@ -50,7 +50,7 @@
         <mat-card-actions class="action-footer">
         
         <div *ngIf="isAdmin; else userView" class="admin-actions">
-            <button mat-flat-button 
+            <button mat-button 
                     class="book-btn edit-btn" 
                     [routerLink]="['/accommodations-form', acc.id]">
             <mat-icon>edit</mat-icon> EDIT ACCOMMODATION
@@ -61,7 +61,7 @@
             <button mat-flat-button 
                     color="primary" 
                     class="book-btn" 
-                    [routerLink]="['/reservation-form']" 
+                    [routerLink]="['/reservations-form']" 
                     [queryParams]="{ accommodationId: acc.id }">
             BOOK THIS ACCOMMODATION
             </button>

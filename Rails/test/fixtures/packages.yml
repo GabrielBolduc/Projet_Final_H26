@@ -3,10 +3,10 @@ one:
   description: "Accès VIP complet"
   price: 150.0
   quota: 100
-  category: "general" # Doit matcher ton enum (minuscule)
-  valid_at: 2025-07-05 10:00:00
-  expired_at: 2026-07-05 23:00:00
-  festival: one # Référence au festival: one
+  category: "general"
+  valid_at: 2026-08-01 10:00:00
+  expired_at: 2026-08-03 23:00:00
+  festival: one
 
 two:
   title: "Billet Journalier"
@@ -14,6 +14,6 @@ two:
   price: 50.0
   quota: 500
   category: "daily"
-  valid_at: 2025-07-04 10:00:00
-  expired_at: 2026-07-21 16:00:00
+  valid_at: 2026-08-01 10:00:00
+  expired_at: 2026-08-01 23:00:00 
   festival: one

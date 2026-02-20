@@ -1,6 +1,6 @@
 one:
   name: "Festival de St-titre"
-  start_at: 2026-08-01 12:00:00
+  start_at: 2026-08-01 10:00:00
   end_at: 2026-08-03 23:00:00
   status: "ONGOING"
   address: "Village de St-Titre, qc, Canada"
@@ -10,9 +10,9 @@ one:
 
 two:
   name: "Festival Shawinigan"
-  start_at: 2025-07-04 12:00:00
+  start_at: 2025-07-04 10:00:00
   end_at: 2025-07-14 23:00:00
-  status: "completed"
+  status: "COMPLETED"
   address: "Rue Shawinigan, qc, Canada"
   daily_capacity: 1000000
   latitude: 46.8033

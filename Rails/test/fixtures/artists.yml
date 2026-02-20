@@ -8,6 +8,6 @@ one:
 
 two:
   name: ArtistB
-  genre: MyString
-  bio: MyText
+  genre: "Rock"
+  bio: "bio"
   popularity: 1

@@ -2,7 +2,16 @@
   "NAV": {
     "HOME": "Accueil",
     "RESERVATION": "Réservation",
-    "TICKETING": "Billetterie"
+    "TICKETING": "Billetterie",
+    "SCHEDULE": "Programmation",
+    "ADMIN": "Administration"
+  },
+  "PUBLIC": {
+    "PROGRAMMATION": "Programmation",
+    "LOADING": "Chargement de la programmation...",
+    "NO_FESTIVAL_TITLE": "Aucun festival en cours",
+    "NO_FESTIVAL_DESC": "Il n'y a actuellement aucun festival actif. Revenez plus tard !",
+    "NO_PERFORMANCES": "Aucune performance n'est actuellement prévue pour ce festival."
   },
   "AUTH": {
     "LOGOUT": "Déconnexion",
@@ -25,7 +34,9 @@
     "NO_ACCOUNT": "Pas encore de compte ?",
     "SIGNUP_LINK": "S'inscrire",
     "ALREADY_ACCOUNT": "Déjà un compte ?",
-    "LOGIN_LINK": "Se connecter"
+    "LOGIN_LINK": "Se connecter",
+    "DISCONNECT": "Déconnexion",
+    "CONNECT": "Connexion"
   },
   "SERVER_ERRORS": {
     "END_BEFORE_START": "L'heure de fin doit être strictement après l'heure de début.",

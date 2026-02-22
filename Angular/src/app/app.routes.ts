@@ -17,7 +17,7 @@ import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
-import {PackageFormComponent} from './features/GabrielR/ticketing/admin/package-form/package-form';
+import { PackageFormComponent } from './features/GabrielR/ticketing/admin/package-form/package-form';
 import { PublicScheduleComponent } from './features/admin/public_programation/public_schedule';
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
@@ -74,26 +74,38 @@ export const routes: Routes = [
                 canActivate: [restrictionLoginGuard]
             },
 
+            // =========================================================
+            // FESTIVALS, DASHBOARD ET PERFORMANCES
+            // =========================================================
+            
+            // 1. Liste des festivals (Admin)
             {
-                path: 'dashboard',
-                component: DashboardComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-            {
-                path: 'performances/new',
-                component: AddPerformanceComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-            {
-                path: 'performances/:id/edit',
-                component: AddPerformanceComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-            {
-                path: 'admin',
+                path: 'admin/festivals',
                 component: AdministrationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
+            
+            // 2. Le Dashboard (Route globale pour le bouton de la Navbar)
+            {
+                path: 'admin/dashboard',
+                component: DashboardComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+
+            // 3. Formulaires de création/édition en Nested Routing (Ont besoin de l'ID du festival)
+            {
+                path: 'admin/festivals/:festivalId/performances/new',
+                component: AddPerformanceComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/festivals/:festivalId/performances/:perfId/edit',
+                component: AddPerformanceComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            
+            // =========================================================
+
             {
                 path: 'admin/ticketing',
                 component: AdminTicketingComponent,

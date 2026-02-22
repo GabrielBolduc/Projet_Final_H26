@@ -141,7 +141,7 @@ export class AddPerformanceComponent implements OnInit {
         });
         this.isLoading.set(false);
       },
-      error: () => this.router.navigate(['/dashboard'])
+      error: () => this.router.navigate(['/admin/dashboard'])
     });
   }
 
@@ -162,30 +162,34 @@ export class AddPerformanceComponent implements OnInit {
       end_at: endAt
     };
 
+    
     const request$ = (this.isEditMode() && this.performanceId)
-      ? this.performanceService.updatePerformance(this.performanceId, payload)
-      : this.performanceService.createPerformance(payload);
+      ? this.performanceService.updatePerformance(this.performanceId, payload) // si oui
+      : this.performanceService.createPerformance(payload); // si non
 
     request$.subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/admin/dashboard']);
       },
       error: (err) => {
         this.isLoading.set(false);
         
-        if (err.status === 422) {
+        if (err.status === 422) { // unprocessable entity
           const railsErrors = err.error?.errors || err.error?.data || err.error;
           const translatedErrorsList: string[] = [];
-
+          
+          // verifie que c'est bien un erreur objet rails
           if (railsErrors && typeof railsErrors === 'object') {
             Object.keys(railsErrors).forEach(field => {
               
-              // mettre en forme nom du champ 
+              // si pas base, creer un prefix
               const fieldName = field !== 'base' ? `${field.toUpperCase()} : ` : '';
 
+              // gestion tableau erreurs
               if (Array.isArray(railsErrors[field])) {
                 railsErrors[field].forEach((errorCode: string) => {
+                  // traduction / creer une cle d'erreur
                   const translationKey = `SERVER_ERRORS.${errorCode}`;
                   const translatedMessage = this.translate.instant(translationKey);
                   
@@ -221,7 +225,7 @@ export class AddPerformanceComponent implements OnInit {
   private combineDateTime(date: Date, time: string): string {
     const d = new Date(date);
     const [hours, minutes] = time.split(':');
-    d.setHours(+hours);
+    d.setHours(+hours);   
     d.setMinutes(+minutes);
     d.setSeconds(0);
     return d.toISOString();

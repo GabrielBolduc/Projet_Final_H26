@@ -35,6 +35,9 @@ export class DashboardComponent implements OnInit {
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
   
+  // 1. DÉCLARATION DE LA VARIABLE MANQUANTE
+  festivalId: number | null = null; 
+  
   currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
@@ -53,11 +56,31 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToAdd(): void { 
-    this.router.navigate(['/performances/new']); 
+    // Utilise l'ID du festival qu'on a récupéré lors du chargement
+    if (this.festivalId) {
+      this.router.navigate(['/admin/festivals', this.festivalId, 'performances', 'new']);
+    } else {
+      console.error("Aucun festival trouvé pour associer cette performance.");
+    }
   }
 
   navigateToEdit(id: number): void {
-    this.router.navigate(['/performances', id, 'edit'])
+    let targetFestivalId = this.festivalId; // Valeur par défaut
+    
+    // On cherche la prestation spécifique dans nos groupes pour récupérer SON festival à elle
+    const allGroups = this.performanceGroups();
+    for (const group of allGroups) {
+      const foundPerf = group.performances.find(p => p.id === id);
+      if (foundPerf) {
+        // Gère les deux formats possibles venant de ton API (objet imbriqué ou juste l'ID)
+        targetFestivalId = foundPerf.festival?.id || foundPerf.festival_id || this.festivalId;
+        break;
+      }
+    }
+
+    if (targetFestivalId) {
+      this.router.navigate(['/admin/festivals', targetFestivalId, 'performances', id, 'edit']);
+    }
   }
 
   loadPerformances(): void {
@@ -66,6 +89,14 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         const sortedData = data.sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
         this.performanceGroups.set(this.groupByDay(sortedData));
+        
+        // 2. RÉCUPÉRATION DE L'ID DU FESTIVAL
+        // On prend le festival de la toute première prestation chargée comme festival par défaut
+        if (sortedData.length > 0) {
+          const firstPerf = sortedData[0];
+          this.festivalId = firstPerf.festival?.id || firstPerf.festival_id || null;
+        }
+
         this.isLoading.set(false);
       },
       error: (err) => {

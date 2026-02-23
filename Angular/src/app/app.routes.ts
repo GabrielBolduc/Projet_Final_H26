@@ -73,26 +73,16 @@ export const routes: Routes = [
                 component: Signup,
                 canActivate: [restrictionLoginGuard]
             },
-
-            // =========================================================
-            // FESTIVALS, DASHBOARD ET PERFORMANCES
-            // =========================================================
-            
-            // 1. Liste des festivals (Admin)
             {
                 path: 'admin/festivals',
                 component: AdministrationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-            
-            // 2. Le Dashboard (Route globale pour le bouton de la Navbar)
             {
                 path: 'admin/dashboard',
                 component: DashboardComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-
-            // 3. Formulaires de création/édition en Nested Routing (Ont besoin de l'ID du festival)
             {
                 path: 'admin/festivals/:festivalId/performances/new',
                 component: AddPerformanceComponent,
@@ -104,8 +94,6 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             
-            // =========================================================
-
             {
                 path: 'admin/ticketing',
                 component: AdminTicketingComponent,

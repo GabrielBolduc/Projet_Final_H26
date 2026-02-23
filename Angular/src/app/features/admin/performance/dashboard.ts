@@ -8,6 +8,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
 
 interface DayGroup {
   date: Date;
@@ -34,20 +36,19 @@ export class DashboardComponent implements OnInit {
 
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
-  
-  // 1. DÉCLARATION DE LA VARIABLE MANQUANTE
-  festivalId: number | null = null; 
-  
-  currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
+
+  festivalId = signal<number | null>(null); 
+  currentLang = toSignal(
+    this.translate.onLangChange.pipe(
+      map(event => this.formatLang(event.lang))
+    ),
+    { initialValue: this.formatLang(this.translate.currentLang) }
+  );
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
 
   ngOnInit(): void {
     this.loadPerformances();
-
-    this.translate.onLangChange.subscribe((event) => {
-      this.currentLang.set(this.formatLang(event.lang));
-    });
   }
 
   private formatLang(lang: string | undefined): string {
@@ -56,30 +57,28 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToAdd(): void { 
-    // Utilise l'ID du festival qu'on a récupéré lors du chargement
-    if (this.festivalId) {
-      this.router.navigate(['/admin/festivals', this.festivalId, 'performances', 'new']);
+    const id = this.festivalId();
+    if (id) {
+      this.router.navigate(['/admin/festivals', id, 'performances', 'new']);
     } else {
       console.error("Aucun festival trouvé pour associer cette performance.");
     }
   }
 
-  navigateToEdit(id: number): void {
-    let targetFestivalId = this.festivalId; // Valeur par défaut
+  navigateToEdit(perfId: number): void {
+    let targetFestivalId = this.festivalId(); // On lit le Signal
     
-    // On cherche la prestation spécifique dans nos groupes pour récupérer SON festival à elle
     const allGroups = this.performanceGroups();
     for (const group of allGroups) {
-      const foundPerf = group.performances.find(p => p.id === id);
+      const foundPerf = group.performances.find(p => p.id === perfId);
       if (foundPerf) {
-        // Gère les deux formats possibles venant de ton API (objet imbriqué ou juste l'ID)
-        targetFestivalId = foundPerf.festival?.id || foundPerf.festival_id || this.festivalId;
+        targetFestivalId = foundPerf.festival?.id || foundPerf.festival_id || this.festivalId();
         break;
       }
     }
 
     if (targetFestivalId) {
-      this.router.navigate(['/admin/festivals', targetFestivalId, 'performances', id, 'edit']);
+      this.router.navigate(['/admin/festivals', targetFestivalId, 'performances', perfId, 'edit']);
     }
   }
 
@@ -90,11 +89,9 @@ export class DashboardComponent implements OnInit {
         const sortedData = data.sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
         this.performanceGroups.set(this.groupByDay(sortedData));
         
-        // 2. RÉCUPÉRATION DE L'ID DU FESTIVAL
-        // On prend le festival de la toute première prestation chargée comme festival par défaut
         if (sortedData.length > 0) {
           const firstPerf = sortedData[0];
-          this.festivalId = firstPerf.festival?.id || firstPerf.festival_id || null;
+          this.festivalId.set(firstPerf.festival?.id || firstPerf.festival_id || null);
         }
 
         this.isLoading.set(false);

@@ -14,7 +14,7 @@ interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class PerformanceService {
   private http = inject(HttpClient);
-  private readonly API_URL = `${environment.apiUrl}/performances`;
+  private readonly API_URL = '/api/performances';
 
   getPerformances(): Observable<Performance[]> {
     return this.http.get<ApiResponse<Performance[]>>(this.API_URL).pipe(

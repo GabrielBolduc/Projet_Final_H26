@@ -19,7 +19,7 @@ interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class FestivalService {
   private http = inject(HttpClient);
-  private readonly API_URL = `${environment.apiUrl}/festivals`; 
+  private readonly API_URL = '/api/festivals';
 
   getFestivals(): Observable<Festival[]> {
     return this.http.get<ApiResponse<Festival[]>>(this.API_URL).pipe(

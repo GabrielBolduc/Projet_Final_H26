@@ -22,6 +22,7 @@ class Api::AccommodationsController < ApiController
 
   def create
     @accommodation = Accommodation.new(accommodation_params)
+    @accommodation.festival = Festival.order(created_at: :desc).first
     if @accommodation.save
       render json: { status: "success", data: @accommodation }, status: :ok
     else

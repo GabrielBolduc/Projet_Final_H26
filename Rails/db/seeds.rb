@@ -414,16 +414,13 @@ end
 
 unit1.save!
 
-#f1 = Festival.create!(
- # name: "Festify 2025",
-  #start_at: Date.new(2025, 7, 10),
-  #end_at: Date.new(2025, 7, 12),
-  #daily_capacity: 5000,
-  #address: "123 Rue rue, Shawinigan, QC",
-  #coordinates: GeoPoint.new(46.52673340326582, -72.73930869816652),
-  #status: "COMPLETED",
-  #satisfaction: 4,
-  #other_income: 15000.00,
-  #other_expense: 5000.00,
-  #comment: "Bon festival"
-#)
+res1 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 15),
+  departure_at: Date.new(2026, 7, 17),
+  nb_of_people: 1,
+  reservation_name: "Jean Daniel",
+  phone_number: "8195338888",
+  user: c,
+  unit: unit1,
+  festival: f
+)

@@ -16,14 +16,13 @@ export interface ApiResponse<T = any> {
 export class PerformanceService {
   private http = inject(HttpClient);
   
-  // L'URL relative parfaite pour ton architecture (Angular dans Rails)
   private readonly API_URL = '/api/performances';
 
   getPerformances(): Observable<Performance[]> {
     return this.http.get<ApiResponse<Performance[]>>(this.API_URL).pipe(
       map(response => {
         if (response.status === 'success') return response.data!;
-        throw response; // Renvoie l'objet entier vers le bloc error
+        throw response; 
       }),
       catchError((error) => throwError(() => error))
     );

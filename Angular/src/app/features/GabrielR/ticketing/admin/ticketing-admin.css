@@ -155,21 +155,24 @@
 
 
 .ticket-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-  padding: 10px;
-  border-left: 2px solid var(--mat-sys-on-surface-variant);
-  background: var(--mat-sys-surface-container);
+  white-space: nowrap; 
+  text-align: center;
 }
 
-.action-btn {
-  color: var(--mat-sys-on-surface);
+.action-btn { 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 4px; 
+  transition: transform 0.2s; 
 }
-.action-btn.delete {
-  color: var(--mat-sys-error);
+
+.action-btn:hover { 
+  transform: scale(1.1); 
 }
+
+.action-btn.edit:hover { color: var(--mat-sys-primary); }
+.action-btn.delete:hover { color: var(--mat-sys-error); }
 
 .filters-section {
   display: flex;

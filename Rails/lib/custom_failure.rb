@@ -6,7 +6,7 @@ class CustomFailure < Devise::FailureApp
       self.response_body = {
         status: "error",
         message: i18n_message,
-        code: 401
+
       }.to_json
     else
       super

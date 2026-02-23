@@ -124,5 +124,25 @@ mat-form-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 16px;
   min-width: 0; /* prevents overflow in grid */
+}
+.priority-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skull-input {
+  display: flex;
+  gap: 6px;
+}
+
+.skull-icon {
+  cursor: pointer;
+  font-size: 28px;
+}
+
+.skull-icon.filled {
+  color: black;
 }

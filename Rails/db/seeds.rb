@@ -37,7 +37,7 @@ User.destroy_all
 
 
 c = Client.create!(
-    email: "client@gmail.com",
+    email: "client@test.com",
     password: "qwerty",
     password_confirmation: "qwerty",
     name: "Client #1",
@@ -60,16 +60,6 @@ Staff.create!(
     phone_number: "666-666-6666",
     ability: "Gestion des réservations"
 )
-
-task_one = Task.create!(
-    title: "Task #1",
-    description: "Description of Task #1",
-    difficulty: 3,
-    priority: 1,
-    reusable: true
-
-)
-
 
 f = Festival.create!(
   name: "Festify 2026",
@@ -231,6 +221,132 @@ unit1 = Unit.new(
   food_options: "Room service,Restaurant"
 )
 
+
+
+# Packages (Billetterie)
+
+p_general = Package.create!(
+  title: "Passeport Festival",
+  description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
+  price: 150.00,
+  quota: 500,
+  category: "general",
+  valid_at: f.start_at,
+  expired_at: f.end_at,
+  festival: f
+)
+
+p_daily = Package.create!(
+  title: "Billet Journalier",
+  description: "Accès pour une seule journée de festivités.",
+  price: 60.00,
+  quota: 1000,
+  category: "daily",
+  valid_at: f.start_at.to_time.change(hour: 10),
+  expired_at: f.start_at.to_time.change(hour: 17),
+  festival: f
+)
+
+p_evening = Package.create!(
+  title: "Billet Soirée",
+  description: "Pour les spectacles du soir !",
+  price: 72.99,
+  quota: 2400,
+  category: "evening",
+  valid_at: f.start_at.to_time.change(hour: 19),
+  expired_at: f.start_at.to_time.change(hour: 23),
+  festival: f
+)
+
+# Attachement des images
+images = {
+  p_general => 'general-ticket.webp',
+  p_daily   => 'daily-ticket.webp',
+  p_evening => 'evening-ticket.jpg',
+  unit1 => 'placeholder-image.jpg'
+}
+
+images.each do |package, filename|
+  path = Rails.root.join('db', 'files', filename)
+  
+  if File.exist?(path)
+    # Détermine le type d'image
+    content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
+
+    package.image.attach(
+      io: File.open(path),
+      filename: filename,
+      content_type: content_type 
+    )
+  else
+    puts "Image non trouvée : #{filename}"
+  end
+end
+
+unit1.save!
+
+
+# Packages (Billetterie)
+
+p_general = Package.create!(
+  title: "Passeport Festival",
+  description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
+  price: 150.00,
+  quota: 500,
+  category: "general",
+  valid_at: f.start_at,
+  expired_at: f.end_at,
+  festival: f
+)
+
+p_daily = Package.create!(
+  title: "Billet Journalier",
+  description: "Accès pour une seule journée de festivités.",
+  price: 60.00,
+  quota: 1000,
+  category: "daily",
+  valid_at: f.start_at.to_time.change(hour: 10),
+  expired_at: f.start_at.to_time.change(hour: 17),
+  festival: f
+)
+
+p_evening = Package.create!(
+  title: "Billet Soirée",
+  description: "Pour les spectacles du soir !",
+  price: 72.99,
+  quota: 2400,
+  category: "evening",
+  valid_at: f.start_at.to_time.change(hour: 19),
+  expired_at: f.start_at.to_time.change(hour: 23),
+  festival: f
+)
+
+# Attachement des images
+images = {
+  p_general => 'general-ticket.webp',
+  p_daily   => 'daily-ticket.webp',
+  p_evening => 'evening-ticket.jpg',
+  unit1 => 'placeholder-image.jpg'
+}
+
+images.each do |package, filename|
+  path = Rails.root.join('db', 'files', filename)
+  
+  if File.exist?(path)
+    # Détermine le type d'image
+    content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
+
+    package.image.attach(
+      io: File.open(path),
+      filename: filename,
+      content_type: content_type 
+    )
+  else
+    puts "Image non trouvée : #{filename}"
+  end
+end
+
+unit1.save!
 
 # Packages (Billetterie)
 

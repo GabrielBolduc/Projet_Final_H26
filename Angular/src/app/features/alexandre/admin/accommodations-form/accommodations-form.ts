@@ -30,16 +30,20 @@ export class AccommodationsForm implements OnInit {
   coordRegex = /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/;
   
   form: FormGroup = this.fb.group({
-    name: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.maxLength(100)]],
     category: ['hotel', [Validators.required]],
-    address: ['', [Validators.required]],
+    address: ['', [Validators.required, Validators.maxLength(255)]],
     coordinates: ['', [Validators.pattern(this.coordRegex)]], 
     latitude: [0],
     longitude: [0],
     shuttle: [false],
     time_car: ['00:00'],
     time_walk: ['00:00'],
-    commission: [0, [Validators.min(0)]],
+    commission: [0, [
+      Validators.required, 
+      Validators.min(0), 
+      Validators.max(29.99)
+    ]],
   });
 
   accommodationId = signal<number | null>(null);

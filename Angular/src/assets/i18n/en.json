@@ -2,6 +2,7 @@
   "NAV": {
     "HOME": "Home",
     "RESERVATION": "Reservation",
+    "ACCOMMODATIONS": "Accommodations",
     "TICKETING": "Ticketing",
     "SCHEDULE": "Schedule",
     "ADMIN": "Admin"

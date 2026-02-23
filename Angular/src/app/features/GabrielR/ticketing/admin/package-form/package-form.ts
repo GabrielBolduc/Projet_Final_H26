@@ -64,8 +64,10 @@ export class PackageFormComponent implements OnInit {
 
   form!: FormGroup;
   selectedFile: File | null = null;
-  previewUrl: string | null = null;
-  existingImageUrl: string | null = null;
+  previewUrl = signal<string | null>(null);
+  existingImageUrl = signal<string | null>(null);
+
+  displayImageUrl = computed(() => this.previewUrl() ?? this.existingImageUrl());
   
   isEditMode = signal(false);
   packageId: number | null = null;
@@ -116,7 +118,7 @@ export class PackageFormComponent implements OnInit {
         const validAt = new Date(data.valid_at);
         const expiredAt = new Date(data.expired_at);
         
-        this.existingImageUrl = data.image_url;
+        this.existingImageUrl.set(data.image_url ?? null);
 
         this.form.patchValue({
           title: data.title,
@@ -250,9 +252,7 @@ export class PackageFormComponent implements OnInit {
     if (file) {
       this.selectedFile = file;
       const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result as string;
-      };
+      reader.onload = () => { this.previewUrl.set(reader.result as string); };
       reader.readAsDataURL(file);
     }
   }

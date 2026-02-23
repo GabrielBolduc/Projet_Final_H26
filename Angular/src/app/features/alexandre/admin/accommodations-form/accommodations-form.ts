@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { AccommodationsService } from '@core/services/accommodations.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -17,7 +18,7 @@ import { AccommodationsService } from '@core/services/accommodations.service';
   imports: [
     ReactiveFormsModule, MatCardModule, MatFormFieldModule, 
     MatInputModule, MatSelectModule, MatSlideToggleModule, 
-    MatButtonModule, RouterLink, MatIconModule, 
+    MatButtonModule, RouterLink, MatIconModule, TranslateModule
   ],
   templateUrl: './accommodations-form.html',
   styleUrl: './accommodations-form.css'
@@ -27,6 +28,7 @@ export class AccommodationsForm implements OnInit {
   private route = inject(ActivatedRoute); 
   private router = inject(Router);        
   private service = inject(AccommodationsService);
+  private translate = inject(TranslateService);
   coordRegex = /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/;
   
   form: FormGroup = this.fb.group({
@@ -157,8 +159,9 @@ export class AccommodationsForm implements OnInit {
     if (!id) return;
     const categoryValue = this.form.get('category')?.value;
     const categoryLabel = this.getCategoryString(categoryValue);
+    const confirmMsg = this.translate.instant('ACCOMMODATIONS.FORM.DELETE_CONFIRM');
 
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet hébergement ? Cette action est irréversible.')) {
+    if (confirm(confirmMsg)) {
       this.isLoading.set(true);
       this.service.deleteAccommodation(id).subscribe({
         next: () => {

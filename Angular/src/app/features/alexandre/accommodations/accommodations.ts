@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'; 
 import { Observable, switchMap, map } from 'rxjs';
+import { TranslateModule } from '@ngx-translate/core';
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { Accommodation } from '@core/models/accommodation';
 import { AuthService } from '@core/services/auth.service';
@@ -19,6 +20,7 @@ import { AuthService } from '@core/services/auth.service';
     MatButtonModule,
     RouterLink,
     RouterLinkActive,
+    TranslateModule,
   ],
   templateUrl: './accommodations.html',
   styleUrls: ['./accommodations.css']

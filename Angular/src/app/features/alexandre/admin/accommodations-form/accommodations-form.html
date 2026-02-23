@@ -6,10 +6,10 @@
             class="delete-btn-top" 
             (click)="onDelete()"
             [disabled]="isLoading()">
-      <mat-icon>delete_forever</mat-icon> SUPPRIMER
+      <mat-icon>delete_forever</mat-icon> {{ 'ACCOMMODATIONS.FORM.DELETE' | translate }}
     </button>
   }
-  <h2>{{ isEditMode() ? 'Modifier l\'hébergement' : 'Nouvel hébergement' }}</h2>
+  <h2>{{ (isEditMode() ? 'ACCOMMODATIONS.FORM.TITLE_EDIT' : 'ACCOMMODATIONS.FORM.TITLE_NEW') | translate }}</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
     
@@ -23,45 +23,45 @@
 
     <div class="grid-row-2">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Nom de l'hébergement</mat-label>
+        <mat-label>{{ 'ACCOMMODATIONS.FORM.NAME' | translate }}</mat-label>
         <input matInput formControlName="name" placeholder="Ex: Grand Hôtel" maxlength="100" #nameInput>
         <mat-hint align="end">{{ nameInput.value.length }} / 100</mat-hint>
-        @if (form.get('name')?.hasError('required')) { <mat-error>Requis</mat-error> }
-        @if (form.get('name')?.hasError('maxlength')) { <mat-error>Maximum 100 caractères</mat-error> }
+        @if (form.get('name')?.hasError('required')) { <mat-error>{{ 'ACCOMMODATIONS.FORM.ERRORS.REQUIRED' | translate }}</mat-error> }
+        @if (form.get('name')?.hasError('maxlength')) { <mat-error>{{ 'ACCOMMODATIONS.FORM.ERRORS.MAX_LENGTH' | translate:{length: 100} }}</mat-error> }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Catégorie</mat-label>
+        <mat-label>{{ 'ACCOMMODATIONS.FORM.CATEGORY' | translate }}</mat-label>
         <mat-select formControlName="category">
-          <mat-option [value]="0">Camping</mat-option>
-          <mat-option [value]="1">Hotel</mat-option>
+          <mat-option [value]="0">{{ 'ACCOMMODATIONS.DETAILS.CAMPING' | translate }}</mat-option>
+          <mat-option [value]="1">{{ 'ACCOMMODATIONS.DETAILS.HOTEL' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Adresse</mat-label>
+      <mat-label>{{ 'ACCOMMODATIONS.FORM.ADDRESS' | translate }}</mat-label>
       <input matInput formControlName="address" maxlength="255" #addrInput>
       <mat-hint align="end">{{ addrInput.value.length }} / 255</mat-hint>
-      @if (form.get('address')?.hasError('required')) { <mat-error>Requis</mat-error> }
-      @if (form.get('address')?.hasError('maxlength')) { <mat-error>Maximum 255 caractères</mat-error> }
+      @if (form.get('address')?.hasError('required')) { <mat-error>{{ 'ACCOMMODATIONS.FORM.ERRORS.REQUIRED' | translate }}</mat-error> }
+      @if (form.get('address')?.hasError('maxlength')) { <mat-error>{{ 'ACCOMMODATIONS.FORM.ERRORS.MAX_LENGTH' | translate:{length: 255} }}</mat-error> }
     </mat-form-field>
 
     <div class="grid-row-3">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Coordonnées (Lat, Long)</mat-label>
+        <mat-label>{{ 'ACCOMMODATIONS.FORM.COORDINATES' | translate }}</mat-label>
         <input matInput 
               placeholder="46.609, -72.704" 
               formControlName="coordinates">
         @if (form.get('coordinates')?.errors?.['pattern']) {
           <mat-error>
-            Format invalide. <strong>46.609, -72.704</strong>
+            {{ 'ACCOMMODATIONS.FORM.ERRORS.PATTERN' | translate }}
           </mat-error>
         }
       </mat-form-field>
 
       <div class="toggle-container">
-        <mat-slide-toggle formControlName="shuttle">Navette</mat-slide-toggle>
+        <mat-slide-toggle formControlName="shuttle">{{ 'ACCOMMODATIONS.FORM.SHUTTLE' | translate }}</mat-slide-toggle>
       </div>
       <div></div> 
     </div>
@@ -69,25 +69,25 @@
     <div class="grid-row-3">
       <div class="grid-row-2">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Temps (Voiture)</mat-label>
+          <mat-label>{{ 'ACCOMMODATIONS.FORM.TIME_CAR' | translate }}</mat-label>
           <input matInput type="time" formControlName="time_car">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Temps (Marche)</mat-label>
+          <mat-label>{{ 'ACCOMMODATIONS.FORM.TIME_WALK' | translate }}</mat-label>
           <input matInput type="time" formControlName="time_walk">
         </mat-form-field>
       </div>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Commission (%)</mat-label>
+        <mat-label>{{ 'ACCOMMODATIONS.FORM.COMMISSION' | translate }}</mat-label>
         <input matInput type="number" formControlName="commission" min="0" max="29.99">
         
         @if (form.get('commission')?.hasError('min')) {
-          <mat-error>La commission doit être au moins <strong>0%</strong></mat-error>
+          <mat-error>{{ 'ACCOMMODATIONS.FORM.ERRORS.MIN_COMMISSION' | translate }}</mat-error>
         }
         @if (form.get('commission')?.hasError('max')) {
-          <mat-error>La commission doit être strictement <strong>inférieure à 30%</strong></mat-error>
+          <mat-error>{{ 'ACCOMMODATIONS.FORM.ERRORS.MAX_COMMISSION' | translate }}</mat-error>
         }
       </mat-form-field>
     </div>
@@ -98,14 +98,12 @@
           [routerLink]="isEditMode() ? ['/accommodations-details', accommodationId()] : ['/accommodations']"
           [queryParams]="{ category: getCategoryString(form.get('category')?.value) }"
           class="action-btn cancel-btn">
-        Annuler
+        {{ 'ACCOMMODATIONS.FORM.CANCEL' | translate }}
       </button>
       <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
-        @if (isLoading()) {
-          <span>Traitement...</span> 
-        } @else {
-          {{ isEditMode() ? 'Mettre à jour' : 'Enregistrer' }}
-        }
+        {{ (isLoading() ? 'ACCOMMODATIONS.FORM.PROCESSING'
+         : (isEditMode() ? 'ACCOMMODATIONS.FORM.SUBMIT_UPDATE' 
+         : 'ACCOMMODATIONS.FORM.SUBMIT_SAVE')) | translate }}
       </button>
     </div>
   </form>

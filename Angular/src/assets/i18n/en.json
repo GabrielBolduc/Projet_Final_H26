@@ -110,6 +110,7 @@
     "TITLE_CREATE": "New Task",
     "TITLE_UPDATE": "Edit Task",
     "REUSABLE_TASKS": "Reusable Tasks",
-    "SELECT_REUSABLE": "Select reusable tasks"
+    "SELECT_REUSABLE": "Select reusable tasks",
+    "REQUIS": "Required"
   }
 }

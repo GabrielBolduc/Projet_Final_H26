@@ -15,7 +15,7 @@ interface ApiResponse<T> {
     totalItems: number;
   };
   message?: string;
-  code?: number;   
+   
 }
 
 
@@ -68,8 +68,13 @@ export class TaskService {
       );  
     }
 
-  createTask(task: TaskPayload) {
-    return this.http.post<ApiResponse<Task>>(`api/tasks`, { task }).pipe(
+  createTask(task: FormData, file?: File) {
+    
+    
+    if (file) {
+      task.append('task[file]', file);
+    }
+    return this.http.post<ApiResponse<Task>>(`api/tasks`, task).pipe(
 
       map(response => {
                 console.log(response)
@@ -83,8 +88,12 @@ export class TaskService {
 
   }
   
-  updateTask(id: number|null, task: TaskPayload) {
-    return this.http.patch<ApiResponse<Task>>(`api/tasks/${id}`, { task }).pipe(
+  updateTask(id: number|null, task: FormData, file?: File) {
+   
+    if (file) {
+      task.append("task[file]", file);
+    }
+    return this.http.patch<ApiResponse<Task>>(`api/tasks/${id}`, task).pipe(
 
       map(response => {
                 console.log(response)

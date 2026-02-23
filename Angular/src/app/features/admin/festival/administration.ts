@@ -7,11 +7,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FestivalService } from '../../../core/services/festival.service';
 import { Festival } from '../../../core/models/festival';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-administration',
   standalone: true,
-  imports: [CommonModule, DatePipe, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, TranslateModule],
+  imports: [CommonModule, DatePipe, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, TranslateModule, RouterModule],
   templateUrl: './administration.html',
   styleUrls: ['./administration.css']
 })

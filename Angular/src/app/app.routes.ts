@@ -7,7 +7,7 @@ import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
 import { AccommodationsDetails } from '@features/alexandre/accommodations-details/accommodations-details';
-import { AccommodationsForm } from '@features/alexandre/accommodations-form/accommodations-form';
+import { AccommodationsForm } from '@features/alexandre/admin/accommodations-form/accommodations-form';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/admin/performance/dashboard';
 import { AdministrationComponent } from './features/admin/festival/administration';
@@ -16,9 +16,9 @@ import { TaskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
-import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing';
-import {PackageFormComponent} from './features/GabrielR/ticketing/admin/package-form/package-form';
-
+import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
+import { PackageFormComponent } from './features/GabrielR/ticketing/admin/package-form/package-form';
+import { PublicScheduleComponent } from './features/admin/public_programation/public_schedule';
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin.guard';
@@ -31,6 +31,10 @@ export const routes: Routes = [
             {
                 path: '',
                 component: Home
+            },
+            {
+                path: 'programmation',
+                component: PublicScheduleComponent
             },
             {
                 path: 'reservations',
@@ -46,11 +50,16 @@ export const routes: Routes = [
                 component: Accommodations
             },
             {
-                path: 'accommodations-details',
+                path: 'accommodations-details/:id',
                 component: AccommodationsDetails
             },
             {
                 path: 'accommodations-form',
+                component: AccommodationsForm,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'accommodations-form/:id',
                 component: AccommodationsForm,
                 canActivate: [AuthGuard, adminGuard]
             },
@@ -64,27 +73,27 @@ export const routes: Routes = [
                 component: Signup,
                 canActivate: [restrictionLoginGuard]
             },
-
             {
-                path: 'dashboard',
+                path: 'admin/festivals',
+                component: AdministrationComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/dashboard',
                 component: DashboardComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'performances/new',
+                path: 'admin/festivals/:festivalId/performances/new',
                 component: AddPerformanceComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'performances/:id/edit',
+                path: 'admin/festivals/:festivalId/performances/:perfId/edit',
                 component: AddPerformanceComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-            {
-                path: 'admin',
-                component: AdministrationComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
+            
             {
                 path: 'admin/ticketing',
                 component: AdminTicketingComponent,

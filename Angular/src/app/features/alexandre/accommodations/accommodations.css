@@ -1,0 +1,104 @@
+.full-height {
+  position: relative; 
+  height: 80vh;
+  overflow-y: auto;
+}
+
+.accommodations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 150px);
+  gap: 25px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.fest-card {
+  width: 150px; 
+  background: var(--mat-sys-surface-container-low);
+  border: 2px solid var(--mat-sys-on-surface);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.fest-card:hover {
+  transform: translateX(5px); 
+  box-shadow: 8px 8px 0px var(--mat-sys-primary);
+}
+
+.nav-image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-bottom: 2px solid var(--mat-sys-on-surface);
+}
+
+.nav-label {
+  padding: 10px;
+  text-align: center;
+  color: black;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-label .title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sub-label {
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.main-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px 40px 10px 0; 
+}
+
+.brutalist-add-btn {
+  background-color: #FFF ;
+  color: var(--mat-sys-primary) ;
+  border: 2px solid black ;
+  border-radius: 12px ;
+  font-weight: 900 ;
+  height: 50px ;
+  padding: 0 25px ;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brutalist-add-btn:hover {
+  background-color: var(--mat-sys-surface-container-low) ;
+}
+
+.brutalist-add-btn mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+
+.accommodations-grid {
+  margin-top: 0px;
+}
+

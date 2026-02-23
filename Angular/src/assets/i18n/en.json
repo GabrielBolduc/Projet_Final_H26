@@ -2,7 +2,16 @@
   "NAV": {
     "HOME": "Home",
     "RESERVATION": "Reservation",
-    "TICKETING": "Ticketing"
+    "TICKETING": "Ticketing",
+    "SCHEDULE": "Schedule",
+    "ADMIN": "Admin"
+  },
+  "PUBLIC": {
+    "PROGRAMMATION": "Schedule",
+    "LOADING": "Loading schedule...",
+    "NO_FESTIVAL_TITLE": "No ongoing festival",
+    "NO_FESTIVAL_DESC": "There is currently no active festival. Please check back later!",
+    "NO_PERFORMANCES": "No performances are currently scheduled for this festival."
   },
   "AUTH": {
     "LOGOUT": "Disconnect",
@@ -25,7 +34,9 @@
     "NO_ACCOUNT": "Don't have an account?",
     "SIGNUP_LINK": "Sign up",
     "ALREADY_ACCOUNT": "Already have an account?",
-    "LOGIN_LINK": "Connect"
+    "LOGIN_LINK": "Connect",
+    "DISCONNECT": "Disconnect",
+    "CONNECT": "Connect"
   },
   "SERVER_ERRORS": {
     "END_BEFORE_START": "End time must be strictly after start time.",
@@ -48,7 +59,7 @@
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "New Performance",
-    "DASHBOARD": "Dashboard",
+    "DASHBOARD": "Performances",
     "LOADING": "Loading schedule...",
     "NOTHING": "No performance is scheduled.",
     "ADD": "Add",
@@ -86,6 +97,51 @@
     "PROG": "Schedule",
     "TASK": "Tasks",
     "TICKET": "Ticketing"
+  },
+  "TICKETING_ADMIN": {
+    "NEW_PACKAGE": "New Package",
+    "TITLE": "Ticketing",
+    "SEARCH_TITLE": "Title",
+    "SORT_BY": "Sort by quantity",
+    "SORT_ALL": "All",
+    "SORT_ASC": "Quantity ascending",
+    "SORT_DESC": "Quantity descending",
+    "DATE": "Date:",
+    "FROM": "From",
+    "TO": "to",
+    "SALES": "Sales",
+    "DELETE_CONFIRM": "Delete {{title}}?",
+    "DELETE_ERROR": "Unable to delete this package."
+  },
+  "PACKAGE_FORM": {
+    "EDIT_TITLE": "Edit Package",
+    "NEW_TITLE": "New Package",
+    "PACKAGE_TITLE": "Title",
+    "TITLE_PLACEHOLDER": "Ex: Daily Pass",
+    "REQUIRED": "Required",
+    "MAX_50": "Maximum 50 characters",
+    "DESCRIPTION": "Description",
+    "MAX_100": "Maximum 100 characters",
+    "PRICE": "Price ($)",
+    "PRICE_INVALID": "Invalid price",
+    "QUOTA": "Quota",
+    "MAX_PLACES": "Max {{cap}} places",
+    "START_DATE": "Start Date",
+    "TIME": "Time",
+    "END_DATE": "End Date",
+    "END_AFTER_START": "End time must be strictly after start time.",
+    "START_BEFORE_FESTIVAL": "Cannot start before opening ({{date}}).",
+    "END_AFTER_FESTIVAL": "Cannot end after closing ({{date}}).",
+    "TYPE": "Type",
+    "TYPE_GENERAL": "General",
+    "TYPE_DAILY": "Daily",
+    "TYPE_EVENING": "Evening",
+    "BACKGROUND_IMAGE": "Background image",
+    "CANCEL": "Cancel",
+    "UPDATE": "Update",
+    "SAVE": "Save",
+    "PROCESSING": "Processing...",
+    "GENERIC_ERROR": "An error occurred."
   },
   "TACHES": {
     "TITLE": "Tasks",

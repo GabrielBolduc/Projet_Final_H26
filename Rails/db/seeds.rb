@@ -21,6 +21,8 @@ Unit.destroy_all
 Package.destroy_all
 
 Accommodation.destroy_all
+Unit.destroy_all
+Reservation.destroy_all
 Performance.destroy_all
 
 Stage.destroy_all
@@ -67,126 +69,7 @@ task_one = Task.create!(
     reusable: true
 
 )
-task_one.file.attach(
-  io: File.open(Rails.root.join('db/files/images.jpg')),
-  filename: 'images.jpg',
-  content_type: 'images/jpg'
-)
 
-task_tow = Task.create!(
-    title: "installation de la scène",
-    description: "Installation de la scène pour le concert",
-    difficulty: 5,
-    priority: 3,
-    reusable: false
-)
-task_tow.file.attach(
-  io: File.open(Rails.root.join('db/files/test.txt')),
-  filename: 'test.txt',
-  content_type: 'test/txt'
-)
-
-task_three = Task.create!(
-    title: "reception du materiel",
-    description: "receptionné la commande de projecteur de projecteur & co",
-    difficulty: 1,
-    priority: 5,
-    reusable: true
-)
-task_tow.file.attach(
-  io: File.open(Rails.root.join('db/files/meme-carre-chat-vibrant-simple_742173-4493.avif')),
-  filename: 'meme-carre-chat-vibrant-simple_742173-4493.avif',
-  content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
-)
-
-task_four = Task.create!(
-    title: "nettoyage du site",
-    description: "nettoyer le site après le festival",  
-    difficulty: 2,
-    priority: 4,
-    reusable: false
-)
-task_four.file.attach(
-  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
-  filename: 'téléchargement (1).jpg',
-  content_type: 'téléchargement (1)/jpg'
-)
-
-task_five = Task.create!(
-    title: "gestion des déchets",
-    description: "gérer les déchets pendant et après le festival",
-    difficulty: 4,
-    priority: 2,
-    reusable: true
-)
-task_five.file.attach(
-  io: File.open(Rails.root.join('db/files/téléchargement.jpg')),
-  filename: 'téléchargement.jpg',
-  content_type: 'téléchargement/jpg'
-)
-
-task_six = Task.create!(
-    title: "sécurité du site",
-    description: "assurer la sécurité du site pendant le festival",
-    difficulty: 5,
-    priority: 1,
-    reusable: true
-)
-task_six.file.attach(
-  io: File.open(Rails.root.join('db/files/images.jpg')),
-  filename: 'images.jpg',
-  content_type: 'images/jpg'
-)
-
-task_seven = Task.create!(
-    title: "coordination des bénévoles",
-    description: "coordonner les bénévoles pendant le festival",
-    difficulty: 3,
-    priority: 3,
-    reusable: true
-)
-task_seven.file.attach(
-  io: File.open(Rails.root.join('db/files/test.txt')),
-  filename: 'test.txt',
-  content_type: 'test/txt'
-) 
-
-
-Staff.create!(
-    email: "cuisto@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "Cuisine",
-    phone_number: "666-666-6666",
-    ability: "Gestion de l'alimentation, préparation des repas, gestion des stocks"
-)
-
-Staff.create!(
-    email: "regi@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "Regisseur",
-    phone_number: "666-666-6666",
-    ability: "Gestion de la logistique, coordination des équipes, supervision des opérations sur le terrain"
-)
-
-Staff.create!(
-    email: "handyman@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "Handy",
-    phone_number: "666-666-6666",
-    ability: " Gestion de la maintenance, réparation des équipements, gestion des installations techniques"
-)
-
-Staff.create!(
-    email: "security@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "hight admiral Brash",
-    phone_number: "666-666-6666",
-    ability: "Gestion de la sécurité, coordination des forces de l'ordre, gestion des menaces"
-)
 
 f = Festival.create!(
   name: "Festify 2026",
@@ -209,7 +92,8 @@ f1 = Festival.create!(
   end_at: Date.new(2025, 7, 12),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  coordinates: GeoPoint.new(46.52673340326582, -72.73930869816652),
+  latitude: 46.52673340326582,
+  longitude: -72.73930869816652,
   status: "COMPLETED",
   satisfaction: 4,
   other_income: 15000.00,
@@ -335,63 +219,15 @@ acc2 = Accommodation.create!(
   festival: f
 )
 
-
-# Packages (Billetterie)
-
-p_general = Package.create!(
-  title: "Passeport Festival",
-  description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
-  price: 150.00,
-  quota: 500,
-  category: "general",
-  valid_at: f.start_at,
-  expired_at: f.end_at,
-  festival: f
+unit1 = Unit.new(
+  type: "SimpleRoom",
+  accommodation: acc1,
+  cost_person_per_night: 55.00,
+  quantity: 10,
+  wifi: true,
+  water: 2 ,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
 )
 
-p_daily = Package.create!(
-  title: "Billet Journalier",
-  description: "Accès pour une seule journée de festivités.",
-  price: 60.00,
-  quota: 1000,
-  category: "daily",
-  valid_at: f.start_at.to_time.change(hour: 10),
-  expired_at: f.start_at.to_time.change(hour: 17),
-  festival: f
-)
-
-p_evening = Package.create!(
-  title: "Billet Soirée",
-  description: "Pour les spectacles du soir !",
-  price: 72.99,
-  quota: 2400,
-  category: "evening",
-  valid_at: f.start_at.to_time.change(hour: 19),
-  expired_at: f.start_at.to_time.change(hour: 23),
-  festival: f
-)
-
-# Attachement des images
-images = {
-  p_general => 'general-ticket.webp',
-  p_daily   => 'daily-ticket.webp',
-  p_evening => 'evening-ticket.jpg'
-}
-
-images.each do |package, filename|
-  path = Rails.root.join('db', 'files', filename)
-  
-  if File.exist?(path)
-    # Détermine le type d'image
-    content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
-
-    package.image.attach(
-      io: File.open(path),
-      filename: filename,
-      content_type: content_type 
-    )
-    puts "Image attachée à #{package.title} (#{content_type})"
-  else
-    puts "Image non trouvée : #{filename}"
-  end
-end

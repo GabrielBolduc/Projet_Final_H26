@@ -1,0 +1,97 @@
+<mat-card class="perf-card">
+
+  @if (isEditMode()) {
+    <button mat-flat-button 
+            type="button" 
+            class="delete-btn-top" 
+            (click)="onDelete()"
+            [disabled]="isLoading()">
+      <mat-icon>delete_forever</mat-icon> SUPPRIMER
+    </button>
+  }
+  <h2>{{ isEditMode() ? 'Modifier l\'hébergement' : 'Nouvel hébergement' }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
+    
+    @if (serverErrors().length > 0) {
+      <div class="form-error">
+        @for (error of serverErrors(); track $index) {
+          <div>{{ error }}</div>
+        }
+      </div>
+    }
+
+    <div class="grid-row-2">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom de l'hébergement</mat-label>
+        <input matInput formControlName="name" placeholder="Ex: Grand Hôtel">
+        @if (form.get('name')?.hasError('required')) { <mat-error>Requis</mat-error> }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Catégorie</mat-label>
+        <mat-select formControlName="category">
+          <mat-option [value]="0">Camping</mat-option>
+          <mat-option [value]="1">Hotel</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Adresse</mat-label>
+      <input matInput formControlName="address">
+      @if (form.get('address')?.hasError('required')) { <mat-error>Requis</mat-error> }
+    </mat-form-field>
+
+    <div class="grid-row-3">
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Latitude</mat-label>
+          <input matInput type="number" formControlName="latitude">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Longitude</mat-label>
+          <input matInput type="number" formControlName="longitude">
+        </mat-form-field>
+      </div>
+
+      <div class="toggle-container">
+        <mat-slide-toggle formControlName="shuttle">Navette</mat-slide-toggle>
+      </div>
+      <div></div> 
+    </div>
+
+    <div class="grid-row-3">
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Temps (Voiture)</mat-label>
+          <input matInput type="time" formControlName="time_car">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Temps (Marche)</mat-label>
+          <input matInput type="time" formControlName="time_walk">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Commission (%)</mat-label>
+        <input matInput type="number" formControlName="commission">
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/accommodations" class="action-btn cancel-btn">
+        Annuler
+      </button>
+      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
+        @if (isLoading()) {
+          <span>Traitement...</span> 
+        } @else {
+          {{ isEditMode() ? 'Mettre à jour' : 'Enregistrer' }}
+        }
+      </button>
+    </div>
+  </form>
+</mat-card>

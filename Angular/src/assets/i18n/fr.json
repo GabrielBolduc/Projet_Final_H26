@@ -2,7 +2,16 @@
   "NAV": {
     "HOME": "Accueil",
     "RESERVATION": "Réservation",
-    "TICKETING": "Billetterie"
+    "TICKETING": "Billetterie",
+    "SCHEDULE": "Programmation",
+    "ADMIN": "Administration"
+  },
+  "PUBLIC": {
+    "PROGRAMMATION": "Programmation",
+    "LOADING": "Chargement de la programmation...",
+    "NO_FESTIVAL_TITLE": "Aucun festival en cours",
+    "NO_FESTIVAL_DESC": "Il n'y a actuellement aucun festival actif. Revenez plus tard !",
+    "NO_PERFORMANCES": "Aucune performance n'est actuellement prévue pour ce festival."
   },
   "AUTH": {
     "LOGOUT": "Déconnexion",
@@ -25,7 +34,9 @@
     "NO_ACCOUNT": "Pas encore de compte ?",
     "SIGNUP_LINK": "S'inscrire",
     "ALREADY_ACCOUNT": "Déjà un compte ?",
-    "LOGIN_LINK": "Se connecter"
+    "LOGIN_LINK": "Se connecter",
+    "DISCONNECT": "Déconnexion",
+    "CONNECT": "Connexion"
   },
   "SERVER_ERRORS": {
     "END_BEFORE_START": "L'heure de fin doit être strictement après l'heure de début.",
@@ -48,7 +59,7 @@
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "Nouvelle Performance",
-    "DASHBOARD": "Tableau de bord",
+    "DASHBOARD": "Performances",
     "LOADING": "Chargement du planning...",
     "NOTHING": "Aucune performance n'est programmée.",
     "ADD": "Ajouter",
@@ -86,6 +97,51 @@
     "PROG": "Programmation",
     "TASK": "Tâches",
     "TICKET": "Billetterie"
+  },
+  "TICKETING_ADMIN": {
+    "NEW_PACKAGE": "Nouveau Forfait",
+    "TITLE": "Billetterie",
+    "SEARCH_TITLE": "Titre",
+    "SORT_BY": "Trier par quantité",
+    "SORT_ALL": "Tous",
+    "SORT_ASC": "Quantité croissante",
+    "SORT_DESC": "Quantité décroissante",
+    "DATE": "Date :",
+    "FROM": "Du",
+    "TO": "au",
+    "SALES": "Ventes",
+    "DELETE_CONFIRM": "Supprimer {{title}} ?",
+    "DELETE_ERROR": "Impossible de supprimer ce forfait."
+  },
+  "PACKAGE_FORM": {
+    "EDIT_TITLE": "Modifier le Billet",
+    "NEW_TITLE": "Nouveau Billet",
+    "PACKAGE_TITLE": "Titre",
+    "TITLE_PLACEHOLDER": "Ex: Billet Journalier",
+    "REQUIRED": "Requis",
+    "MAX_50": "Maximum 50 caractères",
+    "DESCRIPTION": "Description",
+    "MAX_100": "Maximum 100 caractères",
+    "PRICE": "Prix ($)",
+    "PRICE_INVALID": "Prix invalide",
+    "QUOTA": "Quota",
+    "MAX_PLACES": "Max {{cap}} places",
+    "START_DATE": "Date début",
+    "TIME": "Heure",
+    "END_DATE": "Date fin",
+    "END_AFTER_START": "L'heure de fin doit être strictement après le début.",
+    "START_BEFORE_FESTIVAL": "Début impossible avant l'ouverture ({{date}}).",
+    "END_AFTER_FESTIVAL": "Fin impossible après la fermeture ({{date}}).",
+    "TYPE": "Type",
+    "TYPE_GENERAL": "Général",
+    "TYPE_DAILY": "Journalier",
+    "TYPE_EVENING": "Soirée",
+    "BACKGROUND_IMAGE": "Image de fond",
+    "CANCEL": "Annuler",
+    "UPDATE": "Mettre à jour",
+    "SAVE": "Enregistrer",
+    "PROCESSING": "Traitement...",
+    "GENERIC_ERROR": "Une erreur s'est produite."
   },
   "TACHES": {
     "TITLE": "Tâches",

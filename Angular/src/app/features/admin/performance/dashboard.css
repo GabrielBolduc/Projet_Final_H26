@@ -21,22 +21,21 @@
 .header-title {
   font-size: 2.2rem;
   margin: 0;
-  font-weight: 800;
+  font-weight: 500; 
   text-align: center;
-  flex: 1;
+  flex: 1; 
   color: var(--mat-sys-primary); 
 }
 
 .btn-new {
   flex: 1;
-  max-width: 250px;
-  border: 2px solid var(--mat-sys-primary) !important;
-  color: var(--mat-sys-primary) !important;
+  max-width: 210px;
+  border: 2px solid var(--mat-sys-primary);
+  color: var(--mat-sys-primary);
   font-weight: bold;
   height: 40px;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .spacer-right {
@@ -44,19 +43,24 @@
   max-width: 250px;
 }
 
-.admin-section {
-  margin-bottom: 60px;
-  width: 100%;
+
+/* tbl*/
+.festify-grid-table th.mat-mdc-header-cell {
+  color: var(--mat-sys-primary); 
+  font-weight: 800 ; 
+  font-size: 0.95rem;
+  border-bottom: 2px solid; 
+  padding: 16px 12px;
+
 }
 
-.section-label {
-  font-size: 1.4rem;
-  margin-bottom: 20px;
-  font-weight: 700;
-  border-left: 5px solid var(--mat-sys-primary); 
-  padding-left: 15px;
-  color: var(--mat-sys-primary); 
+/* empeche marge a droite */
+.festify-grid-table th.mat-mdc-header-cell:last-child,
+.festify-grid-table td.mat-cell:last-child {
+  text-align: center;
+  padding-right: 12px; 
 }
+
 
 .grid-table-container {
   width: 100%; 
@@ -64,8 +68,6 @@
   background: var(--mat-sys-surface-container-low);
   border: 2px solid var(--mat-sys-on-surface);
   border-radius: 15px;
-  
-  /* scroll horizontal*/
   overflow-x: auto; 
   -webkit-overflow-scrolling: touch; 
 }
@@ -77,11 +79,12 @@
   min-width: 700px; 
 }
 
+/* en tete tbl*/
 .festify-grid-table th.mat-header-cell {
-  color: var(--mat-sys-on-surface);
-  font-weight: 800;
+  color: var(--mat-sys-primary) ; 
+  font-weight: 800 ; 
   font-size: 0.95rem;
-  border-bottom: 2px solid var(--mat-sys-on-surface);
+  border-bottom: 2px solid var(--mat-sys-primary);
   padding: 16px 12px;
   text-transform: uppercase;
 }
@@ -96,6 +99,7 @@
 .festify-grid-table tr.mat-mdc-row:nth-child(odd) { 
   background-color: var(--mat-sys-surface); 
 }
+
 .festify-grid-table tr.mat-mdc-row:nth-child(even) { 
   background-color: var(--mat-sys-surface-container-lowest); 
 }
@@ -112,7 +116,6 @@
   padding: 4px; 
   margin: 0 4px; 
   transition: transform 0.2s; 
-  color: var(--mat-sys-on-surface-variant);
 }
 
 .icon-btn:hover { 
@@ -123,11 +126,8 @@
 .icon-btn.trash:hover { color: var(--mat-sys-error); }
 
 .bold-text { font-weight: 700; }
-.desc-cell { 
-  font-style: italic; 
-  color: var(--mat-sys-on-surface-variant); 
-  font-size: 0.9rem; 
-}
+
+
 
 @media screen and (max-width: 850px) {
   .admin-page {

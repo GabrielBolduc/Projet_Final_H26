@@ -28,7 +28,7 @@ export class NavbarComponent {
   public translate = inject(TranslateService);
 
   toggleLanguage() {
-    const current = this.translate.currentLang; 
+    const current = this.translate.getCurrentLang(); 
     const targetLang = current === 'en' ? 'fr' : 'en';
     this.translate.use(targetLang);
     localStorage.setItem('userLanguage', targetLang); 

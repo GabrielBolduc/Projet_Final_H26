@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Performance } from '../models/performance';
-
+import { environment } from '../../../environments/environment';
 interface ApiResponse<T> {
   status: 'success' | 'error';
   data: T;
@@ -14,7 +14,7 @@ interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class PerformanceService {
   private http = inject(HttpClient);
-  private readonly API_URL = '/api/performances';
+  private readonly API_URL = `${environment.apiUrl}/performances`;
 
   getPerformances(): Observable<Performance[]> {
     return this.http.get<ApiResponse<Performance[]>>(this.API_URL).pipe(

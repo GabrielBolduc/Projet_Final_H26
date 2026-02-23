@@ -222,7 +222,6 @@ unit1 = Unit.new(
 )
 
 
-
 # Packages (Billetterie)
 
 p_general = Package.create!(

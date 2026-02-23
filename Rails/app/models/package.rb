@@ -28,13 +28,10 @@ class Package < ApplicationRecord
   def validity_must_be_within_festival_dates
     return unless festival && valid_at && expired_at
 
-    # 1. On convertit la date de DÉBUT du festival en "Début de journée" (00:00:00)
     festival_start_limit = festival.start_at.beginning_of_day
 
-    # 2. On convertit la date de FIN du festival en "Fin de journée" (23:59:59.999)
     festival_end_limit = festival.end_at.end_of_day
 
-    # 3. Validation
     if valid_at < festival_start_limit
       errors.add(:valid_at, "ne peut pas être avant le début du festival (#{festival.start_at})")
     end

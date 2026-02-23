@@ -15,7 +15,6 @@ h2 {
   color: #333;
 }
 
-/* Grille de mise en page Formulaire vs Aperçu */
 .package-layout {
   display: flex;
   gap: 40px;
@@ -122,20 +121,6 @@ mat-form-field {
   height: 44px;
 }
 
-/* ---- RESPONSIVE MOBILE ---- */
-@media (max-width: 900px) {
-  .package-layout {
-    flex-direction: column-reverse;
-  }
-  
-  .preview-section {
-    width: 100%;
-    position: relative;
-    top: 0;
-    box-sizing: border-box;
-  }
-}
-
 @media (max-width: 768px) {
   .grid-row-2 {
     grid-template-columns: 1fr;
@@ -155,25 +140,11 @@ mat-form-field {
   .action-btn {
     width: 100%; 
   }
-
-  .file-category-row {
-    align-items: stretch;
-  }
-
-  .file-input-container {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-
-  .card-content-layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .ticket-visual {
+  
+  .preview-section {
     width: 100%;
-    height: 120px;
-    border-right: none;
-    border-bottom: 2px solid black;
+    position: relative;
+    top: 0;
+    box-sizing: border-box;
   }
 }

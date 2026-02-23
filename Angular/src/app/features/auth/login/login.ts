@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '../../../core/services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -20,6 +22,7 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isLoading = signal(false);
   errorMessage = signal('');
@@ -39,7 +42,8 @@ export class Login {
         next: (success) => {
           this.isLoading.set(false);
           if (success) {
-            this.router.navigate(['/']);
+            const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+            this.router.navigateByUrl(returnUrl);
           } else {
             this.errorMessage.set('Identifiants invalides');
           }

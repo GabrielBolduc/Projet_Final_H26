@@ -29,7 +29,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
       get api_packages_url, as: :json
     end
 
-    # code http
+    # code
     assert_response :ok
 
     # format reponse

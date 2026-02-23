@@ -13,15 +13,15 @@
       </button>
 
       <mat-menu #adminMenu="matMenu">
-        <button mat-menu-item [routerLink]="['admin']">
+        <button mat-menu-item [routerLink]="['/admin/festivals']">
           <mat-icon>dashboard</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
-        <button mat-menu-item [routerLink]="['dashboard']">
+        <button mat-menu-item [routerLink]="['/admin/dashboard']">
           <mat-icon>event</mat-icon>
           <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
-        <button mat-menu-item [routerLink]="['tasks']">
+        <button mat-menu-item [routerLink]="['/tasks']">
           <mat-icon>assignment</mat-icon>
           <span>{{'ADMIN_NAV.TASK' | translate}}</span>
         </button>
@@ -96,15 +96,16 @@
       @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
         <mat-divider></mat-divider>
         <div mat-subheader style="color: var(--mat-sys-primary); font-weight: bold; padding: 0 16px;">Administration</div>
-        <button mat-menu-item [routerLink]="['admin']">
+        
+        <button mat-menu-item [routerLink]="['/admin/festivals']">
           <mat-icon>dashboard</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
-        <button mat-menu-item [routerLink]="['dashboard']">
+        <button mat-menu-item [routerLink]="['/admin/dashboard']">
           <mat-icon>event</mat-icon>
           <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
-        <button mat-menu-item [routerLink]="['tasks']">
+        <button mat-menu-item [routerLink]="['/tasks']">
           <mat-icon>assignment</mat-icon>
           <span>{{'ADMIN_NAV.TASK' | translate}}</span>
         </button>
@@ -123,8 +124,8 @@
         </button>
       } @else {
         <button mat-menu-item routerLink="/login">
-          <mat-icon>{{'AUTH.CONNECT' | translate}}</mat-icon>
-          <span>Salut</span>
+          <mat-icon>login</mat-icon>
+          <span>{{'AUTH.CONNECT' | translate}}</span>
         </button>
       }
     </mat-menu>

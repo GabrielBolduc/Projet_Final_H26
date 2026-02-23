@@ -7,16 +7,19 @@
 
     <div class="grid-row-2">
       
+      @if (!isEditMode) {
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'TACHES.SELECT_REUSABLE' | translate }}</mat-label>
-        <mat-select formControlName="reusable_task_id">
-          @for (t of reusableTasks(); track t.id) {
-            <mat-option [value]="t.id">{{ t.title }}</mat-option>
-          }
-        </mat-select>
-       
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'TACHES.SELECT_REUSABLE' | translate }}</mat-label>
+          <mat-select formControlName="reusable_task_id">
+            @for (t of reusableTasks(); track t.id) {
+              <mat-option [value]="t.id">{{ t.title }}</mat-option>
+            }
+          </mat-select>
+        
+        </mat-form-field>
+      }
+     
 
       <mat-checkbox formControlName="reusable">
         {{ 'TACHES.REUSABLE_TASKS' | translate }}
@@ -32,7 +35,7 @@
         <mat-label>{{ 'TACHES.TACHES_TITLE' | translate }}</mat-label>
         <input matInput formControlName="title" placeholder="Ex: Concert live">
         @if (form.get('title')?.hasError('required')) {
-          <mat-error>Requis</mat-error>
+          <mat-error>{{ 'TACHES.REQUIS' | translate }}</mat-error>
         }
         
       </mat-form-field>
@@ -53,49 +56,43 @@
 
     </div>
 
-    
+    <div class="priority-section">
+      <label>{{ 'TACHES.PRIORITY' | translate }}</label>
 
-    <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'TACHES.PRIORITY' | translate }}</mat-label>
-            <input 
-                matInput 
-                type="number"
-                formControlName="priority"
-                min="1"
-                step="1"
-                pattern="[0-9]*"
-            >
-            @if (form.get('priority')?.hasError('min')) {
-                <mat-error>Minimum 1</mat-error>
-            }
-    </mat-form-field>
-   
+      <div class="skull-input">
+        @for (skull of getPriorityArray(); track skull) {
+          <mat-icon
+            (click)="setPriority(skull)"
+            [class.filled]="skull <= form.value.priority"
+            class="skull-icon">
+            {{ skull <= form.value.priority ? 'skull' : 'skull_outline' }}
+          </mat-icon>
+        }
+      </div>
+    </div>
+
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'TACHES.DESCRIPTION' | translate }}</mat-label>
       <textarea matInput formControlName="description" rows="3"></textarea>
     </mat-form-field>
 
-    <div class="file-upload">
+      <div class="image-upload-wrapper">
+          <div class="file-input-container">
+            <button type="button" mat-stroked-button (click)="fileInput.click()">
+              <mat-icon>image</mat-icon> Image de fond
+            </button>
+            <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
+            @if (selectedFile) { <span class="file-name">{{ selectedFile.name }}</span> }
+          </div>
 
-  <button mat-stroked-button type="button" (click)="fileInput.click()">
-        <mat-icon>attach_file</mat-icon>
-        {{ 'TACHES.CHOSE_FILE' | translate }}
-        </button>
-
-        <span class="file-name" *ngIf="selectedFile">
-            {{ selectedFile.name }}
-        </span>
-
-        <input
-            #fileInput
-            type="file"
-            hidden
-            (change)="onFileSelected($event)"
-            accept="image/*,application/pdf"
-        />
-
-    </div>
+          @if (previewUrl || existingImageUrl) {
+            <div class="image-thumbnail">
+              <img [src]="previewUrl || existingImageUrl" alt="Aperçu de l'image du billet">
+            </div>
+          }
+        </div>
+      
 
 
     <div class="form-actions">

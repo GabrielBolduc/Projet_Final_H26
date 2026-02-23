@@ -38,13 +38,18 @@ export class TaskFormComponent {
   task = signal<Task | null>(null);
   reusableTasks = signal<Task[]>([]);
   editTask: TaskPayload | null = null;
+
+  selectedFile: File | null = null;
+  previewUrl: string | null = null;
+  existingImageUrl: string | null = null;
+
    
     form: FormGroup = new FormBuilder().group({
         reusable_task_id: [null],
         title: ['', Validators.required],
         description: [''],
-        difficulty: [0, Validators.required],
-        priority: [1, [Validators.required, Validators.min(1)]],
+        difficulty: [0, [Validators.required, Validators.min(0), Validators.max(5)]],
+        priority: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
         reusable: [false],  
         file: [null]
         });
@@ -98,49 +103,56 @@ export class TaskFormComponent {
     
   }
 
-  selectedFile: File | null = null;
-
-    onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-
-    if (input.files && input.files.length > 0) {
-        this.selectedFile = input.files[0];
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.previewUrl = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
+  }
+
+  getPriorityArray(): number[] {
+      return [1, 2, 3, 4, 5];
     }
 
-
+    setPriority(value: number) {
+      this.form.patchValue({ priority: value });
+    }
     save() {
 
-         //const formData = new FormData();
+         const formData = new FormData();
 
-          //  formData.append("file", this.selectedFile!);
-           // formData.append("title", this.form.value.title);
-          //  formData.append("description", this.form.value.description);
-          //  formData.append("difficulty", this.form.value.difficulty);
-          //  formData.append("priority", this.form.value.priority);
-          //  formData.append("reusable", this.form.value.reusable);
+          formData.append('task[title]', this.form.value.title);
+          formData.append('task[description]', this.form.value.description);
+          formData.append('task[difficulty]', this.form.value.difficulty);
+          formData.append('task[priority]', this.form.value.priority);
+          formData.append('task[reusable]', this.form.value.reusable);
+
         
-        this.editTask = {
-          title: this.form.value.title,
-          description: this.form.value.description,
-          difficulty: this.form.value.difficulty,
-          priority: this.form.value.priority,
-          reusable: this.form.value.reusable
-        };
+        //this.editTask = {
+          //title: this.form.value.title,
+          //description: this.form.value.description,
+          //difficulty: this.form.value.difficulty,
+          //priority: this.form.value.priority,
+          //reusable: this.form.value.reusable
+        //};
 
       
 
-        console.log('Données à envoyer : ', this.editTask);
         if (this.isEditMode && this.taskId) {
-            this.taskService.updateTask(this.taskId, this.editTask).subscribe(() => {
+            this.taskService.updateTask(this.taskId, formData, this.selectedFile ||undefined ).subscribe(() => {
            
             });
-             this.router.navigate(['/tasks']);
+             //this.router.navigate(['/tasks']);
         } else {
-            this.taskService.createTask(this.editTask).subscribe(() => {
+            this.taskService.createTask(formData, this.selectedFile ||undefined).subscribe(() => {
            
             });
-             this.router.navigate(['/tasks']);
+             //this.router.navigate(['/tasks']);
         }
     }
 

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Festival } from '../models/festival';
-
+import { environment } from '../../../environments/environment';
 
 interface ApiResponse<T> {
   status: 'success' | 'error';
@@ -19,7 +19,7 @@ interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class FestivalService {
   private http = inject(HttpClient);
-  private readonly API_URL = '/api/festivals'; 
+  private readonly API_URL = `${environment.apiUrl}/festivals`; 
 
   getFestivals(): Observable<Festival[]> {
     return this.http.get<ApiResponse<Festival[]>>(this.API_URL).pipe(

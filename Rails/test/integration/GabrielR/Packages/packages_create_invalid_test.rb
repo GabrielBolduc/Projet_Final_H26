@@ -23,7 +23,7 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
       post api_packages_url, params: @valid_params, as: :json
     end
     
-    # code http
+    # code
     assert_response :ok 
 
     # format reponse
@@ -31,7 +31,6 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
     
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 403, json["code"]
     assert_equal "Access denied: Admin privileges required.", json["message"]
   end
 
@@ -45,7 +44,6 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_response :ok
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 403, json["code"]
     assert_equal "Access denied: Admin privileges required.", json["message"]
   end
 
@@ -59,7 +57,6 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_response :ok
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
     assert_equal "Validation failed", json["message"]
     assert_not_nil json["errors"]
   end

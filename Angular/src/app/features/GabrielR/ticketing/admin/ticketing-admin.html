@@ -30,7 +30,7 @@
           <div class="card-content-layout">
             
             <div class="ticket-visual">
-              <img [src]="pkg.image_url || 'assets/placeholder-ticket.png'" alt="ticket">
+              <img [src]="pkg.image_url || 'assets/placeholder-image.png'" alt="ticket">
               <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
                 {{ 'PACKAGE_FORM.TYPE_' + (pkg.category | uppercase) | translate }}
               </span>

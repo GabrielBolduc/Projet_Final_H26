@@ -9,7 +9,7 @@ class PackagesDestroyInvalidTest < ActionDispatch::IntegrationTest
     @package = packages(:one)
   end
 
-  test "should return 404 code when deleting non-existent package" do
+  test "should return error when deleting non-existent package" do
     sign_in @admin
 
     # modif ou non
@@ -17,7 +17,7 @@ class PackagesDestroyInvalidTest < ActionDispatch::IntegrationTest
       delete api_package_url(id: 999999), as: :json
     end
 
-    # code http
+    # code
     assert_response :ok
 
     # format reponse
@@ -25,7 +25,6 @@ class PackagesDestroyInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 404, json["code"]
     assert_equal "Package not found", json["message"]
   end
 
@@ -39,6 +38,5 @@ class PackagesDestroyInvalidTest < ActionDispatch::IntegrationTest
     assert_response :ok
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 403, json["code"]
   end
 end

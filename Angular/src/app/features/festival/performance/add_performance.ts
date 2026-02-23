@@ -86,7 +86,6 @@ export class AddPerformanceComponent implements OnInit {
   ngOnInit(): void {
     this.loadDropdowns();
 
-    // On utilise bien "perfId" défini dans tes routes !
     const id = this.route.snapshot.paramMap.get('perfId');
 
     if (id) {

@@ -2,8 +2,7 @@ class Festival < ApplicationRecord
   has_many :performances, dependent: :destroy
   has_many :affectations, dependent: :destroy
   has_many :packages, dependent: :destroy
-  has_many :accommodations
-
+  has_many :accommodations, dependent: :destroy
 
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
 

@@ -1,16 +1,15 @@
 class Api::PerformancesController < ApiController
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
+
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :set_performance, only: [ :show, :update, :destroy ]
   before_action :require_admin!, only: [ :create, :update, :destroy ]
 
   def index
-    ongoing_festival = Festival.find_by(status: 'ongoing')
-    
-    if ongoing_festival
-      performances = Performance.includes(:artist, :stage, :festival)
-                                .where(festival_id: ongoing_festival.id)
-                                .order(start_at: :asc)
-      
+    if Festival.ongoing.exists?
+      performances = Performance.active
+                                .chronological
+                                .includes(:artist, :stage, :festival)
       render json: {
         status: "success",
         data: performances.as_json(include: [ :artist, :stage, :festival ])
@@ -25,17 +24,10 @@ class Api::PerformancesController < ApiController
   end
 
   def show
-    if @performance
-      render json: {
-        status: "success",
-        data: @performance.as_json(include: [ :artist, :stage, :festival ])
-      }, status: :ok
-    else
-      render json: {
-        status: "error",
-        message: "Performance introuvable."
-      }, status: :ok
-    end
+    render json: {
+      status: "success",
+      data: @performance.as_json(include: [ :artist, :stage, :festival ])
+    }, status: :ok
   end
 
   def create
@@ -56,47 +48,40 @@ class Api::PerformancesController < ApiController
   end
 
   def update
-    if @performance
-      if @performance.update(performance_params)
-        render json: {
-          status: "success",
-          data: @performance.as_json(include: [ :artist, :stage, :festival ])
-        }, status: :ok
-      else
-        render json: {
-          status: "error",
-          message: "Échec de la mise à jour",
-          errors: @performance.errors.messages
-        }, status: :ok
-      end 
+    if @performance.update(performance_params)
+      render json: {
+        status: "success",
+        data: @performance.as_json(include: [ :artist, :stage, :festival ])
+      }, status: :ok
     else
       render json: {
         status: "error",
-        message: "Performance introuvable."
+        message: "Échec de la mise à jour",
+        errors: @performance.errors.messages
       }, status: :ok
-    end
+    end 
   end
 
   def destroy
-    if @performance
-      @performance.destroy
-      render json: {
-        status: "success",
-        message: "Performance supprimée avec succès.",
-        data: nil
-      }, status: :ok
-    else
-      render json: {
-        status: "error",
-        message: "Performance introuvable."
-      }, status: :ok
-    end
+    @performance.destroy
+    render json: {
+      status: "success",
+      message: "Performance supprimée avec succès.",
+      data: nil
+    }, status: :ok
   end
 
   private
 
   def set_performance
-    @performance = Performance.includes(:artist, :stage, :festival).find_by(id: params[:id])
+    @performance = Performance.includes(:artist, :stage, :festival).find(params[:id])
+  end
+
+  def not_found_response
+    render json: {
+      status: "error",
+      message: "Performance introuvable."
+    }, status: :ok
   end
 
   def performance_params

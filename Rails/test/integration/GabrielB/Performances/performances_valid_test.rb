@@ -29,7 +29,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success
+    assert_response :ok
 
     # format reponse
     json = JSON.parse(response.body)
@@ -48,7 +48,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success
+    assert_response :ok
 
     # format reponse
     json = JSON.parse(response.body)
@@ -68,7 +68,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success
+    assert_response :ok
 
     # format reponse
     json = JSON.parse(response.body)
@@ -88,7 +88,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success
+    assert_response :ok
 
     # format reponse
     json = JSON.parse(response.body)
@@ -108,7 +108,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :success
+    assert_response :ok
 
     # format reponse
     json = JSON.parse(response.body)

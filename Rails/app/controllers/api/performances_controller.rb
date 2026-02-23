@@ -13,13 +13,11 @@ class Api::PerformancesController < ApiController
       
       render json: {
         status: "success",
-        code: 200,
         data: performances.as_json(include: [ :artist, :stage, :festival ])
       }, status: :ok
     else
       render json: {
         status: "success", 
-        code: 200,
         data: [],
         message: "Aucun festival en cours trouvé."
       }, status: :ok
@@ -30,13 +28,11 @@ class Api::PerformancesController < ApiController
     if @performance
       render json: {
         status: "success",
-        code: 200,
         data: @performance.as_json(include: [ :artist, :stage, :festival ])
       }, status: :ok
     else
       render json: {
         status: "error",
-        code: 404,
         message: "Performance introuvable."
       }, status: :ok
     end
@@ -48,13 +44,11 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-        code: 201,
         data: performance.as_json(include: [:artist, :stage, :festival])
       }, status: :ok
     else
       render json: {
         status: "error",
-        code: 422,
         message: "Échec de la validation",
         errors: performance.errors.messages
       }, status: :ok
@@ -66,13 +60,11 @@ class Api::PerformancesController < ApiController
       if @performance.update(performance_params)
         render json: {
           status: "success",
-          code: 200,
           data: @performance.as_json(include: [ :artist, :stage, :festival ])
         }, status: :ok
       else
         render json: {
           status: "error",
-          code: 422,
           message: "Échec de la mise à jour",
           errors: @performance.errors.messages
         }, status: :ok
@@ -80,7 +72,6 @@ class Api::PerformancesController < ApiController
     else
       render json: {
         status: "error",
-        code: 404,
         message: "Performance introuvable."
       }, status: :ok
     end
@@ -91,14 +82,12 @@ class Api::PerformancesController < ApiController
       @performance.destroy
       render json: {
         status: "success",
-        code: 200,
         message: "Performance supprimée avec succès.",
         data: nil
       }, status: :ok
     else
       render json: {
         status: "error",
-        code: 404,
         message: "Performance introuvable."
       }, status: :ok
     end
@@ -121,7 +110,6 @@ class Api::PerformancesController < ApiController
     unless current_user&.is_a?(Admin)
       render json: {
         status: "error",
-        code: 403,
         message: "Accès refusé : Privilèges administrateur requis."
       }, status: :ok
     end

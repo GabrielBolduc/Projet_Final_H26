@@ -21,8 +21,7 @@ class Api::FestivalsController < ApiController
     else
       render json: {
         status: "error",
-        message: "Resource not found",
-        code: 404
+        message: "Resource not found"
       }, status: :ok
     end
   end

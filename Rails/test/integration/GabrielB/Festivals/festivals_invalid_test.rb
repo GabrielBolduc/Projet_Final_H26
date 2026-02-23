@@ -8,13 +8,12 @@ class FestivalInvalidTest < ActionDispatch::IntegrationTest
         end
 
         # code http
-        assert_response :success
+        assert_response :ok
 
         # format reponse
         json = JSON.parse(response.body)
 
         # donne reponse
         assert_equal "error", json["status"]
-        assert_equal 404, json["code"]
     end
 end

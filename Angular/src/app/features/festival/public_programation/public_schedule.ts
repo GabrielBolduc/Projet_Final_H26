@@ -8,6 +8,8 @@ import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
+import { DateUtils } from '../../../core/utils/date.utils'; 
+import { ErrorHandlerService } from '../../../core/services/error-handler.service'; 
 
 interface DayGroup {
   date: Date;
@@ -29,11 +31,13 @@ interface DayGroup {
 export class PublicScheduleComponent implements OnInit {
   private performanceService = inject(PerformanceService);
   private festivalService = inject(FestivalService);
+  private errorHandler = inject(ErrorHandlerService);
   public translate = inject(TranslateService);
 
   currentFestival = signal<Festival | null>(null);
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
+  serverErrors = signal<string[]>([]); 
   
   currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
 
@@ -54,6 +58,8 @@ export class PublicScheduleComponent implements OnInit {
 
   loadSchedule(): void {
     this.isLoading.set(true);
+    this.serverErrors.set([]);
+
     this.festivalService.getFestivals().subscribe({
       next: (festivals) => {
         const ongoing = festivals.find(f => f.status === 'ongoing');
@@ -69,12 +75,13 @@ export class PublicScheduleComponent implements OnInit {
                 p.festival_id === ongoing.id || (p.festival && p.festival.id === ongoing.id)
               );
 
-              const sortedData = festivalPerformances.sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
+              const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
+              
               this.performanceGroups.set(this.groupByDay(sortedData));
               this.isLoading.set(false);
             },
             error: (err) => {
-              console.error('Erreur performances:', err);
+              this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
               this.isLoading.set(false);
             }
           });
@@ -84,7 +91,7 @@ export class PublicScheduleComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Erreur festivals:', err);
+        this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
         this.isLoading.set(false);
       }
     });
@@ -92,13 +99,16 @@ export class PublicScheduleComponent implements OnInit {
 
   private groupByDay(performances: Performance[]): DayGroup[] {
     const groups: { [key: string]: Performance[] } = {};
+    
     performances.forEach(perf => {
-      const dateKey = new Date(perf.start_at).toDateString();
+      const dateKey = DateUtils.toDateStringKey(perf.start_at);
+      
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(perf);
     });
+
     return Object.keys(groups).map(key => ({
-      date: new Date(key),
+      date: DateUtils.toDate(key),
       performances: groups[key]
     }));
   }

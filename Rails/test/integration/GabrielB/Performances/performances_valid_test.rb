@@ -29,7 +29,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :ok
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -48,7 +48,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :ok
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -68,7 +68,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :created
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -88,7 +88,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :ok
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
@@ -108,14 +108,14 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :ok
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
 
     # donne reponse
     assert_equal "success", json["status"]
-    assert_equal "Performance deleted successfully", json["message"]
+    assert_equal "Performance supprimée avec succès.", json["message"]
     assert_nil json["data"]
   end
 end

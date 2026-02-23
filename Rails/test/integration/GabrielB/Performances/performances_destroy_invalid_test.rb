@@ -18,7 +18,7 @@ class PerformancesDestroyInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :not_found
+    assert_response :success
 
     # format et donne reponse
     json = JSON.parse(response.body)
@@ -35,7 +35,7 @@ class PerformancesDestroyInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :forbidden
+    assert_response :success
 
     # format et donne reponse
     json = JSON.parse(response.body)

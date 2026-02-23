@@ -3,60 +3,69 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Performance } from '../models/performance';
-import { environment } from '../../../environments/environment';
-interface ApiResponse<T> {
+
+export interface ApiResponse<T = any> {
   status: 'success' | 'error';
-  data: T;
+  data?: T;
   message?: string;
+  code?: number;
   errors?: any;
 }
 
 @Injectable({ providedIn: 'root' })
 export class PerformanceService {
   private http = inject(HttpClient);
+  
+  // L'URL relative parfaite pour ton architecture (Angular dans Rails)
   private readonly API_URL = '/api/performances';
 
   getPerformances(): Observable<Performance[]> {
     return this.http.get<ApiResponse<Performance[]>>(this.API_URL).pipe(
       map(response => {
-        if (response.status === 'success') return response.data;
-        throw new Error(response.message || 'Erreur lors du chargement');
-      })
+        if (response.status === 'success') return response.data!;
+        throw response; // Renvoie l'objet entier vers le bloc error
+      }),
+      catchError((error) => throwError(() => error))
     );
   }
 
   getPerformance(id: number): Observable<Performance> {
     return this.http.get<ApiResponse<Performance>>(`${this.API_URL}/${id}`).pipe(
       map(response => {
-        if (response.status === 'success') return response.data;
-        throw new Error(response.message || 'Erreur lors du chargement');
-      })
+        if (response.status === 'success') return response.data!;
+        throw response;
+      }),
+      catchError((error) => throwError(() => error))
     );
   }
 
   createPerformance(payload: any): Observable<any> {
     return this.http.post<ApiResponse<any>>(this.API_URL, payload).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('Erreur API Performance:', error);
-        return throwError(() => error);
-      })
+      map(response => {
+        if (response.status === 'success') return response;
+        throw response;
+      }),
+      catchError((error) => throwError(() => error))
     );
   }
 
   updatePerformance(id: number, payload: any): Observable<any> {
     return this.http.put<ApiResponse<any>>(`${this.API_URL}/${id}`, payload).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('Erreur API Performance:', error);
-        return throwError(() => error);
-      })
+      map(response => {
+        if (response.status === 'success') return response;
+        throw response;
+      }),
+      catchError((error) => throwError(() => error))
     );
   }
 
   deletePerformance(id: number): Observable<any> {
-    return this.http.delete(`${this.API_URL}/${id}`).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => error);
-      })
+    return this.http.delete<ApiResponse<any>>(`${this.API_URL}/${id}`).pipe(
+      map(response => {
+        if (response.status === 'success') return response;
+        throw response;
+      }),
+      catchError((error) => throwError(() => error))
     );
   }
 }

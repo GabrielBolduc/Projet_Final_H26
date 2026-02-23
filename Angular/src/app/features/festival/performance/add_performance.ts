@@ -2,16 +2,18 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 import { PerformanceService } from '../../../core/services/performance.service';
 import { ArtistService } from '../../../core/services/artist.service';
 import { StageService } from '../../../core/services/stage.service';
 import { FestivalService } from '../../../core/services/festival.service';
+import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 
 import { Artist } from '../../../core/models/artist';
 import { Stage } from '../../../core/models/stage';
 import { Festival } from '../../../core/models/festival';
+import { DateUtils } from '../../../core/utils/date.utils'; 
 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,7 +23,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
 
 const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const start = control.get('start_time')?.value;
@@ -54,7 +55,8 @@ export class AddPerformanceComponent implements OnInit {
   private artistService = inject(ArtistService);
   private stageService = inject(StageService);
   private festivalService = inject(FestivalService);
-  private translate = inject(TranslateService);
+  private errorHandler = inject(ErrorHandlerService);
+  public translate = inject(TranslateService);
 
   form: FormGroup;
   isEditMode = signal(false);
@@ -84,7 +86,9 @@ export class AddPerformanceComponent implements OnInit {
   ngOnInit(): void {
     this.loadDropdowns();
 
-    const id = this.route.snapshot.paramMap.get('id');
+    // On utilise bien "perfId" défini dans tes routes !
+    const id = this.route.snapshot.paramMap.get('perfId');
+
     if (id) {
       this.isEditMode.set(true);
       this.performanceId = +id;
@@ -107,15 +111,19 @@ export class AddPerformanceComponent implements OnInit {
   }
 
   private checkCurrentFestivalVisibility(allFestivals: Festival[]) {
-    this.performanceService.getPerformance(this.performanceId!).subscribe(perf => {
-      const currentFestId = perf.festival?.id || perf.festival_id;
-      const isInList = this.festivals().find(f => f.id === currentFestId);
-      
-      if (!isInList) {
-        const oldFestival = allFestivals.find(f => f.id === currentFestId);
-        if (oldFestival) {
-          this.festivals.update(list => [...list, oldFestival]);
+    this.performanceService.getPerformance(this.performanceId!).subscribe({
+      next: (perf) => {
+        const currentFestId = perf.festival?.id || perf.festival_id;
+        const isInList = this.festivals().find(f => f.id === currentFestId);
+        
+        if (!isInList) {
+          const oldFestival = allFestivals.find(f => f.id === currentFestId);
+          if (oldFestival) {
+            this.festivals.update(list => [...list, oldFestival]);
+          }
         }
+      },
+      error: () => {
       }
     });
   }
@@ -136,8 +144,8 @@ export class AddPerformanceComponent implements OnInit {
           festival_id: data.festival?.id || data.festival_id,
           
           date: start,
-          start_time: this.formatTime(start),
-          end_time: this.formatTime(end)
+          start_time: DateUtils.formatTime(start), // Utilisation de DateUtils
+          end_time: DateUtils.formatTime(end)      // Utilisation de DateUtils
         });
         this.isLoading.set(false);
       },
@@ -153,8 +161,9 @@ export class AddPerformanceComponent implements OnInit {
     this.isLoading.set(true);
     const val = this.form.value;
     
-    const startAt = this.combineDateTime(val.date, val.start_time);
-    const endAt = this.combineDateTime(val.date, val.end_time);
+    // Utilisation de DateUtils
+    const startAt = DateUtils.combineDateTime(val.date, val.start_time);
+    const endAt = DateUtils.combineDateTime(val.date, val.end_time);
 
     const payload = {
       ...val,
@@ -162,10 +171,9 @@ export class AddPerformanceComponent implements OnInit {
       end_at: endAt
     };
 
-    
     const request$ = (this.isEditMode() && this.performanceId)
-      ? this.performanceService.updatePerformance(this.performanceId, payload) // si oui
-      : this.performanceService.createPerformance(payload); // si non
+      ? this.performanceService.updatePerformance(this.performanceId, payload)
+      : this.performanceService.createPerformance(payload);
 
     request$.subscribe({
       next: () => {
@@ -175,59 +183,8 @@ export class AddPerformanceComponent implements OnInit {
       error: (err) => {
         this.isLoading.set(false);
         
-        if (err.status === 422) { // unprocessable entity
-          const railsErrors = err.error?.errors || err.error?.data || err.error;
-          const translatedErrorsList: string[] = [];
-          
-          // verifie que c'est bien un erreur objet rails
-          if (railsErrors && typeof railsErrors === 'object') {
-            Object.keys(railsErrors).forEach(field => {
-              
-              // si pas base, creer un prefix
-              const fieldName = field !== 'base' ? `${field.toUpperCase()} : ` : '';
-
-              // gestion tableau erreurs
-              if (Array.isArray(railsErrors[field])) {
-                railsErrors[field].forEach((errorCode: string) => {
-                  // traduction / creer une cle d'erreur
-                  const translationKey = `SERVER_ERRORS.${errorCode}`;
-                  const translatedMessage = this.translate.instant(translationKey);
-                  
-                  // si traduction echoue affiche code erreur brut
-                  const finalMessage = translatedMessage === translationKey ? errorCode : translatedMessage;
-                  translatedErrorsList.push(`${fieldName}${finalMessage}`);
-                });
-              } else if (typeof railsErrors[field] === 'string') {
-                 const errorCode = railsErrors[field];
-                 const translationKey = `SERVER_ERRORS.${errorCode}`;
-                 const translatedMessage = this.translate.instant(translationKey);
-                 const finalMessage = translatedMessage === translationKey ? errorCode : translatedMessage;
-                 translatedErrorsList.push(`${fieldName}${finalMessage}`);
-              }
-            });
-            this.serverErrors.set(translatedErrorsList);
-          } else {
-            this.serverErrors.set(["Invalid data."]);
-          }
-        } else if (err.status === 500) {
-          this.serverErrors.set(["Erreur interne du serveur Rails."]);
-        } else {
-          this.serverErrors.set([`Une erreur est survenue (Code: ${err.status}).`]);
-        }
+        this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
       }
     });
-  }
-
-  private formatTime(date: Date): string {
-    return date.toTimeString().substring(0, 5);
-  }
-
-  private combineDateTime(date: Date, time: string): string {
-    const d = new Date(date);
-    const [hours, minutes] = time.split(':');
-    d.setHours(+hours);   
-    d.setMinutes(+minutes);
-    d.setSeconds(0);
-    return d.toISOString();
   }
 }

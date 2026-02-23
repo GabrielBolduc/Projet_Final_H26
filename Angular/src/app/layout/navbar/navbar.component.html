@@ -40,9 +40,15 @@
       <span>{{ 'NAV.SCHEDULE' | translate }}</span>
     </a>
 
-    <a [routerLink]="['/reservations']" class="nav-link">
-      <span>{{ 'NAV.RESERVATION' | translate }}</span>
-    </a>
+    @if (auth.isAdmin()) {
+      <a [routerLink]="['/accommodations']" class="nav-link">
+        <span>{{ 'NAV.ACCOMMODATIONS' | translate }}</span>
+      </a>
+    } @else {
+      <a [routerLink]="['/reservations']" class="nav-link">
+        <span>{{ 'NAV.RESERVATION' | translate }}</span>
+      </a>
+    }
     <a [routerLink]="['/ticketing']" class="nav-link">
       <span>{{ 'NAV.TICKETING' | translate }}</span>
     </a>

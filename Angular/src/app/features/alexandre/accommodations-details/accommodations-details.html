@@ -4,14 +4,17 @@
         [routerLink]="['/accommodations']" 
         [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
   <mat-icon>arrow_back</mat-icon> 
-  Back to {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'Hotel' : 'Camping' }}
+  {{ 'ACCOMMODATIONS.DETAILS.BACK_TO' | translate }} 
+  {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') 
+      ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) 
+      : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}
 </button>
 
   <mat-card class="detail-card horizontal-layout">
     <div class="info-section">
       <mat-card-content class="content-padding">
         <div class="badge-row">
-          <span class="category-tag">{{ acc.category === 1 ? 'HOTEL' : 'CAMPING' }}</span>
+          <span class="category-tag">{{ acc.category === 1 ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}</span>
         </div>
         
         <h1 class="acc-name">{{ acc.name }}</h1>
@@ -24,25 +27,25 @@
         <div class="stats-grid">
             <div class="stat-box">
                 <mat-icon>directions_walk</mat-icon>
-                <div class="stat-label">Walk</div>
+                <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.WALK' | translate }}</div>
                 <div class="stat-value">{{ formatTime(acc.time_walk) }}</div>
             </div>
 
             <div class="stat-box">
                 <mat-icon>directions_car</mat-icon>
-                <div class="stat-label">Drive</div>
+                <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.DRIVE' | translate }}</div>
                 <div class="stat-value">{{ formatTime(acc.time_car) }}</div>
             </div>
 
           <div class="stat-box" [class.active]="acc.shuttle">
             <mat-icon>directions_bus</mat-icon>
-            <div class="stat-label">Shuttle</div>
-            <div class="stat-value">{{ acc.shuttle ? 'YES' : 'NO' }}</div>
+            <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.SHUTTLE' | translate }}</div>
+            <div class="stat-value">{{ acc.shuttle ? ('ACCOMMODATIONS.DETAILS.YES' | translate) : ('ACCOMMODATIONS.DETAILS.NO' | translate) }}</div>
           </div>
 
           <div class="stat-box" *ngIf="acc.commission > 0">
             <mat-icon>payments</mat-icon>
-            <div class="stat-label">Fee</div>
+            <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.FEE' | translate }}</div>
             <div class="stat-value">{{ acc.commission }}%</div>
           </div>
         </div>
@@ -53,7 +56,7 @@
             <button mat-button 
                     class="book-btn edit-btn" 
                     [routerLink]="['/accommodations-form', acc.id]">
-            <mat-icon>edit</mat-icon> EDIT ACCOMMODATION
+            <mat-icon>edit</mat-icon> <span>{{ 'ACCOMMODATIONS.DETAILS.EDIT' | translate }}</span>
             </button>
         </div>
 
@@ -63,7 +66,7 @@
                     class="book-btn" 
                     [routerLink]="['/reservations-form']" 
                     [queryParams]="{ accommodationId: acc.id }">
-            BOOK THIS ACCOMMODATION
+            <span>{{ 'ACCOMMODATIONS.DETAILS.BOOK' | translate }}</span>
             </button>
         </ng-template>
 
@@ -80,6 +83,6 @@
 
 <ng-template #loading>
   <div class="main-display">
-    <p>Loading details...</p>
+    <p>{{ 'ACCOMMODATIONS.DETAILS.LOADING' | translate }}</p>
   </div>
 </ng-template>

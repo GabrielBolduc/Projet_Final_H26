@@ -8,7 +8,7 @@
          routerLinkActive="active-selection">
         <div class="fest-card">
           <img src="assets/camping-photo.jpeg" alt="Camping" class="nav-image">
-          <div class="nav-label">Reserve Camping</div>
+          <div class="nav-label">{{ 'RESERVATIONS.SIDEBAR.RESERVE_CAMPING' | translate }}</div>
         </div>
       </a>
 
@@ -18,13 +18,13 @@
          routerLinkActive="active-selection">
         <div class="fest-card">
           <img src="assets/hotel-photo.jpg" alt="Hotel" class="nav-image">
-          <div class="nav-label">Reserve Hotel</div>
+          <div class="nav-label">{{ 'RESERVATIONS.SIDEBAR.RESERVE_HOTEL' | translate }}</div>
         </div>
       </a>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="main-display">
-    <p>No reservations yet...</p>
+    <p>{{ 'RESERVATIONS.EMPTY_STATE' | translate }}</p>
   </mat-sidenav-content>
 </mat-sidenav-container>

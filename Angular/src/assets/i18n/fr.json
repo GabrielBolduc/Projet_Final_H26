@@ -2,6 +2,7 @@
   "NAV": {
     "HOME": "Accueil",
     "RESERVATION": "Réservation",
+    "ACCOMMODATIONS": "Hébergements",
     "TICKETING": "Billetterie",
     "SCHEDULE": "Programmation",
     "ADMIN": "Administration"
@@ -166,9 +167,59 @@
     "UPDATE": "Mettre à jour",
     "TITLE_UPDATE": "Mettre à jour la tâche",
     "TITLE_CREATE": "Créer une nouvelle tâche",
-    "SELECT_REUSABLE": "Tâches réutilisables",
-    "REQUIS": "Requis"
+    "SELECT_REUSABLE": "Tâches réutilisables"
+  },
+  "ACCOMMODATIONS": {
+    "ADD": "AJOUTER",
+    "ALL": "TOUT",
+    "HOTELS": "HOTELS",
+    "CAMPINGS": "CAMPINGS",
+    "NOT_FOUND": "Aucun hébergement trouvé.",
+    "DETAILS": {
+      "BACK_TO": "Retour aux",
+      "HOTEL": "Hôtels",
+      "CAMPING": "Campings",
+      "WALK": "Marche",
+      "DRIVE": "Voiture",
+      "SHUTTLE": "Navette",
+      "FEE": "Frais",
+      "YES": "OUI",
+      "NO": "NON",
+      "EDIT": "MODIFIER L'HÉBERGEMENT",
+      "BOOK": "RÉSERVER CET HÉBERGEMENT",
+      "LOADING": "Chargement des détails..."
+    },
+    "FORM": {
+      "TITLE_EDIT": "Modifier l'hébergement",
+      "TITLE_NEW": "Nouvel hébergement",
+      "DELETE": "SUPPRIMER",
+      "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer cet hébergement ? Cette action est irréversible.",
+      "NAME": "Nom de l'hébergement",
+      "CATEGORY": "Catégorie",
+      "ADDRESS": "Adresse",
+      "COORDINATES": "Coordonnées (Lat, Long)",
+      "SHUTTLE": "Navette",
+      "TIME_CAR": "Temps (Voiture)",
+      "TIME_WALK": "Temps (Marche)",
+      "COMMISSION": "Commission (%)",
+      "CANCEL": "Annuler",
+      "SUBMIT_UPDATE": "Mettre à jour",
+      "SUBMIT_SAVE": "Enregistrer",
+      "PROCESSING": "Traitement...",
+      "ERRORS": {
+        "REQUIRED": "Requis",
+        "MAX_LENGTH": "Maximum {{length}} caractères",
+        "PATTERN": "Format invalide. Ex: 46.609, -72.704",
+        "MIN_COMMISSION": "La commission doit être au moins 0%",
+        "MAX_COMMISSION": "La commission doit être strictement inférieure à 30%"
+      }
+    }
+  },
+  "RESERVATIONS": {
+    "SIDEBAR": {
+      "RESERVE_CAMPING": "Réserver un Camping",
+      "RESERVE_HOTEL": "Réserver un Hôtel"
+    },
+    "EMPTY_STATE": "Aucune réservation pour le moment..."
   }
-
-  
 }

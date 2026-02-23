@@ -21,7 +21,15 @@ class Api::AccommodationsController < ApiController
   end
 
   def create
+    festival = Festival.ongoing.order(created_at: :desc).first
+
+    if festival.nil?
+      return render_logic_error(["No festival is currently ongoing. Accommodations cannot be created."], 422)
+    end
+
     @accommodation = Accommodation.new(accommodation_params)
+    @accommodation.festival = festival
+
     if @accommodation.save
       render json: { status: "success", data: @accommodation }, status: :ok
     else

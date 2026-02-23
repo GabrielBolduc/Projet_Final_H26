@@ -283,3 +283,14 @@ images.each do |package, filename|
 end
 
 unit1.save!
+
+res1 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 15),
+  departure_at: Date.new(2026, 7, 17),
+  nb_of_people: 1,
+  reservation_name: "Jean Daniel",
+  phone_number: "8195338888",
+  user: c,
+  unit: unit1,
+  festival: f
+)

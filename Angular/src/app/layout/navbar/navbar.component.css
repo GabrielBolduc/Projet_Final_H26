@@ -1,7 +1,3 @@
-/* ========================================= */
-/* --- STRUCTURE GLOBALE --- */
-/* ========================================= */
-
 .brand-header {
   display: flex;
   justify-content: space-between;
@@ -28,10 +24,6 @@
   align-items: center; 
   gap: 20px; 
 }
-
-/* ========================================= */
-/* --- LOGO ET LIENS --- */
-/* ========================================= */
 
 .brand-link {
   display: flex;
@@ -71,12 +63,8 @@ button mat-icon {
   margin-right: 8px;
 }
 
-/* ========================================= */
-/* --- BOUTON DE LANGUE (Web & Mobile) --- */
-/* ========================================= */
-
 .lang-btn, .lang-btn-mobile {
-  border-radius: 20px !important; /* Crée l'effet pilule arrondi */
+  border-radius: 20px !important;
   font-weight: bold !important;
   color: var(--mat-sys-primary) !important;
   border-color: var(--mat-sys-outline-variant) !important;
@@ -89,19 +77,16 @@ button mat-icon {
 .lang-btn-mobile {
   margin-right: 10px;
   padding: 0 12px !important;
-  min-width: auto !important; /* Empêche le bouton d'être trop large sur un petit écran */
+  min-width: auto !important; 
 }
 
-/* Réduit légèrement l'espacement de l'icône sur mobile pour gagner de la place */
 .lang-btn-mobile mat-icon {
   margin-right: 4px; 
 }
 
-/* --- Par défaut (Version Web), on cache le conteneur mobile --- */
 .show-on-mobile {
   display: none; 
 }
-
 
 
 @media screen and (max-width: 850px) {

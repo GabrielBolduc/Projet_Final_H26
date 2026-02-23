@@ -58,8 +58,6 @@ production:
   primary: &primary_production
     <<: *default
     database: projet_production
-    username: projet
-    password: <%= ENV["PROJET_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: projet_production_cache

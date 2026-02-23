@@ -37,7 +37,7 @@ User.destroy_all
 
 
 c = Client.create!(
-    email: "client@gmail.com",
+    email: "client@test.com",
     password: "qwerty",
     password_confirmation: "qwerty",
     name: "Client #1",
@@ -59,135 +59,6 @@ Staff.create!(
     name: "Staff #1",
     phone_number: "666-666-6666",
     ability: "Gestion des réservations"
-)
-
-task_one = Task.create!(
-    title: "Task #1",
-    description: "Description of Task #1",
-    difficulty: 3,
-    priority: 1,
-    reusable: true
-
-)
-task_one.file.attach(
-  io: File.open(Rails.root.join('db/files/images.jpg')),
-  filename: 'images.jpg',
-  content_type: 'images/jpg'
-)
-
-task_tow = Task.create!(
-    title: "installation de la scène",
-    description: "Installation de la scène pour le concert",
-    difficulty: 5,
-    priority: 3,
-    reusable: false
-)
-task_tow.file.attach(
-  io: File.open(Rails.root.join('db/files/test.txt')),
-  filename: 'test.txt',
-  content_type: 'test/txt'
-)
-
-task_three = Task.create!(
-    title: "reception du materiel",
-    description: "receptionné la commande de projecteur de projecteur & co",
-    difficulty: 1,
-    priority: 5,
-    reusable: true
-)
-task_tow.file.attach(
-  io: File.open(Rails.root.join('db/files/meme-carre-chat-vibrant-simple_742173-4493.avif')),
-  filename: 'meme-carre-chat-vibrant-simple_742173-4493.avif',
-  content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
-)
-
-task_four = Task.create!(
-    title: "nettoyage du site",
-    description: "nettoyer le site après le festival",  
-    difficulty: 2,
-    priority: 4,
-    reusable: false
-)
-task_four.file.attach(
-  io: File.open(Rails.root.join('db/files/téléchargement (1).jpg')),
-  filename: 'téléchargement (1).jpg',
-  content_type: 'téléchargement (1)/jpg'
-)
-
-task_five = Task.create!(
-    title: "gestion des déchets",
-    description: "gérer les déchets pendant et après le festival",
-    difficulty: 4,
-    priority: 2,
-    reusable: true
-)
-task_five.file.attach(
-  io: File.open(Rails.root.join('db/files/téléchargement.jpg')),
-  filename: 'téléchargement.jpg',
-  content_type: 'téléchargement/jpg'
-)
-
-task_six = Task.create!(
-    title: "sécurité du site",
-    description: "assurer la sécurité du site pendant le festival",
-    difficulty: 5,
-    priority: 1,
-    reusable: true
-)
-task_six.file.attach(
-  io: File.open(Rails.root.join('db/files/images.jpg')),
-  filename: 'images.jpg',
-  content_type: 'images/jpg'
-)
-
-task_seven = Task.create!(
-    title: "coordination des bénévoles",
-    description: "coordonner les bénévoles pendant le festival",
-    difficulty: 3,
-    priority: 3,
-    reusable: true
-)
-task_seven.file.attach(
-  io: File.open(Rails.root.join('db/files/test.txt')),
-  filename: 'test.txt',
-  content_type: 'test/txt'
-) 
-
-
-Staff.create!(
-    email: "cuisto@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "Cuisine",
-    phone_number: "666-666-6666",
-    ability: "Gestion de l'alimentation, préparation des repas, gestion des stocks"
-)
-
-Staff.create!(
-    email: "regi@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "Regisseur",
-    phone_number: "666-666-6666",
-    ability: "Gestion de la logistique, coordination des équipes, supervision des opérations sur le terrain"
-)
-
-Staff.create!(
-    email: "handyman@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "Handy",
-    phone_number: "666-666-6666",
-    ability: " Gestion de la maintenance, réparation des équipements, gestion des installations techniques"
-)
-
-Staff.create!(
-    email: "security@staff.com",
-    password: "qwerty",
-    password_confirmation: "qwerty",
-    name: "hight admiral Brash",
-    phone_number: "666-666-6666",
-    ability: "Gestion de la sécurité, coordination des forces de l'ordre, gestion des menaces"
 )
 
 f = Festival.create!(

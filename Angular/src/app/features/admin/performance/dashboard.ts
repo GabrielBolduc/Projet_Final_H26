@@ -8,6 +8,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
 
 interface DayGroup {
   date: Date;
@@ -34,17 +36,19 @@ export class DashboardComponent implements OnInit {
 
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
-  
-  currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
+
+  festivalId = signal<number | null>(null); 
+  currentLang = toSignal(
+    this.translate.onLangChange.pipe(
+      map(event => this.formatLang(event.lang))
+    ),
+    { initialValue: this.formatLang(this.translate.currentLang) }
+  );
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
 
   ngOnInit(): void {
     this.loadPerformances();
-
-    this.translate.onLangChange.subscribe((event) => {
-      this.currentLang.set(this.formatLang(event.lang));
-    });
   }
 
   private formatLang(lang: string | undefined): string {
@@ -53,11 +57,29 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToAdd(): void { 
-    this.router.navigate(['/performances/new']); 
+    const id = this.festivalId();
+    if (id) {
+      this.router.navigate(['/admin/festivals', id, 'performances', 'new']);
+    } else {
+      console.error("Aucun festival trouvé pour associer cette performance.");
+    }
   }
 
-  navigateToEdit(id: number): void {
-    this.router.navigate(['/performances', id, 'edit'])
+  navigateToEdit(perfId: number): void {
+    let targetFestivalId = this.festivalId(); // On lit le Signal
+    
+    const allGroups = this.performanceGroups();
+    for (const group of allGroups) {
+      const foundPerf = group.performances.find(p => p.id === perfId);
+      if (foundPerf) {
+        targetFestivalId = foundPerf.festival?.id || foundPerf.festival_id || this.festivalId();
+        break;
+      }
+    }
+
+    if (targetFestivalId) {
+      this.router.navigate(['/admin/festivals', targetFestivalId, 'performances', perfId, 'edit']);
+    }
   }
 
   loadPerformances(): void {
@@ -66,6 +88,12 @@ export class DashboardComponent implements OnInit {
       next: (data) => {
         const sortedData = data.sort((a, b) => new Date(a.start_at).getTime() - new Date(b.start_at).getTime());
         this.performanceGroups.set(this.groupByDay(sortedData));
+        
+        if (sortedData.length > 0) {
+          const firstPerf = sortedData[0];
+          this.festivalId.set(firstPerf.festival?.id || firstPerf.festival_id || null);
+        }
+
         this.isLoading.set(false);
       },
       error: (err) => {

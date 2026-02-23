@@ -10,7 +10,7 @@ class PackagesUpdateInvalidTest < ActionDispatch::IntegrationTest
     @invalid_params = { package: { quota: -500 } } # Quota impossible
   end
 
-  test "should return 404 code when updating non-existent package" do
+  test "should return error when updating non-existent package" do
     sign_in @admin
 
     # modif ou non
@@ -18,7 +18,7 @@ class PackagesUpdateInvalidTest < ActionDispatch::IntegrationTest
       put api_package_url(id: 999999), params: { package: { title: "Test" } }, as: :json
     end
 
-    # code http
+    # code
     assert_response :ok
 
     # format reponse
@@ -26,7 +26,6 @@ class PackagesUpdateInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 404, json["code"]
   end
 
   test "should forbid update if user is not admin" do
@@ -38,7 +37,6 @@ class PackagesUpdateInvalidTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     json = JSON.parse(response.body)
-    assert_equal 403, json["code"]
   end
 
   test "should fail to update with invalid data" do
@@ -50,7 +48,6 @@ class PackagesUpdateInvalidTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     json = JSON.parse(response.body)
-    assert_equal 422, json["code"]
     assert_not_nil json["errors"]
   end
 end

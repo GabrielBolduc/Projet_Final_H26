@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -279,11 +279,11 @@ export class PackageFormComponent implements OnInit {
       expired_at: expiredAtFull.toISOString()
     };
 
-    const request$ = (this.isEditMode() && this.packageId)
+    const request = (this.isEditMode() && this.packageId)
       ? this.packageService.updatePackage(this.packageId, packageData, this.selectedFile || undefined)
       : this.packageService.createPackage(packageData, this.selectedFile || undefined);
 
-    request$.subscribe({
+    request.subscribe({
       next: () => {
         this.isLoading.set(false);
         this.router.navigate(['/admin/ticketing']);

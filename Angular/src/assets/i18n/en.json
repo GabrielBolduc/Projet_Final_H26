@@ -100,7 +100,7 @@
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "New Package",
-    "TITLE": "Ticketing",
+    "TITLE": "Packages management",
     "SEARCH_TITLE": "Title",
     "SORT_BY": "Sort by quantity",
     "SORT_ALL": "All",

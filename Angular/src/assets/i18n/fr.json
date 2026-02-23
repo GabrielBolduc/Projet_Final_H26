@@ -100,7 +100,7 @@
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "Nouveau Forfait",
-    "TITLE": "Billetterie",
+    "TITLE": "Gestion des forfaits",
     "SEARCH_TITLE": "Titre",
     "SORT_BY": "Trier par quantité",
     "SORT_ALL": "Tous",

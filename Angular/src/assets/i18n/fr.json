@@ -47,16 +47,37 @@
     "FESTIVAL_COMPLETED": "Ce festival est terminé.",
     "blank": "Ce champ est requis."
   },
-  "FESTIVAL":{
+  "FESTIVAL": {
     "ADMINISTRATION": "Administration",
-    "HELLO": "Bonjour",
-    "CURRENT_FESTIVAL": "Festival Actuel",
-    "ACCESS_DASHBOARD": "Acceder au dashboard",
-    "ARCHIVE": "Archive :",
+    "HELLO": "Bonjour !",
+    "CURRENT_FESTIVAL": "Festival en cours",
+    "DRAFTS": "Festivals en préparation",
+    "ARCHIVE": "Archives des festivals",
     "ADRESS": "Adresse :",
-    "VIEW_COMMENT": "Consulter les commentaires",
-    "FINISHED": "(Terminé)",
-    "NEW_FESTIVAL": "Nouveau Festival"
+    "ACCESS_DASHBOARD": "Accéder au tableau de bord",
+    "FINISHED": "Terminé",
+    "DRAFT": "Brouillon",
+    "ONGOING": "En cours",
+
+    "NEW_FESTIVAL": "Nouveau Festival",
+    "EDIT_FESTIVAL": "Modifier le Festival",
+    "NAME": "Nom du festival",
+    "STATUS": "Statut",
+    "START_DATE": "Date de début",
+    "END_DATE": "Date de fin",
+    "DAILY_CAPACITY": "Capacité journalière",
+    "LATITUDE": "Latitude (Optionnel)",
+    "LONGITUDE": "Longitude (Optionnel)",
+    "SATISFACTION": "Satisfaction",
+    "OTHER_INCOME": "Autres revenus ($)",
+    "OTHER_EXPENSE": "Autres dépenses ($)",
+    
+    "REQUIRE": "Ce champ est requis",
+    "MAXIMUM": "Longueur maximale dépassée",
+    "CANCEL": "Annuler",
+    "SAVE": "Créer",
+    "UPDATE": "Mettre à jour",
+    "LOADING": "Chargement..."
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "Nouvelle Performance",

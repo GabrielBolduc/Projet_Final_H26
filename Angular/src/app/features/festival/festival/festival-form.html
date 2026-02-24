@@ -1,0 +1,121 @@
+<mat-card class="festival-card">
+  <h2>{{ isEditMode() ? ('FESTIVAL.EDIT_FESTIVAL' | translate) : ('FESTIVAL.NEW_FESTIVAL' | translate) }}</h2>
+
+  <form [formGroup]="festivalForm" (ngSubmit)="onSubmit()" class="festival-form">
+    
+    @if (serverErrors().length > 0) {
+      <div class="form-error">
+        @for (error of serverErrors(); track $index) {
+          <div>{{ error }}</div>
+        }
+      </div>
+    }
+
+    <div class="grid-row-2">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.NAME' | translate }}</mat-label>
+        <input matInput formControlName="name">
+        @if (festivalForm.get('name')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
+        @if (festivalForm.get('name')?.hasError('maxlength')) {
+          <mat-error>{{ 'FESTIVAL.MAXIMUM' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.STATUS' | translate }}</mat-label>
+        <mat-select formControlName="status">
+          @for (option of statusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        @if (festivalForm.get('status')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <div class="grid-row-2">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.START_DATE' | translate }}</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="start_at">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        @if (festivalForm.get('start_at')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.END_DATE' | translate }}</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="end_at">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+        @if (festivalForm.get('end_at')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'FESTIVAL.ADRESS' | translate }}</mat-label>
+      <input matInput formControlName="address">
+      @if (festivalForm.get('address')?.hasError('required')) {
+        <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+      }
+    </mat-form-field>
+
+    <div class="grid-row-3">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.DAILY_CAPACITY' | translate }}</mat-label>
+        <input matInput type="number" formControlName="daily_capacity">
+        @if (festivalForm.get('daily_capacity')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.LATITUDE' | translate }}</mat-label>
+        <input matInput type="number" formControlName="latitude">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.LONGITUDE' | translate }}</mat-label>
+        <input matInput type="number" formControlName="longitude">
+      </mat-form-field>
+    </div>
+
+    <div class="grid-row-3">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.SATISFACTION' | translate }} (0-5)</mat-label>
+        <input matInput type="number" formControlName="satisfaction" min="0" max="5">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.OTHER_INCOME' | translate }}</mat-label>
+        <input matInput type="number" formControlName="other_income">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'FESTIVAL.OTHER_EXPENSE' | translate }}</mat-label>
+        <input matInput type="number" formControlName="other_expense">
+      </mat-form-field>
+    </div>
+
+    <div class="form-actions">
+      <button mat-stroked-button type="button" routerLink="/admin/festivals" class="action-btn cancel-btn">
+        {{ 'FESTIVAL.CANCEL' | translate }}
+      </button>
+      
+      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="festivalForm.invalid || isLoading()">
+        @if (isLoading()) {
+          <span>{{ "FESTIVAL.LOADING" | translate }}</span> 
+        } @else {
+          {{ isEditMode() ? ('FESTIVAL.UPDATE' | translate) : ('FESTIVAL.SAVE' | translate) }}
+        }
+      </button>
+    </div>
+
+  </form>
+</mat-card>

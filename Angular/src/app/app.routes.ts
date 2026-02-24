@@ -22,6 +22,7 @@ import { PublicScheduleComponent } from './features/festival/public_programation
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin.guard';
+import {FestivalFormComponent} from './features/festival/festival/festival-form'
 
 export const routes: Routes = [
     {
@@ -76,6 +77,16 @@ export const routes: Routes = [
             {
                 path: 'admin/festivals',
                 component: AdministrationComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/festivals/new',
+                component: FestivalFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/festivals/:id/edit',
+                component: FestivalFormComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

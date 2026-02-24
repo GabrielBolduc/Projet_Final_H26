@@ -1,7 +1,12 @@
 <div class="admin-page">
   
   <header class="admin-top-bar">
-    <div class="top-bar-side"></div>
+    <div class="top-bar-side">
+      <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
+        <mat-icon>add</mat-icon>
+        Nouveau Festival
+      </button>
+    </div>
     
     <h1 class="header-title">{{'FESTIVAL.ADMINISTRATION' | translate}}</h1>
     
@@ -11,14 +16,16 @@
   </header>
 
   <main>
-    <section class="admin-section">
-      <h2 class="section-label">{{'FESTIVAL.CURRENT_FESTIVAL' | translate}}</h2>
-      
-      @if (currentFestival(); as f) {
+    @if (currentFestival(); as f) {
+      <section class="admin-section">
+        <h2 class="section-label">{{'FESTIVAL.CURRENT_FESTIVAL' | translate}}</h2>
+        
         <mat-card class="fest-card">
           <mat-card-content class="card-content-layout">
             <div class="main-info">
-              <h3>{{ f.name }}</h3>
+              <h3>
+                {{ f.name }}
+              </h3>
               
               <div class="meta-info">
                 <mat-icon>calendar_today</mat-icon>
@@ -31,33 +38,98 @@
                 {{'FESTIVAL.ACCESS_DASHBOARD' | translate}}
               </button>
             </div>
+
+            <div class="card-actions-side">
+              <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+                <mat-icon>edit_square</mat-icon>
+              </button>
+              <button class="icon-btn trash" [disabled]="f.status === 'ongoing'" (click)="deleteFestival(f)" title="Supprimer">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
           </mat-card-content>
         </mat-card>
-      }
-    </section>
+      </section>
+    }
 
-    <section class="admin-section">
-      <h2 class="section-label">{{'FESTIVAL.ARCHIVE' | translate}}</h2>
-      
-      <div class="archive-grid">
-        @for (f of archives(); track f.id) {
-          <mat-card class="fest-card archived">
-            <mat-card-content class="card-content-layout">
-              <div class="main-info">
-                <h3>{{ f.name }} <small class="status-badge">{{'FESTIVAL.FINISHED' | translate}}</small></h3>
-                
-                <div class="meta-info">
-                  <mat-icon>calendar_today</mat-icon>
-                  <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+    @if (drafts().length > 0) {
+      <section class="admin-section">
+        <h2 class="section-label">{{'FESTIVAL.DRAFTS' | translate}}</h2>
+        
+        <div class="archive-grid">
+          @for (f of drafts(); track f.id) {
+            <mat-card class="fest-card">
+              <mat-card-content class="card-content-layout">
+                <div class="main-info">
+                  <h3>{{ f.name }} <small class="status-badge draft">{{'FESTIVAL.DRAFT' | translate}}</small></h3>
+                  
+                  <div class="meta-info">
+                    <mat-icon>calendar_today</mat-icon>
+                    <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+                  </div>
+                  
+                  <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
                 </div>
-                
-                <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        }
-      </div>
-    </section>
+
+                <div class="card-actions-side">
+                  <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+                    <mat-icon>edit_square</mat-icon>
+                  </button>
+                  <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      </section>
+    }
+
+    @if (archives().length > 0) {
+      <section class="admin-section">
+        <h2 class="section-label">{{'FESTIVAL.ARCHIVE' | translate}}</h2>
+        
+        <div class="archive-grid">
+          @for (f of archives(); track f.id) {
+            <mat-card class="fest-card archived">
+              <mat-card-content class="card-content-layout">
+                <div class="main-info">
+                  <h3>{{ f.name }} <span class="status-badge">{{'FESTIVAL.FINISHED' | translate}}</span></h3>
+                  
+                  <div class="meta-info">
+                    <mat-icon>calendar_today</mat-icon>
+                    <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+                  </div>
+                  
+                  <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
+                </div>
+
+                <div class="card-actions-side">
+                  <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+                    <mat-icon>edit_square</mat-icon>
+                  </button>
+                  <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      </section>
+    }
   </main>
 
 </div>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>Supprimer ce festival ?</h2>
+  <mat-dialog-content>
+    <p>Êtes-vous sûr de vouloir supprimer définitivement ce festival ? Toutes les données rattachées seront effacées.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+  </mat-dialog-actions>
+</ng-template>

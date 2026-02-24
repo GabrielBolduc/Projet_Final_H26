@@ -47,16 +47,37 @@
     "FESTIVAL_COMPLETED": "This festival is completed.",
     "blank": "This field is required."
   },
-  "FESTIVAL":{
+  "FESTIVAL": {
     "ADMINISTRATION": "Administration",
-    "HELLO": "Hello",
+    "HELLO": "Hello!",
     "CURRENT_FESTIVAL": "Current Festival",
-    "ACCESS_DASHBOARD": "Access the dashboard",
-    "ARCHIVE": "Archive :",
-    "ADRESS": "Adress :",
-    "VIEW_COMMENT": "View comments",
-    "FINISHED": "(Finished)",
-    "NEW_FESTIVAL": "New Festival"
+    "DRAFTS": "Upcoming Festivals",
+    "ARCHIVE": "Festival Archives",
+    "ADRESS": "Address:",
+    "ACCESS_DASHBOARD": "Access Dashboard",
+    "FINISHED": "Finished",
+    "DRAFT": "Draft",
+    "ONGOING": "Ongoing",
+
+    "NEW_FESTIVAL": "New Festival",
+    "EDIT_FESTIVAL": "Edit Festival",
+    "NAME": "Festival Name",
+    "STATUS": "Status",
+    "START_DATE": "Start Date",
+    "END_DATE": "End Date",
+    "DAILY_CAPACITY": "Daily Capacity",
+    "LATITUDE": "Latitude (Optional)",
+    "LONGITUDE": "Longitude (Optional)",
+    "SATISFACTION": "Satisfaction",
+    "OTHER_INCOME": "Other Income ($)",
+    "OTHER_EXPENSE": "Other Expense ($)",
+    
+    "REQUIRE": "This field is required",
+    "MAXIMUM": "Maximum length exceeded",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "UPDATE": "Update",
+    "LOADING": "Loading..."
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "New Performance",

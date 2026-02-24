@@ -39,7 +39,6 @@ interface DayGroup {
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
-  // 1. On cible le template qui se trouvera dans dashboard.html
   @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
 
   private performanceService = inject(PerformanceService);
@@ -93,7 +92,6 @@ export class DashboardComponent implements OnInit {
   }
 
   loadPerformances(): void {
-    // ... (Ton code de chargement reste exactement le même)
     this.isLoading.set(true);
     this.serverErrors.set([]);
 
@@ -133,7 +131,6 @@ export class DashboardComponent implements OnInit {
   }
 
   private groupByDay(performances: Performance[]): DayGroup[] {
-    // ... (Même logique)
     const groups: { [key: string]: Performance[] } = {};
     
     performances.forEach(perf => {
@@ -149,7 +146,6 @@ export class DashboardComponent implements OnInit {
   }
   
   deletePerformance(id: number): void {
-    // 2. On ouvre la boîte de dialogue en utilisant le template ciblé
     const dialogRef = this.dialog.open(this.confirmDialogTemplate, {
       width: '400px'
     });

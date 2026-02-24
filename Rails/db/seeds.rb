@@ -7,33 +7,28 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 0;")
+
 begin
-  Affectation.destroy_all
-rescue NameError, ActiveRecord::StatementInvalid
-  # continue si aucune affectation
+  Affectation.delete_all
+  Reservation.delete_all
+  Order.delete_all
+  Ticket.delete_all
+  Package.delete_all
+  Unit.delete_all
+  Accommodation.delete_all
+  Performance.delete_all
+  Stage.delete_all
+  Task.delete_all
+  Artist.delete_all
+  Festival.delete_all 
+  Client.delete_all
+  Admin.delete_all
+  Staff.delete_all
+  User.delete_all
+ensure
+  ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 1;")
 end
-
-Reservation.destroy_all
-Order.destroy_all
-Ticket.destroy_all
-
-Unit.destroy_all
-Package.destroy_all
-
-Accommodation.destroy_all
-Unit.destroy_all
-Reservation.destroy_all
-Performance.destroy_all
-
-Stage.destroy_all
-Artist.destroy_all
-Task.destroy_all
-
-Festival.destroy_all
-Client.destroy_all
-Admin.destroy_all
-Staff.destroy_all
-User.destroy_all
 
 
 c = Client.create!(
@@ -61,6 +56,7 @@ Staff.create!(
     ability: "Gestion des réservations"
 )
 
+# GabrielB
 f = Festival.create!(
   name: "Festify 2026",
   start_at: Date.new(2026, 7, 15),
@@ -183,6 +179,7 @@ Performance.create!(
   artist: artist2
 )
 
+# Alexandre
 acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",
   category: :hotel,
@@ -222,7 +219,7 @@ unit1 = Unit.new(
 )
 
 
-# Packages (Billetterie)
+# Racine
 
 p_general = Package.create!(
   title: "Passeport Festival",
@@ -283,6 +280,9 @@ images.each do |package, filename|
 end
 
 unit1.save!
+
+
+# Laurent
 
 res1 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),

@@ -61,14 +61,6 @@ Staff.create!(
     ability: "Gestion des réservations"
 )
 
-task_one = Task.create!(
-    title: "Task #1",
-    description: "Description of Task #1",
-    difficulty: 3,
-    priority: 1,
-    reusable: true
-
-)
 
 
 f = Festival.create!(
@@ -265,9 +257,35 @@ task_three = Task.create!(
     priority: 5,
     reusable: true
 )
-task_tow.file.attach(
+task_three.file.attach(
   io: File.open(Rails.root.join('db/files/meme-carre-chat-vibrant-simple_742173-4493.avif')),
   filename: 'meme-carre-chat-vibrant-simple_742173-4493.avif',
   content_type: 'meme-carre-chat-vibrant-simple_742173-4493/avif'
 )
 
+Affectation.create!(
+    user: Staff.first,
+    task: task_one,
+    festival: f,
+    responsability: "Affectation de la tache 1",
+    expected_start: f.start_at.to_time.change(hour: 8, min: 0),
+    expected_end: f.start_at.to_time.change(hour: 12, min: 0)
+)
+
+Affectation.create!(
+    user: Staff.first,
+    task: task_tow,
+    festival: f,
+    responsability: "Assurer la bonne installation de la scène",
+    expected_start: f.start_at.to_time.change(hour: 13, min: 0),
+    expected_end: f.start_at.to_time.change(hour: 17, min: 0)
+) 
+
+Affectation.create!(
+    user: Staff.first,
+    task: task_three,
+    festival: f,
+    responsability: "Receptionné la commande de projecteur de projecteur & co",
+    expected_start: f.start_at.to_time.change(hour: 9, min: 0),
+    expected_end: f.start_at.to_time.change(hour: 10, min: 0)
+) 

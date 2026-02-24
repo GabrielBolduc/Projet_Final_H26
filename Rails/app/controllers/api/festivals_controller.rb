@@ -1,7 +1,7 @@
 class Api::FestivalsController < ApiController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
-  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  skip_before_action :authenticate_user!, only: [ :index, :show, :current ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   
   before_action :set_festival, only: [ :show, :update, :destroy ]
@@ -24,6 +24,23 @@ class Api::FestivalsController < ApiController
       status: "success",
       data: @festival.as_json
     }, status: :ok
+  end
+
+  def current
+    festival = Festival.ongoing.first
+
+    if festival
+      render json: {
+        status: "success",
+        data: festival.as_json
+      }, status: :ok
+    else
+      render json: {
+        status: "success",
+        data: nil,
+        message: "Aucun festival en cours"
+      }, status: :ok
+    end
   end
 
   def create

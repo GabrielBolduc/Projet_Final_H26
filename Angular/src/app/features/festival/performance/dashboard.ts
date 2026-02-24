@@ -1,10 +1,12 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 
@@ -29,17 +31,24 @@ interface DayGroup {
     MatButtonModule, 
     MatIconModule,
     MatTableModule,
+    MatDialogModule,
+    MatSnackBarModule,
     TranslateModule
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
+  // 1. On cible le template qui se trouvera dans dashboard.html
+  @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
+
   private performanceService = inject(PerformanceService);
   private festivalService = inject(FestivalService); 
   private errorHandler = inject(ErrorHandlerService);
   private router = inject(Router);
   public translate = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
@@ -69,7 +78,10 @@ export class DashboardComponent implements OnInit {
     if (id) {
       this.router.navigate(['/admin/festivals', id, 'performances', 'new']);
     } else {
-      this.serverErrors.set(["Impossible d'ajouter une performance : Aucun festival en cours trouvé."]);
+      this.snackBar.open("Impossible d'ajouter une performance : Aucun festival en cours trouvé.", 'Fermer', {
+        duration: 5000,
+        panelClass: ['error-snackbar']
+      });
     }
   }
 
@@ -81,6 +93,7 @@ export class DashboardComponent implements OnInit {
   }
 
   loadPerformances(): void {
+    // ... (Ton code de chargement reste exactement le même)
     this.isLoading.set(true);
     this.serverErrors.set([]);
 
@@ -102,7 +115,7 @@ export class DashboardComponent implements OnInit {
               this.isLoading.set(false);
             },
             error: (err) => {
-              this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+              this.showErrorsAsSnackBar(err);
               this.isLoading.set(false);
             }
           });
@@ -113,13 +126,14 @@ export class DashboardComponent implements OnInit {
         }
       },
       error: (err) => {
-        this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+        this.showErrorsAsSnackBar(err);
         this.isLoading.set(false);
       }
     });
   }
 
   private groupByDay(performances: Performance[]): DayGroup[] {
+    // ... (Même logique)
     const groups: { [key: string]: Performance[] } = {};
     
     performances.forEach(perf => {
@@ -135,13 +149,32 @@ export class DashboardComponent implements OnInit {
   }
   
   deletePerformance(id: number): void {
-    if(confirm('Supprimer définitivement cette performance ?')) {
-      this.serverErrors.set([]);
-      this.performanceService.deletePerformance(id).subscribe({
-        next: () => this.loadPerformances(),
-        error: (err) => {
-          this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
-        }
+    // 2. On ouvre la boîte de dialogue en utilisant le template ciblé
+    const dialogRef = this.dialog.open(this.confirmDialogTemplate, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.serverErrors.set([]);
+        this.performanceService.deletePerformance(id).subscribe({
+          next: () => {
+            this.snackBar.open('Performance supprimée avec succès', 'Fermer', { duration: 3000 });
+            this.loadPerformances();
+          },
+          error: (err) => {
+            this.showErrorsAsSnackBar(err);
+          }
+        });
+      }
+    });
+  }
+
+  private showErrorsAsSnackBar(err: any): void {
+    const errors = this.errorHandler.parseRailsErrors(err);
+    if (errors.length > 0) {
+      this.snackBar.open(errors.join(' | '), 'Fermer', {
+        duration: 5000,
       });
     }
   }

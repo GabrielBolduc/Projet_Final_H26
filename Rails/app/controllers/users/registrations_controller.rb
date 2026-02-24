@@ -39,7 +39,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         status: "error",
         message: "validation failed",
         errors: resource.errors.full_messages,
-        code: 422 # Unprocessable entity
+        
       }, status: :ok
     end
   end

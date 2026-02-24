@@ -20,6 +20,17 @@ Rails.application.routes.draw do
     resources :reservations
     resources :accommodations
     resources :packages
+     resources :affectations do
+      collection do
+        get 'get_by_user/:user_id',
+            to: 'affectations#get_by_user',
+            as: :get_by_user
+
+        get 'get_by_task/:task_id',
+            to: 'affectations#get_by_task',
+            as: :get_by_task
+      end
+    end
   end
 
   root to: "angular#index"

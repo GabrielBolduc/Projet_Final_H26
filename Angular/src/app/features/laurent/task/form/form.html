@@ -3,8 +3,6 @@
 
   <form [formGroup]="form" (ngSubmit)="save()" class="perf-form">
     
-    
-
     <div class="grid-row-2">
       
       @if (!isEditMode) {
@@ -88,7 +86,7 @@
 
           @if (previewUrl || existingImageUrl) {
             <div class="image-thumbnail">
-              <img [src]="previewUrl || existingImageUrl" alt="Aperçu de l'image du billet">
+              <img [src]="previewUrl || existingImageUrl" alt="Aperçu de l'image du billet" class="image-preview">
             </div>
           }
         </div>

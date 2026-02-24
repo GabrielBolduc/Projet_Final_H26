@@ -1,20 +1,21 @@
-class Api::AffectationController < ApiController
+class Api::AffectationsController < ApiController
     before_action :authenticate_user!
     before_action :set_affectation, only: %i[show update destroy]
 
-    def index
-        @affectations = Task.find(params[:task_id]).affectations.order(updated_at: :desc)
-
-        render json: {
-        status: "success",
-        data: @affectations.as_json(affectation_json)
-        }, status: :ok
-    end
+    
 
     def show
        render json: {
         status: "success",
         data: @affectation.as_json(affectation_json)
+        }, status: :ok
+    end
+
+    def get_by_task
+        @affectations = Affectation.where(task_id: params[:task_id]).order(updated_at: :desc)   
+        render json: {
+        status: "success",
+        data: @affectations.as_json(affectation_json)
         }, status: :ok
     end
 
@@ -56,6 +57,20 @@ class Api::AffectationController < ApiController
 
     private
 
+    def affectation_json
+        {
+            success: true,
+            only: [ :id, :status, :start, :end, :expected_start, :expected_end, :responsability ],
+             
+            include: {
+                task: {
+                    only: [ :id, :name, :description, :reusable ],
+                    methods: [ :file_url]
+                }
+            }
+        }
+    end
+
     def set_affectation
         @affectation = Affectation.find(params[:id])
 
@@ -65,7 +80,16 @@ class Api::AffectationController < ApiController
     end
 
     def affectation_params
-        params.require(:affectation).permit(:user_id, :task_id, :status)
+        params.require(:affectation).permit(
+            :user_id, 
+            :task_id, 
+            :status, 
+            :start, 
+            :end, 
+            :expected_start, 
+            :expected_end, 
+            :responsability
+            )
     end
 
 end

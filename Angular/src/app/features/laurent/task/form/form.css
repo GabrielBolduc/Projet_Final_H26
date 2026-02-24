@@ -127,22 +127,10 @@ mat-form-field {
   margin-bottom: 16px;
   min-width: 0; /* prevents overflow in grid */
 }
-.priority-section {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
 
-.skull-input {
-  display: flex;
-  gap: 6px;
-}
-
-.skull-icon {
-  cursor: pointer;
-  font-size: 28px;
-}
-
-.skull-icon.filled {
-  color: black;
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 4px;
 }

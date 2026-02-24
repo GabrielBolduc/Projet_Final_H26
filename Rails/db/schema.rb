@@ -202,7 +202,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_17_202552) do
     t.column "food_options", "set('None','Canteen','Room service','Restaurant')", default: "None"
     t.decimal "parking_cost", precision: 4, scale: 2, default: "0.0", null: false, unsigned: true
     t.integer "quantity", limit: 1, null: false, unsigned: true
-    t.column "type", "enum('SimpleRoom','DoubleRoom','FamilyRoom','SmallTerrain','StandardTerrain','DeluxeTerrain')", null: false
+    t.column "type", "enum('Units::SimpleRoom','Units::DoubleRoom','Units::FamilyRoom','Units::SmallTerrain','Units::StandardTerrain','Units::DeluxeTerrain')", null: false
     t.datetime "updated_at", null: false
     t.integer "water", limit: 1, default: 0
     t.boolean "wifi", default: false, null: false

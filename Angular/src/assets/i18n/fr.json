@@ -243,5 +243,38 @@
       "RESERVE_HOTEL": "Réserver un Hôtel"
     },
     "EMPTY_STATE": "Aucune réservation pour le moment..."
+  },
+  "UNITS": {
+    "CREATE_TITLE": "Ajouter une unité",
+    "EDIT_TITLE": "Modifier l'unité",
+    "TYPE": "Type d'unité",
+    "COST": "Prix par personne/nuit",
+    "QUANTITY": "Quantité",
+    "WIFI": "Wi-Fi disponible",
+    "WATER": "Accès à l'eau",
+    "ELECTRICITY": "Électricité",
+    "PARKING": "Frais de parking",
+    "FOOD": "Options de restauration",
+    "UPLOAD_IMAGE": "Télécharger une image",
+    "TYPES": {
+      "ROOMS_HEADER": "Chambres d'hôtes",
+      "TERRAINS_HEADER": "Terrains de camping",
+      "SimpleRoom": "Chambre Simple",
+      "DoubleRoom": "Chambre Double",
+      "FamilyRoom": "Chambre Familiale",
+      "SmallTerrain": "Petit Terrain",
+      "StandardTerrain": "Terrain Standard",
+      "DeluxeTerrain": "Terrain Deluxe"
+    },
+    "WATER_STATUS": {
+      "NONE": "Pas d'eau",
+      "UNDRINKABLE": "Non potable",
+      "DRINKABLE": "Potable"
+    }
+  },
+  "COMMON": {
+    "SAVE": "Enregistrer",
+    "CANCEL": "Annuler",
+    "DELETE": "Supprimer"
   }
 }

@@ -23,7 +23,9 @@ Rails.application.routes.draw do
     resources :stages, only: [:index]
     resources :performances
     resources :reservations
-    resources :accommodations
+    resources :accommodations do
+      resources :units, shallow: true, only: [:create, :update, :destroy]
+    end
     resources :packages
      resources :affectations do
       collection do

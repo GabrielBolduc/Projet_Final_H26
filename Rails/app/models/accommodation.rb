@@ -1,6 +1,5 @@
 class Accommodation < ApplicationRecord
   belongs_to :festival
-  has_many :units, dependent: :destroy
   enum :category, { camping: 0, hotel: 1 }
 
   validates :name, presence: true, length: { maximum: 100 }

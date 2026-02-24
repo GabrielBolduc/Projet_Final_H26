@@ -206,8 +206,7 @@ acc2 = Accommodation.create!(
   festival: f
 )
 
-unit1 = Unit.new(
-  type: "SimpleRoom",
+unit1 = Units::SimpleRoom.new(
   accommodation: acc1,
   cost_person_per_night: 55.00,
   quantity: 10,

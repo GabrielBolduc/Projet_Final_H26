@@ -1,16 +1,16 @@
 # app/models/unit.rb
 class Unit < ApplicationRecord
   belongs_to :accommodation
-  has_many :reservations
+  has_many :reservations, dependent: :destroy
   has_one_attached :image
 
   CAPACITIES = {
-    "SimpleRoom"      => 1,
-    "DoubleRoom"      => 2,
-    "FamilyRoom"      => 6,
-    "SmallTerrain"    => 2,
-    "StandardTerrain" => 4,
-    "DeluxeTerrain"   => 8
+    "Units::SimpleRoom"      => 1,
+    "Units::DoubleRoom"      => 2,
+    "Units::FamilyRoom"      => 6,
+    "Units::SmallTerrain"    => 2,
+    "Units::StandardTerrain" => 4,
+    "Units::DeluxeTerrain"   => 8
   }.freeze
 
   enum :water, { no_water: 0, undrinkable: 1, drinkable: 2 }
@@ -40,6 +40,30 @@ class Unit < ApplicationRecord
     })
   end
 
+  def simple_room?
+    is_a?(Units::SimpleRoom)
+  end
+
+  def double_room?
+    is_a?(Units::DoubleRoom)
+  end
+
+  def family_room?
+    is_a?(Units::FamilyRoom)
+  end
+
+  def small_terrain?
+    is_a?(Units::SmallTerrain)
+  end
+
+  def standard_terrain?
+    is_a?(Units::StandardTerrain)
+  end
+
+  def deluxe_terrain?
+    is_a?(Units::DeluxeTerrain)
+  end
+
   private
 
   def must_have_image
@@ -49,9 +73,3 @@ class Unit < ApplicationRecord
   end
 end
 
-class SimpleRoom < Unit; end
-class DoubleRoom < Unit; end
-class FamilyRoom < Unit; end
-class SmallTerrain < Unit; end
-class StandardTerrain < Unit; end
-class DeluxeTerrain < Unit; end

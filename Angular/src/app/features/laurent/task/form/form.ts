@@ -44,15 +44,15 @@ export class TaskFormComponent {
   existingImageUrl: string | null = null;
 
    
-    form: FormGroup = new FormBuilder().group({
-        reusable_task_id: [null],
-        title: ['', Validators.required],
-        description: [''],
-        difficulty: [0, [Validators.required, Validators.min(0), Validators.max(5)]],
-        priority: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
-        reusable: [false],  
-        file: [null]
-        });
+  form: FormGroup = new FormBuilder().group({
+      reusable_task_id: [null],
+      title: ['', Validators.required],
+      description: [''],
+      difficulty: [0, [Validators.required, Validators.min(0), Validators.max(5)]],
+      priority: [1, [Validators.required, Validators.min(1), Validators.max(5)]],
+      reusable: [false],  
+      file: [null]
+      });
 
 
   constructor(
@@ -119,10 +119,10 @@ export class TaskFormComponent {
       return [1, 2, 3, 4, 5];
     }
 
-    setPriority(value: number) {
+  setPriority(value: number) {
       this.form.patchValue({ priority: value });
     }
-    save() {
+  save() {
 
          const formData = new FormData();
 

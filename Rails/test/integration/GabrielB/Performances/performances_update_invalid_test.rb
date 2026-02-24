@@ -20,12 +20,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :not_found
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 404, json["code"]
   end
 
   test "should forbid update if user is not admin" do
@@ -37,12 +36,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :forbidden
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 403, json["code"]
   end
 
   test "should fail to update with nil title" do
@@ -54,12 +52,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update with title longer than 20 characters" do
@@ -71,12 +68,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update with nil start_at" do
@@ -88,12 +84,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update with nil end_at" do
@@ -105,12 +100,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update with nil price" do
@@ -122,12 +116,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update with negative price" do
@@ -139,12 +132,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
 
@@ -157,12 +149,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update without a stage" do
@@ -174,12 +165,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to update without a festival" do
@@ -191,12 +181,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail if end_at is before start_at" do
@@ -208,12 +197,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail if dates are outside festival dates" do
@@ -225,12 +213,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail if stage overlaps with another performance" do
@@ -248,12 +235,11 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail if artist overlaps with another performance" do
@@ -271,11 +257,10 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 end

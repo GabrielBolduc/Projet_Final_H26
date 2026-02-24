@@ -2,10 +2,9 @@ class Festival < ApplicationRecord
   has_many :performances, dependent: :destroy
   has_many :affectations, dependent: :destroy
   has_many :packages, dependent: :destroy
-  has_many :accommodations
+  has_many :accommodations, dependent: :destroy
 
-
-  enum :status, { draft: "DRAFT", ongoing: "ONGOING",  completed: "COMPLETED" }, default: :draft, validate: true
+  enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :start_at, :end_at, :status, :address, presence: true

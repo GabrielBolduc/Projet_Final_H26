@@ -82,7 +82,8 @@ class Api::AffectationsController < ApiController
     def affectation_params
         params.require(:affectation).permit(
             :user_id, 
-            :task_id, 
+            :task_id,
+            :festival_id, 
             :status, 
             :start, 
             :end, 

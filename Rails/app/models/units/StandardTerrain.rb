@@ -1,2 +1,5 @@
-class Units::StandardTerrain < Unit
+module Units
+  class StandardTerrain < ::Unit
+    
+  end
 end

@@ -98,7 +98,7 @@
 .icon-btn.edit:hover { color: var(--mat-sys-primary); }
 .icon-btn.trash:hover { color: var(--mat-sys-error); }
 
-/* --- NOUVEAUX BLOCS AJOUTÉS --- */
+
 
 .card-actions-side {
   display: flex;

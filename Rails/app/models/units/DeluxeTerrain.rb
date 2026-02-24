@@ -1,2 +1,5 @@
-class Units::DeluxeTerrain < Unit
+module Units
+  class SimpleRoom < ::Unit
+    
+  end
 end

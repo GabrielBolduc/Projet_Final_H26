@@ -1,2 +1,5 @@
-class Units::FamilyRoom < Unit
+module Units
+  class FamilyRoom < ::Unit
+    
+  end
 end

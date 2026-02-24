@@ -108,7 +108,7 @@ class Api::FestivalsController < ApiController
     params.require(:festival).permit(
       :name, :start_at, :end_at, :status, :address, 
       :daily_capacity, :satisfaction, :other_income, :other_expense,
-      :latitude, :longitude
+      :latitude, :longitude, :comment
     )
   end
 

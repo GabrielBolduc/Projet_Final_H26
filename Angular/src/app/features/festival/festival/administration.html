@@ -1,5 +1,5 @@
 <div class="admin-page">
-  
+
   <header class="admin-top-bar">
     <div class="top-bar-side">
       <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
@@ -7,9 +7,9 @@
         Nouveau Festival
       </button>
     </div>
-    
+
     <h1 class="header-title">{{'FESTIVAL.ADMINISTRATION' | translate}}</h1>
-    
+
     <div class="top-bar-side right-align">
       <span class="greeting">{{'FESTIVAL.HELLO' | translate}}</span>
     </div>
@@ -17,110 +17,139 @@
 
   <main>
     @if (currentFestival(); as f) {
-      <section class="admin-section">
-        <h2 class="section-label">{{'FESTIVAL.CURRENT_FESTIVAL' | translate}}</h2>
-        
+    <section class="admin-section">
+      <h2 class="section-label">{{'FESTIVAL.CURRENT_FESTIVAL' | translate}}</h2>
+
+      <mat-card class="fest-card">
+        <mat-card-content class="card-content-layout">
+          <div class="main-info">
+            <h3>
+              {{ f.name }}
+              <span class="status-badge ongoing">{{'FESTIVAL.ONGOING' | translate}}</span>
+            </h3>
+
+            <div class="meta-info">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+            </div>
+
+            <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
+
+            <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['/admin/dashboard']">
+              {{'FESTIVAL.ACCESS_DASHBOARD' | translate}}
+            </button>
+          </div>
+
+          <div class="card-actions-side">
+            <button class="icon-btn finish" (click)="openFinishDialog(f)" title="Terminer et archiver">
+              <mat-icon>check_circle_outline</mat-icon>
+            </button>
+
+            <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+              <mat-icon>edit_square</mat-icon>
+            </button>
+            
+            <button class="icon-btn trash" [disabled]="f.status === 'ongoing'" (click)="deleteFestival(f)" title="Supprimer">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section>
+    }
+
+    @if (drafts().length > 0) {
+    <section class="admin-section">
+      <h2 class="section-label">{{'FESTIVAL.DRAFTS' | translate}}</h2>
+
+      <div class="archive-grid">
+        @for (f of drafts(); track f.id) {
         <mat-card class="fest-card">
           <mat-card-content class="card-content-layout">
             <div class="main-info">
               <h3>
-                {{ f.name }}
+                {{ f.name }} 
+                <span class="status-badge draft">{{'FESTIVAL.DRAFT' | translate}}</span>
               </h3>
-              
+
               <div class="meta-info">
                 <mat-icon>calendar_today</mat-icon>
                 <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
               </div>
-              
+
               <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
-              
-              <button mat-flat-button color="primary" class="btn-dash" routerLink="/admin/dashboard">
-                {{'FESTIVAL.ACCESS_DASHBOARD' | translate}}
-              </button>
             </div>
 
             <div class="card-actions-side">
               <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
                 <mat-icon>edit_square</mat-icon>
               </button>
-              <button class="icon-btn trash" [disabled]="f.status === 'ongoing'" (click)="deleteFestival(f)" title="Supprimer">
+              <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
           </mat-card-content>
         </mat-card>
-      </section>
-    }
-
-    @if (drafts().length > 0) {
-      <section class="admin-section">
-        <h2 class="section-label">{{'FESTIVAL.DRAFTS' | translate}}</h2>
-        
-        <div class="archive-grid">
-          @for (f of drafts(); track f.id) {
-            <mat-card class="fest-card">
-              <mat-card-content class="card-content-layout">
-                <div class="main-info">
-                  <h3>{{ f.name }} <small class="status-badge draft">{{'FESTIVAL.DRAFT' | translate}}</small></h3>
-                  
-                  <div class="meta-info">
-                    <mat-icon>calendar_today</mat-icon>
-                    <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
-                  </div>
-                  
-                  <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
-                </div>
-
-                <div class="card-actions-side">
-                  <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
-                    <mat-icon>edit_square</mat-icon>
-                  </button>
-                  <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
-                    <mat-icon>delete_outline</mat-icon>
-                  </button>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          }
-        </div>
-      </section>
+        }
+      </div>
+    </section>
     }
 
     @if (archives().length > 0) {
-      <section class="admin-section">
-        <h2 class="section-label">{{'FESTIVAL.ARCHIVE' | translate}}</h2>
-        
-        <div class="archive-grid">
-          @for (f of archives(); track f.id) {
-            <mat-card class="fest-card archived">
-              <mat-card-content class="card-content-layout">
-                <div class="main-info">
-                  <h3>{{ f.name }} <span class="status-badge">{{'FESTIVAL.FINISHED' | translate}}</span></h3>
-                  
-                  <div class="meta-info">
-                    <mat-icon>calendar_today</mat-icon>
-                    <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
-                  </div>
-                  
-                  <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
-                </div>
+    <section class="admin-section">
+      <h2 class="section-label">{{'FESTIVAL.ARCHIVE' | translate}}</h2>
 
-                <div class="card-actions-side">
-                  <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
-                    <mat-icon>edit_square</mat-icon>
+      <div class="archive-grid">
+        @for (f of archives(); track f.id) {
+        <mat-card class="fest-card archived">
+          <mat-card-content class="card-content-layout">
+            <div class="main-info">
+              <h3>
+                {{ f.name }} 
+                <span class="status-badge">{{'FESTIVAL.FINISHED' | translate}}</span>
+              </h3>
+
+              <div class="meta-info">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
+              </div>
+
+              <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
+              
+              <div class="kpi-summary" style="margin-top: 10px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 15px;">
+                <span style="display: flex; align-items: center; gap: 4px;">
+                  <mat-icon inline style="color: #ffb400;">star</mat-icon> {{f.satisfaction}} / 5
+                </span>
+                <span style="display: flex; align-items: center; gap: 4px;">
+                  <mat-icon inline color="primary">trending_up</mat-icon> {{f.other_income | currency:'USD':'symbol':'1.0-0'}}
+                </span>
+                <span style="display: flex; align-items: center; gap: 4px;">
+                  <mat-icon inline color="warn">trending_down</mat-icon> {{f.other_expense | currency:'USD':'symbol':'1.0-0'}}
+                </span>
+
+                @if (f.comment) {
+                  <button mat-button color="primary" class="btn-notes" (click)="showNotes(f)">
+                    <mat-icon inline>description</mat-icon> Voir les notes
                   </button>
-                  <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
-                    <mat-icon>delete_outline</mat-icon>
-                  </button>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          }
-        </div>
-      </section>
+                }
+              </div>
+            </div>
+
+            <div class="card-actions-side">
+              <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+                <mat-icon>edit_square</mat-icon>
+              </button>
+              <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        }
+      </div>
+    </section>
     }
   </main>
-
 </div>
 
 <ng-template #confirmDialogTemplate>
@@ -132,4 +161,66 @@
     <button mat-button mat-dialog-close>Annuler</button>
     <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
   </mat-dialog-actions>
+</ng-template>
+
+<ng-template #finishDialogTemplate let-data>
+  <h2 mat-dialog-title>Clôturer le festival</h2>
+  <mat-dialog-content>
+    <p>Entrez les résultats finaux pour <strong>{{data.name}}</strong> :</p>
+    
+    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+      <mat-form-field appearance="outline">
+        <mat-label>Satisfaction globale (1 à 5)</mat-label>
+        <input matInput type="number" [(ngModel)]="data.satisfaction" min="1" max="5">
+        <mat-icon matSuffix>star</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Notes / Débriefing</mat-label>
+        <textarea matInput [(ngModel)]="data.comment" rows="3" placeholder="Points forts, incidents..."></textarea>
+        <mat-icon matSuffix>notes</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Autres revenus ($)</mat-label>
+        <input matInput type="number" [(ngModel)]="data.other_income">
+        <mat-icon matSuffix>attach_money</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Autres dépenses ($)</mat-label>
+        <input matInput type="number" [(ngModel)]="data.other_expense">
+        <mat-icon matSuffix>money_off</mat-icon>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="data">Confirmer et Archiver</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #notesDialogTemplate let-data>
+  <div style="padding: 20px;">
+    <h2 mat-dialog-title style="margin: 0; padding-bottom: 10px;">
+      Débriefing : {{ data.name }}
+    </h2>
+    
+    <mat-dialog-content>
+      <div class="notes-paper">
+        <div class="notes-header">
+          <mat-icon inline>assignment</mat-icon>
+          Commentaires de clôture
+        </div>
+        
+        <div class="notes-text">
+          {{ data.comment }}
+        </div>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end" style="padding-top: 20px;">
+      <button mat-flat-button color="primary" mat-dialog-close>Fermer le rapport</button>
+    </mat-dialog-actions>
+  </div>
 </ng-template>

@@ -1,2 +1,5 @@
-class Units::DoubleRoom < Unit
+module Units
+  class DoubleRoom < ::Unit
+    
+  end
 end

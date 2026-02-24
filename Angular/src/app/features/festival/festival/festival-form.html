@@ -78,28 +78,17 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.LATITUDE' | translate }}</mat-label>
         <input matInput type="number" formControlName="latitude">
+        @if (festivalForm.get('latitude')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.LONGITUDE' | translate }}</mat-label>
         <input matInput type="number" formControlName="longitude">
-      </mat-form-field>
-    </div>
-
-    <div class="grid-row-3">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'FESTIVAL.SATISFACTION' | translate }} (0-5)</mat-label>
-        <input matInput type="number" formControlName="satisfaction" min="0" max="5">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'FESTIVAL.OTHER_INCOME' | translate }}</mat-label>
-        <input matInput type="number" formControlName="other_income">
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'FESTIVAL.OTHER_EXPENSE' | translate }}</mat-label>
-        <input matInput type="number" formControlName="other_expense">
+        @if (festivalForm.get('longitude')?.hasError('required')) {
+          <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
+        }
       </mat-form-field>
     </div>
 

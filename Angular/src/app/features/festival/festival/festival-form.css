@@ -26,8 +26,6 @@ h2 {
 }
 
 .grid-row-3 {
-  /* Garde la même logique que ton formulaire de performance : 
-     Le premier champ (Capacité/Satisfaction) prendra plus de place que les 2 autres */
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   gap: 24px;

@@ -1,31 +1,36 @@
 import { Component, OnInit, inject, signal, computed, ViewChild, TemplateRef } from '@angular/core';
-import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms'; // <-- Ajouté pour le [(ngModel)] de la modale
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field'; // <-- Pour le formulaire
+import { MatInputModule } from '@angular/material/input'; // <-- Pour le formulaire
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs'; // <-- La clé pour se passer de .subscribe()
+import { firstValueFrom } from 'rxjs';
 
 import { FestivalService } from '../../../core/services/festival.service';
 import { Festival } from '../../../core/models/festival';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
-
 @Component({
   selector: 'app-administration',
   standalone: true,
   imports: [
     CommonModule, 
     DatePipe,
+    FormsModule,
     MatCardModule, 
     MatButtonModule, 
     MatIconModule, 
     MatDividerModule, 
     MatDialogModule,
     MatSnackBarModule,
+    MatFormFieldModule,
+    MatInputModule,
     TranslateModule, 
     RouterModule
   ],
@@ -34,6 +39,8 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
 })
 export class AdministrationComponent implements OnInit {
   @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
+  @ViewChild('finishDialogTemplate') finishDialogTemplate!: TemplateRef<any>;
+  @ViewChild('notesDialogTemplate') notesDialogTemplate!: TemplateRef<any>;
 
   private festivalService = inject(FestivalService);
   private errorHandler = inject(ErrorHandlerService);
@@ -49,7 +56,7 @@ export class AdministrationComponent implements OnInit {
 
   drafts = computed(() =>
     this.festivals().filter(f => f.status === 'draft')
-  )
+  );
 
   archives = computed(() => 
     this.festivals().filter(f => f.status === 'completed')
@@ -68,6 +75,43 @@ export class AdministrationComponent implements OnInit {
     }
   }
 
+  showNotes(festival: Festival):void {
+    this.dialog.open(this.notesDialogTemplate, {
+      width: '500px',
+      data: festival
+    })
+  }
+
+  // fin de festival
+  async openFinishDialog(festival: Festival): Promise<void> {
+    const finishData = {
+      satisfaction: 5,
+      other_income: 0,
+      other_expense: 0,
+      comment: ''
+    };
+
+    const dialogRef = this.dialog.open(this.finishDialogTemplate, {
+      width: '450px',
+      data: { name: festival.name, ...finishData }
+    });
+
+    const result = await firstValueFrom(dialogRef.afterClosed());
+
+    if (result) {
+      try {
+        await firstValueFrom(this.festivalService.updateFestival(festival.id, {
+          ...result,
+          status: 'completed'
+        }));
+        this.snackBar.open("Festival archiver", "Fermer", {duration: 3000})
+        await this.loadFestivals()
+      }catch (err){
+        this.showErrorsAsSnackBar(err)
+      }
+    }
+  }
+
   navigateToAdd(): void {
     this.router.navigate(['/admin/festivals/new']);
   }
@@ -83,7 +127,6 @@ export class AdministrationComponent implements OnInit {
     }
 
     const dialogRef = this.dialog.open(this.confirmDialogTemplate, { width: '400px' });
-    
     const result = await firstValueFrom(dialogRef.afterClosed());
 
     if (result) {

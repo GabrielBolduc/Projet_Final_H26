@@ -2,12 +2,16 @@ class Api::FestivalsController < ApiController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  before_action :require_admin!, only: [ :create, :update, :destroy ]
   
-  # 2. On charge le festival avant d'entrer dans l'action
-  before_action :set_festival, only: [ :show ]
+  before_action :set_festival, only: [ :show, :update, :destroy ]
 
   def index
-    festivals = Festival.all
+    festivals = Festival.order(start_at: :desc)
+
+    if params[:status].present?
+      festivals = festivals.where(status: params[:status])
+    end
 
     render json: {
       status: "success",
@@ -22,6 +26,54 @@ class Api::FestivalsController < ApiController
     }, status: :ok
   end
 
+  def create
+    festival = Festival.new(festival_params)
+
+    if festival.save
+      render json: {
+        status: "success",
+        data: festival.as_json
+      }, status: :ok
+    else
+      render json: {
+        status: "error",
+        message: "Échec de la validation",
+        errors: festival.errors.messages
+      }, status: :ok
+    end
+  end
+
+  def update
+    if @festival.update(festival_params)
+      render json: {
+        status: "success",
+        data: @festival.as_json
+      }, status: :ok
+    else
+      render json: {
+        status: "error",
+        message: "Échec de la mise à jour",
+        errors: @festival.errors.messages
+      }, status: :ok
+    end
+  end
+
+  def destroy
+    if @festival.destroy
+      render json: {
+        status: "success",
+        message: "Festival supprimé avec succès.",
+        data: nil
+      }, status: :ok
+    else
+      render json: {
+        status: "error",
+        message: "Impossible de supprimer ce festival.",
+        errors: @festival.errors.messages
+      }, status: :ok
+    end
+  end
+
   private
 
   def set_festival
@@ -33,5 +85,22 @@ class Api::FestivalsController < ApiController
       status: "error",
       message: "Resource not found"
     }, status: :ok
+  end
+
+  def festival_params
+    params.require(:festival).permit(
+      :name, :start_at, :end_at, :status, :address, 
+      :daily_capacity, :satisfaction, :other_income, :other_expense,
+      :latitude, :longitude
+    )
+  end
+
+  def require_admin!
+    unless current_user&.is_a?(Admin)
+      render json: {
+        status: "error",
+        message: "Accès refusé : Privilèges administrateur requis."
+      }, status: :ok
+    end
   end
 end

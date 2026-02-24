@@ -2,8 +2,9 @@ class Api::PerformancesController < ApiController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
-  before_action :set_performance, only: [ :show, :update, :destroy ]
   before_action :require_admin!, only: [ :create, :update, :destroy ]
+  before_action :set_performance, only: [ :show, :update, :destroy ]
+  
 
   def index
     if Festival.ongoing.exists?

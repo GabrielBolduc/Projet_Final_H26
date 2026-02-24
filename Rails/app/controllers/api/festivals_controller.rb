@@ -7,7 +7,7 @@ class Api::FestivalsController < ApiController
   before_action :set_festival, only: [ :show, :update, :destroy ]
 
   def index
-    festivals = Festival.order(start_at: :desc)
+    festivals = Festival.recent
 
     if params[:status].present?
       festivals = festivals.where(status: params[:status])

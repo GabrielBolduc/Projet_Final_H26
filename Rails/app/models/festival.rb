@@ -4,6 +4,7 @@ class Festival < ApplicationRecord
   has_many :packages, dependent: :destroy
   has_many :accommodations, dependent: :destroy
 
+  scope :recent, -> { order(start_at: :desc) }
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
 
   validates :name, presence: true, length: { maximum: 100 }

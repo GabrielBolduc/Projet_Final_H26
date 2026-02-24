@@ -80,7 +80,7 @@ f1 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "completed",
+  status: "draft",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -95,7 +95,7 @@ f2 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "completed",
+  status: "draft", 
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -123,7 +123,6 @@ c_stage = Stage.create!(
     technical_specs: "Small speaker"
 )
 
-
 artist1 = Artist.create!(
     name: "Bob",
     genre: "Rock",
@@ -145,7 +144,7 @@ artist3 = Artist.create!(
     bio: "Good music"
 )
 
-
+# perf pour f (ongoing)
 Performance.create!(
   title: "First show",
   description: "Bon show.",
@@ -178,6 +177,76 @@ Performance.create!(
   stage: main_stage,
   artist: artist2
 )
+
+# perf pour f1 (draft)
+Performance.create!(
+  title: "First show",
+  description: "Bon show.",
+  price: 55.00,
+  start_at: f1.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f1.start_at.to_time.change(hour: 22, min: 0),
+  festival: f1,
+  stage: main_stage,
+  artist: artist1
+)
+
+Performance.create!(
+  title: "Second show",
+  description: "Good show",
+  price: 45.00,
+  start_at: f1.start_at.to_time.change(hour: 21, min: 0),
+  end_at: f1.start_at.to_time.change(hour: 23, min: 59),
+  festival: f1,
+  stage: b_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last show",
+  description: "Good show",
+  price: 60.00,
+  start_at: (f1.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f1.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f1,
+  stage: main_stage,
+  artist: artist2
+)
+
+# perf pour f2 (completed)
+Performance.create!(
+  title: "First show",
+  description: "Bon show.",
+  price: 55.00,
+  start_at: f2.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f2.start_at.to_time.change(hour: 22, min: 0),
+  festival: f2,
+  stage: main_stage,
+  artist: artist1
+)
+
+Performance.create!(
+  title: "Second show",
+  description: "Good show",
+  price: 45.00,
+  start_at: f2.start_at.to_time.change(hour: 21, min: 0),
+  end_at: f2.start_at.to_time.change(hour: 23, min: 59),
+  festival: f2,
+  stage: b_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last show",
+  description: "Good show",
+  price: 60.00,
+  start_at: (f2.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f2.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f2,
+  stage: main_stage,
+  artist: artist2
+)
+
+f2.update!(status: "completed")
 
 # Alexandre
 acc1 = Accommodation.create!(

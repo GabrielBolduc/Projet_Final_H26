@@ -7,21 +7,20 @@ class Api::PerformancesController < ApiController
   
 
   def index
-    if Festival.ongoing.exists?
-      performances = Performance.active
-                                .chronological
-                                .includes(:artist, :stage, :festival)
-      render json: {
-        status: "success",
-        data: performances.as_json(include: [ :artist, :stage, :festival ])
-      }, status: :ok
-    else
-      render json: {
-        status: "success", 
-        data: [],
-        message: "Aucun festival en cours trouvé."
-      }, status: :ok
+    # On récupère les performances en incluant les relations pour éviter les requêtes N+1
+    performances = Performance.chronological.includes(:artist, :stage, :festival)
+    
+    # OPTIONNEL MAIS RECOMMANDÉ : Si l'URL contient un festival_id, on filtre côté base de données
+    if params[:festival_id].present?
+      performances = performances.where(festival_id: params[:festival_id])
     end
+
+    # Note : J'ai retiré le '.active' car il filtrait sûrement les anciennes performances.
+    
+    render json: {
+      status: "success",
+      data: performances.as_json(include: [ :artist, :stage, :festival ])
+    }, status: :ok
   end
 
   def show

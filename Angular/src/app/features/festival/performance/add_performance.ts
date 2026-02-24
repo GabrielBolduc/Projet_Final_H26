@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 
 import { PerformanceService } from '../../../core/services/performance.service';
 import { ArtistService } from '../../../core/services/artist.service';
@@ -38,7 +39,7 @@ const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
   selector: 'app-add-performance',
   standalone: true,
   imports: [
-    CommonModule, ReactiveFormsModule, RouterLink,
+    CommonModule, ReactiveFormsModule,
     MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule,
     MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,
     TranslateModule
@@ -61,6 +62,7 @@ export class AddPerformanceComponent implements OnInit {
   form: FormGroup;
   isEditMode = signal(false);
   performanceId: number | null = null;
+  currentFestivalId = signal<number | null>(null);
   isLoading = signal(false);
 
   serverErrors = signal<string[]>([]);
@@ -84,83 +86,102 @@ export class AddPerformanceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const festId = this.route.snapshot.paramMap.get('id');
+    if (festId) {
+      this.currentFestivalId.set(Number(festId));
+      this.form.patchValue({ festival_id: Number(festId) });
+    }
+
     this.loadDropdowns();
 
-    const id = this.route.snapshot.paramMap.get('perfId');
-
-    if (id) {
+    const perfIdParam = this.route.snapshot.paramMap.get('perfId');
+    if (perfIdParam) {
       this.isEditMode.set(true);
-      this.performanceId = +id;
+      this.performanceId = +perfIdParam;
       this.loadPerformanceData(this.performanceId);
     }
   }
 
-  loadDropdowns() {
-    this.artistService.getArtists().subscribe(data => this.artists.set(data));
-    this.stageService.getStages().subscribe(data => this.stages.set(data));
-    
-    this.festivalService.getFestivals().subscribe(data => {
-      const activeFestivals = data.filter(f => f.status !== 'completed');
+  goBack(): void {
+    const festId = this.currentFestivalId();
+    if (festId) {
+      this.router.navigate(['/admin/festivals', festId, 'dashboard']);
+    } else {
+      this.router.navigate(['/admin/festivals']);
+    }
+  }
+
+  async loadDropdowns() {
+    try {
+      const [artistsData, stagesData, festivalsData] = await Promise.all([
+        firstValueFrom(this.artistService.getArtists()),
+        firstValueFrom(this.stageService.getStages()),
+        firstValueFrom(this.festivalService.getFestivals())
+      ]);
+
+      this.artists.set(artistsData);
+      this.stages.set(stagesData);
+
+      const activeFestivals = festivalsData.filter(f => f.status !== 'completed');
       this.festivals.set(activeFestivals);
 
       if (this.isEditMode() && this.performanceId) {
-        this.checkCurrentFestivalVisibility(data);
+        this.checkCurrentFestivalVisibility(festivalsData);
       }
-    });
+    } catch (err) {
+      this.serverErrors.set(['Erreur lors du chargement des sélecteurs.']);
+    }
   }
 
-  private checkCurrentFestivalVisibility(allFestivals: Festival[]) {
-    this.performanceService.getPerformance(this.performanceId!).subscribe({
-      next: (perf) => {
-        const currentFestId = perf.festival?.id || perf.festival_id;
-        const isInList = this.festivals().find(f => f.id === currentFestId);
-        
-        if (!isInList) {
-          const oldFestival = allFestivals.find(f => f.id === currentFestId);
-          if (oldFestival) {
-            this.festivals.update(list => [...list, oldFestival]);
-          }
+  private async checkCurrentFestivalVisibility(allFestivals: Festival[]) {
+    try {
+      const perf = await firstValueFrom(this.performanceService.getPerformance(this.performanceId!));
+      const currentFestId = perf.festival?.id || perf.festival_id;
+      const isInList = this.festivals().find(f => f.id === currentFestId);
+      
+      if (!isInList) {
+        const oldFestival = allFestivals.find(f => f.id === currentFestId);
+        if (oldFestival) {
+          this.festivals.update(list => [...list, oldFestival]);
         }
-      },
-      error: () => {
       }
-    });
+    } catch (err) {
+    }
   }
 
-  loadPerformanceData(id: number) {
+  async loadPerformanceData(id: number) {
     this.isLoading.set(true);
-    this.performanceService.getPerformance(id).subscribe({
-      next: (data) => {
-        const start = new Date(data.start_at);
-        const end = new Date(data.end_at);
+    try {
+      const data = await firstValueFrom(this.performanceService.getPerformance(id));
+      const start = new Date(data.start_at);
+      const end = new Date(data.end_at);
 
-        this.form.patchValue({
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          artist_id: data.artist?.id || data.artist_id,
-          stage_id: data.stage?.id || data.stage_id,
-          festival_id: data.festival?.id || data.festival_id,
-          
-          date: start,
-          start_time: DateUtils.formatTime(start), // Utilisation de DateUtils
-          end_time: DateUtils.formatTime(end)      // Utilisation de DateUtils
-        });
-        this.isLoading.set(false);
-      },
-      error: () => this.router.navigate(['/admin/dashboard'])
-    });
+      this.form.patchValue({
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        artist_id: data.artist?.id || data.artist_id,
+        stage_id: data.stage?.id || data.stage_id,
+        festival_id: data.festival?.id || data.festival_id,
+        
+        date: start,
+        start_time: DateUtils.formatTime(start),
+        end_time: DateUtils.formatTime(end)
+      });
+    } catch (err) {
+      this.goBack();
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.serverErrors.set([]);
-
     if (this.form.invalid) return;
 
     this.isLoading.set(true);
     const val = this.form.value;
     
-    // Utilisation de DateUtils
     const startAt = DateUtils.combineDateTime(val.date, val.start_time);
     const endAt = DateUtils.combineDateTime(val.date, val.end_time);
 
@@ -170,20 +191,17 @@ export class AddPerformanceComponent implements OnInit {
       end_at: endAt
     };
 
-    const request$ = (this.isEditMode() && this.performanceId)
-      ? this.performanceService.updatePerformance(this.performanceId, payload)
-      : this.performanceService.createPerformance(payload);
-
-    request$.subscribe({
-      next: () => {
-        this.isLoading.set(false);
-        this.router.navigate(['/admin/dashboard']);
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        
-        this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+    try {
+      if (this.isEditMode() && this.performanceId) {
+        await firstValueFrom(this.performanceService.updatePerformance(this.performanceId, payload));
+      } else {
+        await firstValueFrom(this.performanceService.createPerformance(payload));
       }
-    });
+      this.goBack();
+    } catch (err) {
+      this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

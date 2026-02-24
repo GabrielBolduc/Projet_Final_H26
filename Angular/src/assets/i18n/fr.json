@@ -91,7 +91,8 @@
     "START": "Début",
     "END": "Fin",
     "NOTE": "Notes",
-    "ACTION": "Actions"
+    "ACTION": "Actions",
+    "NO_ONGOING": "Aucun festival en cours"
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",

@@ -2,7 +2,7 @@
   <main class="admin-page">
     
     <header class="admin-top-bar">
-      <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
+      <button mat-stroked-button class="btn-new" (click)="navigateToAdd()" [disabled]="!festivalId()">
         <mat-icon>add</mat-icon>{{'DASHBOARD.NEW_PERFORMANCE' | translate}}
       </button>
       
@@ -14,7 +14,18 @@
       <div class="loading-state"><p>{{'DASHBOARD.LOADING' | translate}}</p></div>
     }
 
-    @if (!isLoading() && performanceGroups().length === 0) {
+    @if (!isLoading() && !festivalId()) {
+      <div class="empty-state" style="text-align: center; padding: 40px; border: 2px dashed #ccc; border-radius: 12px; margin-top: 20px;">
+        <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #ccc; margin-bottom: 16px;">event_busy</mat-icon>
+        <h2>Aucun festival en cours</h2>
+        <p>Vous devez définir un festival sur "En cours" depuis l'administration pour gérer sa programmation.</p>
+        <button mat-flat-button color="primary" routerLink="/admin/festivals" style="margin-top: 16px;">
+          Retour à l'administration
+        </button>
+      </div>
+    }
+
+    @if (!isLoading() && festivalId() && performanceGroups().length === 0) {
       <div class="empty-state">
         <p>{{'DASHBOARD.NOTHING' | translate}}</p>
         <button mat-button color="primary" (click)="navigateToAdd()">{{'DASHBOARD.ADD' | translate}}</button>
@@ -84,18 +95,19 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
-          <ng-template #confirmDialogTemplate>
-            <h2 mat-dialog-title>Confirmation de suppression</h2>
-            <mat-dialog-content>
-              <p>Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.</p>
-            </mat-dialog-content>
-            <mat-dialog-actions align="end">
-              <button mat-stroked-button mat-dialog-close mat-dialog-close>Annuler</button>
-              <button mat-flat-button [mat-dialog-close]="true">Supprimer</button>
-            </mat-dialog-actions>
-          </ng-template>
         </div>
       </section>
     }
   </main>
 </div>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>Confirmation de suppression</h2>
+  <mat-dialog-content>
+    <p>Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button mat-dialog-close>Annuler</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+  </mat-dialog-actions>
+</ng-template>

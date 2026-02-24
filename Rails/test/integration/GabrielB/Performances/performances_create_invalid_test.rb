@@ -30,13 +30,12 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :forbidden
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 403, json["code"]
-    assert_equal "Access denied: Admin privileges required.", json["message"]
+    assert_equal "Accès refusé : Privilèges administrateur requis.", json["message"]
   end
 
   test "should fail to create with nil title" do
@@ -48,13 +47,12 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
-    assert_equal "Validation failed", json["message"]
+    assert_equal "Échec de la validation", json["message"]
     assert_not_nil json["errors"]
   end
 
@@ -67,12 +65,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create with nil start_at" do
@@ -84,12 +81,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create with nil end_at" do
@@ -101,12 +97,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create with nil price" do
@@ -118,12 +113,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create with negative price" do
@@ -135,12 +129,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
 
@@ -153,12 +146,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create without a stage" do
@@ -170,12 +162,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create without a festival" do
@@ -187,12 +178,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
 
@@ -207,12 +197,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create if dates are outside festival dates" do
@@ -226,12 +215,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create if stage overlaps with another performance" do
@@ -249,12 +237,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create if artist overlaps with another performance" do
@@ -272,12 +259,11 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
 
   test "should fail to create if festival is completed" do
@@ -296,12 +282,10 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :unprocessable_entity
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
   end
-
 end

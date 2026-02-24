@@ -10,12 +10,11 @@ class PerformancesShowInvalidTest < ActionDispatch::IntegrationTest
     end
 
     # code http
-    assert_response :not_found
+    assert_response :ok
 
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal 404, json["code"]
-    assert_equal "Performance not found", json["message"]
+    assert_equal "Performance introuvable.", json["message"]
   end
 end

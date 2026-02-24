@@ -69,8 +69,9 @@
 
 .admin-header {
   display: flex;
-  justify-content: flex-end;
-  padding: 20px 40px 10px 0; 
+  justify-content: flex-start;
+  padding: 20px 20px 10px 60px; 
+  gap: 100px;
 }
 
 .brutalist-add-btn {
@@ -100,5 +101,11 @@
 
 .accommodations-grid {
   margin-top: 0px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 

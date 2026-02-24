@@ -119,9 +119,9 @@
             @if (selectedFile) { <span class="file-name">{{ selectedFile.name }}</span> }
           </div>
 
-          @if (previewUrl || existingImageUrl) {
+          @if (displayImageUrl()) {
             <div class="image-thumbnail">
-              <img [src]="previewUrl || existingImageUrl" alt="Aperçu de l'image du billet">
+              <img [src]="displayImageUrl()" alt="Aperçu de l'image du billet">
             </div>
           }
         </div>

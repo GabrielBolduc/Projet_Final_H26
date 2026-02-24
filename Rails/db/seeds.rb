@@ -37,7 +37,7 @@ User.destroy_all
 
 
 c = Client.create!(
-    email: "client@gmail.com",
+    email: "client@test.com",
     password: "qwerty",
     password_confirmation: "qwerty",
     name: "Client #1",
@@ -61,8 +61,6 @@ Staff.create!(
     ability: "Gestion des réservations"
 )
 
-
-
 f = Festival.create!(
   name: "Festify 2026",
   start_at: Date.new(2026, 7, 15),
@@ -71,7 +69,7 @@ f = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "ONGOING",
+  status: "ongoing",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -86,7 +84,7 @@ f1 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "COMPLETED",
+  status: "completed",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -101,7 +99,7 @@ f2 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "COMPLETED",
+  status: "completed",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -223,6 +221,79 @@ unit1 = Unit.new(
   food_options: "Room service,Restaurant"
 )
 
+
+# Packages (Billetterie)
+
+p_general = Package.create!(
+  title: "Passeport Festival",
+  description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
+  price: 150.00,
+  quota: 500,
+  category: "general",
+  valid_at: f.start_at,
+  expired_at: f.end_at,
+  festival: f
+)
+
+p_daily = Package.create!(
+  title: "Billet Journalier",
+  description: "Accès pour une seule journée de festivités.",
+  price: 60.00,
+  quota: 1000,
+  category: "daily",
+  valid_at: f.start_at.to_time.change(hour: 10),
+  expired_at: f.start_at.to_time.change(hour: 17),
+  festival: f
+)
+
+p_evening = Package.create!(
+  title: "Billet Soirée",
+  description: "Pour les spectacles du soir !",
+  price: 72.99,
+  quota: 2400,
+  category: "evening",
+  valid_at: f.start_at.to_time.change(hour: 19),
+  expired_at: f.start_at.to_time.change(hour: 23),
+  festival: f
+)
+
+# Attachement des images
+images = {
+  p_general => 'general-ticket.webp',
+  p_daily   => 'daily-ticket.webp',
+  p_evening => 'evening-ticket.jpg',
+  unit1 => 'placeholder-image.jpg'
+}
+
+images.each do |package, filename|
+  path = Rails.root.join('db', 'files', filename)
+  
+  if File.exist?(path)
+    # Détermine le type d'image
+    content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
+
+    package.image.attach(
+      io: File.open(path),
+      filename: filename,
+      content_type: content_type 
+    )
+  else
+    puts "Image non trouvée : #{filename}"
+  end
+end
+
+unit1.save!
+
+res1 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 15),
+  departure_at: Date.new(2026, 7, 17),
+  nb_of_people: 1,
+  reservation_name: "Jean Daniel",
+  phone_number: "8195338888",
+  user: c,
+  unit: unit1,
+  festival: f
+)
 task_one = Task.create!(
     title: "Task #1",
     description: "Description of Task #1",

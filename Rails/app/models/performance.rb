@@ -3,6 +3,11 @@ class Performance < ApplicationRecord
   belongs_to :stage
   belongs_to :festival
 
+  scope :chronological, -> { order(start_at: :asc) }
+  scope :for_festival, ->(f_id) { where(festival_id: f_id) }
+  scope :active, -> { joins(:festival).merge(Festival.ongoing) }
+  scope :upcoming, -> { where("start_at >= ?", Time.current) }
+
   validates :start_at, :end_at, :price, presence: true
   validates :title, length: { maximum: 20 }
   validates :price, numericality: { greater_than_or_equal_to: 0 }, presence: true

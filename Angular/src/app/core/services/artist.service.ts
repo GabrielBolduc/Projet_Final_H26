@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, catchError, of } from 'rxjs';
 import { Artist } from '../models/artist';
-import { environment } from '../../../environments/environment';
 
 interface ApiResponse<T> {
   status: 'success' | 'error';
@@ -13,16 +12,21 @@ interface ApiResponse<T> {
 @Injectable({ providedIn: 'root' })
 export class ArtistService {
   private http = inject(HttpClient);
-  private readonly API_URL = `${environment.apiUrl}/artists` 
+  private readonly API_URL = '/api/artists';
 
   getArtists(): Observable<Artist[]> {
     return this.http.get<ApiResponse<Artist[]>>(this.API_URL).pipe(
       map(response => {
         if (response.status === 'success') {
-          return response.data;
+          return response.data; 
         } else {
-          throw new Error(response.message || 'Erreur chargement artistes');
+          console.error('Erreur API:', response.message);
+          return []; 
         }
+      }),
+      catchError(err => {
+        console.error('Erreur réseau attrapée dans le service:', err);
+        return of([]);
       })
     );
   }

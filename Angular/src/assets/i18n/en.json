@@ -2,6 +2,7 @@
   "NAV": {
     "HOME": "Home",
     "RESERVATION": "Reservation",
+    "ACCOMMODATIONS": "Accommodations",
     "TICKETING": "Ticketing",
     "SCHEDULE": "Schedule",
     "ADMIN": "Admin"
@@ -100,7 +101,7 @@
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "New Package",
-    "TITLE": "Ticketing",
+    "TITLE": "Packages management",
     "SEARCH_TITLE": "Title",
     "SORT_BY": "Sort by quantity",
     "SORT_ALL": "All",
@@ -166,7 +167,59 @@
     "TITLE_CREATE": "New Task",
     "TITLE_UPDATE": "Edit Task",
     "REUSABLE_TASKS": "Reusable Tasks",
-    "SELECT_REUSABLE": "Select reusable tasks",
-    "REQUIS": "Required"
+    "SELECT_REUSABLE": "Select reusable tasks"
+  },
+  "ACCOMMODATIONS": {
+    "ADD": "ADD",
+    "ALL": "ALL",
+    "HOTELS": "HOTELS",
+    "CAMPINGS": "CAMPINGS",
+    "NOT_FOUND": "No accommodations found.",
+    "DETAILS": {
+      "BACK_TO": "Back to",
+      "HOTEL": "Hotel",
+      "CAMPING": "Camping",
+      "WALK": "Walk",
+      "DRIVE": "Drive",
+      "SHUTTLE": "Shuttle",
+      "FEE": "Fee",
+      "YES": "YES",
+      "NO": "NO",
+      "EDIT": "EDIT ACCOMMODATION",
+      "BOOK": "BOOK THIS ACCOMMODATION",
+      "LOADING": "Loading details..."
+    },
+    "FORM": {
+      "TITLE_EDIT": "Edit Accommodation",
+      "TITLE_NEW": "New Accommodation",
+      "DELETE": "DELETE",
+      "DELETE_CONFIRM": "Are you sure you want to delete this accommodation? This action is irreversible.",
+      "NAME": "Accommodation Name",
+      "CATEGORY": "Category",
+      "ADDRESS": "Address",
+      "COORDINATES": "Coordinates (Lat, Long)",
+      "SHUTTLE": "Shuttle",
+      "TIME_CAR": "Time (Drive)",
+      "TIME_WALK": "Time (Walk)",
+      "COMMISSION": "Commission (%)",
+      "CANCEL": "Cancel",
+      "SUBMIT_UPDATE": "Update",
+      "SUBMIT_SAVE": "Save",
+      "PROCESSING": "Processing...",
+      "ERRORS": {
+        "REQUIRED": "Required",
+        "MAX_LENGTH": "Maximum {{length}} characters",
+        "PATTERN": "Invalid format. Use: 46.609, -72.704",
+        "MIN_COMMISSION": "Commission must be at least 0%",
+        "MAX_COMMISSION": "Commission must be strictly less than 30%"
+      }
+    }
+  },
+  "RESERVATIONS": {
+    "SIDEBAR": {
+      "RESERVE_CAMPING": "Reserve Camping",
+      "RESERVE_HOTEL": "Reserve Hotel"
+    },
+    "EMPTY_STATE": "No reservations yet..."
   }
 }

@@ -33,6 +33,13 @@ class Unit < ApplicationRecord
     self.food_options = Array(values).reject(&:blank?).join(",")
   end
 
+  def as_json(options = {})
+    super(options).merge({
+      food_options: food_options_list,
+      max_capacity: max_capacity
+    })
+  end
+
   private
 
   def must_have_image

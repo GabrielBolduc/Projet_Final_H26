@@ -33,7 +33,7 @@ class Api::AccommodationsController < ApiController
     if @accommodation.save
       render json: { status: "success", data: @accommodation }, status: :ok
     else
-      render_logic_error(@accommodation.errors.full_messages, 422)
+      render_logic_error(@accommodation.errors.full_messages)
     end
   end
 
@@ -41,7 +41,7 @@ class Api::AccommodationsController < ApiController
     if @accommodation.update(accommodation_params)
       render json: { status: "success", data: @accommodation }, status: :ok
     else
-      render_logic_error(@accommodation.errors.full_messages, 422)
+      render_logic_error(@accommodation.errors.full_messages)
     end
   end
 
@@ -53,7 +53,7 @@ class Api::AccommodationsController < ApiController
   private
   def set_accommodation
     @accommodation = Accommodation.find_by(id: params[:id])
-    render_logic_error("Accommodation not found", 404) unless @accommodation
+    render_logic_error("Accommodation not found") unless @accommodation
   end
 
   def accommodation_params
@@ -63,17 +63,16 @@ class Api::AccommodationsController < ApiController
     )
   end
   
-  def render_logic_error(message, code)
+  def render_logic_error(message)
     render json: { 
       status: "error", 
-      code: code, 
       message: message 
     }, status: :ok
   end
 
   def require_admin!
     unless current_user&.is_a?(Admin)
-      render_logic_error("Access denied: Admin privileges required.", 403)
+      render_logic_error("Access denied: Admin privileges required.")
     end
   end
 end

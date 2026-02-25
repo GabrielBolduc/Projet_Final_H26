@@ -2,6 +2,16 @@ class Api::UnitsController < ApiController
     before_action :set_unit, only: [:update, :destroy]
     before_action :require_admin!
 
+    def index
+        @accommodation = Accommodation.find(params[:accommodation_id])
+        @units = @accommodation.units
+        render json: { status: "success", data: @units }
+    end
+
+    def show
+        render json: { status: "success", data: @unit }, status: :ok
+    end
+
     def create
         @accommodation = Accommodation.find_by(id: params[:accommodation_id])
         return render_logic_error("Accommodation not found") unless @accommodation

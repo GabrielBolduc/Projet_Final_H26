@@ -8,6 +8,8 @@ import { ReservationsForm } from '@features/alexandre/reservations-form/reservat
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
 import { AccommodationsDetails } from '@features/alexandre/accommodations-details/accommodations-details';
 import { AccommodationsForm } from '@features/alexandre/admin/accommodations-form/accommodations-form';
+import { UnitsForm } from '@features/alexandre/admin/units-form/units-form';
+import { Units } from '@features/alexandre/admin/units/units';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/festival/performance/dashboard';
 import { AdministrationComponent } from './features/festival/festival/administration';
@@ -26,7 +28,6 @@ import { PublicScheduleComponent } from './features/festival/public_programation
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin.guard';
-import {FestivalFormComponent} from './features/festival/festival/festival-form'
 
 export const routes: Routes = [
     {
@@ -64,6 +65,16 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
+                path: 'units',
+                component: Units,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'units-form/:id',
+                component: UnitsForm,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
                 path: 'accommodations-form/:id',
                 component: AccommodationsForm,
                 canActivate: [AuthGuard, adminGuard]
@@ -84,27 +95,17 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'admin/festivals/new',
-                component: FestivalFormComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-            {
-                path: 'admin/festivals/:id/edit',
-                component: FestivalFormComponent,
-                canActivate: [AuthGuard, adminGuard]
-            },
-            {
-                path: 'admin/festivals/:id/dashboard',
+                path: 'admin/dashboard',
                 component: DashboardComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'admin/festivals/:id/performances/new',
+                path: 'admin/festivals/:festivalId/performances/new',
                 component: AddPerformanceComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'admin/festivals/:id/performances/:perfId/edit',
+                path: 'admin/festivals/:festivalId/performances/:perfId/edit',
                 component: AddPerformanceComponent,
                 canActivate: [AuthGuard, adminGuard]
             },

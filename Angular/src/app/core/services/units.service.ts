@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Unit } from '../models/unit';
 
@@ -10,32 +10,42 @@ interface ApiResponse<T> {
   code?: number;   
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class UnitsService {
   private http = inject(HttpClient);
-  private readonly ACCOM_URL = '/api/accommodations';
-  private readonly UNIT_URL = '/api/units';
+  private readonly BASE_URL = '/api';
+
+  getUnitsByAccommodation(accommodationId: number): Observable<ApiResponse<Unit[]>> {
+    return this.http.get<ApiResponse<Unit[]>>(
+      `${this.BASE_URL}/accommodations/${accommodationId}/units`
+    );
+  }
 
   createUnit(accommodationId: number, unit: Partial<Unit>, image: File): Observable<Unit> {
     const formData = this.prepareFormData(unit, image);
-    return this.http.post<ApiResponse<Unit>>(`${this.ACCOM_URL}/${accommodationId}/units`, formData).pipe(
-      map(response => this.handleResponse(response))
+    return this.http.post<ApiResponse<Unit>>(
+      `${this.BASE_URL}/accommodations/${accommodationId}/units`, 
+      formData
+    ).pipe(map(res => this.handleResponse(res)));
+  }
+
+  getUnit(unitId: number): Observable<Unit> {
+    return this.http.get<ApiResponse<Unit>>(`${this.BASE_URL}/units/${unitId}`).pipe(
+      map(res => this.handleResponse(res))
     );
   }
 
   updateUnit(unitId: number, unit: Partial<Unit>, image?: File): Observable<Unit> {
     const formData = this.prepareFormData(unit, image);
-    return this.http.patch<ApiResponse<Unit>>(`${this.UNIT_URL}/${unitId}`, formData).pipe(
-      map(response => this.handleResponse(response))
+    return this.http.patch<ApiResponse<Unit>>(`${this.BASE_URL}/units/${unitId}`, formData).pipe(
+      map(res => this.handleResponse(res))
     );
   }
 
   deleteUnit(unitId: number): Observable<void> {
-    return this.http.delete<ApiResponse<null>>(`${this.UNIT_URL}/${unitId}`).pipe(
-      map(response => {
-        if (response.status === 'error') throw new Error(response.message);
+    return this.http.delete<ApiResponse<null>>(`${this.BASE_URL}/units/${unitId}`).pipe(
+      map(res => {
+        if (res.status === 'error') throw new Error(res.message);
         return;
       })
     );
@@ -46,10 +56,13 @@ export class UnitsService {
     
     Object.keys(unit).forEach(key => {
       const value = (unit as any)[key];
+      
       if (Array.isArray(value)) {
         value.forEach(item => formData.append(`unit[${key}][]`, item));
-      } else if (value !== undefined && value !== null) {
-        formData.append(`unit[${key}]`, value);
+      } 
+
+      else if (value !== undefined && value !== null) {
+        formData.append(`unit[${key}]`, value.toString());
       }
     });
 

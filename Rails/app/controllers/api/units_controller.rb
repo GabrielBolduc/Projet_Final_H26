@@ -1,6 +1,6 @@
 class Api::UnitsController < ApiController
     before_action :set_unit, only: [:show, :update, :destroy] 
-    before_action :require_admin!
+    before_action :require_admin!, except: [:index, :show] 
 
     def index
     @accommodation = Accommodation.find(params[:accommodation_id] || params[:id])

@@ -71,6 +71,11 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
+                path: 'units-form/new/:id',
+                component: UnitsForm,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
                 path: 'units-form/:id',
                 component: UnitsForm,
                 canActivate: [AuthGuard, adminGuard]

@@ -13,6 +13,11 @@ Rails.application.routes.draw do
         get 'get_reusable', to: 'tasks#get_reusable'
       end
     end
+    resources :festivals do
+      collection do
+        get 'current'
+      end
+    end
      
     resources :artists, only: [:index]
     resources :stages, only: [:index]

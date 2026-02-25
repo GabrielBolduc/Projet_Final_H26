@@ -1,13 +1,13 @@
 class Api::FestivalsController < ApiController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
-  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  skip_before_action :authenticate_user!, only: [ :index, :show, :current ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   
   before_action :set_festival, only: [ :show, :update, :destroy ]
 
   def index
-    festivals = Festival.order(start_at: :desc)
+    festivals = Festival.recent
 
     if params[:status].present?
       festivals = festivals.where(status: params[:status])
@@ -24,6 +24,23 @@ class Api::FestivalsController < ApiController
       status: "success",
       data: @festival.as_json
     }, status: :ok
+  end
+
+  def current
+    festival = Festival.ongoing.first
+
+    if festival
+      render json: {
+        status: "success",
+        data: festival.as_json
+      }, status: :ok
+    else
+      render json: {
+        status: "success",
+        data: nil,
+        message: "Aucun festival en cours"
+      }, status: :ok
+    end
   end
 
   def create
@@ -91,7 +108,7 @@ class Api::FestivalsController < ApiController
     params.require(:festival).permit(
       :name, :start_at, :end_at, :status, :address, 
       :daily_capacity, :satisfaction, :other_income, :other_expense,
-      :latitude, :longitude
+      :latitude, :longitude, :comment
     )
   end
 

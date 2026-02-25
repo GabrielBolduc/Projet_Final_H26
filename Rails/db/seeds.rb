@@ -7,33 +7,28 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 0;")
+
 begin
-  Affectation.destroy_all
-rescue NameError, ActiveRecord::StatementInvalid
-  # continue si aucune affectation
+  Affectation.delete_all
+  Reservation.delete_all
+  Order.delete_all
+  Ticket.delete_all
+  Package.delete_all
+  Unit.delete_all
+  Accommodation.delete_all
+  Performance.delete_all
+  Stage.delete_all
+  Task.delete_all
+  Artist.delete_all
+  Festival.delete_all 
+  Client.delete_all
+  Admin.delete_all
+  Staff.delete_all
+  User.delete_all
+ensure
+  ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 1;")
 end
-
-Reservation.destroy_all
-Order.destroy_all
-Ticket.destroy_all
-
-Unit.destroy_all
-Package.destroy_all
-
-Accommodation.destroy_all
-Unit.destroy_all
-Reservation.destroy_all
-Performance.destroy_all
-
-Stage.destroy_all
-Artist.destroy_all
-Task.destroy_all
-
-Festival.destroy_all
-Client.destroy_all
-Admin.destroy_all
-Staff.destroy_all
-User.destroy_all
 
 
 c = Client.create!(
@@ -61,6 +56,7 @@ Staff.create!(
     ability: "Gestion des réservations"
 )
 
+# GabrielB
 f = Festival.create!(
   name: "Festify 2026",
   start_at: Date.new(2026, 7, 15),
@@ -84,7 +80,7 @@ f1 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "completed",
+  status: "draft",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -99,7 +95,7 @@ f2 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "completed",
+  status: "draft", 
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -127,7 +123,6 @@ c_stage = Stage.create!(
     technical_specs: "Small speaker"
 )
 
-
 artist1 = Artist.create!(
     name: "Bob",
     genre: "Rock",
@@ -149,7 +144,7 @@ artist3 = Artist.create!(
     bio: "Good music"
 )
 
-
+# perf pour f (ongoing)
 Performance.create!(
   title: "First show",
   description: "Bon show.",
@@ -183,6 +178,77 @@ Performance.create!(
   artist: artist2
 )
 
+# perf pour f1 (draft)
+Performance.create!(
+  title: "First show",
+  description: "Bon show.",
+  price: 55.00,
+  start_at: f1.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f1.start_at.to_time.change(hour: 22, min: 0),
+  festival: f1,
+  stage: main_stage,
+  artist: artist1
+)
+
+Performance.create!(
+  title: "Second show",
+  description: "Good show",
+  price: 45.00,
+  start_at: f1.start_at.to_time.change(hour: 21, min: 0),
+  end_at: f1.start_at.to_time.change(hour: 23, min: 59),
+  festival: f1,
+  stage: b_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last show",
+  description: "Good show",
+  price: 60.00,
+  start_at: (f1.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f1.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f1,
+  stage: main_stage,
+  artist: artist2
+)
+
+# perf pour f2 (completed)
+Performance.create!(
+  title: "First show",
+  description: "Bon show.",
+  price: 55.00,
+  start_at: f2.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f2.start_at.to_time.change(hour: 22, min: 0),
+  festival: f2,
+  stage: main_stage,
+  artist: artist1
+)
+
+Performance.create!(
+  title: "Second show",
+  description: "Good show",
+  price: 45.00,
+  start_at: f2.start_at.to_time.change(hour: 21, min: 0),
+  end_at: f2.start_at.to_time.change(hour: 23, min: 59),
+  festival: f2,
+  stage: b_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last show",
+  description: "Good show",
+  price: 60.00,
+  start_at: (f2.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f2.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f2,
+  stage: main_stage,
+  artist: artist2
+)
+
+f2.update!(status: "completed")
+
+# Alexandre
 acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",
   category: :hotel,
@@ -221,7 +287,7 @@ unit1 = Units::SimpleRoom.new(
 )
 
 
-# Packages (Billetterie)
+# Racine
 
 p_general = Package.create!(
   title: "Passeport Festival",
@@ -256,6 +322,43 @@ p_evening = Package.create!(
   festival: f
 )
 
+# Orders + Tickets (Billetterie)
+order_client_1 = Order.create!(
+  user: c,
+  purchased_at: f.start_at.to_time.change(hour: 9, min: 15)
+)
+
+order_client_2 = Order.create!(
+  user: c,
+  purchased_at: f.start_at.to_time.change(hour: 12, min: 45)
+)
+
+Ticket.create!(
+  order: order_client_1,
+  package: p_general,
+  holder_name: "Jean Daniel",
+  holder_phone: "8195551111",
+  holder_email: "jean.daniel@example.com"
+)
+
+Ticket.create!(
+  order: order_client_1,
+  package: p_daily,
+  holder_name: "Marie Tremblay",
+  holder_phone: "8195552222",
+  holder_email: "marie.tremblay@example.com"
+)
+
+Ticket.create!(
+  order: order_client_2,
+  package: p_evening,
+  holder_name: "Alex Martin",
+  holder_phone: "8195553333",
+  holder_email: "alex.martin@example.com",
+  refunded: true,
+  refunded_at: f.start_at.to_time.change(hour: 18, min: 0)
+)
+
 # Attachement des images
 images = {
   p_general => 'general-ticket.webp',
@@ -282,6 +385,9 @@ images.each do |package, filename|
 end
 
 unit1.save!
+
+
+# Laurent
 
 res1 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),

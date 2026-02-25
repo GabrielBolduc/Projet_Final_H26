@@ -1,2 +1,5 @@
-class Units::SimpleRoom < Unit
+module Units
+  class SimpleRoom < ::Unit
+    
+  end
 end

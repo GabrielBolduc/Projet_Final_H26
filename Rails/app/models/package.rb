@@ -5,6 +5,24 @@ class Package < ApplicationRecord
   # ACTIVESTORAGE
   has_one_attached :image
 
+  scope :for_festival, ->(festival_id) { where(festival_id: festival_id) }
+  scope :for_festival_status, ->(status) { joins(:festival).where(festivals: { status: status }) }
+  scope :search_by_title, ->(query) do
+    where("LOWER(packages.title) LIKE ?", "%#{sanitize_sql_like(query.downcase)}%")
+  end
+  scope :sorted_for_admin, ->(sort_key) do
+    case sort_key
+    when "date_asc"
+      order(valid_at: :asc)
+    when "date_desc"
+      order(valid_at: :desc)
+    when "price_desc"
+      order(price: :desc)
+    else
+      order(price: :asc)
+    end
+  end
+
   enum :category, {
     general: 'GENERAL',
     daily: 'DAILY',
@@ -22,6 +40,20 @@ class Package < ApplicationRecord
   validate :image_format_validation
   validate :quota_cannot_exceed_daily_capacity
   validate :validity_must_be_within_festival_dates
+
+  def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil)
+    relation = includes(:festival)
+
+    if festival_id.present?
+      relation = relation.for_festival(festival_id)
+    else
+      festival_status = status.to_s.downcase.presence || Festival.statuses[:ongoing]
+      relation = relation.for_festival_status(festival_status)
+    end
+
+    relation = relation.search_by_title(query) if query.present?
+    relation.sorted_for_admin(sort)
+  end
 
   private
 

@@ -1,0 +1,39 @@
+<div class="order-detail-page">
+  <header class="detail-header">
+    <a mat-button routerLink="/ticketing/orders" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'TICKETING_PUBLIC.MY_ORDERS' | translate }}
+    </a>
+  </header>
+
+  @if (isLoading()) {
+    <p class="state-message">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
+  } @else if (order(); as currentOrder) {
+    <mat-card class="detail-card">
+      <h1 class="detail-title">{{ 'TICKETING_PUBLIC.ORDER_DETAILS' | translate }} #{{ currentOrder.id }}</h1>
+      <p class="detail-date">{{ currentOrder.purchased_at | date:'yyyy-MM-dd HH:mm' }}</p>
+
+      <div class="ticket-list">
+        @for (ticket of currentOrder.tickets; track ticket.id) {
+          <div class="ticket-row">
+            <div class="ticket-info">
+              @if (ticket.package.image_url) {
+                <div class="ticket-thumbnail" [style.background-image]="'url(' + ticket.package.image_url + ')'"></div>
+              }
+              <strong class="ticket-title">{{ ticket.package.title }}</strong>
+              <p class="ticket-meta">{{ ticket.price | currency:'CAD':'symbol-narrow' }} - {{ ticket.holder_name }}</p>
+              <span class="ticket-status" [class.refunded]="ticket.refunded">
+                {{ ticket.refunded ? ('TICKETING_PUBLIC.REFUNDED' | translate) : ('TICKETING_PUBLIC.ACTIVE' | translate) }}
+              </span>
+            </div>
+            <a mat-stroked-button [routerLink]="['/ticketing/tickets', ticket.id]">
+              {{ 'TICKETING_PUBLIC.VIEW_TICKET' | translate }}
+            </a>
+          </div>
+        }
+      </div>
+    </mat-card>
+  } @else {
+    <p class="empty-state">{{ 'TICKETING_PUBLIC.ORDER_NOT_FOUND' | translate }}</p>
+  }
+</div>

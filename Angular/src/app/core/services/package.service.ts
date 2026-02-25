@@ -20,6 +20,7 @@ export interface PackageFilters {
   status?: PackageStatus;
   q?: string;
   sort?: PackageSort;
+  categories?: Array<'general' | 'daily' | 'evening'>;
 }
 
 @Injectable({
@@ -46,6 +47,16 @@ export class PackageService {
 
     if (filters.sort) {
       params = params.set('sort', filters.sort);
+    }
+
+    if (filters.categories !== undefined) {
+      if (filters.categories.length === 0) {
+        params = params.append('categories[]', '__none__');
+      } else {
+        filters.categories.forEach((category) => {
+          params = params.append('categories[]', category);
+        });
+      }
     }
 
     return this.http.get<ApiResponse<Package[]>>(this.API_URL, { params }).pipe(

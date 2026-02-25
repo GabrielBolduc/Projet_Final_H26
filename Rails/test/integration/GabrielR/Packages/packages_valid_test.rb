@@ -5,119 +5,194 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
   setup do
     @admin = users(:three)
+    @ongoing_festival = festivals(:one)
+    @completed_festival = festivals(:two)
+    @draft_festival = festivals(:three)
     @package = packages(:one)
-
-    @valid_params = {
-      package: {
-        title: "Passeport VIP",
-        description: "Accès total pour tout le festival",
-        price: 150.00,
-        quota: 500,
-        category: "general",
-        valid_at: "2026-08-01T12:00:00Z",
-        expired_at: "2026-08-01T23:59:00Z",
-        festival_id: festivals(:one).id
-      }
-    }
-  end
-
-  # --- INDEX ---
-  test "public should list all packages" do
-
-    # modif ou non
-    assert_no_difference("Package.count") do
-      get api_packages_url, as: :json
-    end
-
-    # code
-    assert_response :ok
-
-    # format reponse
-    json = JSON.parse(response.body)
-
-    # donne reponse
-    assert_equal "success", json["status"]
-    assert_not_nil json["data"]
-  end
-
-  test "index should return packages ordered by price ascending" do
-    get api_packages_url, as: :json
-    json = JSON.parse(response.body)
-    
-    prices = json["data"].map { |p| p["price"].to_f }
-    assert_equal prices.sort, prices, "Les forfaits ne sont pas triés par prix croissant"
-  end
-
-  # --- SHOW ---
-  test "public should show a specific package" do
-    assert_no_difference("Package.count") do
-      get api_package_url(@package), as: :json
-    end
-
-    assert_response :ok
-    json = JSON.parse(response.body)
-
-    assert_equal "success", json["status"]
-    assert_equal @package.title, json["data"]["title"]
-  end
-
-  # --- CREATE ---
-  test "admin should create a new package" do
     sign_in @admin
+  end
+
+  # INDEX
+  test "index defaults to ongoing festival packages sorted by price asc" do
+    get api_packages_url
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+
+    returned_ids = json["data"].map { |pkg| pkg["id"] }
+    expected_ids = [packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one)].map(&:id)
+    assert_equal expected_ids, returned_ids
+
+    statuses = json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
+    assert_equal [ "ongoing" ], statuses
+  end
+
+  test "index with explicit completed status returns only completed festival packages" do
+    get api_packages_url, params: { status: "completed" }
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal [packages(:five).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ "completed" ], json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
+  end
+
+  test "index with explicit draft status returns only draft festival packages" do
+    get api_packages_url, params: { status: "draft" }
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal [packages(:six).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ "draft" ], json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
+  end
+
+  test "festival_id has priority over status fallback/filter" do
+    get api_packages_url, params: { festival_id: @completed_festival.id, status: "ongoing" }
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal [packages(:five).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [@completed_festival.id], json["data"].map { |pkg| pkg["festival_id"] }.uniq
+  end
+
+  test "index search is case-insensitive" do
+    get api_packages_url, params: { q: "eVeNiNg", status: "ongoing" }
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal [packages(:three).id], json["data"].map { |pkg| pkg["id"] }
+  end
+
+  test "index search with no match returns empty list" do
+    get api_packages_url, params: { q: "no-match-title", status: "ongoing" }
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal [], json["data"]
+  end
+
+  test "index categories filter accepts comma-separated values" do
+    get api_packages_url, params: { status: "ongoing", categories: "daily,evening" }
+    assert_response :ok
+
+    json = parsed_body
+    ids = json["data"].map { |pkg| pkg["id"] }
+    assert_equal [packages(:four).id, packages(:two).id, packages(:three).id], ids
+  end
+
+  test "index categories filter returns empty when all categories are invalid" do
+    get api_packages_url, params: { status: "ongoing", categories: "vip,weekend,zzz" }
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal [], json["data"]
+  end
+
+  test "index supports date_desc sort" do
+    get api_packages_url, params: { status: "ongoing", sort: "date_desc" }
+    assert_response :ok
+
+    json = parsed_body
+    ids = json["data"].map { |pkg| pkg["id"] }
+    assert_equal [packages(:seven).id, packages(:four).id, packages(:three).id, packages(:two).id, packages(:one).id], ids
+  end
+
+  test "index supports price_desc sort" do
+    get api_packages_url, params: { status: "ongoing", sort: "price_desc" }
+    assert_response :ok
+
+    json = parsed_body
+    ids = json["data"].map { |pkg| pkg["id"] }
+    assert_equal [packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id], ids
+  end
+
+  # SHOW
+  test "show returns package with sold count excluding refunded tickets" do
+    get api_package_url(@package)
+    assert_response :ok
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+    assert_equal @package.id, json.dig("data", "id")
+    assert_equal 1, json.dig("data", "sold")
+    assert_equal @ongoing_festival.id, json.dig("data", "festival", "id")
+  end
+
+  # CREATE
+  test "admin can create package with valid data" do
+    payload = valid_package_payload(
+      title: "Integration Created Package",
+      category: "daily",
+      festival_id: @ongoing_festival.id,
+      price: 88.50,
+      quota: 20
+    )
 
     assert_difference("Package.count", 1) do
-      post api_packages_url, params: @valid_params, as: :json
+      post api_packages_url, params: payload, as: :json
     end
 
     assert_response :ok
-    json = JSON.parse(response.body)
+    json = parsed_body
 
     assert_equal "success", json["status"]
-    assert_equal "Passeport VIP", json["data"]["title"]
-    assert_equal 150.00, json["data"]["price"].to_f
+    assert_equal "Integration Created Package", json.dig("data", "title")
+    assert_equal "daily", json.dig("data", "category")
+    assert_equal 88.5, json.dig("data", "price").to_f
+    assert_equal 0, json.dig("data", "sold")
+    assert_equal @ongoing_festival.id, json.dig("data", "festival_id")
   end
 
-  # --- UPDATE ---
-  test "admin should update a package" do
-    sign_in @admin
-
+  # UPDATE
+  test "admin can update package fields" do
     assert_no_difference("Package.count") do
-      put api_package_url(@package), params: { package: { title: "Titre Modifié", price: 99.99 } }, as: :json
+      put api_package_url(@package), params: { package: { title: "Updated Title", price: 99.99, category: "evening" } }, as: :json
     end
 
     assert_response :ok
-    json = JSON.parse(response.body)
+    json = parsed_body
 
     assert_equal "success", json["status"]
-    assert_equal "Titre Modifié", json["data"]["title"]
-    assert_equal 99.99, json["data"]["price"].to_f
+    assert_equal "Updated Title", json.dig("data", "title")
+    assert_equal 99.99, json.dig("data", "price").to_f
+    assert_equal "evening", json.dig("data", "category")
   end
 
-  # --- DESTROY ---
-  test "admin should delete a package" do
-    sign_in @admin
+  # DESTROY
+  test "admin can delete package without tickets and receives deleted payload" do
+    deletable = packages(:seven)
 
-    package_to_delete = Package.new(
-      title: "Package à supprimer",
-      description: "Test",
-      price: 50.0,
-      quota: 100,
-      category: "general",
-      valid_at: "2026-08-01T10:00:00Z",
-      expired_at: "2026-08-01T23:00:00Z",
-      festival: festivals(:one)
-    )
-    
-    # sauvegarde dans la base de données en ignorant les validations
-    package_to_delete.save(validate: false)
-
-    # teste la suppression
     assert_difference("Package.count", -1) do
-      delete api_package_url(package_to_delete), as: :json
+      delete api_package_url(deletable), as: :json
     end
 
     assert_response :ok
-    json = JSON.parse(response.body)
+    json = parsed_body
     assert_equal "success", json["status"]
+    assert_equal "Package deleted successfully", json["message"]
+    assert_equal deletable.id, json.dig("data", "id")
+    assert_equal deletable.title, json.dig("data", "title")
+    assert_equal deletable.festival_id, json.dig("data", "festival_id")
+  end
+
+  private
+
+  def parsed_body
+    JSON.parse(response.body)
+  end
+
+  def valid_package_payload(overrides = {})
+    base = {
+      title: "New Package",
+      description: "Description valide pour integration test",
+      price: 50.0,
+      quota: 10,
+      category: "general",
+      valid_at: "2026-08-02 10:00:00",
+      expired_at: "2026-08-02 20:00:00",
+      festival_id: @ongoing_festival.id
+    }
+
+    { package: base.merge(overrides) }
   end
 end

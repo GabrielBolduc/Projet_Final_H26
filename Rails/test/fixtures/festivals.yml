@@ -17,3 +17,13 @@ two:
   daily_capacity: 1000000
   latitude: 46.8033
   longitude: -71.2172
+
+three:
+  name: "Festival Draft"
+  start_at: 2026-09-05
+  end_at: 2026-09-07
+  status: "draft"
+  address: "789 Draft Road, QC, Canada"
+  daily_capacity: 300
+  latitude: 46.8233
+  longitude: -71.1972

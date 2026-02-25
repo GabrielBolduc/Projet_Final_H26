@@ -11,6 +11,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UnitsService } from '@core/services/units.service';
+import { Unit } from '@core/models/unit';
 
 @Component({
   selector: 'app-units',
@@ -28,17 +29,20 @@ export class Units implements OnInit {
   private router = inject(Router);
 
   accommodationId = signal<number | null>(null);
-  units = signal<any[]>([]);
+  units = signal<Unit[]>([]);
   searchQuery = signal('');
   sortOption = signal('all');
 
   filteredUnits = computed(() => {
     let list = [...this.units()].filter(u => 
-      u.type.toLowerCase().includes(this.searchQuery().toLowerCase())
+      u.type.toLowerCase().includes(this.searchQuery().trim().toLowerCase())
     );
 
-    if (this.sortOption() === 'qty_asc') list.sort((a, b) => a.quantity - b.quantity);
-    if (this.sortOption() === 'qty_desc') list.sort((a, b) => b.quantity - a.quantity);
+    if (this.sortOption() === 'qty_asc') {
+      list.sort((a, b) => a.quantity - b.quantity);
+    } else if (this.sortOption() === 'qty_desc') {
+      list.sort((a, b) => b.quantity - a.quantity);
+    }
     
     return list;
   });
@@ -57,7 +61,7 @@ export class Units implements OnInit {
     });
   }
 
-  openForm(unit?: any) {
+  openForm(unit?: Unit) {
     if (unit) {
       this.router.navigate(['/units', unit.id], { queryParams: { edit: 'true' } });
     } else {
@@ -65,7 +69,11 @@ export class Units implements OnInit {
     }
   }
 
-  deleteUnit(unit: any) {
+  deleteUnit(unit: Unit): void {
+    if (!unit.id) {
+      return;
+    }
+
     if (confirm('Are you sure you want to delete this unit?')) {
       this.service.deleteUnit(unit.id).subscribe((res) => {
         this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
@@ -73,8 +81,8 @@ export class Units implements OnInit {
     }
   }
 
-
-  formatType(type: string): string {
-    return type.split('::').pop() || type;
+  formatType(rawType: string): string {
+    const shortType = rawType.split('::').pop() ?? rawType;
+    return shortType.replace(/([a-z])([A-Z])/g, '$1 $2');
   }
 }

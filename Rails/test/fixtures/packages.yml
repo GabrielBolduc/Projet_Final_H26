@@ -1,19 +1,69 @@
 one:
-  title: "Passe VIP"
-  description: "Accès VIP complet"
+  title: "Ongoing General Pass"
+  description: "Accès général pour tout le festival ongoing."
   price: 150.0
   quota: 100
   category: "general"
   valid_at: 2026-08-01 10:00:00
-  expired_at: 2026-08-03 23:00:00
+  expired_at: 2026-08-03 22:00:00
   festival: one
 
 two:
-  title: "Billet Journalier"
-  description: "Tarif réduit"
-  price: 50.0
-  quota: 500
+  title: "Ongoing Daily Standard"
+  description: "Billet journalier standard du festival ongoing."
+  price: 60.0
+  quota: 80
   category: "daily"
-  valid_at: 2026-08-01 10:00:00
-  expired_at: 2026-08-01 23:00:00 
+  valid_at: 2026-08-01 12:00:00
+  expired_at: 2026-08-01 23:00:00
+  festival: one
+
+three:
+  title: "Ongoing Evening Prime"
+  description: "Billet soirée premium du festival ongoing."
+  price: 90.0
+  quota: 70
+  category: "evening"
+  valid_at: 2026-08-01 18:00:00
+  expired_at: 2026-08-01 23:00:00
+  festival: one
+
+four:
+  title: "Ongoing Daily Budget"
+  description: "Billet journalier économique du festival ongoing."
+  price: 40.0
+  quota: 50
+  category: "daily"
+  valid_at: 2026-08-02 09:00:00
+  expired_at: 2026-08-02 23:00:00
+  festival: one
+
+five:
+  title: "Completed Archive Pass"
+  description: "Forfait archivé pour festival complété."
+  price: 55.0
+  quota: 40
+  category: "general"
+  valid_at: 2025-07-05 10:00:00
+  expired_at: 2025-07-10 23:00:00
+  festival: two
+
+six:
+  title: "Draft Preview Evening"
+  description: "Billet de prévisualisation pour festival draft."
+  price: 65.0
+  quota: 35
+  category: "evening"
+  valid_at: 2026-09-05 18:00:00
+  expired_at: 2026-09-05 23:00:00
+  festival: three
+
+seven:
+  title: "Ongoing Deletable Pass"
+  description: "Forfait ongoing sans billets associés."
+  price: 75.0
+  quota: 25
+  category: "general"
+  valid_at: 2026-08-03 10:00:00
+  expired_at: 2026-08-03 20:00:00
   festival: one

@@ -53,19 +53,16 @@ export class AccommodationsDetails implements OnInit {
       shareReplay(1)
     );
 
-    // Fetch Accommodation Details
     this.accommodation$ = id$.pipe(
       switchMap(id => this.service.getAccommodation(id))
     );
 
-    // Fetch Units from Backend
     this.units$ = id$.pipe(
       switchMap(id => this.unitsService.getUnitsByAccommodation(id)),
       map(res => (res.data as Unit[]) || []),
       shareReplay(1)
     );
 
-    // Process Unit Groups for UI (Images + Counts)
 this.groupedUnits$ = this.units$.pipe(
   map(units => {
     const groups = units.reduce((acc, unit) => {
@@ -80,7 +77,7 @@ this.groupedUnits$ = this.units$.pipe(
           icon: typeKey.toLowerCase().includes('room') ? 'hotel' : 'terrain',
           hasWifi: false,
           hasElectricity: false,
-          waterStatus: 'no_water', // Track the enum string
+          waterStatus: 'no_water', 
           foodOptions: new Set<string>()
         };
       }
@@ -89,7 +86,6 @@ this.groupedUnits$ = this.units$.pipe(
       if (unit.wifi) acc[typeKey].hasWifi = true;
       if (unit.electricity) acc[typeKey].hasElectricity = true;
 
-      // Logic to prioritize "drinkable" > "undrinkable" > "no_water"
       const statusPriority: Record<string, number> = { 'drinkable': 2, 'undrinkable': 1, 'no_water': 0 };
       const currentStatus = unit.water || 'no_water';
       if (statusPriority[currentStatus] > statusPriority[acc[typeKey].waterStatus]) {
@@ -115,7 +111,6 @@ this.groupedUnits$ = this.units$.pipe(
   })
 );
 
-    // Calculate Overall Price Range
     this.priceRange$ = this.units$.pipe(
       map(units => {
         if (!units?.length) return null;
@@ -133,7 +128,6 @@ this.groupedUnits$ = this.units$.pipe(
           .map(u => u.image_url)
           .filter((url): url is string => !!url);
         
-        // Return unique images or the default placeholder if none exist
         return urls.length > 0 ? [...new Set(urls)] : ['assets/placeholder-image.png'];
       }),
       shareReplay(1)

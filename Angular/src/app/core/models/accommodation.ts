@@ -3,6 +3,10 @@ export enum AccommodationCategory {
   Camping = 1
 }
 
+export interface AccommodationWithImage extends Accommodation {
+  displayImage: string;
+}
+
 export interface Accommodation {
   id: number;
   name: string;

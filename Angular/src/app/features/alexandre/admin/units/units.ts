@@ -75,8 +75,8 @@ export class Units implements OnInit {
     }
 
     if (confirm('Are you sure you want to delete this unit?')) {
-      this.service.deleteUnit(unit.id).subscribe(() => {
-        this.units.set(this.units().filter(u => u.id !== unit.id));
+      this.service.deleteUnit(unit.id).subscribe((res) => {
+        this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
       });
     }
   }

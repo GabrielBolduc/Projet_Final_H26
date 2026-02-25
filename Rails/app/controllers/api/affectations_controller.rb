@@ -66,7 +66,10 @@ class Api::AffectationsController < ApiController
                 task: {
                     only: [ :id, :name, :description, :reusable ],
                     methods: [ :file_url]
-                }
+                },
+                festival: {
+                    only: [ :id, :name, :status ]
+                },
             }
         }
     end

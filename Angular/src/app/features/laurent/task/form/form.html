@@ -55,19 +55,17 @@
     </div>
 
     <div class="priority-section">
-      <label>{{ 'TACHES.PRIORITY' | translate }}</label>
-
-      <div class="skull-input">
-        @for (skull of getPriorityArray(); track skull) {
-          <mat-icon
-            (click)="setPriority(skull)"
-            [class.filled]="skull <= form.value.priority"
-            class="skull-icon">
-            {{ skull <= form.value.priority ? 'skull' : 'skull_outline' }}
-          </mat-icon>
-        }
-      </div>
-    </div>
+     <label>{{ 'TACHES.PRIORITY' | translate }}</label>
+      <div class="star-input">
+            @for (star of getStarArray(); track star) {
+            <mat-icon
+                (click)="setPriority(star)"
+                [class.filled]="star <= form.value.priority"
+                class="star-icon">
+                {{ star <= form.value.priority ? 'star' : 'star_border' }}
+            </mat-icon>
+            }
+        </div>    </div>
 
 
     <mat-form-field appearance="outline" class="full-width">

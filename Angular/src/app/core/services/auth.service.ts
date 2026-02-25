@@ -103,4 +103,9 @@ export class AuthService {
     const user = this.currentUser();
     return !!(user && user.type === 'Admin');
   }
+
+  isStaff(): boolean {
+    const user = this.currentUser();
+    return !!(user && user.type === 'Staff');
+  }
 }

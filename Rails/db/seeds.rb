@@ -197,7 +197,7 @@ Performance.create!(
 # perf pour f1 (draft)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "DRAFT - Bon show",
   price: 55.00,
   start_at: f1.start_at.to_time.change(hour: 20, min: 0),
   end_at: f1.start_at.to_time.change(hour: 22, min: 0),
@@ -208,7 +208,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Second show",
-  description: "Good show",
+  description: "DRAFT - Good show",
   price: 45.00,
   start_at: f1.start_at.to_time.change(hour: 21, min: 0),
   end_at: f1.start_at.to_time.change(hour: 23, min: 59),
@@ -219,7 +219,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Last show",
-  description: "Good show",
+  description: "DRAFT - Good show",
   price: 60.00,
   start_at: (f1.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f1.start_at + 1.day).to_time.change(hour: 20, min: 30),
@@ -231,7 +231,7 @@ Performance.create!(
 # perf pour f2 (completed)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "un show de musique",
   price: 55.00,
   start_at: f2.start_at.to_time.change(hour: 20, min: 0),
   end_at: f2.start_at.to_time.change(hour: 22, min: 0),
@@ -242,7 +242,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Second show",
-  description: "Good show",
+  description: "un show",
   price: 45.00,
   start_at: f2.start_at.to_time.change(hour: 21, min: 0),
   end_at: f2.start_at.to_time.change(hour: 23, min: 59),
@@ -253,7 +253,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Last show",
-  description: "Good show",
+  description: "not a good show",
   price: 60.00,
   start_at: (f2.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f2.start_at + 1.day).to_time.change(hour: 20, min: 30),
@@ -458,6 +458,16 @@ end
 
 # Laurent
 
+res1 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 15),
+  departure_at: Date.new(2026, 7, 17),
+  nb_of_people: 1,
+  reservation_name: "Jean Daniel",
+  phone_number: "8195338888",
+  user: c,
+  unit: unit1,
+  festival: f
+)
 task_one = Task.create!(
     title: "Task #1",
     description: "Description of Task #1",

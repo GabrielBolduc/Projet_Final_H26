@@ -7,9 +7,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+
+// NOUVEAUX IMPORTS POUR LE DROPDOWN
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
-import { firstValueFrom } from 'rxjs'; 
+import { firstValueFrom } from 'rxjs';
 
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
@@ -34,6 +39,8 @@ interface DayGroup {
     MatTableModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatSelectModule,      // <-- Ajout
+    MatFormFieldModule,   // <-- Ajout
     TranslateModule
   ],
   templateUrl: './dashboard.html',
@@ -52,6 +59,8 @@ export class DashboardComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   festival = signal<Festival | null>(null);
+  allFestivals = signal<Festival[]>([]); // <-- Signal pour la liste du dropdown
+
   isReadOnly = computed(() => this.festival()?.status === 'completed');
   
   performanceGroups = signal<DayGroup[]>([]);
@@ -66,17 +75,39 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
 
   ngOnInit(): void {
-    const idParam = this.route.snapshot.paramMap.get('id');
-    if (idParam) {
-      this.loadDashboardData(Number(idParam));
-    } else {
-      this.router.navigate(['/admin/festivals']);
-    }
+    // 1. On charge la liste de tous les festivals pour alimenter le menu déroulant
+    this.loadAllFestivals();
+
+    // 2. Au lieu d'un simple "snapshot", on s'abonne aux changements d'URL
+    // Ainsi, quand le dropdown change l'URL, les données se mettent à jour automatiquement !
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      if (idParam) {
+        this.loadDashboardData(Number(idParam));
+      } else {
+        this.router.navigate(['/admin/festivals']);
+      }
+    });
   }
 
   private formatLang(lang: string | undefined): string {
     if (!lang) return 'en'; 
     return lang.split('-')[0];
+  }
+
+  async loadAllFestivals(): Promise<void> {
+    try {
+      const festivals = await firstValueFrom(this.festivalService.getFestivals());
+      this.allFestivals.set(festivals);
+    } catch (err) {
+      console.error('Erreur lors du chargement des festivals', err);
+    }
+  }
+
+  // MÉTHODE DÉCLENCHÉE PAR LE DROPDOWN
+  onFestivalChange(newFestivalId: number): void {
+    // Navigue vers la nouvelle URL, ce qui redéclenchera l'abonnement dans ngOnInit
+    this.router.navigate(['/admin/festivals', newFestivalId, 'dashboard']);
   }
 
   navigateToAdd(): void { 
@@ -102,8 +133,9 @@ export class DashboardComponent implements OnInit {
       this.festival.set(targetFestival);
 
       const allPerformances = await firstValueFrom(this.performanceService.getPerformances());
+      
       const festivalPerformances = allPerformances.filter(p => 
-        p.festival_id === festivalId || (p.festival && p.festival.id === festivalId)
+        Number(p.festival_id) === festivalId || (p.festival && Number(p.festival.id) === festivalId)
       );
 
       const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
@@ -111,7 +143,6 @@ export class DashboardComponent implements OnInit {
 
     } catch (err) {
       this.showErrorsAsSnackBar(err);
-      this.router.navigate(['/admin/festivals']); 
     } finally {
       this.isLoading.set(false);
     }

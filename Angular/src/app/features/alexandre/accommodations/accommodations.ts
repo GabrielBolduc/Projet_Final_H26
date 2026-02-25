@@ -4,11 +4,14 @@ import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'; 
-import { Observable, switchMap, map } from 'rxjs';
+import { Observable, switchMap, map, of, forkJoin } from 'rxjs';
+import { catchError, shareReplay } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccommodationsService } from '@core/services/accommodations.service';
-import { Accommodation } from '@core/models/accommodation';
+import { AccommodationWithImage } from '@core/models/accommodation';
 import { AuthService } from '@core/services/auth.service';
+import { UnitsService } from '@core/services/units.service';
+
 
 @Component({
   selector: 'app-accommodations',
@@ -26,24 +29,47 @@ import { AuthService } from '@core/services/auth.service';
   styleUrls: ['./accommodations.css']
 })
 export class Accommodations implements OnInit {
-  accommodations$!: Observable<Accommodation[]>;
+  accommodations$!: Observable<AccommodationWithImage[]>;
   currentCategory$!: Observable<string>; 
 
   private route = inject(ActivatedRoute);
   private service = inject(AccommodationsService);
   private authService = inject(AuthService);
+  private unitsService = inject(UnitsService);
 
   ngOnInit() {
-
     this.currentCategory$ = this.route.queryParamMap.pipe(
-      map(params => params.get('category') || 'all')
+      map(params => params.get('category') || 'all'),
+      shareReplay(1)
     );
 
     this.accommodations$ = this.route.queryParamMap.pipe(
       switchMap(params => {
         const category = params.get('category') || 'all';
         return this.service.getAccommodations(category);
-      })
+      }),
+      switchMap(accs => {
+        if (!accs || accs.length === 0) return of([]);
+
+        const requests = accs.map(acc => 
+          this.unitsService.getUnitsByAccommodation(acc.id).pipe(
+            map(res => {
+              const units = res.data || [];
+              const urls: string[] = units.map(u => u.image_url).filter((url): url is string => !!url);
+              
+              const randomImg: string = urls.length > 0 
+                ? urls[Math.floor(Math.random() * urls.length)] 
+                : 'assets/placeholder-image.png';
+
+              return { ...acc, displayImage: randomImg } as AccommodationWithImage;
+            }),
+            catchError(() => of({ ...acc, displayImage: 'assets/placeholder-image.png' } as AccommodationWithImage))
+          )
+        );
+
+        return forkJoin(requests);
+      }),
+      shareReplay(1)
     );
   }
 

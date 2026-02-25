@@ -1,29 +1,40 @@
+import { Festival } from "./festival"
+import { Task } from "./task"
+import { User } from "./user"
+
 export class Affectation {
     id: number
-    user_id: number
-    task_id: number
-    festival_id: number
-    start_time: string
-    end_time: string
+    expected_start: string
+    expected_end: string
     responsability: string
+    task: Task
+    festival:Festival
+    user:User
+    start:string|null
+    end:string|null
    
    
     
     constructor(
        id: number,
-       user_id: number,
-       task_id: number,
-       festival_id: number,
-       start_time: string,
-       end_time: string,
-       responsability: string
+       expected_start: string,
+       expected_end: string,
+       responsability: string,
+       task: Task,
+       festival:Festival,
+       user:User,
+       start: string,
+       end: string
+       
     ) {
         this.id = id;
-        this.user_id = user_id;
-        this.task_id = task_id;
-        this.festival_id = festival_id;
-        this.start_time = start_time;
-        this.end_time = end_time;
+        this.task = task;
+        this.festival = festival;
+        this.user = user;
+        this.expected_start = expected_start;
+        this.expected_end = expected_end;
         this.responsability = responsability;
+        this.start = start; 
+        this.end = end;
     }
 }

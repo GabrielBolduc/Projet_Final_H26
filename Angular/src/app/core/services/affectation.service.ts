@@ -25,7 +25,7 @@ export class AffectationService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-   listAffectationsByTask(id: number): Observable<Affectation[]> {
+   listAffectationsByTask(id: number|null): Observable<Affectation[]> {
       
         return this.http.get<ApiResponse<Affectation[]>>(`api/affectations/get_by_task/${id}` ).pipe(
               map(response => {
@@ -39,7 +39,7 @@ export class AffectationService {
       );
     }
 
-    listAffectationsByUser(id: number): Observable<Affectation[]> {
+    listAffectationsByUser(id: number|null): Observable<Affectation[]> {
     
         return this.http.get<ApiResponse<Affectation[]>>(`api/affectations/get_by_user/${id}` ).pipe(
               map(response => {
@@ -53,7 +53,7 @@ export class AffectationService {
       );
     }
   
-    getAffectation(id: number): Observable<Affectation> {
+    getAffectation(id: number|null): Observable<Affectation> {
         return this.http.get<ApiResponse<Affectation>>(`api/affectations/${id}` ).pipe(
              map(response => {
               console.log(response)

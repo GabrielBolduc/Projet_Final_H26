@@ -13,6 +13,10 @@ class Api::FestivalsController < ApiController
       festivals = festivals.where(status: params[:status])
     end
 
+    unless current_user&.is_a?(Admin)
+      festivals = festivals.where(status: 'ongoing')
+    end
+
     render json: {
       status: "success",
       data: festivals.as_json
@@ -20,6 +24,12 @@ class Api::FestivalsController < ApiController
   end
 
   def show
+    unless current_user&.is_a?(Admin) || @festival.ongoing?
+      return  render json: {
+        status: "error",
+        message: "festival non public"
+      }, status: :ok
+    end
     render json: {
       status: "success",
       data: @festival.as_json
@@ -110,14 +120,5 @@ class Api::FestivalsController < ApiController
       :daily_capacity, :satisfaction, :other_income, :other_expense,
       :latitude, :longitude, :comment
     )
-  end
-
-  def require_admin!
-    unless current_user&.is_a?(Admin)
-      render json: {
-        status: "error",
-        message: "Accès refusé : Privilèges administrateur requis."
-      }, status: :ok
-    end
   end
 end

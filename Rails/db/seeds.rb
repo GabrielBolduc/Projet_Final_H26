@@ -197,7 +197,7 @@ Performance.create!(
 # perf pour f1 (draft)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "DRAFT - Bon show",
   price: 55.00,
   start_at: f1.start_at.to_time.change(hour: 20, min: 0),
   end_at: f1.start_at.to_time.change(hour: 22, min: 0),
@@ -208,7 +208,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Second show",
-  description: "Good show",
+  description: "DRAFT - Good show",
   price: 45.00,
   start_at: f1.start_at.to_time.change(hour: 21, min: 0),
   end_at: f1.start_at.to_time.change(hour: 23, min: 59),
@@ -219,7 +219,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Last show",
-  description: "Good show",
+  description: "DRAFT - Good show",
   price: 60.00,
   start_at: (f1.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f1.start_at + 1.day).to_time.change(hour: 20, min: 30),
@@ -231,7 +231,7 @@ Performance.create!(
 # perf pour f2 (completed)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "un show de musique",
   price: 55.00,
   start_at: f2.start_at.to_time.change(hour: 20, min: 0),
   end_at: f2.start_at.to_time.change(hour: 22, min: 0),
@@ -242,7 +242,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Second show",
-  description: "Good show",
+  description: "un show",
   price: 45.00,
   start_at: f2.start_at.to_time.change(hour: 21, min: 0),
   end_at: f2.start_at.to_time.change(hour: 23, min: 59),
@@ -253,7 +253,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Last show",
-  description: "Good show",
+  description: "not a good show",
   price: 60.00,
   start_at: (f2.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f2.start_at + 1.day).to_time.change(hour: 20, min: 30),
@@ -300,6 +300,50 @@ unit1 = Units::SimpleRoom.new(
   electricity: true,
   parking_cost: 0.00,
   food_options: "Room service,Restaurant"
+)
+
+unit_hotel_mid = Units::DoubleRoom.new(
+  accommodation: acc1,
+  cost_person_per_night: 85.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+unit_hotel_high = Units::FamilyRoom.new(
+  accommodation: acc1,
+  cost_person_per_night: 150.00,
+  quantity: 5,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_camp_low = Units::SmallTerrain.new(
+  accommodation: acc2,
+  cost_person_per_night: 25.00,
+  quantity: 30,
+  wifi: false,
+  water: :no_water,
+  electricity: false,
+  parking_cost: 5.00,
+  food_options: "None"
+)
+
+unit_camp_high = Units::DeluxeTerrain.new(
+  accommodation: acc2,
+  cost_person_per_night: 75.00,
+  quantity: 10,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Canteen"
 )
 
 
@@ -426,7 +470,11 @@ images = {
   p_daily_sold_out => 'daily-ticket.webp',
   p_evening_last_spots => 'evening-ticket.jpg',
   p_completed => 'general-ticket.webp',
-  unit1 => 'placeholder-image.jpg'
+  unit1 => 'hotel-image.jpg',
+  unit_hotel_mid => 'hotel-mid.jpg',
+  unit_hotel_high => 'hotel-high.jpg',
+  unit_camp_low => 'camping-cheap.jpg',
+  unit_camp_high => 'oubliette.jpg'
 }
 
 images.each do |package, filename|
@@ -447,6 +495,10 @@ images.each do |package, filename|
 end
 
 unit1.save!
+unit_camp_high.save!
+unit_camp_low.save!
+unit_hotel_high.save!
+unit_hotel_mid.save!
 
 puts "\nTicketing seed summary (ongoing festival):"
 [p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|

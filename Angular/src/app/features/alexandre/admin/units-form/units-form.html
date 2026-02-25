@@ -1,11 +1,8 @@
 <mat-card class="perf-card">
   @if (isEditMode()) {
-    <button mat-flat-button 
-            type="button" 
-            class="delete-btn-top" 
-            (click)="onDelete()"
-            [disabled]="isLoading()">
-      <mat-icon>delete_forever</mat-icon> {{ 'ACCOMMODATIONS.FORM.DELETE' | translate }}
+    <button mat-flat-button type="button" class="delete-btn-top" (click)="$any(onDelete())" [disabled]="isLoading()">
+      <mat-icon class="material-icons">delete_forever</mat-icon> 
+      {{ 'ACCOMMODATIONS.FORM.DELETE' | translate }}
     </button>
   }
   
@@ -25,32 +22,44 @@
       <mat-form-field appearance="outline">
         <mat-label>{{ 'UNITS.TYPE' | translate }}</mat-label>
         <mat-select formControlName="type">
-          <mat-optgroup [label]="'UNITS.TYPES.ROOMS_HEADER' | translate">
-            @for (t of ROOM_TYPES; track t) { 
-              <mat-option [value]="t">{{ 'UNITS.TYPES.' + t | translate }}</mat-option> 
-            }
-          </mat-optgroup>
-          <mat-optgroup [label]="'UNITS.TYPES.TERRAINS_HEADER' | translate">
-            @for (t of TERRAIN_TYPES; track t) { 
-              <mat-option [value]="t">{{ 'UNITS.TYPES.' + t | translate }}</mat-option> 
-            }
-          </mat-optgroup>
+          @if (parentCategory() === 1 || parentCategory() === 'hotel') {
+            <mat-optgroup [label]="'UNITS.TYPES.ROOMS_HEADER' | translate">
+              @for (t of ROOM_TYPES; track t) { <mat-option [value]="t">{{ 'UNITS.TYPES.' + t | translate }}</mat-option> }
+            </mat-optgroup>
+          }
+          @if (parentCategory() === 2 || parentCategory() === 'camping') {
+            <mat-optgroup [label]="'UNITS.TYPES.TERRAINS_HEADER' | translate">
+              @for (t of TERRAIN_TYPES; track t) { <mat-option [value]="t">{{ 'UNITS.TYPES.' + t | translate }}</mat-option> }
+            </mat-optgroup>
+          }
         </mat-select>
+        <mat-error>{{ 'UNITS.FORM.REQUIRED' | translate }}</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'UNITS.COST' | translate }}</mat-label>
         <input matInput type="number" formControlName="cost_person_per_night">
+        @if (form.get('cost_person_per_night')?.hasError('required')) { <mat-error>{{ 'UNITS.FORM.REQUIRED' | translate }}</mat-error> }
+        @if (form.get('cost_person_per_night')?.hasError('min')) { <mat-error>{{ 'UNITS.FORM.MIN_VALUE' | translate }}</mat-error> }
+        @if (form.get('parking_cost')?.hasError('max')) { <mat-error>{{ 'UNITS.FORM.MAX_COST' | translate }}</mat-error> }
       </mat-form-field>
 
-    <mat-form-field appearance="outline">
-        <mat-label>{{ 'UNITS.PARKING_COST' | translate }}</mat-label>
-        <input matInput type="number" formControlName="parking_cost">
-    </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>{{ 'UNITS.PARKING' | translate }}</mat-label>
+          <input matInput type="number" formControlName="parking_cost">
+          @if (form.get('parking_cost')?.hasError('max')) {
+            <mat-error>{{ 'UNITS.FORM.MAX_PARKING' | translate }}</mat-error>
+          }
+          @if (form.get('parking_cost')?.hasError('min')) {
+            <mat-error>{{ 'UNITS.FORM.MIN_VALUE' | translate }}</mat-error>
+          }
+      </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'UNITS.QUANTITY' | translate }}</mat-label>
         <input matInput type="number" formControlName="quantity">
+        @if (form.get('quantity')?.hasError('required')) { <mat-error>{{ 'UNITS.FORM.REQUIRED' | translate }}</mat-error> }
+        @if (form.get('quantity')?.hasError('min')) { <mat-error>{{ 'UNITS.FORM.MIN_VALUE' | translate }}</mat-error> }
       </mat-form-field>
     </div>
 
@@ -59,12 +68,11 @@
         <mat-form-field appearance="outline">
           <mat-label>{{ 'UNITS.WATER' | translate }}</mat-label>
           <mat-select formControlName="water">
-            <mat-option [value]="0">{{ 'UNITS.WATER_STATUS.NONE' | translate }}</mat-option>
-            <mat-option [value]="1">{{ 'UNITS.WATER_STATUS.UNDRINKABLE' | translate }}</mat-option>
-            <mat-option [value]="2">{{ 'UNITS.WATER_STATUS.DRINKABLE' | translate }}</mat-option>
+            <mat-option value="no_water">{{ 'UNITS.WATER_STATUS.NONE' | translate }}</mat-option>
+            <mat-option value="undrinkable">{{ 'UNITS.WATER_STATUS.UNDRINKABLE' | translate }}</mat-option>
+            <mat-option value="drinkable">{{ 'UNITS.WATER_STATUS.DRINKABLE' | translate }}</mat-option>
           </mat-select>
         </mat-form-field>
-
         <div class="toggle-container">
           <mat-slide-toggle formControlName="electricity">{{ 'UNITS.ELECTRICITY' | translate }}</mat-slide-toggle>
         </div>
@@ -76,9 +84,10 @@
         <mat-label>{{ 'UNITS.FOOD' | translate }}</mat-label>
         <mat-select formControlName="food_options" multiple>
           @for (opt of FOOD_OPTIONS; track opt) { 
-            <mat-option [value]="opt">{{opt}}</mat-option> 
+            <mat-option [value]="opt">{{ 'UNITS.FOOD_OPTIONS_LABELS.' + opt | translate }}</mat-option> 
           }
         </mat-select>
+        <mat-error>{{ 'UNITS.FORM.REQUIRED' | translate }}</mat-error>
       </mat-form-field>
 
       <div class="toggle-container">
@@ -88,17 +97,15 @@
 
     <div class="file-area">
       <button type="button" mat-stroked-button (click)="fileInput.click()">
-        <mat-icon>image</mat-icon> {{ 'UNITS.UPLOAD_IMAGE' | translate }}
+        <mat-icon class="material-icons">image</mat-icon> {{ 'UNITS.UPLOAD_IMAGE' | translate }}
       </button>
-      <input #fileInput type="file" hidden (change)="onFileSelected($event)" accept="image/*">
+      <input #fileInput type="file" hidden (change)="$any(onFileSelected($event))" accept="image/*">
       @if (selectedFile()) { <span class="file-name">{{ selectedFile()?.name }}</span> }
+      @if (!isEditMode() && !selectedFile()) { <div class="custom-err">{{ 'UNITS.FORM.IMAGE_REQUIRED' | translate }}</div> }
     </div>
 
     <div class="form-actions">
-      <button 
-          mat-stroked-button type="button" 
-          [routerLink]="['/accommodations', accommodationId()]"
-          class="action-btn cancel-btn">
+      <button mat-stroked-button type="button" [routerLink]="['/units', accommodationId()]" class="action-btn cancel-btn">
         {{ 'COMMON.CANCEL' | translate }}
       </button>
       <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">

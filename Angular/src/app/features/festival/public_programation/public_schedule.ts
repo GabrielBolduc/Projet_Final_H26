@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { firstValueFrom } from 'rxjs'; 
 
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
@@ -56,45 +57,32 @@ export class PublicScheduleComponent implements OnInit {
     return lang.split('-')[0];
   }
 
-  loadSchedule(): void {
+  async loadSchedule(): Promise<void> {
     this.isLoading.set(true);
     this.serverErrors.set([]);
 
-    this.festivalService.getFestivals().subscribe({
-      next: (festivals) => {
-        const ongoing = festivals.find(f => f.status === 'ongoing');
-        
-        console.log('festival recu', festivals);
-        
-        if (ongoing) {
-          this.currentFestival.set(ongoing);
-          
-          this.performanceService.getPerformances().subscribe({
-            next: (allPerformances) => {
-              const festivalPerformances = allPerformances.filter(p => 
-                p.festival_id === ongoing.id || (p.festival && p.festival.id === ongoing.id)
-              );
+    try {
+      const festivals = await firstValueFrom(this.festivalService.getFestivals());
+      const ongoing = festivals.find(f => f.status === 'ongoing');
 
-              const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
-              
-              this.performanceGroups.set(this.groupByDay(sortedData));
-              this.isLoading.set(false);
-            },
-            error: (err) => {
-              this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
-              this.isLoading.set(false);
-            }
-          });
-        } else {
-          this.currentFestival.set(null);
-          this.isLoading.set(false);
-        }
-      },
-      error: (err) => {
-        this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
-        this.isLoading.set(false);
+      if (ongoing) {
+        this.currentFestival.set(ongoing);
+        const allPerformances = await firstValueFrom(this.performanceService.getPerformances());
+        
+        const festivalPerformances = allPerformances.filter(p => 
+          Number(p.festival_id) === Number(ongoing.id) || (p.festival && Number(p.festival.id) === Number(ongoing.id))
+        );
+        
+        const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
+        this.performanceGroups.set(this.groupByDay(sortedData));
+      } else {
+        this.currentFestival.set(null);
       }
-    });
+    } catch (err) {
+      this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   private groupByDay(performances: Performance[]): DayGroup[] {

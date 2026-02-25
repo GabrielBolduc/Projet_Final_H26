@@ -8,6 +8,9 @@ class Performance < ApplicationRecord
   scope :active, -> { joins(:festival).merge(Festival.ongoing) }
   scope :upcoming, -> { where("start_at >= ?", Time.current) }
 
+  before_update :prevent_modification_if_festival_completed
+  before_destroy :prevent_modification_if_festival_completed
+
   validates :start_at, :end_at, :price, presence: true
   validates :title, length: { maximum: 20 }
   validates :price, numericality: { greater_than_or_equal_to: 0 }, presence: true
@@ -49,15 +52,22 @@ class Performance < ApplicationRecord
     end
   end
 
-  def overlapping_query(conditions)
-    Performance.where(conditions)
-               .where.not(id: id)
-               .where("start_at < ? AND end_at > ?", end_at, start_at)
-  end
-
   def festival_must_be_active
     if festival&.completed?
       errors.add(:festival_id, "FESTIVAL_COMPLETED")
     end
+  end
+
+  def prevent_modification_if_festival_completed
+    if festival&.completed? || (festival_id_changed? && Festival.find_by(id: festival_id)&.completed?)
+      errors.add(:base, "Impossible de modifier ou supprimer une performance d'un festival archivé.")
+      throw(:abort)
+    end
+  end
+
+  def overlapping_query(conditions)
+    Performance.where(conditions)
+               .where.not(id: id)
+               .where("start_at < ? AND end_at > ?", end_at, start_at)
   end
 end

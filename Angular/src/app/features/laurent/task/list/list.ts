@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Task } from '@core/models/task';
 import { TaskService } from '@core/services/task.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,11 +19,34 @@ export class TaskListComponent implements OnInit {
   private taskService = inject(TaskService);
   tasks = signal<Task[]>([]);
 
+  constructor(private router: Router) {}
+
   ngOnInit() {
     this.taskService.listTasks().subscribe(data => { 
       console.log('Tâches reçues : ', data);
       this.tasks.set(data);
     });
+  }
+
+  handleClick(id: number) {
+
+    
+
+    this.taskService.deleteTask(id).subscribe(data =>{ 
+      console.log('tache reçu : ', data)
+    
+    });
+    this.taskService.listTasks().subscribe(data => { 
+      console.log('Tâches reçues : ', data);
+      this.tasks.set(data);
+    });
+
+  }
+
+  handleEditClick(id: number) {
+
+    this.router.navigate([`/tasks/${id}/edit`]);
+
   }
 
   isImage(fileUrl: string | undefined): boolean {

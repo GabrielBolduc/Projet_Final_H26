@@ -1,5 +1,5 @@
 one:
-  type: SimpleRoom
+  type: Units::SimpleRoom
   accommodation: one
   cost_person_per_night: 55.00
   quantity: 10
@@ -10,7 +10,7 @@ one:
   food_options: "Room service,Restaurant"
 
 two:
-  type: StandardTerrain
+  type: Units::StandardTerrain
   accommodation: two
   cost_person_per_night: 20.00
   quantity: 20
@@ -21,7 +21,7 @@ two:
   food_options: "Canteen"
 
 three:
-  type: SimpleRoom
+  type: Units::SimpleRoom
   accommodation: one
   cost_person_per_night: 55.00
   quantity: 5

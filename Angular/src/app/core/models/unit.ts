@@ -20,6 +20,7 @@ export interface Unit {
   parking_cost: number;
   food_options: FoodOption[];
   accommodation_id: number;
+  image_url?: string | null;
   created_at?: Date;
   updated_at?: Date;
 }

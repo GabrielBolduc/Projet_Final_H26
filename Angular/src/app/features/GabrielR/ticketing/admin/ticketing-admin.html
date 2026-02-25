@@ -10,72 +10,163 @@
   <section class="filters-section">
     <mat-form-field appearance="outline" class="search-bar">
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate" [(ngModel)]="searchQuery">
+      <input
+        matInput
+        [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate"
+        [ngModel]="searchQuery()"
+        [ngModelOptions]="{updateOn: 'blur'}"
+        (ngModelChange)="searchQuery.set($event)"
+        (keyup.enter)="$any($event.target).blur()"
+      >
+      @if (searchQuery()) {
+        <button mat-icon-button matSuffix (click)="searchQuery.set('')" [attr.aria-label]="'Clear'">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="sort-select">
       <mat-label>{{ 'TICKETING_ADMIN.SORT_BY' | translate }}</mat-label>
-      <mat-select [(ngModel)]="sortOption">
-        <mat-option value="all">{{ 'TICKETING_ADMIN.SORT_ALL' | translate }}</mat-option>
-        <mat-option value="qty_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
-        <mat-option value="qty_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
+      <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
+        <mat-option value="date_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
+        <mat-option value="date_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </section>
 
   <main>
-    <div class="packages-grid">
-      @for (pkg of filteredPackages(); track pkg.id) {
-        <mat-card class="ticket-card">
-          <div class="card-content-layout">
-            
-            <div class="ticket-visual">
-              <img [src]="pkg.image_url || 'assets/placeholder-image.png'" alt="ticket">
-              <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
-                {{ 'PACKAGE_FORM.TYPE_' + (pkg.category | uppercase) | translate }}
-              </span>
-            </div>
-
-            <div class="ticket-info">
-              <div class="info-header">
-                <h3>{{ pkg.title }}</h3>
-                <span class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</span>
-              </div>
-              
-              <div class="date-info">
-                <strong>{{ 'TICKETING_ADMIN.DATE' | translate }}</strong> 
-                @if ((pkg.valid_at | date:'yyyy-MM-dd') === (pkg.expired_at | date:'yyyy-MM-dd')) {
-                  {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
-                  ({{ pkg.valid_at | date:'HH:mm' }} - {{ pkg.expired_at | date:'HH:mm' }})
-                } @else {
-                  {{ 'TICKETING_ADMIN.FROM' | translate }} {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
-                  {{ 'TICKETING_ADMIN.TO' | translate }} {{ pkg.expired_at | date:'yyyy-MM-dd' }}
-                }
-              </div>
-              
-              <p class="description">{{ pkg.description }}</p>
-
-              <div class="quota-section">
-                <div class="quota-labels">
-                  <span>{{ 'TICKETING_ADMIN.SALES' | translate }}</span>
-                  <span>{{ pkg.sold || 0 }} / {{ pkg.quota }}</span>
-                </div>
-                <mat-progress-bar mode="determinate" [value]="((pkg.sold || 0) / (pkg.quota || 1)) * 100"></mat-progress-bar>
-              </div>
-            </div>
-
-            <div class="ticket-actions">
-              <button mat-icon-button class="action-btn edit" (click)="openForm(pkg)">
-                <mat-icon>edit_square</mat-icon>
-              </button>
-              <button mat-icon-button class="action-btn delete" (click)="deletePackage(pkg)">
-                <mat-icon>delete_outline</mat-icon>
-              </button>
-            </div>
-
-          </div>
-        </mat-card>
+    <section class="admin-section">
+      <h2 class="section-label">{{ 'TICKETING_ADMIN.ACTIVE_TITLE' | translate }}</h2>
+      @if (activePackages().length === 0) {
+        <p class="empty-state">{{ 'TICKETING_ADMIN.EMPTY_ACTIVE' | translate }}</p>
       }
-    </div>
+      <div class="packages-grid">
+        @for (pkg of activePackages(); track pkg.id) {
+          <mat-card class="ticket-card">
+            <div class="card-content-layout">
+              
+              <div class="ticket-visual">
+                <img [src]="pkg.image_url || 'assets/placeholder-image.png'" alt="ticket">
+                <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
+                  {{ 'PACKAGE_FORM.TYPE_' + (pkg.category | uppercase) | translate }}
+                </span>
+              </div>
+
+              <div class="ticket-info">
+                <div class="info-header">
+                  <h3>{{ pkg.title }}</h3>
+                  <span class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</span>
+                </div>
+                
+                <div class="date-info">
+                  <strong>{{ 'TICKETING_ADMIN.DATE' | translate }}</strong> 
+                  @if ((pkg.valid_at | date:'yyyy-MM-dd') === (pkg.expired_at | date:'yyyy-MM-dd')) {
+                    {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                    ({{ pkg.valid_at | date:'HH:mm' }} - {{ pkg.expired_at | date:'HH:mm' }})
+                  } @else {
+                    {{ 'TICKETING_ADMIN.FROM' | translate }} {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                    {{ 'TICKETING_ADMIN.TO' | translate }} {{ pkg.expired_at | date:'yyyy-MM-dd' }}
+                  }
+                </div>
+                
+                <p class="description">{{ pkg.description }}</p>
+
+                <div class="quota-section">
+                  <div class="quota-labels">
+                    <span>{{ 'TICKETING_ADMIN.SALES' | translate }}</span>
+                    <span>{{ pkg.sold || 0 }} / {{ pkg.quota }}</span>
+                  </div>
+                  <mat-progress-bar mode="determinate" [value]="((pkg.sold || 0) / (pkg.quota || 1)) * 100"></mat-progress-bar>
+                </div>
+              </div>
+
+              <div class="ticket-actions">
+                <button mat-icon-button class="icon-btn edit" (click)="openForm(pkg)">
+                  <mat-icon>edit_square</mat-icon>
+                </button>
+                <button mat-icon-button class="icon-btn trash" (click)="deletePackage(pkg)">
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+
+            </div>
+          </mat-card>
+        }
+      </div>
+    </section>
+
+    <section class="admin-section">
+      <h2 class="section-label">{{ 'TICKETING_ADMIN.ARCHIVED_TITLE' | translate }}</h2>
+      @if (archivedPackages().length === 0) {
+        <p class="empty-state">{{ 'TICKETING_ADMIN.EMPTY_ARCHIVED' | translate }}</p>
+      }
+      <div class="packages-grid">
+        @for (pkg of archivedPackages(); track pkg.id) {
+          <mat-card class="ticket-card archived-card">
+            <div class="card-content-layout">
+              
+              <div class="ticket-visual">
+                <img [src]="pkg.image_url || 'assets/placeholder-image.png'" alt="ticket">
+                <span class="category-badge" [ngClass]="pkg.category.toLowerCase()">
+                  {{ 'PACKAGE_FORM.TYPE_' + (pkg.category | uppercase) | translate }}
+                </span>
+                <span class="archive-badge">{{ 'TICKETING_ADMIN.ARCHIVED_BADGE' | translate }}</span>
+              </div>
+
+              <div class="ticket-info">
+                <div class="info-header">
+                  <h3>{{ pkg.title }}</h3>
+                  <span class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</span>
+                </div>
+                
+                <div class="date-info">
+                  <strong>{{ 'TICKETING_ADMIN.DATE' | translate }}</strong> 
+                  @if ((pkg.valid_at | date:'yyyy-MM-dd') === (pkg.expired_at | date:'yyyy-MM-dd')) {
+                    {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                    ({{ pkg.valid_at | date:'HH:mm' }} - {{ pkg.expired_at | date:'HH:mm' }})
+                  } @else {
+                    {{ 'TICKETING_ADMIN.FROM' | translate }} {{ pkg.valid_at | date:'yyyy-MM-dd' }} 
+                    {{ 'TICKETING_ADMIN.TO' | translate }} {{ pkg.expired_at | date:'yyyy-MM-dd' }}
+                  }
+                </div>
+                
+                <p class="description">{{ pkg.description }}</p>
+
+                <div class="quota-section">
+                  <div class="quota-labels">
+                    <span>{{ 'TICKETING_ADMIN.SALES' | translate }}</span>
+                    <span>{{ pkg.sold || 0 }} / {{ pkg.quota }}</span>
+                  </div>
+                  <mat-progress-bar mode="determinate" [value]="((pkg.sold || 0) / (pkg.quota || 1)) * 100"></mat-progress-bar>
+                </div>
+              </div>
+
+              <div class="ticket-actions">
+                <button mat-icon-button class="icon-btn edit" disabled>
+                  <mat-icon>edit_square</mat-icon>
+                </button>
+                <button mat-icon-button class="icon-btn trash" disabled>
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
+
+            </div>
+          </mat-card>
+        }
+      </div>
+    </section>
+
   </main>
 </div>
+
+<ng-template #confirmDialogTemplate let-data>
+  <h2 mat-dialog-title>{{ 'TICKETING_ADMIN.DELETE_DIALOG_TITLE' | translate }}</h2>
+  <mat-dialog-content>
+    <p>{{ 'TICKETING_ADMIN.DELETE_CONFIRM' | translate:{title: data?.title} }}</p>
+    <p>{{ 'TICKETING_ADMIN.DELETE_DIALOG_BODY' | translate }}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'TICKETING_ADMIN.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">{{ 'TICKETING_ADMIN.DELETE' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>

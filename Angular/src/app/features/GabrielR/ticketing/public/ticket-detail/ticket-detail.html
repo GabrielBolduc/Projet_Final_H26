@@ -1,0 +1,111 @@
+<div class="ticket-detail-page">
+  <header class="ticket-header">
+    <a mat-button [routerLink]="backOrdersLink()" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'TICKETING_PUBLIC.MY_ORDER' | translate }}
+    </a>
+  </header>
+
+  @if (isLoading()) {
+    <p class="state-message">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
+  } @else if (ticket(); as currentTicket) {
+    <mat-card class="ticket-card">
+      @if (currentTicket.package.image_url) {
+        <div class="ticket-image" [style.background-image]="'url(' + currentTicket.package.image_url + ')'"></div>
+      }
+
+      <h1 class="ticket-title">{{ 'TICKETING_PUBLIC.TICKET_DETAILS' | translate }}</h1>
+      <h2 class="ticket-subtitle">{{ currentTicket.package.title }}</h2>
+
+      @if (currentTicket.qr_code_url) {
+        <div class="qr-code-container" [class.invalid]="qrIsInvalid()">
+          <img
+            class="qr-code-image"
+            [src]="currentTicket.qr_code_url"
+            [alt]="'QR code ' + currentTicket.unique_code"
+          />
+          @if (qrIsInvalid()) {
+            <span class="invalid-badge">INVALID</span>
+          }
+        </div>
+      } @else {
+        <div class="fake-qr" [class.invalid]="qrIsInvalid()">
+          {{ currentTicket.unique_code }}
+          @if (qrIsInvalid()) {
+            <span class="invalid-badge">INVALID</span>
+          }
+        </div>
+      }
+
+      <p class="ticket-date">{{ 'TICKETING_PUBLIC.DATE' | translate }}: {{ currentTicket.package.valid_at | date:'yyyy-MM-dd HH:mm' }}</p>
+      <p class="status" [class.refunded]="currentTicket.refunded">
+        {{ currentTicket.refunded ? ('TICKETING_PUBLIC.REFUNDED' | translate) : ('TICKETING_PUBLIC.ACTIVE' | translate) }}
+      </p>
+
+      <form [formGroup]="ticketForm" (ngSubmit)="updateTicketDetails()" class="ticket-form">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'TICKETING_PUBLIC.HOLDER_NAME' | translate }}</mat-label>
+          <input matInput formControlName="holder_name">
+          @if (holderNameControl?.hasError('required') && holderNameControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.REQUIRED' | translate }}</mat-error>
+          }
+          @if (holderNameControl?.hasError('maxlength') && holderNameControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.HOLDER_NAME_MAX' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'TICKETING_PUBLIC.HOLDER_PHONE' | translate }}</mat-label>
+          <input matInput formControlName="holder_phone">
+          @if (holderPhoneControl?.hasError('required') && holderPhoneControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.REQUIRED' | translate }}</mat-error>
+          }
+          @if (holderPhoneControl?.hasError('pattern') && holderPhoneControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.INVALID_PHONE' | translate }}</mat-error>
+          }
+          @if (holderPhoneControl?.hasError('maxlength') && holderPhoneControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.HOLDER_PHONE_MAX' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'TICKETING_PUBLIC.HOLDER_EMAIL' | translate }}</mat-label>
+          <input matInput formControlName="holder_email" type="email">
+          @if (holderEmailControl?.hasError('required') && holderEmailControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.REQUIRED' | translate }}</mat-error>
+          }
+          @if (holderEmailControl?.hasError('email') && holderEmailControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.INVALID_EMAIL' | translate }}</mat-error>
+          }
+          @if (holderEmailControl?.hasError('maxlength') && holderEmailControl?.touched) {
+            <mat-error>{{ 'TICKETING_PUBLIC.HOLDER_EMAIL_MAX' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        @if (formError()) {
+          <p class="error">{{ formError() }}</p>
+        }
+        @if (formSuccess()) {
+          <p class="success">{{ formSuccess() }}</p>
+        }
+
+        <div class="actions">
+          <button mat-stroked-button type="submit" [disabled]="isSaving() || currentTicket.refunded">
+            {{ 'TICKETING_PUBLIC.UPDATE_TICKET' | translate }}
+          </button>
+          <button
+            mat-flat-button
+            type="button"
+            color="warn"
+            (click)="refundTicket()"
+            [disabled]="isRefunding() || currentTicket.refunded"
+          >
+            {{ 'TICKETING_PUBLIC.REFUND_TICKET' | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  } @else {
+    <p class="empty-state">{{ 'TICKETING_PUBLIC.TICKET_NOT_FOUND' | translate }}</p>
+  }
+</div>

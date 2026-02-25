@@ -1,12 +1,15 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import { firstValueFrom } from 'rxjs'; 
 
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
@@ -14,7 +17,7 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
 import { DateUtils } from '../../../core/utils/date.utils'; 
 
 import { Performance } from '../../../core/models/performance';
-import { Festival } from '../../../core/models/festival'
+import { Festival } from '../../../core/models/festival';
 
 interface DayGroup {
   date: Date;
@@ -29,34 +32,46 @@ interface DayGroup {
     MatButtonModule, 
     MatIconModule,
     MatTableModule,
+    MatDialogModule,
+    MatSnackBarModule,
     TranslateModule
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
+
   private performanceService = inject(PerformanceService);
   private festivalService = inject(FestivalService); 
   private errorHandler = inject(ErrorHandlerService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   public translate = inject(TranslateService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
 
+  festival = signal<Festival | null>(null);
+  isReadOnly = computed(() => this.festival()?.status === 'completed');
+  
   performanceGroups = signal<DayGroup[]>([]);
   isLoading = signal(true);
   serverErrors = signal<string[]>([]);
-  festivalId = signal<number | null>(null); 
 
   currentLang = toSignal(
-    this.translate.onLangChange.pipe(
-      map(event => this.formatLang(event.lang))
-    ),
+    this.translate.onLangChange.pipe(map(event => this.formatLang(event.lang))),
     { initialValue: this.formatLang(this.translate.getCurrentLang()) }
   );
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
 
   ngOnInit(): void {
-    this.loadPerformances();
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      this.loadDashboardData(Number(idParam));
+    } else {
+      this.router.navigate(['/admin/festivals']);
+    }
   }
 
   private formatLang(lang: string | undefined): string {
@@ -65,84 +80,80 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToAdd(): void { 
-    const id = this.festivalId();
-    if (id) {
-      this.router.navigate(['/admin/festivals', id, 'performances', 'new']);
-    } else {
-      this.serverErrors.set(["Impossible d'ajouter une performance : Aucun festival en cours trouvé."]);
+    const currentFest = this.festival();
+    if (currentFest && !this.isReadOnly()) {
+      this.router.navigate(['/admin/festivals', currentFest.id, 'performances', 'new']);
     }
   }
 
   navigateToEdit(perfId: number): void {
-    const targetFestivalId = this.festivalId(); 
-    if (targetFestivalId) {
-      this.router.navigate(['/admin/festivals', targetFestivalId, 'performances', perfId, 'edit']);
+    const currentFest = this.festival();
+    if (currentFest && !this.isReadOnly()) {
+      this.router.navigate(['/admin/festivals', currentFest.id, 'performances', perfId, 'edit']);
     }
   }
 
-  loadPerformances(): void {
+  async loadDashboardData(festivalId: number): Promise<void> {
     this.isLoading.set(true);
     this.serverErrors.set([]);
 
-    this.festivalService.getFestivals().subscribe({
-      next: (festivals) => {
-        const ongoingFestival = festivals.find(f => f.status === 'ongoing');
+    try {
+      const targetFestival = await firstValueFrom(this.festivalService.getFestival(festivalId));
+      this.festival.set(targetFestival);
 
-        if (ongoingFestival) {
-          this.festivalId.set(ongoingFestival.id);
+      const allPerformances = await firstValueFrom(this.performanceService.getPerformances());
+      const festivalPerformances = allPerformances.filter(p => 
+        p.festival_id === festivalId || (p.festival && p.festival.id === festivalId)
+      );
 
-          this.performanceService.getPerformances().subscribe({
-            next: (allPerformances) => {
-              const festivalPerformances = allPerformances.filter(p => 
-                p.festival_id === ongoingFestival.id || (p.festival && p.festival.id === ongoingFestival.id)
-              );
+      const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
+      this.performanceGroups.set(this.groupByDay(sortedData));
 
-              const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
-              this.performanceGroups.set(this.groupByDay(sortedData));
-              this.isLoading.set(false);
-            },
-            error: (err) => {
-              this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
-              this.isLoading.set(false);
-            }
-          });
-        } else {
-          this.festivalId.set(null);
-          this.performanceGroups.set([]);
-          this.isLoading.set(false);
-        }
-      },
-      error: (err) => {
-        this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
-        this.isLoading.set(false);
-      }
-    });
+    } catch (err) {
+      this.showErrorsAsSnackBar(err);
+      this.router.navigate(['/admin/festivals']); 
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
   private groupByDay(performances: Performance[]): DayGroup[] {
     const groups: { [key: string]: Performance[] } = {};
-    
     performances.forEach(perf => {
       const dateKey = DateUtils.toDateStringKey(perf.start_at);
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(perf);
     });
-
     return Object.keys(groups).map(key => ({
       date: DateUtils.toDate(key),
       performances: groups[key]
     }));
   }
   
-  deletePerformance(id: number): void {
-    if(confirm('Supprimer définitivement cette performance ?')) {
+  async deletePerformance(id: number): Promise<void> {
+    if (this.isReadOnly()) return;
+
+    const dialogRef = this.dialog.open(this.confirmDialogTemplate, { width: '400px' });
+    const result = await firstValueFrom(dialogRef.afterClosed());
+
+    if (result) {
       this.serverErrors.set([]);
-      this.performanceService.deletePerformance(id).subscribe({
-        next: () => this.loadPerformances(),
-        error: (err) => {
-          this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+      try {
+        await firstValueFrom(this.performanceService.deletePerformance(id));
+        this.snackBar.open('Performance supprimée avec succès', 'Fermer', { duration: 3000 });
+        if (this.festival()) {
+          await this.loadDashboardData(this.festival()!.id);
         }
-      });
+      } catch (err) {
+        this.showErrorsAsSnackBar(err);
+      }
+    }
+  }
+
+  private showErrorsAsSnackBar(err: any): void {
+    const errors = this.errorHandler.parseRailsErrors(err);
+    if (errors.length > 0) {
+      this.snackBar.open(errors.join(' | '), 'Fermer', { duration: 5000 });
     }
   }
 }

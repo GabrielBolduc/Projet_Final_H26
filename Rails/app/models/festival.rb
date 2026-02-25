@@ -4,7 +4,10 @@ class Festival < ApplicationRecord
   has_many :packages, dependent: :destroy
   has_many :accommodations, dependent: :destroy
 
+  scope :recent, -> { order(start_at: :desc) }
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
+
+  before_destroy :prevent_destroy_if_ongoing
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :start_at, :end_at, :status, :address, presence: true
@@ -16,6 +19,8 @@ class Festival < ApplicationRecord
   validates :other_income, :other_expense, numericality: { allow_nil: true }
 
   validate :end_at_after_start_at
+  validate :only_one_ongoing_festival
+
   composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
 
 
@@ -26,6 +31,19 @@ class Festival < ApplicationRecord
 
     if end_at < start_at
       errors.add(:end_at, "doit etre apres la date de debut")
+    end
+  end
+
+  def only_one_ongoing_festival
+    if ongoing? && Festival.ongoing.where.not(id: id).exists?
+      errors.add(:status, "festival ongoing en cours")
+    end
+  end
+
+  def prevent_destroy_if_ongoing
+    if ongoing?
+      errors.add(:base, "impossible de supprimer un festival ongoing")
+      throw(:abort)
     end
   end
 end

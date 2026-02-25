@@ -1,0 +1,82 @@
+<div class="admin-page">
+  <header class="admin-top-bar">
+      <button mat-stroked-button class="btn-new" (click)="openForm()">
+        <mat-icon>add</mat-icon> {{ 'UNITS_ADMIN.NEW_UNIT' | translate }}
+      </button>
+      <h1 class="header-title">{{ 'UNITS_ADMIN.TITLE' | translate }}</h1>
+      <div class="spacer-right" style="flex: 1; max-width: 250px;"></div>
+  </header>
+
+  <section class="filters-section">
+    <mat-form-field appearance="outline" class="search-bar">
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [placeholder]="'UNITS_ADMIN.SEARCH_TYPE' | translate" 
+             [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="sort-select">
+      <mat-label>{{ 'UNITS_ADMIN.SORT_BY' | translate }}</mat-label>
+      <mat-select [ngModel]="sortOption()" (selectionChange)="sortOption.set($event.value)">
+        <mat-option value="all">{{ 'UNITS_ADMIN.SORT_ALL' | translate }}</mat-option>
+        <mat-option value="qty_asc">{{ 'UNITS_ADMIN.SORT_QTY_ASC' | translate }}</mat-option>
+        <mat-option value="qty_desc">{{ 'UNITS_ADMIN.SORT_QTY_DESC' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <main>
+    <div class="packages-grid">
+      @for (unit of filteredUnits(); track unit.id) {
+        <mat-card class="ticket-card">
+          <div class="card-content-layout">
+            
+            <div class="ticket-visual">
+              <img [src]="unit.image_url || 'assets/placeholder-unit.png'" alt="unit image">
+                <span class="category-badge" [ngClass]="unit.type.split('::').pop()?.toLowerCase()">
+                {{ formatType(unit.type) }}
+                </span>
+            </div>
+
+            <div class="ticket-info">
+              <div class="info-header">
+                <h3>{{ formatType(unit.type) }}</h3>
+                <span class="price">{{ unit.cost_person_per_night | currency:'CAD':'symbol-narrow' }} / night</span>
+              </div>
+              
+              <div class="date-info">
+                <strong>{{ 'UNITS_ADMIN.FEATURES' | translate }}:</strong> 
+                <mat-icon *ngIf="unit.wifi" title="WiFi">wifi</mat-icon>
+                <mat-icon *ngIf="unit.electricity" title="Electricity">bolt</mat-icon>
+                <span>Water: {{ unit.water }}L</span>
+              </div>
+              
+              <p class="description">
+                {{ 'UNITS_ADMIN.PARKING' | translate }}: {{ unit.parking_cost | currency:'CAD' }} | 
+                {{ 'UNITS_ADMIN.FOOD' | translate }}: {{ unit.food_options.join(', ') }}
+              </p>
+
+              <div class="quota-section">
+                <div class="quota-labels">
+                  <span>{{ 'UNITS_ADMIN.AVAILABLE_QTY' | translate }}</span>
+                  <span>{{ unit.quantity }} {{ 'UNITS_ADMIN.UNITS' | translate }}</span>
+                </div>
+                <!-- Progress bar showing occupancy or capacity if you add a 'booked' field later -->
+                <mat-progress-bar mode="determinate" [value]="100"></mat-progress-bar>
+              </div>
+            </div>
+
+            <div class="ticket-actions">
+              <button mat-icon-button class="action-btn edit" (click)="openForm(unit)">
+                <mat-icon>edit_square</mat-icon>
+              </button>
+              <button mat-icon-button class="action-btn delete" (click)="deleteUnit(unit)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+
+          </div>
+        </mat-card>
+      }
+    </div>
+  </main>
+</div>

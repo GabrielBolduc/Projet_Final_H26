@@ -20,6 +20,7 @@ import { FestivalService } from '../../../../../core/services/festival.service';
 import { PackageService } from '../../../../../core/services/package.service';
 import { Festival } from '@core/models/festival';
 import { Package } from '@core/models/package';
+import { DateUtils } from '@core/utils/date.utils';
 
 const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const validDate = control.get('valid_date')?.value;
@@ -130,9 +131,9 @@ export class PackageFormComponent implements OnInit {
         category: data.category,
         festival_id: data.festival_id,
         valid_date: validAt,
-        valid_time: this.formatTime(validAt),
+        valid_time: DateUtils.formatTime(validAt),
         expired_date: expiredAt,
-        expired_time: this.formatTime(expiredAt)
+        expired_time: DateUtils.formatTime(expiredAt)
       });
 
       await this.loadFestivalData(data.festival_id);
@@ -239,17 +240,6 @@ export class PackageFormComponent implements OnInit {
     };
   }
 
-  private formatTime(date: Date): string {
-    return date.toTimeString().substring(0, 5);
-  }
-
-  private combineDateTime(dateVal: Date, timeVal: string): Date {
-    const d = new Date(dateVal);
-    const [hours, minutes] = timeVal.split(':').map(Number);
-    d.setHours(hours, minutes, 0);
-    return d;
-  }
-
   private parseDateWithoutTimezone(dateInput: string | Date): Date {
     if (dateInput instanceof Date) {
       return new Date(dateInput.getFullYear(), dateInput.getMonth(), dateInput.getDate());
@@ -286,8 +276,8 @@ export class PackageFormComponent implements OnInit {
     try {
       const val = this.form.getRawValue();
 
-      const validAtFull = this.combineDateTime(val.valid_date, val.valid_time);
-      const expiredAtFull = this.combineDateTime(val.expired_date, val.expired_time);
+      const validAtFull = DateUtils.combineDateTime(val.valid_date, val.valid_time);
+      const expiredAtFull = DateUtils.combineDateTime(val.expired_date, val.expired_time);
 
       const packageData: Partial<Package> = {
         title: val.title,
@@ -296,8 +286,8 @@ export class PackageFormComponent implements OnInit {
         quota: val.quota,
         category: val.category,
         festival_id: val.festival_id,
-        valid_at: validAtFull.toISOString(),
-        expired_at: expiredAtFull.toISOString()
+        valid_at: validAtFull,
+        expired_at: expiredAtFull
       };
 
       if (this.isEditMode() && this.packageId) {

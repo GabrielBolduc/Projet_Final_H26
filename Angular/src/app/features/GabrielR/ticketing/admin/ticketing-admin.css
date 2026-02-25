@@ -37,6 +37,12 @@
   padding-left: 15px;
 }
 
+.empty-state {
+  margin: 0 0 15px;
+  color: var(--mat-sys-outline);
+  font-size: 0.95rem;
+}
+
 .btn-new {
   flex: 1;
   max-width: 250px;
@@ -74,6 +80,16 @@
   box-shadow: 8px 8px 0px var(--mat-sys-primary);
 }
 
+.archived-card {
+  opacity: 0.68;
+  filter: grayscale(0.65);
+}
+
+.archived-card:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .card-content-layout {
   display: flex;
   padding: 0;
@@ -108,6 +124,19 @@
 .category-badge.general { background: #E0E0E0; color: black; }
 .category-badge.daily { background: #FFD700; color: black; }
 .category-badge.evening { background: #ADD8E6; color: black; }
+
+.archive-badge {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 4px 8px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border-radius: 4px;
+  text-transform: uppercase;
+  color: #fff;
+  background: #555;
+}
 
 .ticket-info {
   flex: 1;
@@ -159,7 +188,7 @@
   text-align: center;
 }
 
-.action-btn { 
+.icon-btn { 
   background: none; 
   border: none; 
   cursor: pointer; 
@@ -167,12 +196,17 @@
   transition: transform 0.2s; 
 }
 
-.action-btn:hover { 
+.icon-btn:hover { 
   transform: scale(1.1); 
 }
 
-.action-btn.edit:hover { color: var(--mat-sys-primary); }
-.action-btn.delete:hover { color: var(--mat-sys-error); }
+.icon-btn.edit:hover { color: var(--mat-sys-primary); }
+.icon-btn.trash:hover { color: var(--mat-sys-error); }
+
+.archived-card .icon-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
 
 .filters-section {
   display: flex;

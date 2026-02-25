@@ -1,4 +1,4 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, inject, resource, signal, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -8,6 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms'; 
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
@@ -22,16 +23,19 @@ import { Package } from '../../../../core/models/package';
   imports: [
     CommonModule, MatCardModule, MatButtonModule, MatIconModule, 
     MatProgressBarModule, CurrencyPipe, DatePipe, 
-    MatFormFieldModule, MatInputModule, MatSelectModule, FormsModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatDialogModule, FormsModule,
     TranslateModule
   ],
   templateUrl: './ticketing-admin.html',
   styleUrls: ['./ticketing-admin.css']
 })
 export class AdminTicketingComponent {
+  @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<unknown>;
+
   private packageService = inject(PackageService);
   private festivalService = inject(FestivalService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
 
   searchQuery = signal('');
@@ -43,7 +47,7 @@ export class AdminTicketingComponent {
 
   currentFestivalId = computed<number | undefined>(() => this.ongoingFestivalResource.value()?.[0]?.id);
 
-  packagesResource = resource<Package[], PackageFilters>({
+  activePackagesResource = resource<Package[], PackageFilters>({
     params: () => {
       const festivalId = this.currentFestivalId();
 
@@ -57,8 +61,22 @@ export class AdminTicketingComponent {
     loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
   });
 
-  packages = computed(() => this.packagesResource.value() ?? []);
-  isLoading = computed(() => this.ongoingFestivalResource.isLoading() || this.packagesResource.isLoading());
+  archivedPackagesResource = resource<Package[], PackageFilters>({
+    params: () => ({
+      status: 'completed',
+      q: this.searchQuery(),
+      sort: this.sortOption()
+    }),
+    loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
+  });
+
+  activePackages = computed(() => this.activePackagesResource.value() ?? []);
+  archivedPackages = computed(() => this.archivedPackagesResource.value() ?? []);
+  isLoading = computed(() =>
+    this.ongoingFestivalResource.isLoading() ||
+    this.activePackagesResource.isLoading() ||
+    this.archivedPackagesResource.isLoading()
+  );
 
   openForm(pkg?: Package) {
     if (pkg && pkg.id) {
@@ -73,16 +91,22 @@ export class AdminTicketingComponent {
       return;
     }
 
-    const confirmMessage = this.translate.instant('TICKETING_ADMIN.DELETE_CONFIRM', { title: pkg.title });
-    
-    if(confirm(confirmMessage)) {
-      try {
-        await firstValueFrom(this.packageService.deletePackage(pkg.id));
-        this.packagesResource.reload();
-      } catch (err: any) {
-        const msg = err.message || this.translate.instant('TICKETING_ADMIN.DELETE_ERROR');
-        alert(msg);
-      }
+    const dialogRef = this.dialog.open(this.confirmDialogTemplate, {
+      width: '420px',
+      data: { title: pkg.title }
+    });
+
+    const shouldDelete = await firstValueFrom(dialogRef.afterClosed());
+    if (!shouldDelete) {
+      return;
+    }
+
+    try {
+      await firstValueFrom(this.packageService.deletePackage(pkg.id));
+      this.activePackagesResource.reload();
+    } catch (err: any) {
+      const msg = err.message || this.translate.instant('TICKETING_ADMIN.DELETE_ERROR');
+      alert(msg);
     }
   }
 }

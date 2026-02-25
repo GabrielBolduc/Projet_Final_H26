@@ -1,1 +1,37 @@
-<p>list works!</p>
+<div class="admin-page">
+  
+  <header class="admin-top-bar">
+    <button mat-stroked-button class="btn-new" [routerLink]="['/tasks/affectation/new']">
+      <mat-icon>add</mat-icon>ajouter une affectation
+    </button>
+    <h1 class="header-title">Affectations</h1>
+    
+  </header>
+
+  <main>
+    <section class="admin-section">
+      
+      <div class="task-list">
+        @for (affectation of affectations(); track affectation.id) {
+          
+          <mat-card class="fest-card">
+            <mat-card-content class="card-content-layout">
+              
+              <p>{{ affectation.user.name }}</p>
+              <p>{{ affectation.user.phone_number }}</p>
+              <p >{{ affectation.responsability }}</p>
+              <p>{{ affectation.expected_start }}</p>
+                <p> {{ affectation.expected_end | date:'HH:mm' : undefined : currentLang() }} </p>
+
+
+              <button mat-stroked-button class="btn-dash">
+                en savoir plus
+              </button>
+            </mat-card-content>
+          </mat-card>
+
+        }
+      </div>
+    </section>
+  </main>
+</div>

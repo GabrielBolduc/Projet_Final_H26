@@ -6,6 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './user-update.html',
   styleUrl: './user-update.css',
 })
-export class UserUpdate {
+export class UserUpdateAffectationComponent {
 
 }

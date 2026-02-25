@@ -80,9 +80,21 @@
 }
 
 .task-thumbnail {
-  height: 150px; 
-  width: 250px;
+  width: clamp(150px, 30vw, 250px);
+  height: auto;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.icon-btn { 
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 4px; 
+  margin: 0 4px; 
+  transition: transform 0.2s; 
+}
+
+.icon-btn:hover { 
+  transform: scale(1.1); 
 }

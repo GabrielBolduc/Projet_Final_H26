@@ -66,7 +66,10 @@ class Api::AffectationsController < ApiController
                 task: {
                     only: [ :id, :name, :description, :reusable ],
                     methods: [ :file_url]
-                }
+                },
+                festival: {
+                    only: [ :id, :name, :status ]
+                },
             }
         }
     end
@@ -82,7 +85,8 @@ class Api::AffectationsController < ApiController
     def affectation_params
         params.require(:affectation).permit(
             :user_id, 
-            :task_id, 
+            :task_id,
+            :festival_id, 
             :status, 
             :start, 
             :end, 

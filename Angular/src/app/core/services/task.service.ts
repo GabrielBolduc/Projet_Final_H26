@@ -41,16 +41,16 @@ export class TaskService {
       );
     }
 
-     listReusableTasks(): Observable<Task[]> {
-    
-        return this.http.get<ApiResponse<Task[]>>('api/tasks/get_reusable' ).pipe(
-             map(response => {
-              console.log(response)
-              if (response.status === 'success') {
-                return response.data;
-              } else {
-                throw new Error(response.message || 'erreur api');
-              }
+    listReusableTasks(): Observable<Task[]> {
+  
+      return this.http.get<ApiResponse<Task[]>>('api/tasks/get_reusable' ).pipe(
+            map(response => {
+            console.log(response)
+            if (response.status === 'success') {
+              return response.data;
+            } else {
+              throw new Error(response.message || 'erreur api');
+            }
         })
       );
     }

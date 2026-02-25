@@ -7,6 +7,7 @@ class Package < ApplicationRecord
 
   scope :for_festival, ->(festival_id) { where(festival_id: festival_id) }
   scope :for_festival_status, ->(status) { joins(:festival).where(festivals: { status: status }) }
+  scope :for_categories, ->(category_values) { where(category: category_values) }
   scope :search_by_title, ->(query) do
     where("LOWER(packages.title) LIKE ?", "%#{sanitize_sql_like(query.downcase)}%")
   end
@@ -41,8 +42,8 @@ class Package < ApplicationRecord
   validate :quota_cannot_exceed_daily_capacity
   validate :validity_must_be_within_festival_dates
 
-  def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil)
-    relation = includes(:festival)
+  def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil)
+    relation = includes(:festival, :tickets)
 
     if festival_id.present?
       relation = relation.for_festival(festival_id)
@@ -52,7 +53,24 @@ class Package < ApplicationRecord
     end
 
     relation = relation.search_by_title(query) if query.present?
+
+    if categories.present?
+      category_values = sanitize_category_filters(categories)
+      relation = category_values.any? ? relation.for_categories(category_values) : relation.none
+    end
+
     relation.sorted_for_admin(sort)
+  end
+
+  def self.sanitize_category_filters(raw_categories)
+    values = Array(raw_categories)
+      .flat_map { |value| value.to_s.split(",") }
+      .map { |value| value.to_s.strip.downcase }
+      .reject(&:blank?)
+      .uniq
+
+    valid_keys = values.select { |value| categories.key?(value) }
+    valid_keys.map { |key| categories[key] }
   end
 
   private

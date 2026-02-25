@@ -18,6 +18,10 @@ import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
 import { PackageFormComponent } from './features/GabrielR/ticketing/admin/package-form/package-form';
+import { TicketingOrderFormComponent } from './features/GabrielR/ticketing/public/order-form/order-form';
+import { TicketingOrdersComponent } from './features/GabrielR/ticketing/public/orders/orders';
+import { TicketingOrderDetailComponent } from './features/GabrielR/ticketing/public/order-detail/order-detail';
+import { TicketingTicketDetailComponent } from './features/GabrielR/ticketing/public/ticket-detail/ticket-detail';
 import { PublicScheduleComponent } from './features/festival/public_programation/public_schedule';
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
@@ -123,6 +127,25 @@ export const routes: Routes = [
             {
                 path: 'ticketing',
                 component: Ticketing
+            },
+            {
+                path: 'ticketing/packages/:id/order',
+                component: TicketingOrderFormComponent
+            },
+            {
+                path: 'ticketing/orders',
+                component: TicketingOrdersComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'ticketing/orders/:id',
+                component: TicketingOrderDetailComponent,
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'ticketing/tickets/:id',
+                component: TicketingTicketDetailComponent,
+                canActivate: [AuthGuard]
             },
             {
                 path: 'tasks',

@@ -11,7 +11,8 @@ class Api::PackagesController < ApiController
       festival_id: params[:festival_id],
       status: params[:status],
       query: params[:q],
-      sort: params[:sort]
+      sort: params[:sort],
+      categories: params[:categories]
     )
     
     render json: {
@@ -80,7 +81,7 @@ class Api::PackagesController < ApiController
   private
 
   def set_package
-    @package = Package.find(params[:id])
+    @package = Package.includes(:festival, :tickets).find(params[:id])
   end
 
   def package_params
@@ -106,11 +107,20 @@ class Api::PackagesController < ApiController
   end
 
   def format_package(package)
+    sold_count = if package.association(:tickets).loaded?
+      package.tickets.count { |ticket| !ticket.refunded }
+    else
+      package.tickets.where(refunded: false).count
+    end
+
     json = package.as_json(include: :festival)
     if package.image.attached?
-      json.merge(image_url: rails_blob_url(package.image, host: request.base_url))
+      json.merge(
+        image_url: rails_blob_url(package.image, host: request.base_url),
+        sold: sold_count
+      )
     else
-      json.merge(image_url: nil)
+      json.merge(image_url: nil, sold: sold_count)
     end
   end
 

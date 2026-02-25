@@ -39,6 +39,22 @@ c = Client.create!(
     phone_number: "555-555-5555"
 )
 
+c2 = Client.create!(
+    email: "client2@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Client #2",
+    phone_number: "555-555-2222"
+)
+
+c3 = Client.create!(
+    email: "client3@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Client #3",
+    phone_number: "555-555-3333"
+)
+
 Admin.create!(
     email: "admin@test.com",
     password: "qwerty",
@@ -290,13 +306,13 @@ unit1 = Units::SimpleRoom.new(
 # Racine
 
 p_general = Package.create!(
-  title: "Passeport Festival",
+  title: "Passeport Festival (Sold Out)",
   description: "Accès complet à toutes les scènes pour toute la durée du festival. Inclut un accès prioritaire.",
   price: 150.00,
-  quota: 500,
+  quota: 4,
   category: "general",
-  valid_at: f.start_at,
-  expired_at: f.end_at,
+  valid_at: f.start_at.to_time.change(hour: 10),
+  expired_at: f.end_at.to_time.change(hour: 23, min: 0),
   festival: f
 )
 
@@ -304,7 +320,7 @@ p_daily = Package.create!(
   title: "Billet Journalier",
   description: "Accès pour une seule journée de festivités.",
   price: 60.00,
-  quota: 1000,
+  quota: 6,
   category: "daily",
   valid_at: f.start_at.to_time.change(hour: 10),
   expired_at: f.start_at.to_time.change(hour: 17),
@@ -312,58 +328,104 @@ p_daily = Package.create!(
 )
 
 p_evening = Package.create!(
-  title: "Billet Soirée",
+  title: "Billet Soirée (Aucune vente)",
   description: "Pour les spectacles du soir !",
   price: 72.99,
-  quota: 2400,
+  quota: 5,
   category: "evening",
   valid_at: f.start_at.to_time.change(hour: 19),
   expired_at: f.start_at.to_time.change(hour: 23),
   festival: f
 )
 
+p_daily_sold_out = Package.create!(
+  title: "Billet Journalier (Complet)",
+  description: "Forfait journalier utilisé pour tester le statut sold out.",
+  price: 55.00,
+  quota: 2,
+  category: "daily",
+  valid_at: (f.start_at + 1.day).to_time.change(hour: 10),
+  expired_at: (f.start_at + 1.day).to_time.change(hour: 17),
+  festival: f
+)
+
+p_evening_last_spots = Package.create!(
+  title: "Billet Soirée (Dernières places)",
+  description: "Forfait presque complet pour valider les derniers billets.",
+  price: 79.99,
+  quota: 3,
+  category: "evening",
+  valid_at: (f.start_at + 1.day).to_time.change(hour: 19),
+  expired_at: (f.start_at + 1.day).to_time.change(hour: 23),
+  festival: f
+)
+
+p_completed = Package.create!(
+  title: "Passeport Archive",
+  description: "Forfait d'un festival terminé pour valider l'affichage des archives.",
+  price: 130.00,
+  quota: 3,
+  category: "general",
+  valid_at: f2.start_at.to_time.change(hour: 10),
+  expired_at: f2.end_at.to_time.change(hour: 23),
+  festival: f2
+)
+
 # Orders + Tickets (Billetterie)
-order_client_1 = Order.create!(
-  user: c,
-  purchased_at: f.start_at.to_time.change(hour: 9, min: 15)
-)
+order_general_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 9, min: 15))
+order_general_2 = Order.create!(user: c2, purchased_at: f.start_at.to_time.change(hour: 9, min: 45))
+order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30))
+order_daily_2 = Order.create!(user: c3, purchased_at: f.start_at.to_time.change(hour: 11, min: 15))
+order_daily_sold_out_1 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 5))
+order_daily_sold_out_2 = Order.create!(user: c3, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 20))
+order_evening_last_spots = Order.create!(user: c, purchased_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 10))
+order_completed = Order.create!(user: c, purchased_at: f2.start_at.to_time.change(hour: 12, min: 0))
 
-order_client_2 = Order.create!(
-  user: c,
-  purchased_at: f.start_at.to_time.change(hour: 12, min: 45)
-)
+ticket_seq = 0
 
-Ticket.create!(
-  order: order_client_1,
-  package: p_general,
-  holder_name: "Jean Daniel",
-  holder_phone: "8195551111",
-  holder_email: "jean.daniel@example.com"
-)
+create_tickets = lambda do |order:, package:, quantity:, refunded_indexes: [], holder_prefix: "Billet"|
+  quantity.times do |index|
+    ticket_seq += 1
+    refunded = refunded_indexes.include?(index)
 
-Ticket.create!(
-  order: order_client_1,
-  package: p_daily,
-  holder_name: "Marie Tremblay",
-  holder_phone: "8195552222",
-  holder_email: "marie.tremblay@example.com"
-)
+    Ticket.create!(
+      order: order,
+      package: package,
+      holder_name: "#{holder_prefix} ##{ticket_seq}",
+      holder_phone: format("819555%04d", ticket_seq),
+      holder_email: "ticket#{ticket_seq}@example.com",
+      refunded: refunded,
+      refunded_at: refunded ? order.purchased_at + 2.hours : nil
+    )
+  end
+end
 
-Ticket.create!(
-  order: order_client_2,
-  package: p_evening,
-  holder_name: "Alex Martin",
-  holder_phone: "8195553333",
-  holder_email: "alex.martin@example.com",
-  refunded: true,
-  refunded_at: f.start_at.to_time.change(hour: 18, min: 0)
-)
+# Cas 1: Sold out exact (4/4 actifs)
+create_tickets.call(order: order_general_1, package: p_general, quantity: 2, holder_prefix: "General")
+create_tickets.call(order: order_general_2, package: p_general, quantity: 2, holder_prefix: "General")
+
+# Cas 2: Partiellement vendu (4 actifs + 1 remboursé, quota 6)
+create_tickets.call(order: order_daily_1, package: p_daily, quantity: 3, refunded_indexes: [0], holder_prefix: "Daily")
+create_tickets.call(order: order_daily_2, package: p_daily, quantity: 2, holder_prefix: "Daily")
+
+# Cas 3: Sold out sur un second forfait (2/2 actifs)
+create_tickets.call(order: order_daily_sold_out_1, package: p_daily_sold_out, quantity: 1, holder_prefix: "Daily Sold Out")
+create_tickets.call(order: order_daily_sold_out_2, package: p_daily_sold_out, quantity: 1, holder_prefix: "Daily Sold Out")
+
+# Cas 4: Dernières places (2/3 actifs)
+create_tickets.call(order: order_evening_last_spots, package: p_evening_last_spots, quantity: 2, holder_prefix: "Evening Last Spots")
+
+# Cas 5: Forfait archivé (1 actif + 1 remboursé)
+create_tickets.call(order: order_completed, package: p_completed, quantity: 2, refunded_indexes: [1], holder_prefix: "Archive")
 
 # Attachement des images
 images = {
   p_general => 'general-ticket.webp',
   p_daily   => 'daily-ticket.webp',
   p_evening => 'evening-ticket.jpg',
+  p_daily_sold_out => 'daily-ticket.webp',
+  p_evening_last_spots => 'evening-ticket.jpg',
+  p_completed => 'general-ticket.webp',
   unit1 => 'placeholder-image.jpg'
 }
 
@@ -385,6 +447,13 @@ images.each do |package, filename|
 end
 
 unit1.save!
+
+puts "\nTicketing seed summary (ongoing festival):"
+[p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|
+  sold = pkg.tickets.where(refunded: false).count
+  refunded = pkg.tickets.where(refunded: true).count
+  puts "- #{pkg.title}: sold=#{sold}/#{pkg.quota}, refunded=#{refunded}"
+end
 
 
 # Laurent

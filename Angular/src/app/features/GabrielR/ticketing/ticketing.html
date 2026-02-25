@@ -1,1 +1,88 @@
-<p>ticketing works!</p>
+<div class="ticketing-page">
+  <header class="page-header">
+    <h1 class="page-title">{{ 'TICKETING_PUBLIC.TITLE' | translate }}</h1>
+    <p class="page-subtitle">{{ 'TICKETING_PUBLIC.SUBTITLE' | translate }}</p>
+
+    @if (isLoggedIn() && isClient()) {
+      <a mat-stroked-button routerLink="/ticketing/orders" class="orders-link">
+        <mat-icon>receipt_long</mat-icon>
+        {{ 'TICKETING_PUBLIC.MY_ORDERS' | translate }}
+      </a>
+    }
+  </header>
+
+  <section class="toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'TICKETING_PUBLIC.SEARCH' | translate }}</mat-label>
+      <input
+        matInput
+        [ngModel]="searchQuery()"
+        [ngModelOptions]="{updateOn: 'blur'}"
+        (ngModelChange)="searchQuery.set($event)"
+        (keyup.enter)="$any($event.target).blur()"
+      >
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="sort-field">
+      <mat-label>{{ 'TICKETING_PUBLIC.SORT_BY' | translate }}</mat-label>
+      <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
+        <mat-option value="price_asc">{{ 'TICKETING_PUBLIC.PRICE_ASC' | translate }}</mat-option>
+        <mat-option value="price_desc">{{ 'TICKETING_PUBLIC.PRICE_DESC' | translate }}</mat-option>
+        <mat-option value="date_asc">{{ 'TICKETING_PUBLIC.DATE_ASC' | translate }}</mat-option>
+        <mat-option value="date_desc">{{ 'TICKETING_PUBLIC.DATE_DESC' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="category-filters">
+      <span class="category-label">{{ 'TICKETING_PUBLIC.CATEGORIES' | translate }}</span>
+      <mat-checkbox [ngModel]="showGeneral()" (ngModelChange)="showGeneral.set($event)">
+        {{ 'PACKAGE_FORM.TYPE_GENERAL' | translate }}
+      </mat-checkbox>
+      <mat-checkbox [ngModel]="showDaily()" (ngModelChange)="showDaily.set($event)">
+        {{ 'PACKAGE_FORM.TYPE_DAILY' | translate }}
+      </mat-checkbox>
+      <mat-checkbox [ngModel]="showEvening()" (ngModelChange)="showEvening.set($event)">
+        {{ 'PACKAGE_FORM.TYPE_EVENING' | translate }}
+      </mat-checkbox>
+    </div>
+  </section>
+
+  <section class="catalog-list">
+    @if (isLoading()) {
+      <p class="empty-state">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
+    } @else if (packages().length === 0) {
+      <p class="empty-state">{{ 'TICKETING_PUBLIC.EMPTY' | translate }}</p>
+    } @else {
+      @for (pkg of packages(); track pkg.id) {
+        <mat-card class="package-card">
+          <div class="package-main">
+            <div class="package-summary">
+              <h3 class="package-title">{{ pkg.title }}</h3>
+              <p class="time-window">
+                {{ pkg.valid_at | date:'yyyy-MM-dd HH:mm' }} - {{ pkg.expired_at | date:'yyyy-MM-dd HH:mm' }}
+              </p>
+              <p class="description">{{ pkg.description }}</p>
+            </div>
+
+            <div class="package-meta">
+              <div class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</div>
+              @if (isSoldOut(pkg)) {
+                <span class="sold-out">{{ 'TICKETING_PUBLIC.SOLD_OUT' | translate }}</span>
+              }
+              <button
+                type="button"
+                mat-stroked-button
+                class="buy-button"
+                [routerLink]="['/ticketing/packages', pkg.id, 'order']"
+                [disabled]="isSoldOut(pkg)"
+              >
+                {{ 'TICKETING_PUBLIC.BUY_TICKET' | translate }}
+              </button>
+            </div>
+          </div>
+        </mat-card>
+      }
+    }
+  </section>
+</div>

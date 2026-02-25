@@ -1,0 +1,33 @@
+<div class="orders-page">
+  <header class="orders-header">
+    <h1 class="page-title">{{ 'TICKETING_PUBLIC.MY_ORDERS' | translate }}</h1>
+    <a mat-button routerLink="/ticketing" class="back-link">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'TICKETING_PUBLIC.BACK_TO_CATALOG' | translate }}
+    </a>
+  </header>
+
+  @if (!isClient()) {
+    <p class="state-message">{{ 'TICKETING_PUBLIC.CLIENT_ONLY_ORDERS' | translate }}</p>
+  } @else if (isLoading()) {
+    <p class="state-message">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
+  } @else if (orders().length === 0) {
+    <p class="empty-state">{{ 'TICKETING_PUBLIC.NO_ORDERS' | translate }}</p>
+  } @else {
+    <div class="order-grid">
+      @for (order of orders(); track order.id) {
+        <mat-card class="order-card">
+          @if (order.tickets[0]?.package?.image_url) {
+            <div class="order-image" [style.background-image]="'url(' + order.tickets[0].package.image_url + ')'"></div>
+          }
+          <h3 class="order-id">#{{ order.id }}</h3>
+          <p class="order-date">{{ order.purchased_at | date:'yyyy-MM-dd HH:mm' }}</p>
+          <p class="ticket-count">{{ order.tickets.length }} {{ 'TICKETING_PUBLIC.TICKETS' | translate }}</p>
+          <a mat-stroked-button [routerLink]="['/ticketing/orders', order.id]" class="order-link">
+            {{ 'TICKETING_PUBLIC.VIEW_ORDER' | translate }}
+          </a>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

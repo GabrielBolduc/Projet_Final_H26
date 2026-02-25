@@ -23,6 +23,8 @@ Rails.application.routes.draw do
     resources :stages, only: [:index]
     resources :performances
     resources :reservations
+    resources :orders, only: [ :index, :show, :create ]
+    resources :tickets, only: [ :index, :show, :update, :destroy ]
     resources :accommodations do
       resources :units, shallow: true, only: [:create, :update, :destroy]
     end

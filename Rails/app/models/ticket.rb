@@ -7,6 +7,7 @@ class Ticket < ApplicationRecord
 
   validates :holder_name, presence: true, length: { maximum: 100 }
   validates :holder_email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :holder_phone, presence: true, length: { maximum: 20 }, format: { with: /\A[0-9+\-() ]+\z/ }
   validates :unique_code, uniqueness: true
 
   before_validation :set_defaults, on: :create

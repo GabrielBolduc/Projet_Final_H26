@@ -1,0 +1,109 @@
+<mat-card class="perf-card">
+  @if (isEditMode()) {
+    <button mat-flat-button 
+            type="button" 
+            class="delete-btn-top" 
+            (click)="onDelete()"
+            [disabled]="isLoading()">
+      <mat-icon>delete_forever</mat-icon> {{ 'ACCOMMODATIONS.FORM.DELETE' | translate }}
+    </button>
+  }
+  
+  <h2>{{ (isEditMode() ? 'UNITS.EDIT_TITLE' : 'UNITS.CREATE_TITLE') | translate }}</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
+    
+    @if (serverErrors().length > 0) {
+      <div class="form-error">
+        @for (error of serverErrors(); track $index) {
+          <div>{{ error }}</div>
+        }
+      </div>
+    }
+
+    <div class="grid-row-3">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'UNITS.TYPE' | translate }}</mat-label>
+        <mat-select formControlName="type">
+          <mat-optgroup [label]="'UNITS.TYPES.ROOMS_HEADER' | translate">
+            @for (t of ROOM_TYPES; track t) { 
+              <mat-option [value]="t">{{ 'UNITS.TYPES.' + t | translate }}</mat-option> 
+            }
+          </mat-optgroup>
+          <mat-optgroup [label]="'UNITS.TYPES.TERRAINS_HEADER' | translate">
+            @for (t of TERRAIN_TYPES; track t) { 
+              <mat-option [value]="t">{{ 'UNITS.TYPES.' + t | translate }}</mat-option> 
+            }
+          </mat-optgroup>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'UNITS.COST' | translate }}</mat-label>
+        <input matInput type="number" formControlName="cost_person_per_night">
+      </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>{{ 'UNITS.PARKING_COST' | translate }}</mat-label>
+        <input matInput type="number" formControlName="parking_cost">
+    </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'UNITS.QUANTITY' | translate }}</mat-label>
+        <input matInput type="number" formControlName="quantity">
+      </mat-form-field>
+    </div>
+
+    @if (isTerrain()) {
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'UNITS.WATER' | translate }}</mat-label>
+          <mat-select formControlName="water">
+            <mat-option [value]="0">{{ 'UNITS.WATER_STATUS.NONE' | translate }}</mat-option>
+            <mat-option [value]="1">{{ 'UNITS.WATER_STATUS.UNDRINKABLE' | translate }}</mat-option>
+            <mat-option [value]="2">{{ 'UNITS.WATER_STATUS.DRINKABLE' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="toggle-container">
+          <mat-slide-toggle formControlName="electricity">{{ 'UNITS.ELECTRICITY' | translate }}</mat-slide-toggle>
+        </div>
+      </div>
+    }
+
+    <div class="grid-row-2">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'UNITS.FOOD' | translate }}</mat-label>
+        <mat-select formControlName="food_options" multiple>
+          @for (opt of FOOD_OPTIONS; track opt) { 
+            <mat-option [value]="opt">{{opt}}</mat-option> 
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="toggle-container">
+        <mat-slide-toggle formControlName="wifi">{{ 'UNITS.WIFI' | translate }}</mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="file-area">
+      <button type="button" mat-stroked-button (click)="fileInput.click()">
+        <mat-icon>image</mat-icon> {{ 'UNITS.UPLOAD_IMAGE' | translate }}
+      </button>
+      <input #fileInput type="file" hidden (change)="onFileSelected($event)" accept="image/*">
+      @if (selectedFile()) { <span class="file-name">{{ selectedFile()?.name }}</span> }
+    </div>
+
+    <div class="form-actions">
+      <button 
+          mat-stroked-button type="button" 
+          [routerLink]="['/accommodations', accommodationId()]"
+          class="action-btn cancel-btn">
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
+        {{ (isLoading() ? 'COMMON.PROCESSING' : 'COMMON.SAVE') | translate }}
+      </button>
+    </div>
+  </form>
+</mat-card>

@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, OnInit, inject, effect } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -51,6 +51,12 @@ export class UnitsForm implements OnInit {
   readonly TERRAIN_TYPES = ['SmallTerrain', 'StandardTerrain', 'DeluxeTerrain'];
   readonly FOOD_OPTIONS = ['None', 'Canteen', 'Room service', 'Restaurant'];
 
+  constructor() {
+    this.form.get('type')?.valueChanges.subscribe(value => {
+      this.isTerrain.set(this.TERRAIN_TYPES.includes(value));
+    });
+  }
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     const isEdit = this.route.snapshot.queryParamMap.get('edit') === 'true';
@@ -73,6 +79,17 @@ export class UnitsForm implements OnInit {
 
   private loadUnit(id: number) {
     this.isLoading.set(true);
+    this.service.getUnit(id).subscribe({
+      next: (unit) => {
+        this.form.patchValue(unit);
+        this.accommodationId.set(unit.accommodation_id);
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.serverErrors.set([err.message]);
+        this.isLoading.set(false);
+      }
+    });
   }
 
   onSubmit() {
@@ -92,6 +109,22 @@ export class UnitsForm implements OnInit {
         : this.service.createUnit(this.accommodationId()!, payload, file!);
 
       request.subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.router.navigate(['/accommodations', this.accommodationId()]);
+        },
+        error: (err) => {
+          this.serverErrors.set([err.message]);
+          this.isLoading.set(false);
+        }
+      });
+    }
+  }
+
+  onDelete(): void {
+    if (confirm('Are you sure you want to delete this unit?')) {
+      this.isLoading.set(true);
+      this.service.deleteUnit(this.unitId()!).subscribe({
         next: () => {
           this.isLoading.set(false);
           this.router.navigate(['/accommodations', this.accommodationId()]);

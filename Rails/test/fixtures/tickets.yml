@@ -1,23 +1,45 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  unique_code: MyString
+  unique_code: TICKET-ONE-001
   refunded: false
-  refunded_at: 2026-02-16 10:22:09
-  holder_name: MyString
-  holder_phone: MyString
-  holder_email: MyString
-  price: 9.99
+  refunded_at:
+  holder_name: Ticket Holder One
+  holder_phone: "8195550001"
+  holder_email: holder.one@example.com
+  price: 150.00
   order: one
   package: one
 
 two:
-  unique_code: MyString
+  unique_code: TICKET-TWO-001
   refunded: false
-  refunded_at: 2026-02-16 10:22:09
-  holder_name: MyString
-  holder_phone: MyString
-  holder_email: MyString
-  price: 9.99
+  refunded_at:
+  holder_name: Ticket Holder Two
+  holder_phone: "8195550002"
+  holder_email: holder.two@example.com
+  price: 60.00
   order: two
   package: two
+
+three:
+  unique_code: TICKET-THREE-001
+  refunded: true
+  refunded_at: 2026-02-16 11:00:00
+  holder_name: Ticket Holder Three
+  holder_phone: "8195550003"
+  holder_email: holder.three@example.com
+  price: 150.00
+  order: one
+  package: one
+
+four:
+  unique_code: TICKET-FOUR-001
+  refunded: true
+  refunded_at: 2026-02-16 11:30:00
+  holder_name: Ticket Holder Four
+  holder_phone: "8195550004"
+  holder_email: holder.four@example.com
+  price: 55.00
+  order: one
+  package: five

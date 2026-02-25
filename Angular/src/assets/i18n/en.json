@@ -178,6 +178,7 @@
     "SOLD_OUT": "Sold out",
     "AVAILABILITY": "Availability",
     "MY_ORDERS": "My Orders",
+    "MY_ORDER": "My Order",
     "LOGIN_TO_VIEW_ORDERS": "Log in to view your order history.",
     "CLIENT_ONLY_ORDERS": "Order history is available for client accounts only.",
     "NO_ORDERS": "No order yet.",

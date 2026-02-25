@@ -40,6 +40,28 @@ export class TicketingTicketDetailComponent implements OnInit {
 
   ticketId = computed(() => Number(this.route.snapshot.paramMap.get('id')));
   ticket = signal<Ticket | null>(null);
+  backOrdersLink = computed(() => {
+    const orderId = this.ticket()?.order_id;
+    return orderId ? ['/ticketing/orders', orderId] : ['/ticketing/orders'];
+  });
+  qrIsInvalid = computed(() => {
+    const currentTicket = this.ticket();
+    if (!currentTicket) {
+      return false;
+    }
+
+    if (currentTicket.refunded) {
+      return true;
+    }
+
+    const expiredAt = this.toDate(currentTicket.package.expired_at);
+    if (!expiredAt) {
+      return true;
+    }
+
+    const now = new Date();
+    return now > expiredAt;
+  });
   isLoading = signal(true);
   isSaving = signal(false);
   isRefunding = signal(false);
@@ -187,5 +209,14 @@ export class TicketingTicketDetailComponent implements OnInit {
     }
 
     return String(err?.message || fallback);
+  }
+
+  private toDate(value: string | Date | null | undefined): Date | null {
+    if (!value) {
+      return null;
+    }
+
+    const parsed = value instanceof Date ? value : new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
   }
 }

@@ -13,6 +13,7 @@ import { Units } from '@features/alexandre/admin/units/units';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/festival/performance/dashboard';
 import { AdministrationComponent } from './features/festival/festival/administration';
+import { FestivalFormComponent } from './features/festival/festival/festival-form';
 import { AddPerformanceComponent } from './features/festival/performance/add_performance';
 import { TaskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
@@ -95,7 +96,17 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'admin/dashboard',
+                path: 'admin/festivals/new',
+                component: FestivalFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/festivals/:id/edit',
+                component: FestivalFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/festivals/:id/dashboard',
                 component: DashboardComponent,
                 canActivate: [AuthGuard, adminGuard]
             },

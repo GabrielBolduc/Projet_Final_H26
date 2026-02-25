@@ -1,9 +1,8 @@
 class Api::PackagesController < ApiController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
-  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
+  before_action :require_admin!
   before_action :set_package, only: [:show, :update, :destroy]
-  before_action :require_admin!, only: [:create, :update, :destroy]
 
   # GET /api/packages
   def index

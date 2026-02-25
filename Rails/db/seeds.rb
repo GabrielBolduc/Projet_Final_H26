@@ -9,6 +9,11 @@
 #   end
 ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 0;")
 
+# Exécute les jobs de manière synchrone pendant le seed afin d'éviter
+# les écritures asynchrones d'ActiveStorage qui entrent en conflit
+# avec les validations modèle et les vérifications de clés étrangères.
+ActiveJob::Base.queue_adapter = :inline
+
 begin
   Affectation.delete_all
   Reservation.delete_all

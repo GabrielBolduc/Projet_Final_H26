@@ -45,7 +45,35 @@
   color: var(--mat-sys-on-surface);
 }
 
+.qr-code-container {
+  position: relative;
+  overflow: hidden;
+  width: 250px;
+  max-width: 100%;
+  margin: 0 auto 16px;
+  padding: 10px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.qr-code-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.qr-code-container.invalid {
+  background: #f0f0f0;
+}
+
+.qr-code-container.invalid .qr-code-image {
+  filter: grayscale(100%) opacity(0.35);
+}
+
 .fake-qr {
+  position: relative;
+  overflow: hidden;
   width: 250px;
   max-width: 100%;
   margin: 0 auto 16px;
@@ -56,6 +84,28 @@
   font-family: monospace;
   word-break: break-all;
   background: var(--mat-sys-surface-container-low);
+}
+
+.fake-qr.invalid {
+  color: #666;
+  border-color: #c2c2c2;
+  background: #efefef;
+}
+
+.invalid-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  z-index: 2;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  pointer-events: none;
 }
 
 .ticket-date {

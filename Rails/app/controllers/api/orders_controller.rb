@@ -107,6 +107,7 @@ class Api::OrdersController < ApiController
       id: ticket.id,
       order_id: ticket.order_id,
       unique_code: ticket.unique_code,
+      qr_code_url: ticket.generate_qr_code,
       refunded: ticket.refunded,
       refunded_at: ticket.refunded_at,
       price: ticket.price,

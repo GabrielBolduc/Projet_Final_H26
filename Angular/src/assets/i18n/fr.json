@@ -179,6 +179,7 @@
     "SOLD_OUT": "Complet",
     "AVAILABILITY": "Disponibilité",
     "MY_ORDERS": "Mes commandes",
+    "MY_ORDER": "Ma commande",
     "LOGIN_TO_VIEW_ORDERS": "Connectez-vous pour consulter votre historique de commandes.",
     "CLIENT_ONLY_ORDERS": "L'historique des commandes est réservé aux comptes client.",
     "NO_ORDERS": "Aucune commande pour le moment.",

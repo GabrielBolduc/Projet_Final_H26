@@ -27,7 +27,6 @@ import { PublicScheduleComponent } from './features/festival/public_programation
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin.guard';
-import {FestivalFormComponent} from './features/festival/festival/festival-form'
 
 export const routes: Routes = [
     {

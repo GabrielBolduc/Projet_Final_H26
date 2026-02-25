@@ -121,13 +121,4 @@ class Api::FestivalsController < ApiController
       :latitude, :longitude, :comment
     )
   end
-
-  def require_admin!
-    unless current_user&.is_a?(Admin)
-      render json: {
-        status: "error",
-        message: "Accès refusé : Privilèges administrateur requis."
-      }, status: :ok
-    end
-  end
 end

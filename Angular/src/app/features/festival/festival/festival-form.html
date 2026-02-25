@@ -69,7 +69,7 @@
     <div class="grid-row-3">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.DAILY_CAPACITY' | translate }}</mat-label>
-        <input matInput type="number" formControlName="daily_capacity">
+        <input matInput type="number" formControlName="daily_capacity" min="0" max="999999">
         @if (festivalForm.get('daily_capacity')?.hasError('required')) {
           <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
         }

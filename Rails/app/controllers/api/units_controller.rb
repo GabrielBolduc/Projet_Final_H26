@@ -1,11 +1,15 @@
 class Api::UnitsController < ApiController
-    before_action :set_unit, only: [:update, :destroy]
+    before_action :set_unit, only: [:show, :update, :destroy] 
     before_action :require_admin!
 
     def index
-        @accommodation = Accommodation.find(params[:accommodation_id])
-        @units = @accommodation.units
-        render json: { status: "success", data: @units }
+    @accommodation = Accommodation.find(params[:accommodation_id] || params[:id])
+    @units = @accommodation.units.with_attached_image
+    
+    render json: { 
+        status: "success", 
+        data: @units.map { |u| u.as_json.merge(image_url: url_for(u.image)) } 
+    }
     end
 
     def show

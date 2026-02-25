@@ -1,4 +1,4 @@
-# app/models/unit.rb
+
 class Unit < ApplicationRecord
   belongs_to :accommodation
   has_many :reservations, dependent: :destroy
@@ -13,7 +13,7 @@ class Unit < ApplicationRecord
     "Units::DeluxeTerrain"   => 8
   }.freeze
 
-  enum :water, { no_water: 0, undrinkable: 1, drinkable: 2 }
+  enum :water, { no_water: 0, undrinkable: 1, drinkable: 2 }, prefix: true
 
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validates :cost_person_per_night, :parking_cost, numericality: { greater_than_or_equal_to: 0 }
@@ -25,18 +25,25 @@ class Unit < ApplicationRecord
     CAPACITIES[self.type] || 0
   end
 
-  def food_options_list
-    food_options&.split(",") || []
+  def food_options_as_array
+    read_attribute(:food_options)&.split(",") || []
   end
 
-  def food_options_list=(values)
-    self.food_options = Array(values).reject(&:blank?).join(",")
+  def food_options=(values)
+    if values.is_a?(Array)
+      str_value = values.reject(&:blank?).join(",")
+      write_attribute(:food_options, str_value)
+    else
+      super(values)
+    end
   end
 
   def as_json(options = {})
     super(options).merge({
-      food_options: food_options_list,
-      max_capacity: max_capacity
+      type: self.type,
+      food_options: food_options_as_array,
+      max_capacity: max_capacity,
+      water: self.water
     })
   end
 
@@ -69,6 +76,14 @@ class Unit < ApplicationRecord
   def must_have_image
     unless image.attached?
       errors.add(:image, "must be uploaded")
+    end
+  end
+
+  def type_matches_accommodation_category
+    if accommodation.hotel? && type.start_with?('Units::SmallTerrain', 'Units::StandardTerrain', 'Units::DeluxeTerrain')
+      errors.add(:type, "cannot be a terrain for a hotel")
+    elsif accommodation.camping? && type.start_with?('Units::SimpleRoom', 'Units::DoubleRoom', 'Units::FamilyRoom')
+      errors.add(:type, "cannot be a room for a camping site")
     end
   end
 end

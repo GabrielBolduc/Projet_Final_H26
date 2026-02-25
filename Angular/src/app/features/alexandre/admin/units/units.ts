@@ -1,24 +1,25 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { UnitsService } from '@core/services/units.service';
+import { AccommodationsService } from '@core/services/accommodations.service';
 import { Unit } from '@core/models/unit';
 
 @Component({
   selector: 'app-units',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, MatCardModule, MatButtonModule, MatIconModule, 
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatProgressBarModule, TranslateModule
+    CommonModule, 
+    MatCardModule, 
+    MatButtonModule, 
+    MatIconModule, 
+    MatProgressBarModule, 
+    TranslateModule
   ],
   templateUrl: './units.html',
   styleUrl: './units.css',
@@ -27,62 +28,74 @@ export class Units implements OnInit {
   private service = inject(UnitsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private accService = inject(AccommodationsService);
 
   accommodationId = signal<number | null>(null);
+  parentCategory = signal<number | string | null>(null);
   units = signal<Unit[]>([]);
-  searchQuery = signal('');
-  sortOption = signal('all');
-
-  filteredUnits = computed(() => {
-    let list = [...this.units()].filter(u => 
-      u.type.toLowerCase().includes(this.searchQuery().trim().toLowerCase())
-    );
-
-    if (this.sortOption() === 'qty_asc') {
-      list.sort((a, b) => a.quantity - b.quantity);
-    } else if (this.sortOption() === 'qty_desc') {
-      list.sort((a, b) => b.quantity - a.quantity);
-    }
-    
-    return list;
-  });
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.accommodationId.set(+id);
-      this.loadUnits(+id);
+      const numericId = Number(id);
+      this.accommodationId.set(numericId);
+      this.loadUnits(numericId);
+      this.fetchParentCategory(numericId);
     }
   }
 
-  loadUnits(id: number) {
-    this.service.getUnitsByAccommodation(id).subscribe(res => {
-      if (res.status === 'success') this.units.set(res.data);
+  private fetchParentCategory(accId: number) {
+    this.accService.getAccommodation(accId).subscribe(acc => {
+      this.parentCategory.set(acc.category);
     });
   }
 
-  openForm(unit?: Unit) {
-    if (unit) {
-      this.router.navigate(['/units', unit.id], { queryParams: { edit: 'true' } });
+  loadUnits(id: number): void {
+    this.service.getUnitsByAccommodation(id).subscribe({
+      next: (res) => {
+        if (res.status === 'success' && res.data) {
+          this.units.set([...res.data]);
+        }
+      },
+      error: (err) => {
+        console.error('Error loading units:', err);
+      }
+    });
+  }
+
+  openForm(unit?: Unit): void {
+    if (unit && unit.id) {
+      this.router.navigate(['/units-form', unit.id], { queryParams: { edit: 'true' } });
     } else {
-      this.router.navigate(['/units/new', this.accommodationId()]);
+      this.router.navigate(['/units-form/new', this.accommodationId()]);
     }
   }
 
   deleteUnit(unit: Unit): void {
-    if (!unit.id) {
-      return;
-    }
-
-    if (confirm('Are you sure you want to delete this unit?')) {
-      this.service.deleteUnit(unit.id).subscribe((res) => {
-        this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
+    if (unit.id && confirm('Are you sure you want to delete this unit?')) {
+      this.service.deleteUnit(unit.id).subscribe({
+        next: () => {
+          this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
+        },
+        error: (err) => {
+          console.error('Delete failed:', err);
+        }
       });
     }
   }
 
-  formatType(rawType: string): string {
-    const shortType = rawType.split('::').pop() ?? rawType;
-    return shortType.replace(/([a-z])([A-Z])/g, '$1 $2');
+  formatType(type: string | null | undefined): string {
+    if (!type) return 'Unknown';
+    return type.split('::').pop() || type;
+  }
+
+  formatWaterKey(water: string | null | undefined): string {
+    if (!water) return 'NONE';
+    const mapping: Record<string, string> = {
+      'no_water': 'NONE',
+      'undrinkable': 'UNDRINKABLE',
+      'drinkable': 'DRINKABLE'
+    };
+    return mapping[water] || water.toUpperCase();
   }
 }

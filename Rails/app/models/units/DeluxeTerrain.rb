@@ -1,5 +1,5 @@
 module Units
-  class SimpleRoom < ::Unit
+  class DeluxeTerrain < ::Unit
     
   end
 end

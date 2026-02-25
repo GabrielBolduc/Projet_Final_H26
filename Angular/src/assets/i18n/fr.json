@@ -217,7 +217,8 @@
       "NO": "NON",
       "EDIT": "MODIFIER L'HÉBERGEMENT",
       "BOOK": "RÉSERVER CET HÉBERGEMENT",
-      "LOADING": "Chargement des détails..."
+      "LOADING": "Chargement des détails...",
+      "MANAGE_UNITS": "Gérer les unités"
     },
     "FORM": {
       "TITLE_EDIT": "Modifier l'hébergement",

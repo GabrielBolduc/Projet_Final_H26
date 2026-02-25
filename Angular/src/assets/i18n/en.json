@@ -216,7 +216,8 @@
       "NO": "NO",
       "EDIT": "EDIT ACCOMMODATION",
       "BOOK": "BOOK THIS ACCOMMODATION",
-      "LOADING": "Loading details..."
+      "LOADING": "Loading details...",
+      "MANAGE_UNITS": "Manage Units"
     },
     "FORM": {
       "TITLE_EDIT": "Edit Accommodation",

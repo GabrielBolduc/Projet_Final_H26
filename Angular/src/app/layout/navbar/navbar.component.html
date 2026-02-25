@@ -17,14 +17,18 @@
           <mat-icon>dashboard</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
-        <button mat-menu-item [routerLink]="['/admin/dashboard']">
+        
+        <button mat-menu-item 
+                [routerLink]="ongoingFestivalId() ? ['/admin/festivals', ongoingFestivalId(), 'dashboard'] : ['/admin/festivals']">
           <mat-icon>event</mat-icon>
           <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
+        
         <button mat-menu-item [routerLink]="['/tasks']">
           <mat-icon>assignment</mat-icon>
           <span>{{'ADMIN_NAV.TASK' | translate}}</span>
         </button>
+        
         <button mat-menu-item [routerLink]="['/admin/ticketing']">
           <mat-icon>local_activity</mat-icon>
           <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
@@ -101,10 +105,13 @@
           <mat-icon>dashboard</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
-        <button mat-menu-item [routerLink]="['/admin/dashboard']">
+        
+        <button mat-menu-item 
+                [routerLink]="ongoingFestivalId() ? ['/admin/festivals', ongoingFestivalId(), 'dashboard'] : ['/admin/festivals']">
           <mat-icon>event</mat-icon>
           <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
+        
         <button mat-menu-item [routerLink]="['/tasks']">
           <mat-icon>assignment</mat-icon>
           <span>{{'ADMIN_NAV.TASK' | translate}}</span>

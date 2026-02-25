@@ -40,19 +40,27 @@
     } @else {
 
       @if (!currentFestivalId() && archivedPackages().length === 0) {
-        <div class="empty-state" style="text-align: center; padding: 40px;">
-          <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #ccc;">event_busy</mat-icon>
-          <h2>{{ 'PUBLIC.NO_FESTIVAL_TITLE' | translate }}</h2>
-          <p>{{ 'PUBLIC.NO_FESTIVAL_DESC' | translate }}</p>
-        </div>
+        <section class="admin-section">
+          <mat-card class="fest-card">
+            <mat-card-content class="card-content-layout" style="justify-content: center; align-items: center; padding: 40px; text-align: center; flex-direction: column; gap: 8px;">
+              <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #ccc;">event_busy</mat-icon>
+              <h3 style="margin: 0;">{{ 'PUBLIC.NO_FESTIVAL_TITLE' | translate }}</h3>
+              <p style="margin: 0; color: #888;">{{ 'PUBLIC.NO_FESTIVAL_DESC' | translate }}</p>
+            </mat-card-content>
+          </mat-card>
+        </section>
       }
 
       @if (currentFestivalId() && activePackages().length === 0 && archivedPackages().length === 0) {
-        <div class="empty-state" style="text-align: center; padding: 40px;">
-          <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #ccc;">confirmation_number</mat-icon>
-          <h2>{{ 'TICKETING_ADMIN.EMPTY' | translate }}</h2>
-          <p>Aucun forfait ne correspond à vos critères.</p>
-        </div>
+        <section class="admin-section">
+          <mat-card class="fest-card">
+            <mat-card-content class="card-content-layout" style="justify-content: center; align-items: center; padding: 40px; text-align: center; flex-direction: column; gap: 8px;">
+              <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #ccc;">confirmation_number</mat-icon>
+              <h3 style="margin: 0;">{{ 'TICKETING_ADMIN.EMPTY' | translate }}</h3>
+              <p style="margin: 0; color: #888;">{{ 'TICKETING_ADMIN.EMPTY_DESC' | translate }}</p>
+            </mat-card-content>
+          </mat-card>
+        </section>
       }
 
       @if (activePackages().length > 0) {

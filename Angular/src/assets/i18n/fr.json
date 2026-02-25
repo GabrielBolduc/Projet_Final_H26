@@ -135,6 +135,8 @@
     "ACTIVE_TITLE": "Forfaits du festival en cours",
     "ARCHIVED_TITLE": "Forfaits archivés",
     "ARCHIVED_BADGE": "Archivé",
+    "EMPTY_TITLE": "Aucun forfait pour l'instant",
+    "EMPTY_DESC": "Créez votre premier forfait en utilisant le bouton ci-dessus.",
     "EMPTY_ACTIVE": "Aucun forfait actif ne correspond aux filtres.",
     "EMPTY_ARCHIVED": "Aucun forfait archivé ne correspond aux filtres.",
     "DELETE_DIALOG_TITLE": "Supprimer ce forfait ?",
@@ -142,7 +144,8 @@
     "CANCEL": "Annuler",
     "DELETE": "Supprimer",
     "DELETE_CONFIRM": "Supprimer {{title}} ?",
-    "DELETE_ERROR": "Impossible de supprimer ce forfait."
+    "DELETE_ERROR": "Impossible de supprimer ce forfait.",
+    "EMPTY": "Aucun forfait disponible pour le festival en cours."
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",

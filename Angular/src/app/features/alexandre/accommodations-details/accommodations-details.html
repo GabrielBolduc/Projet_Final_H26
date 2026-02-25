@@ -1,14 +1,22 @@
 <div class="details-container" *ngIf="accommodation$ | async as acc; else loading">
   
-<button mat-button class="back-btn" 
-        [routerLink]="['/accommodations']" 
-        [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
-  <mat-icon>arrow_back</mat-icon> 
-  {{ 'ACCOMMODATIONS.DETAILS.BACK_TO' | translate }} 
-  {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') 
-      ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) 
-      : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}
-</button>
+  <div class="header-row">
+    <button mat-button class="back-btn" 
+            [routerLink]="['/accommodations']" 
+            [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
+      <mat-icon>arrow_back</mat-icon> 
+      {{ 'ACCOMMODATIONS.DETAILS.BACK_TO' | translate }} 
+      {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') 
+          ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) 
+          : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}
+    </button>
+
+    <button *ngIf="isAdmin" mat-button class="back-btn units-header-btn" 
+            [routerLink]="['/units', acc.id]">
+      <mat-icon>meeting_room</mat-icon> 
+      {{ 'ACCOMMODATIONS.DETAILS.MANAGE_UNITS' | translate }}
+    </button>
+  </div>
 
   <mat-card class="detail-card horizontal-layout">
     <div class="info-section">

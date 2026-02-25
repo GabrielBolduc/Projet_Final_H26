@@ -4,11 +4,23 @@
   margin: 0 auto;
 }
 
+.header-row {
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-start;
+  width: 100%;
+}
+
 .back-btn {
   margin-bottom: 20px;
   border: 2px solid var(--mat-sys-on-surface) ;
   font-weight: 700 ;
   border-radius: 10px ;
+}
+
+.units-header-btn {
+  color: var(--mat-sys-primary);
+  margin-bottom: 20px; 
 }
 
 .detail-card.horizontal-layout {

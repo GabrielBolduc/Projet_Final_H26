@@ -500,6 +500,10 @@ images.each do |package, filename|
 end
 
 unit1.save!
+unit_camp_high.save!
+unit_camp_low.save!
+unit_hotel_high.save!
+unit_hotel_mid.save!
 
 puts "\nTicketing seed summary (ongoing festival):"
 [p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|

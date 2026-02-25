@@ -9,11 +9,6 @@
 #   end
 ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 0;")
 
-# Exécute les jobs de manière synchrone pendant le seed afin d'éviter
-# les écritures asynchrones d'ActiveStorage qui entrent en conflit
-# avec les validations modèle et les vérifications de clés étrangères.
-ActiveJob::Base.queue_adapter = :inline
-
 begin
   Affectation.delete_all
   Reservation.delete_all
@@ -463,16 +458,6 @@ end
 
 # Laurent
 
-res1 = Reservation.create!(
-  arrival_at: Date.new(2026, 7, 15),
-  departure_at: Date.new(2026, 7, 17),
-  nb_of_people: 1,
-  reservation_name: "Jean Daniel",
-  phone_number: "8195338888",
-  user: c,
-  unit: unit1,
-  festival: f
-)
 task_one = Task.create!(
     title: "Task #1",
     description: "Description of Task #1",

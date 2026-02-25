@@ -7,15 +7,15 @@ class Api::PerformancesController < ApiController
   
 
   def index
-    # On récupère les performances en incluant les relations pour éviter les requêtes N+1
     performances = Performance.chronological.includes(:artist, :stage, :festival)
     
-    # OPTIONNEL MAIS RECOMMANDÉ : Si l'URL contient un festival_id, on filtre côté base de données
     if params[:festival_id].present?
       performances = performances.where(festival_id: params[:festival_id])
     end
 
-    # Note : J'ai retiré le '.active' car il filtrait sûrement les anciennes performances.
+    unless current_user&.is_a?(Admin)
+      performances = performances.joins(:festival).where(festivals: {status: 'ongoing'})
+    end
     
     render json: {
       status: "success",

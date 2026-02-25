@@ -14,9 +14,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 
 import { FestivalService } from '../../../../../core/services/festival.service';
 import { PackageService } from '../../../../../core/services/package.service';
+import { Festival } from '@core/models/festival';
 import { Package } from '@core/models/package';
 
 const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
@@ -78,16 +80,16 @@ export class PackageFormComponent implements OnInit {
   festivalStartLimit = signal<Date | null>(null);
   festivalEndLimit = signal<Date | null>(null);
 
-  ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.initForm();
 
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode.set(true);
       this.packageId = +id;
-      this.loadPackageData(this.packageId);
+      await this.loadPackageData(this.packageId);
     } else {
-      this.loadFestivalData();
+      await this.loadFestivalData();
     }
   }
 
@@ -111,81 +113,91 @@ export class PackageFormComponent implements OnInit {
     });
   }
 
-  private loadPackageData(id: number) {
+  private async loadPackageData(id: number): Promise<void> {
     this.isLoading.set(true);
-    this.packageService.getPackage(id).subscribe({
-      next: (data: any) => {
-        const validAt = new Date(data.valid_at);
-        const expiredAt = new Date(data.expired_at);
-        
-        this.existingImageUrl.set(data.image_url ?? null);
+    try {
+      const data = await firstValueFrom(this.packageService.getPackage(id));
+      const validAt = new Date(data.valid_at);
+      const expiredAt = new Date(data.expired_at);
+      
+      this.existingImageUrl.set(data.image_url ?? null);
 
-        this.form.patchValue({
-          title: data.title,
-          description: data.description,
-          price: data.price,
-          quota: data.quota,
-          category: data.category,
-          festival_id: data.festival_id,
-          valid_date: validAt,
-          valid_time: this.formatTime(validAt),
-          expired_date: expiredAt,
-          expired_time: this.formatTime(expiredAt)
-        });
+      this.form.patchValue({
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        quota: data.quota,
+        category: data.category,
+        festival_id: data.festival_id,
+        valid_date: validAt,
+        valid_time: this.formatTime(validAt),
+        expired_date: expiredAt,
+        expired_time: this.formatTime(expiredAt)
+      });
 
-        this.loadFestivalData(data.festival_id);
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.router.navigate(['/admin/ticketing']);
-      }
-    });
+      await this.loadFestivalData(data.festival_id);
+    } catch {
+      this.router.navigate(['/admin/ticketing']);
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 
-  private loadFestivalData(festivalId?: number) {
-    this.festivalService.getFestivals().subscribe({
-      next: (festivals: any[]) => {
-        let festival = festivalId 
-          ? festivals.find(f => f.id === festivalId)
-          : festivals.find(f => f.status === 'ONGOING' || f.status === 'ongoing');
+  private async loadFestivalData(festivalId?: number): Promise<void> {
+    try {
+      const festival = festivalId
+        ? await firstValueFrom(this.festivalService.getFestival(festivalId))
+        : await this.getCurrentFestival();
 
-        if (festival) {
-          console.log("Festival trouvé :", festival);
-          
-          this.form.patchValue({ festival_id: festival.id });
-
-          const fStart = this.parseDateWithoutTimezone(festival.start_at);
-          fStart.setHours(0, 0, 0, 0); 
-          this.festivalStartLimit.set(fStart);
-
-          const fEnd = this.parseDateWithoutTimezone(festival.end_at);
-          fEnd.setHours(23, 59, 59, 999); 
-          this.festivalEndLimit.set(fEnd);
-
-          if (!this.isEditMode()) {
-            console.log("Application des dates du festival au formulaire...");
-            this.form.patchValue({
-              valid_date: fStart,
-              valid_time: '00:00',
-              expired_date: fEnd,
-              expired_time: '23:59'
-            });
-          }
-
-          if (festival.daily_capacity) {
-            this.festivalCapacity.set(festival.daily_capacity);
-            const quotaControl = this.form.get('quota');
-            quotaControl?.setValidators([
-              Validators.required, Validators.min(1), Validators.max(festival.daily_capacity)
-            ]);
-          }
-
-          this.form.updateValueAndValidity();
-        } else {
-          console.error("ERREUR : Aucun festival 'ONGOING' n'a été trouvé. Le formulaire gardera les dates d'aujourd'hui.");
-        }
+      if (!festival) {
+        console.error("ERREUR : Aucun festival en cours n'a été trouvé.");
+        return;
       }
-    });
+
+      this.applyFestivalConstraints(festival);
+    } catch {
+      console.error("ERREUR : Impossible de charger le festival.");
+    }
+  }
+
+  private async getCurrentFestival(): Promise<Festival | null> {
+    const festivals = await firstValueFrom(this.festivalService.getFestivals('ongoing'));
+    return festivals[0] ?? null;
+  }
+
+  private applyFestivalConstraints(festival: Festival): void {
+    this.form.patchValue({ festival_id: festival.id });
+
+    const fStart = this.parseDateWithoutTimezone(festival.start_at);
+    fStart.setHours(0, 0, 0, 0);
+    this.festivalStartLimit.set(fStart);
+
+    const fEnd = this.parseDateWithoutTimezone(festival.end_at);
+    fEnd.setHours(23, 59, 59, 999);
+    this.festivalEndLimit.set(fEnd);
+
+    if (!this.isEditMode()) {
+      this.form.patchValue({
+        valid_date: fStart,
+        valid_time: '00:00',
+        expired_date: fEnd,
+        expired_time: '23:59'
+      });
+    }
+
+    const quotaControl = this.form.get('quota');
+    if (festival.daily_capacity !== undefined && festival.daily_capacity !== null) {
+      this.festivalCapacity.set(festival.daily_capacity);
+      quotaControl?.setValidators([
+        Validators.required, Validators.min(1), Validators.max(festival.daily_capacity)
+      ]);
+    } else {
+      this.festivalCapacity.set(null);
+      quotaControl?.setValidators([Validators.required, Validators.min(1)]);
+    }
+
+    quotaControl?.updateValueAndValidity({ emitEvent: false });
+    this.form.updateValueAndValidity();
   }
 
   private festivalBoundsValidator(): ValidatorFn {
@@ -238,17 +250,22 @@ export class PackageFormComponent implements OnInit {
     return d;
   }
 
-  private parseDateWithoutTimezone(dateString: any): Date {
-    if (!dateString) return new Date();
-    const parts = dateString.toString().split('T')[0].split('-');
+  private parseDateWithoutTimezone(dateInput: string | Date): Date {
+    if (dateInput instanceof Date) {
+      return new Date(dateInput.getFullYear(), dateInput.getMonth(), dateInput.getDate());
+    }
+
+    const parts = dateInput.toString().split('T')[0].split('-');
     const year = parseInt(parts[0], 10);
-    const month = parseInt(parts[1], 10) - 1; 
+    const month = parseInt(parts[1], 10) - 1;
     const day = parseInt(parts[2], 10);
     return new Date(year, month, day);
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
     if (file) {
       this.selectedFile = file;
       const reader = new FileReader();
@@ -257,51 +274,60 @@ export class PackageFormComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  async onSubmit(): Promise<void> {
     this.serverErrors.set([]);
 
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      return;
+    }
 
     this.isLoading.set(true);
-    const val = this.form.value;
 
-    const validAtFull = this.combineDateTime(val.valid_date, val.valid_time);
-    const expiredAtFull = this.combineDateTime(val.expired_date, val.expired_time);
+    try {
+      const val = this.form.getRawValue();
 
-    const packageData: Partial<Package> = {
-      title: val.title,
-      description: val.description,
-      price: val.price,
-      quota: val.quota,
-      category: val.category,
-      festival_id: val.festival_id,
-      valid_at: validAtFull.toISOString(),
-      expired_at: expiredAtFull.toISOString()
-    };
+      const validAtFull = this.combineDateTime(val.valid_date, val.valid_time);
+      const expiredAtFull = this.combineDateTime(val.expired_date, val.expired_time);
 
-    const request = (this.isEditMode() && this.packageId)
-      ? this.packageService.updatePackage(this.packageId, packageData, this.selectedFile || undefined)
-      : this.packageService.createPackage(packageData, this.selectedFile || undefined);
+      const packageData: Partial<Package> = {
+        title: val.title,
+        description: val.description,
+        price: val.price,
+        quota: val.quota,
+        category: val.category,
+        festival_id: val.festival_id,
+        valid_at: validAtFull.toISOString(),
+        expired_at: expiredAtFull.toISOString()
+      };
 
-    request.subscribe({
-      next: () => {
-        this.isLoading.set(false);
-        this.router.navigate(['/admin/ticketing']);
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        if (err.error && err.error.errors) {
-          const errorsArray: string[] = [];
-          Object.keys(err.error.errors).forEach(key => {
-            err.error.errors[key].forEach((msg: string) => {
-              errorsArray.push(`${key}: ${msg}`);
-            });
-          });
-          this.serverErrors.set(errorsArray);
-        } else {
-          this.serverErrors.set([this.translate.instant('PACKAGE_FORM.GENERIC_ERROR')]);
-        }
+      if (this.isEditMode() && this.packageId) {
+        await firstValueFrom(this.packageService.updatePackage(this.packageId, packageData, this.selectedFile || undefined));
+      } else {
+        await firstValueFrom(this.packageService.createPackage(packageData, this.selectedFile || undefined));
       }
-    });
+
+      this.router.navigate(['/admin/ticketing']);
+    } catch (err: any) {
+      const responseErrors = err?.error?.errors ?? err?.errors;
+      if (responseErrors && typeof responseErrors === 'object') {
+        const errorsArray: string[] = [];
+
+        Object.keys(responseErrors).forEach(key => {
+          const fieldErrors = responseErrors[key];
+
+          if (Array.isArray(fieldErrors)) {
+            fieldErrors.forEach((msg: string) => errorsArray.push(`${key}: ${msg}`));
+          } else if (fieldErrors) {
+            errorsArray.push(`${key}: ${fieldErrors}`);
+          }
+        });
+
+        this.serverErrors.set(errorsArray.length > 0 ? errorsArray : [this.translate.instant('PACKAGE_FORM.GENERIC_ERROR')]);
+      } else {
+        this.serverErrors.set([this.translate.instant('PACKAGE_FORM.GENERIC_ERROR')]);
+      }
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

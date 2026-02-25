@@ -322,6 +322,43 @@ p_evening = Package.create!(
   festival: f
 )
 
+# Orders + Tickets (Billetterie)
+order_client_1 = Order.create!(
+  user: c,
+  purchased_at: f.start_at.to_time.change(hour: 9, min: 15)
+)
+
+order_client_2 = Order.create!(
+  user: c,
+  purchased_at: f.start_at.to_time.change(hour: 12, min: 45)
+)
+
+Ticket.create!(
+  order: order_client_1,
+  package: p_general,
+  holder_name: "Jean Daniel",
+  holder_phone: "8195551111",
+  holder_email: "jean.daniel@example.com"
+)
+
+Ticket.create!(
+  order: order_client_1,
+  package: p_daily,
+  holder_name: "Marie Tremblay",
+  holder_phone: "8195552222",
+  holder_email: "marie.tremblay@example.com"
+)
+
+Ticket.create!(
+  order: order_client_2,
+  package: p_evening,
+  holder_name: "Alex Martin",
+  holder_phone: "8195553333",
+  holder_email: "alex.martin@example.com",
+  refunded: true,
+  refunded_at: f.start_at.to_time.change(hour: 18, min: 0)
+)
+
 # Attachement des images
 images = {
   p_general => 'general-ticket.webp',

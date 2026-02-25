@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_17_202552) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_25_120000) do
   create_table "accommodations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
@@ -192,6 +192,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_17_202552) do
     t.datetime "updated_at", null: false
     t.index ["order_id"], name: "index_tickets_on_order_id"
     t.index ["package_id"], name: "index_tickets_on_package_id"
+    t.index ["unique_code"], name: "index_tickets_on_unique_code", unique: true
   end
 
   create_table "units", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|

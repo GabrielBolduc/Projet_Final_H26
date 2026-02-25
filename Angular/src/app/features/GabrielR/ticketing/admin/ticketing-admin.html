@@ -10,22 +10,33 @@
   <section class="filters-section">
     <mat-form-field appearance="outline" class="search-bar">
       <mat-icon matPrefix>search</mat-icon>
-      <input matInput [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate" [(ngModel)]="searchQuery">
+      <input
+        matInput
+        [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate"
+        [ngModel]="searchQuery()"
+        [ngModelOptions]="{updateOn: 'blur'}"
+        (ngModelChange)="searchQuery.set($event)"
+        (keyup.enter)="$any($event.target).blur()"
+      >
+      @if (searchQuery()) {
+        <button mat-icon-button matSuffix (click)="searchQuery.set('')" [attr.aria-label]="'Clear'">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="sort-select">
       <mat-label>{{ 'TICKETING_ADMIN.SORT_BY' | translate }}</mat-label>
-      <mat-select [(ngModel)]="sortOption">
-        <mat-option value="all">{{ 'TICKETING_ADMIN.SORT_ALL' | translate }}</mat-option>
-        <mat-option value="qty_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
-        <mat-option value="qty_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
+      <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
+        <mat-option value="date_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
+        <mat-option value="date_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </section>
 
   <main>
     <div class="packages-grid">
-      @for (pkg of filteredPackages(); track pkg.id) {
+      @for (pkg of packages(); track pkg.id) {
         <mat-card class="ticket-card">
           <div class="card-content-layout">
             

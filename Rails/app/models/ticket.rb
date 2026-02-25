@@ -27,7 +27,9 @@ class Ticket < ApplicationRecord
 
   def check_package_quota
     return unless package
-    if package.tickets.count >= package.quota
+
+    active_ticket_count = package.tickets.where(refunded: false).count
+    if active_ticket_count >= package.quota
       errors.add(:base, "Le quota pour ce forfait est atteint (Sold Out).")
     end
   end

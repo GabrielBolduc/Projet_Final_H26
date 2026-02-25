@@ -1,11 +1,18 @@
 class Api::PackagesController < ApiController
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
+
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :set_package, only: [:show, :update, :destroy]
   before_action :require_admin!, only: [:create, :update, :destroy]
 
   # GET /api/packages
   def index
-    packages = Package.includes(:festival).order(price: :asc)
+    packages = Package.admin_scope(
+      festival_id: params[:festival_id],
+      status: params[:status],
+      query: params[:q],
+      sort: params[:sort]
+    )
     
     render json: {
       status: "success",
@@ -15,14 +22,10 @@ class Api::PackagesController < ApiController
 
   # GET /api/packages/:id
   def show
-    if @package
-      render json: {
-        status: "success",
-        data: format_package(@package)
-      }, status: :ok
-    else
-      render_error("Package not found")
-    end
+    render json: {
+      status: "success",
+      data: format_package(@package)
+    }, status: :ok
   end
 
   # POST /api/packages (Admin Only)
@@ -53,11 +56,17 @@ class Api::PackagesController < ApiController
 
   # DELETE /api/packages/:id
   def destroy
+    deleted_package_data = {
+      id: @package.id,
+      title: @package.title,
+      festival_id: @package.festival_id
+    }
+
     if @package.destroy
       render json: {
         status: "success",
         message: "Package deleted successfully",
-        data: nil
+        data: deleted_package_data
       }, status: :ok
     else
       render json: {
@@ -71,8 +80,7 @@ class Api::PackagesController < ApiController
   private
 
   def set_package
-    @package = Package.find_by(id: params[:id])
-    render_error("Package not found") unless @package
+    @package = Package.find(params[:id])
   end
 
   def package_params
@@ -85,12 +93,16 @@ class Api::PackagesController < ApiController
 
   # Vérification stricte Admin (STI)
   def require_admin!
-    unless current_user.is_a?(Admin)
+    unless current_user&.is_a?(Admin)
       render json: {
         status: "error",
         message: "Access denied: Admin privileges required."
       }, status: :ok
     end
+  end
+
+  def not_found_response
+    render_error("Package not found")
   end
 
   def format_package(package)

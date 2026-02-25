@@ -20,13 +20,13 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "Access denied: Admin privileges required.", json["message"]
   end
 
-  test "index is forbidden when unauthenticated" do
+  test "index is public when unauthenticated and limited to ongoing festival" do
     get api_packages_url
     assert_response :ok
 
     json = parsed_body
-    assert_equal "error", json["status"]
-    assert_equal "Access denied: Admin privileges required.", json["message"]
+    assert_equal "success", json["status"]
+    assert json["data"].all? { |pkg| pkg.dig("festival", "status") == "ongoing" }
   end
 
   test "create is forbidden when authenticated user is not admin" do
@@ -42,15 +42,15 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "Access denied: Admin privileges required.", json["message"]
   end
 
-  test "index is forbidden when authenticated user is not admin" do
+  test "index is available for non admin users and limited to ongoing festival" do
     sign_in @client
 
     get api_packages_url
     assert_response :ok
 
     json = parsed_body
-    assert_equal "error", json["status"]
-    assert_equal "Access denied: Admin privileges required.", json["message"]
+    assert_equal "success", json["status"]
+    assert json["data"].all? { |pkg| pkg.dig("festival", "status") == "ongoing" }
   end
 
   test "create fails when title is missing" do

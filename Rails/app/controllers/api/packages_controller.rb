@@ -1,18 +1,27 @@
 class Api::PackagesController < ApiController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
-  before_action :require_admin!
+  before_action :require_admin!, only: [:create, :update, :destroy]
   before_action :set_package, only: [:show, :update, :destroy]
 
   # GET /api/packages
   def index
-    packages = Package.admin_scope(
-      festival_id: params[:festival_id],
-      status: params[:status],
-      query: params[:q],
-      sort: params[:sort],
-      categories: params[:categories]
-    )
+    packages = if admin_user?
+      Package.admin_scope(
+        festival_id: params[:festival_id],
+        status: params[:status],
+        query: params[:q],
+        sort: params[:sort],
+        categories: params[:categories]
+      )
+    else
+      Package.admin_scope(
+        status: Festival.statuses[:ongoing],
+        query: params[:q],
+        sort: params[:sort],
+        categories: params[:categories]
+      )
+    end
     
     render json: {
       status: "success",
@@ -80,7 +89,9 @@ class Api::PackagesController < ApiController
   private
 
   def set_package
-    @package = Package.includes(:festival, :tickets).find(params[:id])
+    scope = Package.includes(:festival, :tickets)
+    scope = scope.joins(:festival).where(festivals: { status: Festival.statuses[:ongoing] }) unless admin_user?
+    @package = scope.find(params[:id])
   end
 
   def package_params
@@ -93,12 +104,16 @@ class Api::PackagesController < ApiController
 
   # Vérification stricte Admin (STI)
   def require_admin!
-    unless current_user&.is_a?(Admin)
+    unless admin_user?
       render json: {
         status: "error",
         message: "Access denied: Admin privileges required."
       }, status: :ok
     end
+  end
+
+  def admin_user?
+    current_user&.is_a?(Admin)
   end
 
   def not_found_response

@@ -64,12 +64,14 @@ class Api::AffectationsController < ApiController
              
             include: {
                 task: {
-                    only: [ :id, :name, :description, :reusable ],
+                    only: [ :id, :title, :description, :reusable, :difficulty,:priority ],
                     methods: [ :file_url]
                 },
                 festival: {
-                    only: [ :id, :name, :status ]
+                    only: [ :id, :name, :status, :start_date, :end_date ]
                 },
+                user: {
+                    only: [ :id, :name, :email,:phone_number, :ability,:type ]
             }
         }
     end

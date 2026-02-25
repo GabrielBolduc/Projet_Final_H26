@@ -29,8 +29,6 @@
           <img [src]="task()?.file_url"
                alt="Task file"
                style="max-width: 100%; max-height: 300px;">
-        } @else {
-          <a [href]="task()?.file_url" download>Download File</a>
         }
 
       }
@@ -38,8 +36,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-button (click)="handleEditClick()">{{ 'TACHES.EDIT' | translate }}</button>
-      <button mat-button color="warn" (click)="handleClick()">{{ 'TACHES.DELETE' | translate }}</button>
+      <button mat-button (click)="handleClick()">affectation</button>
     </mat-card-actions>
   </mat-card>
 

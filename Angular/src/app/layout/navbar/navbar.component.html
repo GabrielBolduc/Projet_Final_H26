@@ -6,6 +6,12 @@
       <span class="home-text">{{ 'NAV.HOME' | translate }}</span>
     </a>
 
+     @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {
+      <a [routerLink]="['/affectations']" class="nav-link hide-on-mobile">
+        <span>affectations</span>
+      </a>
+     }
+
     @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
       <button mat-button [matMenuTriggerFor]="adminMenu" class="admin-btn hide-on-mobile">
         Administration

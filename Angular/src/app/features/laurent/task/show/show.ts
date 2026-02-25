@@ -51,28 +51,10 @@ export class TaskShowComponent {
     
   }
   
-  handleClick() {
-
+ handleClick() {
     const idParam = this.route.snapshot.paramMap.get('id');
-
     const id = idParam ? Number(idParam) : null;
-
-    this.taskService.deleteTask(id).subscribe(data =>{ 
-      console.log('tache reçu : ', data)
-    
-    });
-    this.router.navigate(['/tasks']);
-
-  }
-
-  handleEditClick() {
-
-    const idParam = this.route.snapshot.paramMap.get('id');
-
-    const id = idParam ? Number(idParam) : null;
-
-    this.router.navigate([`/tasks/${id}/edit`]);
-
+    this.router.navigate(['task', id, 'affectations']);
   }
 
   getStars(difficulty: number | undefined): number[] {

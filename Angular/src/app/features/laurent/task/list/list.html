@@ -23,16 +23,23 @@
                 <button mat-stroked-button class="btn-dash" [routerLink]="['/tasks', task.id]">
                   {{ 'TACHES.SHOW' | translate }}
                 </button>
+
+                 <button class="icon-btn edit" (click)="handleEditClick(task.id!)" title="Modifier">
+                    <mat-icon>edit_square</mat-icon>
+                  </button>
+                  <button class="icon-btn trash" (click)="handleClick(task.id!)" title="Supprimer">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
               </div>
               @if (isImage(task.file_url)) {
-                    <div class="image-container">
-                        <img 
-                        [src]="task.file_url"
-                        class="task-thumbnail"
-                        alt="Image de la tâche"
-                        />
-                    </div>
-                }
+                  <div class="image-container">
+                      <img 
+                      [src]="task.file_url"
+                      class="task-thumbnail"
+                      alt="Image de la tâche"
+                      />
+                  </div>
+              }
 
               
             </mat-card-content>

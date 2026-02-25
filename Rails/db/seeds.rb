@@ -307,6 +307,50 @@ unit1 = Units::SimpleRoom.new(
   food_options: "Room service,Restaurant"
 )
 
+unit_hotel_mid = Units::DoubleRoom.new(
+  accommodation: acc1,
+  cost_person_per_night: 85.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+unit_hotel_high = Units::FamilyRoom.new(
+  accommodation: acc1,
+  cost_person_per_night: 150.00,
+  quantity: 5,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_camp_low = Units::SmallTerrain.new(
+  accommodation: acc2,
+  cost_person_per_night: 25.00,
+  quantity: 30,
+  wifi: false,
+  water: :no_water,
+  electricity: false,
+  parking_cost: 5.00,
+  food_options: "None"
+)
+
+unit_camp_high = Units::DeluxeTerrain.new(
+  accommodation: acc2,
+  cost_person_per_night: 75.00,
+  quantity: 10,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Canteen"
+)
+
 
 # Racine
 
@@ -431,7 +475,11 @@ images = {
   p_daily_sold_out => 'daily-ticket.webp',
   p_evening_last_spots => 'evening-ticket.jpg',
   p_completed => 'general-ticket.webp',
-  unit1 => 'placeholder-image.jpg'
+  unit1 => 'placeholder-image.jpg',
+  unit_hotel_mid => 'hotel-mid.jpg',
+  unit_hotel_high => 'hotel-high.jpg',
+  unit_camp_low => 'camping-cheap.jpg',
+  unit_camp_high => 'oubliette.jpg'
 }
 
 images.each do |package, filename|

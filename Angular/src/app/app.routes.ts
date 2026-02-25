@@ -8,7 +8,8 @@ import { ReservationsForm } from '@features/alexandre/reservations-form/reservat
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
 import { AccommodationsDetails } from '@features/alexandre/accommodations-details/accommodations-details';
 import { AccommodationsForm } from '@features/alexandre/admin/accommodations-form/accommodations-form';
-import { UnitsForm } from '@features/alexandre/units-form/units-form';
+import { UnitsForm } from '@features/alexandre/admin/units-form/units-form';
+import { Units } from '@features/alexandre/admin/units/units';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { DashboardComponent } from './features/festival/performance/dashboard';
 import { AdministrationComponent } from './features/festival/festival/administration';
@@ -57,6 +58,11 @@ export const routes: Routes = [
             {
                 path: 'accommodations-form',
                 component: AccommodationsForm,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'units',
+                component: Units,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

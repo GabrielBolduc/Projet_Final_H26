@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :performances
     resources :reservations
     resources :accommodations do
-      resources :units, shallow: true, only: [:create, :update, :destroy]
+      resources :units, shallow: true
     end
     resources :packages
      resources :affectations do

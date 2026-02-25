@@ -322,6 +322,11 @@
     "PARKING": "Parking Cost",
     "FOOD": "Food Options",
     "UPLOAD_IMAGE": "Upload Unit Image",
+    "TITLE": "Unit Management",
+    "NEW_UNIT": "Add New Unit",
+    "FEATURES": "Features",
+    "AVAILABLE_QTY": "Available Quantity",
+    "UNITS": "Units",
     "TYPES": {
       "ROOMS_HEADER": "Guest Rooms",
       "TERRAINS_HEADER": "Camping Terrains",
@@ -336,6 +341,21 @@
       "NONE": "No Water",
       "UNDRINKABLE": "Undrinkable",
       "DRINKABLE": "Drinkable"
+    },
+    "FOOD_OPTIONS_LABELS": {
+      "None": "No food service",
+      "Canteen": "Canteen",
+      "Room service": "Room Service",
+      "Restaurant": "Restaurant"
+    },
+    "FORM": {
+      "REQUIRED": "This field is required",
+      "MIN_VALUE": "Value must be at least 0",
+      "IMAGE_REQUIRED": "An image is mandatory for new units",
+      "HOTEL_NO_TERRAIN": "A hotel cannot have camping terrains.",
+      "CAMPING_NO_ROOM": "A camping site cannot have rooms.",
+      "MAX_PARKING": "Parking cost cannot be equal or above to $100",
+      "MAX_COST": "Unit cost cannot be equal or above $1000"
     }
   },
   "COMMON": {

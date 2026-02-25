@@ -337,6 +337,21 @@
       "NONE": "Pas d'eau",
       "UNDRINKABLE": "Non potable",
       "DRINKABLE": "Potable"
+    },
+    "FOOD_OPTIONS_LABELS": {
+      "None": "Aucun service",
+      "Canteen": "Cantine",
+      "Room service": "Service aux chambres",
+      "Restaurant": "Restaurant"
+    },
+    "FORM": {
+      "REQUIRED": "Ce champ est obligatoire",
+      "MIN_VALUE": "La valeur doit être d'au moins 0",
+      "IMAGE_REQUIRED": "Une image est obligatoire pour les nouvelles unités",
+      "HOTEL_NO_TERRAIN": "Un hôtel ne peut pas avoir de terrains de camping.",
+      "CAMPING_NO_ROOM": "Un terrain de camping ne peut pas avoir de chambre",
+      "MAX_PARKING": "Le coût du stationnement ne peut pas être égale ou dépasser 100 $",
+      "MAX_COST": "Le coût de l'unité ne peut pas être égale ou dépasser 1000 $"
     }
   },
   "COMMON": {

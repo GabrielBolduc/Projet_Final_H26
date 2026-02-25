@@ -32,7 +32,7 @@ export class Units implements OnInit {
   searchQuery = signal('');
   sortOption = signal('all');
 
-  filteredPackages = computed(() => {
+  filteredUnits = computed(() => {
     let list = [...this.units()].filter(u => 
       u.type.toLowerCase().includes(this.searchQuery().toLowerCase())
     );
@@ -65,11 +65,16 @@ export class Units implements OnInit {
     }
   }
 
-  deletePackage(unit: any) {
+  deleteUnit(unit: any) {
     if (confirm('Are you sure you want to delete this unit?')) {
-      this.service.deleteUnit(unit.id).subscribe(() => {
-        this.units.set(this.units().filter(u => u.id !== unit.id));
+      this.service.deleteUnit(unit.id).subscribe((res) => {
+        this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
       });
     }
+  }
+
+
+  formatType(type: string): string {
+    return type.split('::').pop() || type;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed, resource } from '@angular/core';
+import { Component, computed, inject, resource, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -10,10 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms'; 
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import {firstValueFrom} from 'rxjs';
-import {toSignal} from '@angular/core/rxjs-interop';
+import { firstValueFrom } from 'rxjs';
 
-import { PackageService } from '../../../../core/services/package.service';
+import { FestivalService } from '../../../../core/services/festival.service';
+import { PackageFilters, PackageService, PackageSort } from '../../../../core/services/package.service';
 import { Package } from '../../../../core/models/package';
 
 @Component({
@@ -30,32 +30,35 @@ import { Package } from '../../../../core/models/package';
 })
 export class AdminTicketingComponent {
   private packageService = inject(PackageService);
+  private festivalService = inject(FestivalService);
   private router = inject(Router);
   private translate = inject(TranslateService);
 
-  packagesResource = resource({
-    loader: () => firstValueFrom(this.packageService.getPackages())
+  searchQuery = signal('');
+  sortOption = signal<PackageSort>('date_asc');
+
+  ongoingFestivalResource = resource({
+    loader: () => firstValueFrom(this.festivalService.getFestivals('ongoing'))
+  });
+
+  currentFestivalId = computed<number | undefined>(() => this.ongoingFestivalResource.value()?.[0]?.id);
+
+  packagesResource = resource<Package[], PackageFilters>({
+    params: () => {
+      const festivalId = this.currentFestivalId();
+
+      return {
+        festivalId,
+        status: festivalId ? undefined : 'ongoing',
+        q: this.searchQuery(),
+        sort: this.sortOption()
+      };
+    },
+    loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
   });
 
   packages = computed(() => this.packagesResource.value() ?? []);
-  isLoading = computed(() => this.packagesResource.isLoading());
-
-  searchQuery = signal<string>('');
-  sortOption = signal<string>('all'); 
-
-  // Filtrage et Tri
-  filteredPackages = computed(() => {
-    let list = this.packages().filter(p => 
-      p.title.toLowerCase().includes(this.searchQuery().toLowerCase())
-    );
-
-    if (this.sortOption() === 'qty_asc') {
-      list.sort((a, b) => a.quota - b.quota);
-    } else if (this.sortOption() === 'qty_desc') {
-      list.sort((a, b) => b.quota - a.quota);
-    }
-    return list;
-  });
+  isLoading = computed(() => this.ongoingFestivalResource.isLoading() || this.packagesResource.isLoading());
 
   openForm(pkg?: Package) {
     if (pkg && pkg.id) {
@@ -65,17 +68,21 @@ export class AdminTicketingComponent {
     }
   }
 
-  deletePackage(pkg: Package) {
+  async deletePackage(pkg: Package): Promise<void> {
+    if (!pkg.id) {
+      return;
+    }
+
     const confirmMessage = this.translate.instant('TICKETING_ADMIN.DELETE_CONFIRM', { title: pkg.title });
     
     if(confirm(confirmMessage)) {
-      this.packageService.deletePackage(pkg.id!).subscribe({
-        next: () => this.packagesResource.reload(),
-        error: (err) => {
-          const msg = err.message || this.translate.instant('TICKETING_ADMIN.DELETE_ERROR');
-          alert(msg);
-        }
-      });
+      try {
+        await firstValueFrom(this.packageService.deletePackage(pkg.id));
+        this.packagesResource.reload();
+      } catch (err: any) {
+        const msg = err.message || this.translate.instant('TICKETING_ADMIN.DELETE_ERROR');
+        alert(msg);
+      }
     }
   }
 }

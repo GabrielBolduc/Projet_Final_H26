@@ -1,0 +1,46 @@
+@if (task()) {
+
+  <mat-card class="task-card">
+    <mat-card-header>
+      <mat-card-title>{{ task()?.title }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p><strong>{{ 'TACHES.DESCRIPTION' | translate }}:</strong> {{ task()?.description }}</p>
+      <div class="priority-stars">
+        <strong>{{ 'TACHES.DIFFICULTY' | translate }}:</strong>
+
+        @for (star of getStars(task()?.difficulty); track $index) {
+            <mat-icon class="star filled">star</mat-icon>
+        }
+
+        @for (star of getEmptyStars(task()?.difficulty); track $index) {
+            <mat-icon class="star empty">star_border</mat-icon>
+        }
+        </div>
+      
+      <p><strong>{{ 'TACHES.PRIORITY' | translate }}:</strong> {{ task()?.priority }}</p>
+
+      @if (task()?.file_url) {
+
+        <p><strong>{{ 'TACHES.FILE' | translate }}:</strong></p>
+
+        @if (isImage(task()?.file_url)) {
+          <img [src]="task()?.file_url"
+               alt="Task file"
+               style="max-width: 100%; max-height: 300px;">
+        } @else {
+          <a [href]="task()?.file_url" download>Download File</a>
+        }
+
+      }
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button (click)="handleEditClick()">{{ 'TACHES.EDIT' | translate }}</button>
+      <button mat-button color="warn" (click)="handleClick()">{{ 'TACHES.DELETE' | translate }}</button>
+    </mat-card-actions>
+  </mat-card>
+
+}

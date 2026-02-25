@@ -24,6 +24,13 @@ class Api::PerformancesController < ApiController
   end
 
   def show
+    unless current_user&.is_a?(Admin) || @performance.festival.ongoing?
+      return render json: {
+        status: "error",
+        message: "Performance non publique"
+      }, status: :ok
+    end
+
     render json: {
       status: "success",
       data: @performance.as_json(include: [ :artist, :stage, :festival ])
@@ -63,12 +70,18 @@ class Api::PerformancesController < ApiController
   end
 
   def destroy
-    @performance.destroy
-    render json: {
+    if @performance.destroy
+      render json: {
       status: "success",
-      message: "Performance supprimée avec succès.",
+      message: "Performance supprimée avec succes",
       data: nil
     }, status: :ok
+    else
+      render json: {
+        status: "error",
+        message: "Impossible de supprimer performance"
+      }, status: :ok
+    end
   end
 
   private

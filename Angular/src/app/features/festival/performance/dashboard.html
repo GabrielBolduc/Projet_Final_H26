@@ -1,8 +1,9 @@
 <div class="dashboard-layout">
   <main class="admin-page">
     
-    <header class="admin-top-bar">
-      <div class="top-bar-side">
+    <header class="admin-top-bar" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 30px;">
+      
+      <div class="top-bar-side" style="flex: 1; display: flex; justify-content: flex-start;">
         @if (!isReadOnly()) {
           <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
             <mat-icon>add</mat-icon> {{'DASHBOARD.NEW_PERFORMANCE' | translate}}
@@ -10,18 +11,36 @@
         }
       </div>
       
-      <h1 class="header-title" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-        {{'DASHBOARD.DASHBOARD' | translate}}
-        @if (isReadOnly()) {
-          <mat-icon style="color: #888; font-size: 20px; width: 20px; height: 20px;" title="Archive en lecture seule">lock</mat-icon>
-        }
-      </h1>
+      <div class="header-center" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+        
+        <h1 class="header-title" style="margin: 0; display: flex; align-items: center; gap: 10px;">
+          {{'DASHBOARD.DASHBOARD' | translate}}
+          @if (isReadOnly()) {
+            <mat-icon style="color: #888; font-size: 20px; width: 20px; height: 20px;" title="Archive en lecture seule">lock</mat-icon>
+          }
+        </h1>
+        
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" style="width: 100%; min-width: 250px; max-width: 350px;">
+          <mat-select [value]="festival()?.id" (selectionChange)="onFestivalChange($event.value)">
+            @for (f of allFestivals(); track f.id) {
+              <mat-option [value]="f.id">
+                {{ f.name }}
+                @if (f.status === 'completed') { <span style="font-size: 0.8em;">(Completed)</span> }
+                @if (f.status === 'draft') { <span style="font-size: 0.8em;">(Draft)</span> }
+                @if (f.status === 'ongoing') { <span style="font-size: 0.8em;">(Ongoing)</span> }
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+      </div>
       
-      <div class="top-bar-side right-align">
+      <div class="top-bar-side right-align" style="flex: 1; display: flex; justify-content: flex-end;">
         <button mat-button routerLink="/admin/festivals">
           <mat-icon>arrow_back</mat-icon> Retour
         </button>
       </div>
+
     </header>
 
     @if (isLoading()) {

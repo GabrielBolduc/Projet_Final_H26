@@ -4,7 +4,7 @@ class Api::AccommodationsController < ApiController
   before_action :require_admin!, only: [:create, :update, :destroy]
 
   def index
-    @accommodations = Accommodation.all
+    @accommodations = Accommodation.joins(:festival).merge(Festival.ongoing)
 
     if params[:category].present? && params[:category] != 'all'
       @accommodations = @accommodations.where(category: params[:category])

@@ -1,7 +1,7 @@
 one:
   user: one
-  unit: unit1
-  festival: f1
+  unit: one
+  festival: one
   reservation_name: "Jean Dupont"
   phone_number: "0612345678"
   nb_of_people: 1
@@ -10,8 +10,8 @@ one:
 
 two:
   user: one
-  unit: unit2
-  festival: f2
+  unit: two
+  festival: two
   reservation_name: "Marie Curie"
   phone_number: "0788990011"
   nb_of_people: 2

@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { Affectation } from '@core/models/affectation';
 import { User } from '@core/models/user';
 import { AffectationService } from '@core/services/affectation.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -64,7 +64,7 @@ export class FormAffectationComponent {
     this.festivals().find(f => f.status === 'ongoing')
   );
 
-    constructor( private route: ActivatedRoute) {}
+    constructor( private route: ActivatedRoute, private router: Router) {}
 
     ngOnInit() {
 
@@ -85,7 +85,9 @@ export class FormAffectationComponent {
            this.form.patchValue({
               expected_start: this.formatForDatetimeLocal(data.expected_start),
               expected_end: this.formatForDatetimeLocal(data.expected_end),
-              responsability: data.responsability
+              responsability: data.responsability,
+              user_id: data.user.id
+              
             });
 
           });
@@ -148,6 +150,7 @@ export class FormAffectationComponent {
           }
         });
       }
+     this.router.navigate(['/task', this.route.snapshot.paramMap.get('id'), 'affectations']);
 
     }
     

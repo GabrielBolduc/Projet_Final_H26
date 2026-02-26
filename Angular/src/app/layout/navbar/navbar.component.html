@@ -7,9 +7,9 @@
     </a>
 
      @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {
-      <a [routerLink]="['/affectations']" class="nav-link hide-on-mobile">
-        <span>affectations</span>
-      </a>
+      <button mat-button [routerLink]="['/affectations']" class="nav-link hide-on-mobile">
+        {{ 'NAV.AFFECTATIONS' | translate }}
+      </button>
      }
 
     @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {

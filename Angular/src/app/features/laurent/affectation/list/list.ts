@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Affectation } from '@core/models/affectation';
 import { Task } from '@core/models/task';
@@ -8,6 +8,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { FestivalService } from '@core/services/festival.service';
+import { Festival } from '@core/models/festival';
 
 @Component({
   selector: 'app-list',
@@ -18,13 +20,19 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export class ListAffectationsComponent {
 
   private affectationService = inject(AffectationService);
-  public translate = inject(TranslateService);
+  private festivalService = inject(FestivalService);
+      public translate = inject(TranslateService);
+      festivals = signal<Festival[]>([]);
 
   taskId: number | null = null;
   constructor(private route: ActivatedRoute) {}
 
   affectations = signal<Affectation[]>([]);
   currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
+
+   currentFestival = computed(() => 
+    this.festivals().find(f => f.status === 'ongoing')
+  );
 
   ngOnInit() {
 
@@ -41,6 +49,11 @@ export class ListAffectationsComponent {
      this.translate.onLangChange.subscribe((event) => {
       this.currentLang.set(this.formatLang(event.lang));
     });
+
+    this.festivalService.getFestivals().subscribe(data => { 
+      console.log('Festivals reçus : ', data);
+      this.festivals.set(data);
+      });
   }
 
   private formatLang(lang: string | undefined): string {

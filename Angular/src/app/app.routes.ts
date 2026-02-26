@@ -33,7 +33,6 @@ import { ListAffectationsComponent } from '@features/laurent/affectation/list/li
 import { ShowAffectationComponent } from '@features/laurent/affectation/show/show';
 import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
 import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
-import { UserShowAffectationComponent } from '@features/laurent/affectation/user-show/user-show';
 import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
 
 export const routes: Routes = [
@@ -216,8 +215,8 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'affectations/:id',
-                component: UserShowAffectationComponent,
+                path: 'affectations/:affectationId',
+                component: ShowAffectationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

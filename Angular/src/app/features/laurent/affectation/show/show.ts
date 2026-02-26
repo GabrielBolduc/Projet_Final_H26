@@ -6,7 +6,7 @@ import { Affectation } from '@core/models/affectation';
 import { AffectationService } from '@core/services/affectation.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
@@ -19,8 +19,12 @@ export class ShowAffectationComponent {
 
   private affectationService = inject(AffectationService);
   private route = inject(ActivatedRoute);
+  public translate = inject(TranslateService);
 
   affectation = signal<Affectation | null>(null);
+
+  currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
+
 
 
   ngOnInit() {
@@ -33,12 +37,21 @@ export class ShowAffectationComponent {
         console.log('Affectation reçue : ', data);
         this.affectation.set(data);
     });
+
+     this.translate.onLangChange.subscribe((event) => {
+      this.currentLang.set(this.formatLang(event.lang));
+    });
   }
 
    getStars(difficulty: number | undefined): number[] {
     if (!difficulty) return [];
     return Array(difficulty).fill(0);
     }
+
+  private formatLang(lang: string | undefined): string {
+    if (!lang) return 'en'; 
+    return lang.split('-')[0];
+  }
 
   getEmptyStars(difficulty: number | undefined): number[] {
     if (!difficulty) return Array(5).fill(0);

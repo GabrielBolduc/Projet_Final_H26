@@ -1,1 +1,82 @@
-<p>user-list works!</p>
+<div class="admin-page">
+
+  <header class="admin-top-bar">
+   
+
+    <h1 class="header-title">{{ 'AFFECTATIONS.TITLE' | translate }}</h1>
+  </header>
+
+  <main>
+
+    <div class="affectation-list">
+
+      @for (affectation of affectations(); track affectation.id) {
+
+        <mat-card class="affectation-card">
+
+          <mat-card-content class="card-layout">
+
+            <div class="user-section">
+
+              <mat-icon class="user-icon">tâche</mat-icon>
+
+              <div>
+                <div class="user-name">
+                  {{ affectation.task.title }}
+                </div>
+
+
+              </div>
+
+            </div>
+
+
+            <div class="info-section">
+
+              <div class="info-row">
+                <mat-icon>assignment</mat-icon>
+
+                {{ affectation.responsability }}
+              </div>
+
+              <div class="info-row">
+                <mat-icon>schedule</mat-icon>
+                start:
+                {{ affectation.expected_start | date:'short' }}
+              </div>
+
+              <div class="info-row">
+                <mat-icon>schedule</mat-icon>
+                end:
+                {{ affectation.expected_end | date:'short' }}
+              </div>
+
+            </div>
+
+
+            <div class="action-section">
+
+              <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['affectations', affectation.id]">
+                {{ 'AFFECTATIONS.MORE' | translate }}
+              </button>
+              @if(affectation.end){
+                <button class="icon-btn edit" [routerLink]="['affectations','edit', affectation.id]" title="Modifier">
+                    <mat-icon>edit_square</mat-icon>
+                </button>
+              }
+               
+               
+            </div>
+
+          </mat-card-content>
+
+
+        </mat-card>
+
+      }
+
+    </div>
+
+  </main>
+
+</div>

@@ -1,12 +1,16 @@
 <div class="admin-page">
 
   <header class="admin-top-bar">
-    <button mat-stroked-button class="btn-new" [routerLink]="['/task',taskId,'affectations','new']">
-      <mat-icon>add</mat-icon>
-      Ajouter une affectation
-    </button>
+    @if(currentFestival()){
 
-    <h1 class="header-title">Affectations</h1>
+       <button mat-stroked-button class="btn-new" [routerLink]="['/task',taskId,'affectation','new']">
+      <mat-icon>add</mat-icon>
+      {{ 'AFFECTATIONS.ADD' | translate }}
+    </button>
+    }
+   
+
+    <h1 class="header-title">{{ 'AFFECTATIONS.TITLE' | translate }}</h1>
   </header>
 
   <main>
@@ -21,7 +25,7 @@
 
             <div class="user-section">
 
-              <mat-icon class="user-icon">person</mat-icon>
+              <mat-icon class="user-icon">{{ 'AFFECTATIONS.USER' | translate }}</mat-icon>
 
               <div>
                 <div class="user-name">
@@ -63,8 +67,11 @@
             <div class="action-section">
 
               <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['/task',taskId,'affectations', affectation.id]">
-                En savoir plus
+               {{ 'AFFECTATIONS.MORE' | translate }}
               </button>
+               <button class="icon-btn edit" [routerLink]="['/task',taskId,'affectation', affectation.id,'edit']" title="Modifier">
+                    <mat-icon>edit_square</mat-icon>
+                </button>
                 <button class="icon-btn trash" (click)="handleClick(affectation.id!)" title="Supprimer">
                   <mat-icon>delete_outline</mat-icon>
                 </button>

@@ -51,7 +51,6 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
         sign_in @admin
 
         # Code http
-        # Using an ID that definitely does not exist
         invalid_id = 999999
         delete "/api/accommodations/#{invalid_id}", as: :json
 

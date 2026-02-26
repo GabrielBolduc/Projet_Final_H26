@@ -85,7 +85,7 @@ f = Festival.create!(
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
-  comment: "Bon festival"
+  comment: "Un gros festival"
 )
 
 f1 = Festival.create!(
@@ -163,7 +163,7 @@ artist3 = Artist.create!(
 # perf pour f (ongoing)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "Le premier show",
   price: 55.00,
   start_at: f.start_at.to_time.change(hour: 20, min: 0),
   end_at: f.start_at.to_time.change(hour: 22, min: 0),

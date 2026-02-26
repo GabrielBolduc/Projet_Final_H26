@@ -24,7 +24,7 @@ class Api::AccommodationsController < ApiController
     festival = Festival.ongoing.order(created_at: :desc).first
 
     if festival.nil?
-      return render_logic_error(["No festival is currently ongoing. Accommodations cannot be created."], 422)
+      return render_logic_error(["No festival is currently ongoing. Accommodations cannot be created."])
     end
 
     @accommodation = Accommodation.new(accommodation_params)
@@ -59,7 +59,7 @@ class Api::AccommodationsController < ApiController
   def accommodation_params
     params.require(:accommodation).permit(
       :name, :category, :address, :latitude, :longitude, 
-      :shuttle, :time_car, :time_walk, :commission, :festival_id
+      :shuttle, :time_car, :time_walk, :commission
     )
   end
   

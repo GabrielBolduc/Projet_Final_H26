@@ -156,14 +156,14 @@ onFileSelected(event: Event): void {
 
         if (this.isEditMode && this.taskId) {
             this.taskService.updateTask(this.taskId, formData, this.selectedFile ||undefined ).subscribe(() => {
-           
+              this.router.navigate(['/tasks']);
             });
-             this.router.navigate(['/tasks']);
+             
         } else {
             this.taskService.createTask(formData, this.selectedFile ||undefined).subscribe(() => {
-           
+              this.router.navigate(['/tasks']);
             });
-             this.router.navigate(['/tasks']);
+            
         }
     }
 

@@ -34,13 +34,13 @@ export class TaskListComponent implements OnInit {
 
     this.taskService.deleteTask(id).subscribe(data =>{ 
       console.log('tache reçu : ', data)
-    
-    });
     this.taskService.listTasks().subscribe(data => { 
       console.log('Tâches reçues : ', data);
       this.tasks.set(data);
     });
 
+    });
+    
   }
 
   handleEditClick(id: number) {

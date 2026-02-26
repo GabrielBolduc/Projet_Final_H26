@@ -42,6 +42,10 @@ Rails.application.routes.draw do
         get 'get_by_task/:task_id',
             to: 'affectations#get_by_task',
             as: :get_by_task
+
+        get 'get_staff_list',
+            to: 'affectations#get_staff_list',
+            as: :get_staff_list
       end
     end
   end

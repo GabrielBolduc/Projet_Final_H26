@@ -69,9 +69,26 @@ Staff.create!(
     password_confirmation: "qwerty",
     name: "Staff #1",
     phone_number: "666-666-6666",
+    ability: "securité"
+)
+
+Staff.create!(
+    email: "staff2@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Staff #2",
+    phone_number: "666-666-6666",
     ability: "Gestion des réservations"
 )
 
+Staff.create!(
+    email: "staff3@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Staff #3",
+    phone_number: "666-666-6666",
+    ability: "cuisine"
+)
 # GabrielB
 f = Festival.create!(
   name: "Festify 2026",

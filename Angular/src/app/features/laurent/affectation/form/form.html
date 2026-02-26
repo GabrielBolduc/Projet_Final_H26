@@ -1,1 +1,127 @@
-<p>form works!</p>
+<div class="form-container">
+
+  <mat-card class="form-card">
+    
+    <mat-card-header>
+      <mat-card-title class="title">Nouvelle Affectation</mat-card-title>
+      <mat-card-subtitle class="subtitle">
+        Remplir les informations de planification
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
+
+        <mat-form-field appearance="outline" class="full-width">
+
+          <mat-label>Début prévu</mat-label>
+
+          <input
+            matInput
+            type="datetime-local"
+            formControlName="expected_start">
+
+          <mat-icon matSuffix>schedule</mat-icon>
+
+          <mat-error *ngIf="form.get('expected_start')?.hasError('required')">
+            Le début est obligatoire
+          </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+
+          <mat-label>Fin prévue</mat-label>
+
+          <input
+            matInput
+            type="datetime-local"
+            formControlName="expected_end">
+
+          <mat-icon matSuffix>event</mat-icon>
+
+          <mat-error *ngIf="form.get('expected_end')?.hasError('required')">
+            La fin est obligatoire
+          </mat-error>
+
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="full-width">
+
+          <mat-label>Responsabilité</mat-label>
+
+          <textarea
+            matInput
+            rows="3"
+            formControlName="responsability">
+          </textarea>
+
+          <mat-icon matSuffix>assignment</mat-icon>
+
+          <mat-error *ngIf="form.get('responsability')?.hasError('required')">
+            La responsabilité est obligatoire
+          </mat-error>
+
+          <mat-error *ngIf="form.get('responsability')?.hasError('maxlength')">
+            Maximum 255 caractères
+          </mat-error>
+
+        </mat-form-field>
+
+
+    <!-- User select -->
+    <mat-form-field appearance="outline" class="full-width">
+
+      <mat-label>Utilisateur</mat-label>
+
+      <mat-select formControlName="user_id">
+
+        @for (user of filteredUsers(); track user.id) {
+
+          <mat-option [value]="user.id">
+
+            {{ user.name }} — {{ user.ability }}
+
+          </mat-option>
+
+        }
+
+      </mat-select>
+
+      <mat-error *ngIf="form.get('user_id')?.hasError('required')">
+        L'utilisateur est obligatoire
+      </mat-error>
+
+    </mat-form-field>
+
+
+        <div class="button-row">
+
+          <button
+            mat-stroked-button
+            routerLink="/tasks/affectation">
+            Annuler
+          </button>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="form.invalid">
+            Enregistrer
+          </button>
+
+        </div>
+
+      </form>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div><div>
+
+
+</div>

@@ -4,6 +4,7 @@ import { inject, Injectable } from '@angular/core';
 import { Task } from '@core/models/task';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
+import { User } from '@core/models/user';
 
 
 interface ApiResponse<T> {
@@ -82,7 +83,7 @@ export class AffectationService {
     
       }
 
-      updateAffectation(id: number, affectation: FormData) {
+      updateAffectation(id: number|null, affectation: FormData) {
         return this.http.patch<ApiResponse<Affectation>>(`api/affectations/${id}`, affectation).pipe(
           map(response => {
                     console.log(response)
@@ -106,6 +107,19 @@ export class AffectationService {
                     }
               })
             );
+      }
+
+      getStaffList(): Observable<User[]> {
+        return this.http.get<ApiResponse<User[]>>('api/affectations/get_staff_list').pipe(
+          map(response => {
+            console.log(response);
+            if (response.status === 'success') {
+              return response.data;
+            } else {
+              throw new Error(response.message || 'erreur api');
+            }
+          })
+        );
       }
 
 }

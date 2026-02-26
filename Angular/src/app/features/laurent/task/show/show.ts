@@ -23,14 +23,7 @@ export class TaskShowComponent {
   private router = inject(Router);
 
   
-  editTask: TaskPayload = new TaskPayload(
-  "Edited title",
-  "Edited description",
-  2,        // difficulty
-  3,        // priority
-  true      // reusable
-  );
-
+  
 
   task = signal<Task | null>(null);
 

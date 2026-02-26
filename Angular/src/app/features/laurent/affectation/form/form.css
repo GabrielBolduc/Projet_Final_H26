@@ -1,0 +1,77 @@
+.form-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 700px;
+  padding: 10px 20px 25px 20px;
+  border-radius: 18px;
+  border: 2px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-low);
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+}
+
+.subtitle {
+  margin-bottom: 20px;
+}
+
+/* Fields */
+
+.full-width {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* User select spacing */
+
+mat-select {
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+}
+
+/* Hover effect */
+
+.form-card:hover {
+  box-shadow: 8px 8px 0px var(--mat-sys-primary);
+  transition: 0.2s ease;
+}
+
+/* Validation messages */
+
+mat-error {
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+
+@media (max-width: 600px) {
+
+  .form-card {
+    padding: 15px;
+  }
+
+  .button-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+}

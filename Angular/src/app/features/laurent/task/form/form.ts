@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Task } from '@core/models/task';
@@ -38,10 +38,12 @@ export class TaskFormComponent {
   task = signal<Task | null>(null);
   reusableTasks = signal<Task[]>([]);
   editTask: TaskPayload | null = null;
-
   selectedFile: File | null = null;
-  previewUrl: string | null = null;
-  existingImageUrl: string | null = null;
+
+ previewUrl = signal<string | null>(null);
+  existingImageUrl = signal<string | null>(null);
+
+  displayImageUrl = computed(() => this.previewUrl() ?? this.existingImageUrl());
 
    
   form: FormGroup = new FormBuilder().group({
@@ -74,12 +76,20 @@ export class TaskFormComponent {
         this.taskService.getTask(id).subscribe(data =>{ 
             console.log('tache reçu : ', data)
             this.task.set(data)
-            console.log('tache initialisé : ', this.task)
+            
           });
+
+          this.form.patchValue({
+          title: this.task()?.title,
+          description: this.task()?.description,
+          difficulty: this.task()?.difficulty,
+          priority: this.task()?.priority,
+          reusable: this.task()?.reusable
+        });
     }
 
      this.taskService.listTasks().subscribe(data => { 
-      console.log('Tâches reçues : ', data);
+      
       this.reusableTasks.set(data);
     });
 
@@ -103,18 +113,17 @@ export class TaskFormComponent {
     
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
+onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
     if (file) {
       this.selectedFile = file;
       const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result as string;
-      };
+      reader.onload = () => { this.previewUrl.set(reader.result as string); };
       reader.readAsDataURL(file);
     }
   }
-
   getPriorityArray(): number[] {
       return [1, 2, 3, 4, 5];
     }
@@ -122,6 +131,8 @@ export class TaskFormComponent {
   setPriority(value: number) {
       this.form.patchValue({ priority: value });
     }
+
+    
   save() {
 
          const formData = new FormData();
@@ -147,12 +158,12 @@ export class TaskFormComponent {
             this.taskService.updateTask(this.taskId, formData, this.selectedFile ||undefined ).subscribe(() => {
            
             });
-             //this.router.navigate(['/tasks']);
+             this.router.navigate(['/tasks']);
         } else {
             this.taskService.createTask(formData, this.selectedFile ||undefined).subscribe(() => {
            
             });
-             //this.router.navigate(['/tasks']);
+             this.router.navigate(['/tasks']);
         }
     }
 

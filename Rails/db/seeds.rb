@@ -89,7 +89,7 @@ f = Festival.create!(
 )
 
 f1 = Festival.create!(
-  name: "Festify 2025",
+  name: "Festify 2027",
   start_at: Date.new(2027, 7, 10),
   end_at: Date.new(2027, 7, 12),
   daily_capacity: 5000,
@@ -104,7 +104,7 @@ f1 = Festival.create!(
 )
 
 f2 = Festival.create!(
-  name: "Festify 2024",
+  name: "Festify 2025",
   start_at: Date.new(2026, 9, 15),
   end_at: Date.new(2026, 9, 20),
   daily_capacity: 5000,

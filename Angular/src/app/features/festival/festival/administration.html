@@ -48,10 +48,6 @@
             <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
               <mat-icon>edit_square</mat-icon>
             </button>
-            
-            <button class="icon-btn trash" [disabled]="f.status === 'ongoing'" (click)="deleteFestival(f)" title="Supprimer">
-              <mat-icon>delete_outline</mat-icon>
-            </button>
           </div>
         </mat-card-content>
       </mat-card>
@@ -147,9 +143,6 @@
               <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
                 <mat-icon>edit_square</mat-icon>
               </button>
-              <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
-                <mat-icon>delete_outline</mat-icon>
-              </button>
             </div>
           </mat-card-content>
         </mat-card>
@@ -172,32 +165,32 @@
 </ng-template>
 
 <ng-template #finishDialogTemplate let-data>
-  <h2 mat-dialog-title>Clôturer le festival</h2>
+  <h2 mat-dialog-title>Terminer le festival</h2>
   <mat-dialog-content>
-    <p>Entrez les résultats finaux pour <strong>{{data.name}}</strong> :</p>
+    <p>{{data.name}}</p>
     
     <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
       <mat-form-field appearance="outline">
-        <mat-label>Satisfaction globale (1 à 5)</mat-label>
+        <mat-label>Satisfaction (1 - 5)</mat-label>
         <input matInput type="number" [(ngModel)]="data.satisfaction" min="1" max="5">
         <mat-icon matSuffix>star</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Notes / Débriefing</mat-label>
-        <textarea matInput [(ngModel)]="data.comment" rows="3" placeholder="Points forts, incidents..."></textarea>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline">
-        <mat-label>Autres revenus ($)</mat-label>
+        <mat-label>Autres revenus</mat-label>
         <input matInput type="number" [(ngModel)]="data.other_income">
         <mat-icon matSuffix>attach_money</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Autres dépenses ($)</mat-label>
+        <mat-label>Autres dépenses</mat-label>
         <input matInput type="number" [(ngModel)]="data.other_expense">
         <mat-icon matSuffix>money_off</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Notes</mat-label>
+        <textarea matInput [(ngModel)]="data.comment" rows="3"></textarea>
       </mat-form-field>
     </div>
   </mat-dialog-content>
@@ -208,7 +201,7 @@
 </ng-template>
 
 <ng-template #notesDialogTemplate let-data>
-  <h2 mat-dialog-title class="dialog-title-custom">Débriefing : {{ data.name }}</h2>
+  <h2 mat-dialog-title class="dialog-title-custom">Notes : {{ data.name }}</h2>
   <mat-dialog-content>
     <div class="notes-display-box">
       {{ data.comment }}

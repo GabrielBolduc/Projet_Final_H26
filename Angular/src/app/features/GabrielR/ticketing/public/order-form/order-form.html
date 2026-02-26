@@ -27,7 +27,14 @@
         </div>
       }
 
-      <p class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</p>
+      <p class="price">
+        {{ totalPrice() | currency:'CAD':'symbol-narrow' }}
+        @if (quantity() > 1) {
+          <span class="price-breakdown">
+            ({{ quantity() }} × {{ pkg.price | currency:'CAD':'symbol-narrow' }})
+          </span>
+        }
+      </p>
       @if (packageAvailability().remaining <= 0) {
         <p class="sold-out">{{ 'TICKETING_PUBLIC.SOLD_OUT' | translate }}</p>
       }

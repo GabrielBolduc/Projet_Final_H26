@@ -9,7 +9,6 @@
   },
   "PUBLIC": {
     "PROGRAMMATION": "Programmation",
-    "LOADING": "Chargement de la programmation...",
     "NO_FESTIVAL_TITLE": "Aucun festival en cours",
     "NO_FESTIVAL_DESC": "Il n'y a actuellement aucun festival actif. Revenez plus tard !",
     "NO_PERFORMANCES": "Aucune performance n'est actuellement prévue pour ce festival."
@@ -49,7 +48,7 @@
   },
   "FESTIVAL": {
     "ADMINISTRATION": "Administration",
-    "HELLO": "Bonjour !",
+    "HELLO": "Bonjour",
     "CURRENT_FESTIVAL": "Festival en cours",
     "DRAFTS": "Festivals en préparation",
     "ARCHIVE": "Archives des festivals",
@@ -135,6 +134,8 @@
     "ACTIVE_TITLE": "Forfaits du festival en cours",
     "ARCHIVED_TITLE": "Forfaits archivés",
     "ARCHIVED_BADGE": "Archivé",
+    "EMPTY_TITLE": "Aucun forfait pour l'instant",
+    "EMPTY_DESC": "Créez votre premier forfait en utilisant le bouton ci-dessus.",
     "EMPTY_ACTIVE": "Aucun forfait actif ne correspond aux filtres.",
     "EMPTY_ARCHIVED": "Aucun forfait archivé ne correspond aux filtres.",
     "DELETE_DIALOG_TITLE": "Supprimer ce forfait ?",
@@ -142,7 +143,8 @@
     "CANCEL": "Annuler",
     "DELETE": "Supprimer",
     "DELETE_CONFIRM": "Supprimer {{title}} ?",
-    "DELETE_ERROR": "Impossible de supprimer ce forfait."
+    "DELETE_ERROR": "Impossible de supprimer ce forfait.",
+    "EMPTY": "Aucun forfait disponible pour le festival en cours."
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",
@@ -275,7 +277,8 @@
       "NO": "NON",
       "EDIT": "MODIFIER L'HÉBERGEMENT",
       "BOOK": "RÉSERVER CET HÉBERGEMENT",
-      "LOADING": "Chargement des détails..."
+      "LOADING": "Chargement des détails...",
+      "MANAGE_UNITS": "Gérer les unités"
     },
     "FORM": {
       "TITLE_EDIT": "Modifier l'hébergement",
@@ -336,6 +339,21 @@
       "NONE": "Pas d'eau",
       "UNDRINKABLE": "Non potable",
       "DRINKABLE": "Potable"
+    },
+    "FOOD_OPTIONS_LABELS": {
+      "None": "Aucun service",
+      "Canteen": "Cantine",
+      "Room service": "Service aux chambres",
+      "Restaurant": "Restaurant"
+    },
+    "FORM": {
+      "REQUIRED": "Ce champ est obligatoire",
+      "MIN_VALUE": "La valeur doit être d'au moins 0",
+      "IMAGE_REQUIRED": "Une image est obligatoire pour les nouvelles unités",
+      "HOTEL_NO_TERRAIN": "Un hôtel ne peut pas avoir de terrains de camping.",
+      "CAMPING_NO_ROOM": "Un terrain de camping ne peut pas avoir de chambre",
+      "MAX_PARKING": "Le coût du stationnement ne peut pas être égale ou dépasser 100 $",
+      "MAX_COST": "Le coût de l'unité ne peut pas être égale ou dépasser 1000 $"
     }
   },
   "COMMON": {

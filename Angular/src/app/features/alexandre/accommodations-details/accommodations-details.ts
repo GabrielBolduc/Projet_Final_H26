@@ -4,11 +4,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, switchMap, map, shareReplay } from 'rxjs';
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { Accommodation, AccommodationCategory } from '@core/models/accommodation';
 import { AuthService } from '@core/services/auth.service';
+import { UnitsService } from '@core/services/units.service';
+import { Unit, UnitType } from '@core/models/unit';
 
 @Component({
   selector: 'app-accommodations-details',
@@ -19,6 +22,7 @@ import { AuthService } from '@core/services/auth.service';
     MatCardModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     TranslateModule
   ],
   templateUrl: './accommodations-details.html',
@@ -28,23 +32,115 @@ export class AccommodationsDetails implements OnInit {
   private route = inject(ActivatedRoute);
   private service = inject(AccommodationsService);
   private authService = inject(AuthService);
+  private unitsService = inject(UnitsService);
 
   accommodation$!: Observable<Accommodation>;
-  Category = AccommodationCategory; 
-
-  ngOnInit(): void {
-    this.accommodation$ = this.route.paramMap.pipe(
-      switchMap(params => {
-        const id = Number(params.get('id'));
-        return this.service.getAccommodation(id);
-      })
-    );
-  }
+  units$!: Observable<Unit[]>;
+  priceRange$!: Observable<{ min: number; max: number } | null>;
+  groupedUnits$!: Observable<any[]>;
+  images$!: Observable<string[]>;
+  
+  Category = AccommodationCategory;
 
   categoryNames: Record<number, string> = {
     [AccommodationCategory.Hotel]: 'Hotel',
     [AccommodationCategory.Camping]: 'Camping'
   };
+
+  ngOnInit(): void {
+    const id$ = this.route.paramMap.pipe(
+      map(params => Number(params.get('id'))),
+      shareReplay(1)
+    );
+
+    this.accommodation$ = id$.pipe(
+      switchMap(id => this.service.getAccommodation(id))
+    );
+
+    this.units$ = id$.pipe(
+      switchMap(id => this.unitsService.getUnitsByAccommodation(id)),
+      map(res => (res.data as Unit[]) || []),
+      shareReplay(1)
+    );
+
+this.groupedUnits$ = this.units$.pipe(
+  map(units => {
+    const groups = units.reduce((acc, unit) => {
+      const typeKey = (unit.type as string).replace('Units::', '') as UnitType;
+
+      if (!acc[typeKey]) {
+        acc[typeKey] = {
+          type: typeKey,
+          totalQuantity: 0,
+          minPrice: Number(unit.cost_person_per_night),
+          imageUrl: unit.image_url,
+          icon: typeKey.toLowerCase().includes('room') ? 'hotel' : 'terrain',
+          hasWifi: false,
+          hasElectricity: false,
+          waterStatus: 'no_water', 
+          foodOptions: new Set<string>()
+        };
+      }
+
+      acc[typeKey].totalQuantity += unit.quantity;
+      if (unit.wifi) acc[typeKey].hasWifi = true;
+      if (unit.electricity) acc[typeKey].hasElectricity = true;
+
+      const statusPriority: Record<string, number> = { 'drinkable': 2, 'undrinkable': 1, 'no_water': 0 };
+      const currentStatus = unit.water || 'no_water';
+      if (statusPriority[currentStatus] > statusPriority[acc[typeKey].waterStatus]) {
+        acc[typeKey].waterStatus = currentStatus;
+      }
+
+      if (unit.food_options) {
+        unit.food_options.forEach(opt => {
+          if (opt && opt !== 'None') acc[typeKey].foodOptions.add(opt);
+        });
+      }
+
+      const price = Number(unit.cost_person_per_night);
+      if (price < acc[typeKey].minPrice) acc[typeKey].minPrice = price;
+
+      return acc;
+    }, {} as Record<string, any>);
+
+    return Object.values(groups).map(group => ({
+      ...group,
+      foodOptions: Array.from(group.foodOptions)
+    }));
+  })
+);
+
+    this.priceRange$ = this.units$.pipe(
+      map(units => {
+        if (!units?.length) return null;
+        const prices = units.map(u => Number(u.cost_person_per_night));
+        return { 
+          min: Math.min(...prices), 
+          max: Math.max(...prices) 
+        };
+      })
+    );
+
+    this.images$ = this.units$.pipe(
+      map(units => {
+        const urls = units
+          .map(u => u.image_url)
+          .filter((url): url is string => !!url);
+        
+        return urls.length > 0 ? [...new Set(urls)] : ['assets/placeholder-image.png'];
+      }),
+      shareReplay(1)
+    );
+  }
+
+  scrollGallery(viewer: HTMLElement, direction: 'left' | 'right'): void {
+    const scrollAmount = viewer.clientWidth;
+    viewer.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  }
 
   formatTime(timeString: any): string {
     if (!timeString) return '';

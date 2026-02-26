@@ -3,14 +3,6 @@
 
   <form [formGroup]="festivalForm" (ngSubmit)="onSubmit()" class="festival-form">
     
-    @if (serverErrors().length > 0) {
-      <div class="form-error">
-        @for (error of serverErrors(); track $index) {
-          <div>{{ error }}</div>
-        }
-      </div>
-    }
-
     <div class="grid-row-2">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.NAME' | translate }}</mat-label>
@@ -39,7 +31,7 @@
     <div class="grid-row-2">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.START_DATE' | translate }}</mat-label>
-        <input matInput [matDatepicker]="startPicker" formControlName="start_at">
+        <input matInput [matDatepicker]="startPicker" formControlName="start_at" [min]="isEditMode() ? null : minDate">
         <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
         @if (festivalForm.get('start_at')?.hasError('required')) {
@@ -49,7 +41,7 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.END_DATE' | translate }}</mat-label>
-        <input matInput [matDatepicker]="endPicker" formControlName="end_at">
+        <input matInput [matDatepicker]="endPicker" formControlName="end_at" [min]="isEditMode() ? null : minDate">
         <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
         <mat-datepicker #endPicker></mat-datepicker>
         @if (festivalForm.get('end_at')?.hasError('required')) {
@@ -69,7 +61,7 @@
     <div class="grid-row-3">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FESTIVAL.DAILY_CAPACITY' | translate }}</mat-label>
-        <input matInput type="number" formControlName="daily_capacity">
+        <input matInput type="number" formControlName="daily_capacity" min="0" max="999999">
         @if (festivalForm.get('daily_capacity')?.hasError('required')) {
           <mat-error>{{ 'FESTIVAL.REQUIRE' | translate }}</mat-error>
         }

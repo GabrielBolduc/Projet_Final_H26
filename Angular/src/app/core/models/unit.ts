@@ -15,7 +15,7 @@ export interface Unit {
   type: UnitType;
   quantity: number;
   wifi: boolean;
-  water: number;
+  water: string;
   electricity: boolean;
   parking_cost: number;
   food_options: FoodOption[];

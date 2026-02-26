@@ -139,6 +139,13 @@
   color: var(--mat-sys-primary); 
 }
 
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
 @media screen and (max-width: 850px) {
   .admin-page { padding: 15px; }
   .admin-top-bar { flex-direction: column-reverse; gap: 20px; margin-bottom: 30px; }

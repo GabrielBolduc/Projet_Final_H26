@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, inject, effect } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UnitsService } from '@core/services/units.service';
+import { AccommodationsService } from '@core/services/accommodations.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -27,20 +28,22 @@ export class UnitsForm implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private service = inject(UnitsService);
+  private accService = inject(AccommodationsService);
 
   form: FormGroup = this.fb.group({
     type: ['', Validators.required],
-    cost_person_per_night: [0, [Validators.required, Validators.min(0)]],
-    quantity: [1, [Validators.required, Validators.min(1)]],
+    cost_person_per_night: [0, [Validators.required, Validators.min(0), Validators.max(9999)]],
+    quantity: [1, [Validators.required, Validators.min(1), Validators.max(255)]], // MySQL TinyInt limit
     wifi: [false],
-    water: [0],
+    water: ['no_water', Validators.required],
     electricity: [false],
-    parking_cost: [0, [Validators.required, Validators.min(0)]],
-    food_options: [[]]
+    parking_cost: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
+    food_options: [[], Validators.required]
   });
 
   unitId = signal<number | null>(null);
   accommodationId = signal<number | null>(null);
+  parentCategory = signal<number | string | null>(null);
   isEditMode = signal(false);
   isLoading = signal(false);
   isTerrain = signal(false);
@@ -61,12 +64,17 @@ export class UnitsForm implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     const isEdit = this.route.snapshot.queryParamMap.get('edit') === 'true';
 
-    if (id && isEdit) {
-      this.isEditMode.set(true);
-      this.unitId.set(+id);
-      this.loadUnit(+id);
-    } else if (id) {
-      this.accommodationId.set(+id);
+    if (id !== null) {
+      const numericId = Number(id);
+
+      if (isEdit) {
+        this.isEditMode.set(true);
+        this.unitId.set(numericId);
+        this.loadUnit(numericId);
+      } else {
+        this.accommodationId.set(numericId);
+        this.fetchParentCategory(numericId);
+      }
     }
   }
 
@@ -77,25 +85,65 @@ export class UnitsForm implements OnInit {
     }
   }
 
+  private fetchParentCategory(accId: number) {
+    this.accService.getAccommodation(accId).subscribe(acc => {
+      this.parentCategory.set(acc.category);
+    });
+  }
+
   private loadUnit(id: number) {
     this.isLoading.set(true);
     this.service.getUnit(id).subscribe({
       next: (unit) => {
-        this.form.patchValue(unit);
+        if (!unit) {
+          this.serverErrors.set(['Unit data not found']);
+          this.isLoading.set(false);
+          return;
+        }
+
+        const rawType = unit.type || '';
+        const cleanType = rawType.split('::').pop() || rawType;
+        
+        this.form.patchValue({
+          ...unit,
+          type: cleanType
+        });
+
         this.accommodationId.set(unit.accommodation_id);
+        
+        this.fetchParentCategory(unit.accommodation_id);
         this.isLoading.set(false);
       },
       error: (err) => {
-        this.serverErrors.set([err.message]);
+        this.serverErrors.set([err.message || 'Failed to load unit']);
         this.isLoading.set(false);
       }
     });
   }
 
+  private preparePayload() {
+    const rawValue = this.form.value;
+    let food = rawValue.food_options || [];
+
+    if (food.length > 1 && food.includes('None')) {
+      food = food.filter((f: string) => f !== 'None');
+    }
+
+    if (food.length === 0) food = ['None'];
+
+    return {
+      ...rawValue,
+      type: `Units::${rawValue.type}`,
+      food_options: food
+    };
+  }
+
   onSubmit() {
     if (this.form.valid) {
       this.isLoading.set(true);
-      const payload = this.form.value;
+      this.serverErrors.set([]);
+      
+      const payload = this.preparePayload();
       const file = this.selectedFile();
 
       if (!this.isEditMode() && !file) {
@@ -111,7 +159,7 @@ export class UnitsForm implements OnInit {
       request.subscribe({
         next: () => {
           this.isLoading.set(false);
-          this.router.navigate(['/accommodations', this.accommodationId()]);
+          this.router.navigate(['/units', this.accommodationId()]);
         },
         error: (err) => {
           this.serverErrors.set([err.message]);
@@ -127,7 +175,7 @@ export class UnitsForm implements OnInit {
       this.service.deleteUnit(this.unitId()!).subscribe({
         next: () => {
           this.isLoading.set(false);
-          this.router.navigate(['/accommodations', this.accommodationId()]);
+          this.router.navigate(['/units', this.accommodationId()]);
         },
         error: (err) => {
           this.serverErrors.set([err.message]);

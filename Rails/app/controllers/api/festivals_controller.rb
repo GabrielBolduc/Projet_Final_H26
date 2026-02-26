@@ -3,14 +3,17 @@ class Api::FestivalsController < ApiController
 
   skip_before_action :authenticate_user!, only: [ :index, :show, :current ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
-  
   before_action :set_festival, only: [ :show, :update, :destroy ]
 
   def index
     festivals = Festival.recent
 
     if params[:status].present?
-      festivals = festivals.where(status: params[:status])
+      festivals = festivals.filter_by_status(params[:status])
+    end
+
+    unless current_user&.is_a?(Admin)
+      festivals = festivals.publicly_visible
     end
 
     render json: {
@@ -20,6 +23,12 @@ class Api::FestivalsController < ApiController
   end
 
   def show
+    unless current_user&.is_a?(Admin) || @festival.ongoing?
+      return render json: {
+        status: "error",
+        message: "festival non public"
+      }, status: :ok
+    end
     render json: {
       status: "success",
       data: @festival.as_json
@@ -110,14 +119,5 @@ class Api::FestivalsController < ApiController
       :daily_capacity, :satisfaction, :other_income, :other_expense,
       :latitude, :longitude, :comment
     )
-  end
-
-  def require_admin!
-    unless current_user&.is_a?(Admin)
-      render json: {
-        status: "error",
-        message: "Accès refusé : Privilèges administrateur requis."
-      }, status: :ok
-    end
   end
 end

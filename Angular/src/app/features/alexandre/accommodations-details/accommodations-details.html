@@ -1,20 +1,30 @@
 <div class="details-container" *ngIf="accommodation$ | async as acc; else loading">
   
-<button mat-button class="back-btn" 
-        [routerLink]="['/accommodations']" 
-        [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
-  <mat-icon>arrow_back</mat-icon> 
-  {{ 'ACCOMMODATIONS.DETAILS.BACK_TO' | translate }} 
-  {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') 
-      ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) 
-      : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}
-</button>
+  <div class="header-row">
+    <button mat-button class="back-btn" 
+            [routerLink]="['/accommodations']" 
+            [queryParams]="{ category: ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? 'hotel' : 'camping' }">
+      <mat-icon>arrow_back</mat-icon> 
+      {{ 'ACCOMMODATIONS.DETAILS.BACK_TO' | translate }} 
+      {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') 
+          ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) 
+          : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}
+    </button>
+
+    <button *ngIf="isAdmin" mat-button class="back-btn units-header-btn" 
+            [routerLink]="['/units', acc.id]">
+      <mat-icon>meeting_room</mat-icon> 
+      {{ 'ACCOMMODATIONS.DETAILS.MANAGE_UNITS' | translate }}
+    </button>
+  </div>
 
   <mat-card class="detail-card horizontal-layout">
     <div class="info-section">
       <mat-card-content class="content-padding">
         <div class="badge-row">
-          <span class="category-tag">{{ acc.category === 1 ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}</span>
+          <span class="category-tag">
+            {{ ($any(acc.category) === Category.Hotel || $any(acc.category) === 'hotel') ? ('ACCOMMODATIONS.DETAILS.HOTEL' | translate) : ('ACCOMMODATIONS.DETAILS.CAMPING' | translate) }}
+          </span>
         </div>
         
         <h1 class="acc-name">{{ acc.name }}</h1>
@@ -37,52 +47,124 @@
                 <div class="stat-value">{{ formatTime(acc.time_car) }}</div>
             </div>
 
-          <div class="stat-box" [class.active]="acc.shuttle">
-            <mat-icon>directions_bus</mat-icon>
-            <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.SHUTTLE' | translate }}</div>
-            <div class="stat-value">{{ acc.shuttle ? ('ACCOMMODATIONS.DETAILS.YES' | translate) : ('ACCOMMODATIONS.DETAILS.NO' | translate) }}</div>
-          </div>
+            <div class="stat-box">
+              <mat-icon>directions_bus</mat-icon>
+              <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.SHUTTLE' | translate }}</div>
+              <div class="stat-value">{{ acc.shuttle ? ('ACCOMMODATIONS.DETAILS.YES' | translate) : ('ACCOMMODATIONS.DETAILS.NO' | translate) }}</div>
+            </div>
 
-          <div class="stat-box" *ngIf="acc.commission > 0">
-            <mat-icon>payments</mat-icon>
-            <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.FEE' | translate }}</div>
-            <div class="stat-value">{{ acc.commission }}%</div>
-          </div>
+            <div class="stat-box" *ngIf="isAdmin && acc.commission > 0">
+                <mat-icon>payments</mat-icon>
+                <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.FEE' | translate }}</div>
+                <div class="stat-value">{{ acc.commission }}%</div>
+            </div>
+
+            <div class="stat-box" *ngIf="!isAdmin && (priceRange$ | async) as range">
+                <mat-icon>sell</mat-icon>
+                <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.PRICE_FROM' | translate }}</div>
+                <div class="stat-value">
+                    {{ range.min | currency:'EUR':'symbol':'1.0-0' }}
+                    <span *ngIf="range.max > range.min"> - {{ range.max | currency:'EUR':'symbol':'1.0-0' }}</span>
+                </div>
+            </div>
         </div>
 
         <mat-card-actions class="action-footer">
-        
-        <div *ngIf="isAdmin; else userView" class="admin-actions">
-            <button mat-button 
-                    class="book-btn edit-btn" 
-                    [routerLink]="['/accommodations-form', acc.id]">
-            <mat-icon>edit</mat-icon> <span>{{ 'ACCOMMODATIONS.DETAILS.EDIT' | translate }}</span>
-            </button>
-        </div>
+            <div *ngIf="isAdmin; else userView" class="admin-actions">
+                <button mat-button class="book-btn edit-btn" [routerLink]="['/accommodations-form', acc.id]">
+                    <mat-icon>edit</mat-icon> <span>{{ 'ACCOMMODATIONS.DETAILS.EDIT' | translate }}</span>
+                </button>
+            </div>
 
-        <ng-template #userView>
-            <button mat-flat-button 
-                    color="primary" 
-                    class="book-btn" 
-                    [routerLink]="['/reservations-form']" 
-                    [queryParams]="{ accommodationId: acc.id }">
-            <span>{{ 'ACCOMMODATIONS.DETAILS.BOOK' | translate }}</span>
-            </button>
-        </ng-template>
-
+            <ng-template #userView>
+                <button mat-button color="primary" class="book-btn" [routerLink]="['/reservations-form']" [queryParams]="{ accommodationId: acc.id }">
+                    <span>{{ 'ACCOMMODATIONS.DETAILS.BOOK' | translate }}</span>
+                </button>
+            </ng-template>
         </mat-card-actions>
       </mat-card-content>
     </div>
 
     <div class="image-section">
-      <img [src]="'assets/placeholder-image.png'" [alt]="acc.name" class="side-image">
-    </div>
+      <div class="gallery-wrapper" *ngIf="images$ | async as images">
+        <ng-container *ngIf="images.length > 1">
+          <button mat-icon-button class="nav-btn prev-btn" (click)="scrollGallery(viewer, 'left')">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+          <button mat-icon-button class="nav-btn next-btn" (click)="scrollGallery(viewer, 'right')">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </ng-container>
 
+        <div class="gallery-viewer" #viewer>
+          <div class="gallery-item" *ngFor="let img of images">
+            <img [src]="img" [alt]="acc.name" class="side-image">
+          </div>
+        </div>
+
+        <div class="gallery-dots" *ngIf="images.length > 1">
+          <span class="dot" *ngFor="let img of images"></span>
+        </div>
+      </div>
+    </div>
   </mat-card>
+
+  <div class="units-listing" *ngIf="groupedUnits$ | async as groups">
+    <h2 class="acc-name" style="font-size: 1.5rem; margin-top: 40px;">
+      {{ 'UNITS.TYPES.ROOMS_HEADER' | translate }} & {{ 'UNITS.TYPES.TERRAINS_HEADER' | translate }}
+    </h2>
+    
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));">
+      <mat-card class="stat-box" *ngFor="let group of groups" style="align-items: flex-start; padding: 20px;">
+        
+        <div class="info-row" style="margin-bottom: 10px;">
+          <mat-icon>{{ group.icon }}</mat-icon>
+          <span class="stat-value">{{ 'UNITS.TYPES.' + group.type | translate }}</span>
+        </div>
+
+        <div class="info-row" style="font-size: 0.8rem; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+          <div *ngIf="group.hasWifi" style="display: flex; align-items: center;">
+            <mat-icon style="font-size: 18px;">wifi</mat-icon>
+            <span>{{ 'UNITS.WIFI' | translate }}</span>
+          </div>
+
+          <ng-container *ngIf="$any(acc.category) === Category.Camping || $any(acc.category) === 'camping'">
+            <div *ngIf="group.waterStatus && group.waterStatus !== 'no_water'" 
+                 style="display: flex; align-items: center; color: #1e88e5;">
+              <mat-icon style="font-size: 18px;">{{ group.waterStatus === 'drinkable' ? 'water_drop' : 'opacity' }}</mat-icon>
+              <span class="stat-label" style="font-size: 0.6rem;">
+                {{ 'UNITS.WATER_STATUS.' + group.waterStatus.toUpperCase() | translate }}
+              </span>
+            </div>
+
+            <div *ngIf="group.hasElectricity" style="display: flex; align-items: center;">
+              <mat-icon style="font-size: 18px;">bolt</mat-icon>
+              <span>{{ 'UNITS.ELECTRICITY' | translate }}</span>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="info-row" style="flex-wrap: wrap; gap: 5px;">
+          <span class="category-tag" *ngFor="let opt of group.foodOptions" 
+                style="font-size: 0.6rem; background: #eee; color: #444; border: 1px solid #ccc;">
+            {{ 'UNITS.FOOD_OPTIONS_LABELS.' + opt | translate }}
+          </span>
+        </div>
+
+        <div style="margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: baseline; padding-top: 10px; border-top: 1px solid #eee;">
+          <span class="stat-label">{{ group.totalQuantity }} {{ 'UNITS.UNITS' | translate }}</span>
+          <span class="stat-value" style="color: var(--mat-sys-primary);">
+            {{ group.minPrice | currency:'EUR':'symbol':'1.0-0' }}
+          </span>
+        </div>
+      </mat-card>
+    </div>
+  </div>
 </div>
 
 <ng-template #loading>
   <div class="main-display">
+    <mat-spinner diameter="40"></mat-spinner>
     <p>{{ 'ACCOMMODATIONS.DETAILS.LOADING' | translate }}</p>
   </div>
 </ng-template>

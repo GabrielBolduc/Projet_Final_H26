@@ -3,3 +3,17 @@
     text-align: center;
     color: var(--mat-sys-primary);
 }
+
+.title .subtitle {
+    color: #666;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    font-weight: normal;
+}
+
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}

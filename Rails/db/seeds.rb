@@ -9,11 +9,6 @@
 #   end
 ActiveRecord::Base.connection.execute("SET FOREIGN_KEY_CHECKS = 0;")
 
-# Exécute les jobs de manière synchrone pendant le seed afin d'éviter
-# les écritures asynchrones d'ActiveStorage qui entrent en conflit
-# avec les validations modèle et les vérifications de clés étrangères.
-ActiveJob::Base.queue_adapter = :inline
-
 begin
   Affectation.delete_all
   Reservation.delete_all
@@ -107,13 +102,13 @@ f = Festival.create!(
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
-  comment: "Bon festival"
+  comment: "Un gros festival"
 )
 
 f1 = Festival.create!(
-  name: "Festify 2025",
-  start_at: Date.new(2025, 7, 10),
-  end_at: Date.new(2025, 7, 12),
+  name: "Festify 2027",
+  start_at: Date.new(2027, 7, 10),
+  end_at: Date.new(2027, 7, 12),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
@@ -126,9 +121,9 @@ f1 = Festival.create!(
 )
 
 f2 = Festival.create!(
-  name: "Festify 2024",
-  start_at: Date.new(2024, 7, 15),
-  end_at: Date.new(2024, 7, 20),
+  name: "Festify 2025",
+  start_at: Date.new(2026, 9, 15),
+  end_at: Date.new(2026, 9, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
@@ -185,7 +180,7 @@ artist3 = Artist.create!(
 # perf pour f (ongoing)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "Le premier show",
   price: 55.00,
   start_at: f.start_at.to_time.change(hour: 20, min: 0),
   end_at: f.start_at.to_time.change(hour: 22, min: 0),
@@ -219,7 +214,7 @@ Performance.create!(
 # perf pour f1 (draft)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "DRAFT - Bon show",
   price: 55.00,
   start_at: f1.start_at.to_time.change(hour: 20, min: 0),
   end_at: f1.start_at.to_time.change(hour: 22, min: 0),
@@ -230,7 +225,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Second show",
-  description: "Good show",
+  description: "DRAFT - Good show",
   price: 45.00,
   start_at: f1.start_at.to_time.change(hour: 21, min: 0),
   end_at: f1.start_at.to_time.change(hour: 23, min: 59),
@@ -241,7 +236,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Last show",
-  description: "Good show",
+  description: "DRAFT - Good show",
   price: 60.00,
   start_at: (f1.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f1.start_at + 1.day).to_time.change(hour: 20, min: 30),
@@ -253,7 +248,7 @@ Performance.create!(
 # perf pour f2 (completed)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "un show de musique",
   price: 55.00,
   start_at: f2.start_at.to_time.change(hour: 20, min: 0),
   end_at: f2.start_at.to_time.change(hour: 22, min: 0),
@@ -264,7 +259,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Second show",
-  description: "Good show",
+  description: "un show",
   price: 45.00,
   start_at: f2.start_at.to_time.change(hour: 21, min: 0),
   end_at: f2.start_at.to_time.change(hour: 23, min: 59),
@@ -275,7 +270,7 @@ Performance.create!(
 
 Performance.create!(
   title: "Last show",
-  description: "Good show",
+  description: "not a good show",
   price: 60.00,
   start_at: (f2.start_at + 1.day).to_time.change(hour: 19, min: 0),
   end_at: (f2.start_at + 1.day).to_time.change(hour: 20, min: 30),
@@ -284,7 +279,7 @@ Performance.create!(
   artist: artist2
 )
 
-f2.update!(status: "completed")
+f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 15),)
 
 # Alexandre
 acc1 = Accommodation.create!(
@@ -322,6 +317,50 @@ unit1 = Units::SimpleRoom.new(
   electricity: true,
   parking_cost: 0.00,
   food_options: "Room service,Restaurant"
+)
+
+unit_hotel_mid = Units::DoubleRoom.new(
+  accommodation: acc1,
+  cost_person_per_night: 85.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+unit_hotel_high = Units::FamilyRoom.new(
+  accommodation: acc1,
+  cost_person_per_night: 150.00,
+  quantity: 5,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_camp_low = Units::SmallTerrain.new(
+  accommodation: acc2,
+  cost_person_per_night: 25.00,
+  quantity: 30,
+  wifi: false,
+  water: :no_water,
+  electricity: false,
+  parking_cost: 5.00,
+  food_options: "None"
+)
+
+unit_camp_high = Units::DeluxeTerrain.new(
+  accommodation: acc2,
+  cost_person_per_night: 75.00,
+  quantity: 10,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Canteen"
 )
 
 
@@ -448,7 +487,11 @@ images = {
   p_daily_sold_out => 'daily-ticket.webp',
   p_evening_last_spots => 'evening-ticket.jpg',
   p_completed => 'general-ticket.webp',
-  unit1 => 'placeholder-image.jpg'
+  unit1 => 'hotel-image.jpg',
+  unit_hotel_mid => 'hotel-mid.jpg',
+  unit_hotel_high => 'hotel-high.jpg',
+  unit_camp_low => 'camping-cheap.jpg',
+  unit_camp_high => 'oubliette.jpg'
 }
 
 images.each do |package, filename|
@@ -463,18 +506,18 @@ images.each do |package, filename|
       filename: filename,
       content_type: content_type 
     )
-  else
-    puts "Image non trouvée : #{filename}"
   end
 end
 
 unit1.save!
+unit_camp_high.save!
+unit_camp_low.save!
+unit_hotel_high.save!
+unit_hotel_mid.save!
 
-puts "\nTicketing seed summary (ongoing festival):"
 [p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|
   sold = pkg.tickets.where(refunded: false).count
   refunded = pkg.tickets.where(refunded: true).count
-  puts "- #{pkg.title}: sold=#{sold}/#{pkg.quota}, refunded=#{refunded}"
 end
 
 

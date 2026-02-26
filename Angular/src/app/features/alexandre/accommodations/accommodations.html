@@ -32,13 +32,13 @@
 
   <div class="accommodations-grid">
     <a *ngFor="let acc of accommodations$ | async" 
-       [routerLink]="['/accommodations-details', acc.id]"
-       class="card-link">
+      [routerLink]="['/accommodations-details', acc.id]"
+      class="card-link">
       
       <mat-card class="fest-card">
-        <img [src]="'assets/placeholder-image.png'" 
-             [alt]="acc.name" 
-             class="nav-image">
+        <img [src]="acc.displayImage" 
+            [alt]="acc.name" 
+            class="nav-image">
         
         <div class="nav-label">
           <span class="title">{{ acc.name }}</span>

@@ -7,15 +7,15 @@ class Api::PerformancesController < ApiController
   
 
   def index
-    # On récupère les performances en incluant les relations pour éviter les requêtes N+1
-    performances = Performance.chronological.includes(:artist, :stage, :festival)
+    performances = Performance.with_details.chronological
     
-    # OPTIONNEL MAIS RECOMMANDÉ : Si l'URL contient un festival_id, on filtre côté base de données
     if params[:festival_id].present?
-      performances = performances.where(festival_id: params[:festival_id])
+      performances = performances.for_festival(params[:festival_id])
     end
 
-    # Note : J'ai retiré le '.active' car il filtrait sûrement les anciennes performances.
+    unless current_user&.is_a?(Admin)
+      performances = performances.publicly_visible
+    end
     
     render json: {
       status: "success",
@@ -24,6 +24,13 @@ class Api::PerformancesController < ApiController
   end
 
   def show
+    unless current_user&.is_a?(Admin) || @performance.festival.ongoing?
+      return render json: {
+        status: "error",
+        message: "Performance non publique"
+      }, status: :ok
+    end
+
     render json: {
       status: "success",
       data: @performance.as_json(include: [ :artist, :stage, :festival ])
@@ -63,18 +70,24 @@ class Api::PerformancesController < ApiController
   end
 
   def destroy
-    @performance.destroy
-    render json: {
+    if @performance.destroy
+      render json: {
       status: "success",
-      message: "Performance supprimée avec succès.",
+      message: "Performance supprimée avec succes",
       data: nil
     }, status: :ok
+    else
+      render json: {
+        status: "error",
+        message: "Impossible de supprimer performance"
+      }, status: :ok
+    end
   end
 
   private
 
   def set_performance
-    @performance = Performance.includes(:artist, :stage, :festival).find(params[:id])
+    @performance = Performance.with_details.find(params[:id])
   end
 
   def not_found_response
@@ -89,14 +102,5 @@ class Api::PerformancesController < ApiController
       :title, :description, :price, :start_at, :end_at,
       :artist_id, :stage_id, :festival_id
     )
-  end
-
-  def require_admin!
-    unless current_user&.is_a?(Admin)
-      render json: {
-        status: "error",
-        message: "Accès refusé : Privilèges administrateur requis."
-      }, status: :ok
-    end
   end
 end

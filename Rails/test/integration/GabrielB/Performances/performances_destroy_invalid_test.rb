@@ -40,4 +40,23 @@ class PerformancesDestroyInvalidTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
   end
+
+  test "should fail to delete if festival is completed" do
+    sign_in @admin
+    
+    @performance.festival.update!(status: "completed")
+
+    # modif ou non
+    assert_no_difference("Performance.count") do
+      delete api_performance_url(@performance), as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_equal "Impossible de supprimer performance", json["message"]
+  end
 end

@@ -9,7 +9,6 @@
   },
   "PUBLIC": {
     "PROGRAMMATION": "Schedule",
-    "LOADING": "Loading schedule...",
     "NO_FESTIVAL_TITLE": "No ongoing festival",
     "NO_FESTIVAL_DESC": "There is currently no active festival. Please check back later!",
     "NO_PERFORMANCES": "No performances are currently scheduled for this festival."
@@ -49,7 +48,7 @@
   },
   "FESTIVAL": {
     "ADMINISTRATION": "Administration",
-    "HELLO": "Hello!",
+    "HELLO": "Hello",
     "CURRENT_FESTIVAL": "Current Festival",
     "DRAFTS": "Upcoming Festivals",
     "ARCHIVE": "Festival Archives",
@@ -122,7 +121,7 @@
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "New Package",
-    "TITLE": "Packages management",
+    "TITLE": "Packages Management",
     "SEARCH_TITLE": "Title",
     "SORT_BY": "Sort by start date",
     "SORT_ASC": "Oldest first",
@@ -134,6 +133,8 @@
     "ACTIVE_TITLE": "Current Festival Packages",
     "ARCHIVED_TITLE": "Archived Packages",
     "ARCHIVED_BADGE": "Archived",
+    "EMPTY_TITLE": "No packages yet",
+    "EMPTY_DESC": "Create your first package using the button above.",
     "EMPTY_ACTIVE": "No active packages match the current filters.",
     "EMPTY_ARCHIVED": "No archived packages match the current filters.",
     "DELETE_DIALOG_TITLE": "Delete this package?",
@@ -141,7 +142,8 @@
     "CANCEL": "Cancel",
     "DELETE": "Delete",
     "DELETE_CONFIRM": "Delete {{title}}?",
-    "DELETE_ERROR": "Unable to delete this package."
+    "DELETE_ERROR": "Unable to delete this package.",
+    "EMPTY": "No package available for the current festival"
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Ticketing",
@@ -274,7 +276,8 @@
       "NO": "NO",
       "EDIT": "EDIT ACCOMMODATION",
       "BOOK": "BOOK THIS ACCOMMODATION",
-      "LOADING": "Loading details..."
+      "LOADING": "Loading details...",
+      "MANAGE_UNITS": "Manage Units"
     },
     "FORM": {
       "TITLE_EDIT": "Edit Accommodation",
@@ -321,6 +324,11 @@
     "PARKING": "Parking Cost",
     "FOOD": "Food Options",
     "UPLOAD_IMAGE": "Upload Unit Image",
+    "TITLE": "Unit Management",
+    "NEW_UNIT": "Add New Unit",
+    "FEATURES": "Features",
+    "AVAILABLE_QTY": "Available Quantity",
+    "UNITS": "Units",
     "TYPES": {
       "ROOMS_HEADER": "Guest Rooms",
       "TERRAINS_HEADER": "Camping Terrains",
@@ -335,6 +343,21 @@
       "NONE": "No Water",
       "UNDRINKABLE": "Undrinkable",
       "DRINKABLE": "Drinkable"
+    },
+    "FOOD_OPTIONS_LABELS": {
+      "None": "No food service",
+      "Canteen": "Canteen",
+      "Room service": "Room Service",
+      "Restaurant": "Restaurant"
+    },
+    "FORM": {
+      "REQUIRED": "This field is required",
+      "MIN_VALUE": "Value must be at least 0",
+      "IMAGE_REQUIRED": "An image is mandatory for new units",
+      "HOTEL_NO_TERRAIN": "A hotel cannot have camping terrains.",
+      "CAMPING_NO_ROOM": "A camping site cannot have rooms.",
+      "MAX_PARKING": "Parking cost cannot be equal or above to $100",
+      "MAX_COST": "Unit cost cannot be equal or above $1000"
     }
   },
   "COMMON": {

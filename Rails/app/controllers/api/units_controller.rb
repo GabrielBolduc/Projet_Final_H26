@@ -1,15 +1,24 @@
 class Api::UnitsController < ApiController
-    before_action :set_unit, only: [:update, :destroy]
-    before_action :require_admin!
+    before_action :set_unit, only: [:show, :update, :destroy] 
+    before_action :require_admin!, except: [:index, :show] 
 
     def index
-        @accommodation = Accommodation.find(params[:accommodation_id])
-        @units = @accommodation.units
-        render json: { status: "success", data: @units }
+        @accommodation = Accommodation.find_by(id: params[:accommodation_id] || params[:id])
+        return render_logic_error("Accommodation not found") unless @accommodation
+
+        @units = @accommodation.units.with_attached_image
+        
+        render json: { 
+            status: "success", 
+            data: @units.map { |u| format_unit(u) } 
+        }
     end
 
     def show
-        render json: { status: "success", data: @unit }, status: :ok
+        render json: { 
+            status: "success", 
+            data: @unit.as_json.merge(image_url: @unit.image.attached? ? url_for(@unit.image) : nil) 
+        }, status: :ok
     end
 
     def create
@@ -19,17 +28,17 @@ class Api::UnitsController < ApiController
         @unit = @accommodation.units.new(unit_params)
 
         if @unit.save
-        render json: { status: "success", data: @unit }, status: :ok
+            render json: { status: "success", data: @unit }, status: :ok
         else
-        render_logic_error(@unit.errors.full_messages)
+            render_logic_error(@unit.errors.full_messages)
         end
     end
 
     def update
         if @unit.update(unit_params)
-        render json: { status: "success", data: @unit }, status: :ok
+            render json: { status: "success", data: @unit }, status: :ok
         else
-        render_logic_error(@unit.errors.full_messages)
+            render_logic_error(@unit.errors.full_messages)
         end
     end
 
@@ -61,5 +70,11 @@ class Api::UnitsController < ApiController
 
     def render_logic_error(message)
         render json: { status: "error", message: message }, status: :ok
+    end
+
+    def format_unit(unit)
+        unit.as_json.merge({
+            image_url: unit.image.attached? ? url_for(unit.image) : nil
+        })
     end
 end

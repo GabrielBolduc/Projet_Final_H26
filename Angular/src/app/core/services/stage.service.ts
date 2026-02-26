@@ -2,11 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Stage } from '../models/stage';
-interface ApiResponse<T> {
-  status: 'success' | 'error'
-  data: T
-  message?: string
-}
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({providedIn: 'root'})
 export class StageService {

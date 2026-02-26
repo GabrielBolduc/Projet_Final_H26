@@ -1,5 +1,5 @@
 one:
-  festival: f1
+  festival: one
   name: "Grand Hotel"
   category: 1 
   address: "123 Jazz St"
@@ -11,7 +11,7 @@ one:
   commission: 15.00
 
 two:
-  festival: f2
+  festival: two
   name: "Forest Camping"
   category: 0 
   address: "North Woods"

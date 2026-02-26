@@ -7,29 +7,33 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api, defaults: { format: :json } do
-    resources :festivals, only: [:index, :show]
+    
+    resources :festivals, only: [:index, :show, :create, :update, :destroy] do
+      collection do
+        get 'current'
+      end
+    end
+
     resources :tasks do
       collection do
         get 'get_reusable', to: 'tasks#get_reusable'
       end
     end
-    resources :festivals do
-      collection do
-        get 'current'
-      end
-    end
-     
+      
     resources :artists, only: [:index]
     resources :stages, only: [:index]
     resources :performances
     resources :reservations
     resources :orders, only: [ :index, :show, :create ]
     resources :tickets, only: [ :index, :show, :update, :destroy ]
+    
     resources :accommodations do
       resources :units, shallow: true
     end
+    
     resources :packages
-     resources :affectations do
+    
+    resources :affectations do
       collection do
         get 'get_by_user/:user_id',
             to: 'affectations#get_by_user',

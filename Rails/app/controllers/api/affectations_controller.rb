@@ -72,6 +72,7 @@ class Api::AffectationsController < ApiController
                 },
                 user: {
                     only: [ :id, :name, :email,:phone_number, :ability,:type ]
+                }
             }
         }
     end

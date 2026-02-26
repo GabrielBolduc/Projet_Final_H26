@@ -66,12 +66,12 @@ export class ListAffectationsComponent {
 
     this.affectationService.deleteAffectation(id).subscribe(data =>{ 
       console.log('affectation reçue : ', data)
-    
-    });
-    this.affectationService.listAffectationsByTask(this.taskId!).subscribe(data => { 
-      console.log('Affectations reçues : ', data);
-      this.affectations.set(data);
-    });
+      this.affectationService.listAffectationsByTask(this.taskId!).subscribe(data => { 
+        console.log('Affectations reçues : ', data);
+        this.affectations.set(data);
+      });
 
+    });
+    
   }
 }

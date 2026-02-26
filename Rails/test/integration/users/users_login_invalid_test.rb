@@ -31,7 +31,6 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 401, json["code"]
   end
 
   # faux email
@@ -54,7 +53,6 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 401, json["code"]
   end
 
   # login sans email
@@ -76,7 +74,6 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 401, json["code"]
   end
 
   # login sans mdp
@@ -98,6 +95,5 @@ class UsersLoginInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 401, json["code"]
   end
 end

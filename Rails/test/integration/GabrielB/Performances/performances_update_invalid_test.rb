@@ -263,4 +263,23 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
   end
+
+  test "should fail to update if festival is completed" do
+    sign_in @admin
+    @performance.festival.update!(status: "completed")
+
+    # modif ou non
+    assert_no_difference("Performance.count") do
+      put api_performance_url(@performance), params: { performance: { title: "Nouveau titre" } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_equal "Échec de la mise à jour", json["message"]
+    assert_not_nil json["errors"]
+  end
 end

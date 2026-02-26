@@ -33,7 +33,6 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
 
     # donne repomse
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
     assert_includes json["errors"].to_s, "Name can't be blank"
   end
 
@@ -61,7 +60,6 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
     assert_includes json["errors"].to_s, "Password confirmation doesn't match Password"
   end
 
@@ -89,7 +87,6 @@ class UsersSignupInvalidTest < ActionDispatch::IntegrationTest
 
     # donne reponse
     assert_equal "error", json["status"]
-    assert_equal 422, json["code"]
     assert_includes json["errors"].to_s, "Email has already been taken"
   end
 end

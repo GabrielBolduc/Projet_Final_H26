@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   festival = signal<Festival | null>(null);
-  allFestivals = signal<Festival[]>([]); // <-- Signal pour la liste du dropdown
+  allFestivals = signal<Festival[]>([]);
 
   isReadOnly = computed(() => this.festival()?.status === 'completed');
   
@@ -72,11 +72,8 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
 
   ngOnInit(): void {
-    // 1. On charge la liste de tous les festivals pour alimenter le menu déroulant
     this.loadAllFestivals();
 
-    // 2. Au lieu d'un simple "snapshot", on s'abonne aux changements d'URL
-    // Ainsi, quand le dropdown change l'URL, les données se mettent à jour automatiquement !
     this.route.paramMap.subscribe(params => {
       const idParam = params.get('id');
       if (idParam) {
@@ -101,9 +98,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // MÉTHODE DÉCLENCHÉE PAR LE DROPDOWN
   onFestivalChange(newFestivalId: number): void {
-    // Navigue vers la nouvelle URL, ce qui redéclenchera l'abonnement dans ngOnInit
     this.router.navigate(['/admin/festivals', newFestivalId, 'dashboard']);
   }
 

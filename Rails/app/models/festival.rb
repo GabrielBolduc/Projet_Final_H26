@@ -12,19 +12,19 @@ class Festival < ApplicationRecord
   before_destroy :prevent_destroy_if_ongoing
 
   validates :name, presence: true, length: { maximum: 100 }
-  validates :start_at, :end_at, :status, :address, presence: true
+  validates :start_at, :end_at, :status, :address, :latitude, :longitude, presence: true
 
   validates :daily_capacity, presence: true, numericality: { only_integer: true, greater_than: 0 }
-
   validates :satisfaction, numericality: {  only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5, allow_nil: true }
-
   validates :other_income, :other_expense, numericality: { allow_nil: true }
+
+  validates :latitude, numericality: { greater_than_or_equal_to: -90, less_than_or_equal_to: 90 }
+  validates :longitude, numericality: { greater_than_or_equal_to: -180, less_than_or_equal_to: 180 }
 
   validate :end_at_after_start_at
   validate :only_one_ongoing_festival
 
   composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
-
 
   private
 

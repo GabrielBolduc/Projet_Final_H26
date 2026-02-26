@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core'; // <-- Ajout de TranslateService
+import { TranslateModule, TranslateService } from '@ngx-translate/core'; 
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'; 
 import { FestivalService } from '../../../core/services/festival.service';
@@ -42,7 +42,7 @@ export class FestivalFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private errorHandler = inject(ErrorHandlerService);
   private snackBar = inject(MatSnackBar);
-  private translate = inject(TranslateService); // <-- Injection du service de traduction
+  private translate = inject(TranslateService);
 
   minDate = new Date();
 
@@ -62,7 +62,6 @@ export class FestivalFormComponent implements OnInit {
   serverErrors = signal<string[]>([]);
   festivalId: number | null = null;
 
-  // Transformé en Getter pour que la traduction se fasse de façon dynamique
   get statusOptions() {
     return [
       { value: 'draft', label: this.translate.instant('FESTIVAL.DRAFT') },

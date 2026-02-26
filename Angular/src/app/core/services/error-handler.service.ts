@@ -5,35 +5,31 @@ import { TranslateService } from '@ngx-translate/core';
 export class ErrorHandlerService {
   private translate = inject(TranslateService);
 
-  parseRailsErrors(errEnvelope: any): string[] {
+  parseRailsErrors(response: any): string[] {
     
-    if (errEnvelope && errEnvelope.code === 422) {
-      const railsErrors = errEnvelope.errors || errEnvelope.data;
+    if (response && response.status === "error") {
       const translatedErrorsList: string[] = [];
 
-      if (railsErrors && typeof railsErrors === 'object') {
-        Object.keys(railsErrors).forEach(field => {
+      if (response.errors && typeof response.errors === 'object') {
+        Object.keys(response.errors).forEach(field => {
           const fieldName = field !== 'base' ? `${field.toUpperCase()} : ` : '';
-          
-          const errorCodes = Array.isArray(railsErrors[field]) ? railsErrors[field] : [railsErrors[field]];
+          const errorCodes = Array.isArray(response.errors[field]) ? response.errors[field] : [response.errors[field]];
 
           errorCodes.forEach((errorCode: string) => {
             const translationKey = `SERVER_ERRORS.${errorCode}`;
             const translatedMessage = this.translate.instant(translationKey);
-            
             const finalMessage = translatedMessage === translationKey ? errorCode : translatedMessage;
             translatedErrorsList.push(`${fieldName}${finalMessage}`);
           });
         });
-        
-        return translatedErrorsList.length > 0 ? translatedErrorsList : ["Données invalides."];
       }
-    }
 
-    if (errEnvelope && errEnvelope.code === 500) {
-      return ["Erreur interne du serveur Rails."];
+      if (translatedErrorsList.length === 0 && response.message) {
+        translatedErrorsList.push(response.message);
+      }
+
+      return translatedErrorsList.length > 0 ? translatedErrorsList : [this.translate.instant('SERVER_ERRORS.UNKNOWN')];
     }
-    const fallbackCode = errEnvelope?.code || errEnvelope?.status || 'Inconnu';
-    return [`Une erreur est survenue (Code: ${fallbackCode}).`];
+    return [this.translate.instant('SERVER_ERRORS.GENERIC_ERROR', { code: 'N/A' })];
   }
 }

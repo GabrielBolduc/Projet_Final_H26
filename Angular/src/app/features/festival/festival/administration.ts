@@ -9,7 +9,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule, TranslateService } from '@ngx-translate/core'; // <-- Ajout de TranslateService
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RouterModule, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
@@ -106,7 +106,6 @@ export class AdministrationComponent implements OnInit {
           ...result,
           status: 'completed'
         }));
-        // Traduction ici
         this.snackBar.open(
           this.translate.instant('FESTIVAL.ARCHIVED_SUCCESS'), 
           this.translate.instant('COMMON.CLOSE'), 
@@ -129,7 +128,6 @@ export class AdministrationComponent implements OnInit {
 
   async deleteFestival(festival: Festival): Promise<void> {
     if (festival.status === 'ongoing') {
-      // Traduction ici
       this.snackBar.open(
         this.translate.instant('FESTIVAL.DELETE_ONGOING_ERROR'), 
         this.translate.instant('COMMON.CLOSE'), 
@@ -144,7 +142,6 @@ export class AdministrationComponent implements OnInit {
     if (result) {
       try {
         await firstValueFrom(this.festivalService.deleteFestival(festival.id));
-        // Traduction ici
         this.snackBar.open(
           this.translate.instant('FESTIVAL.DELETE_SUCCESS'), 
           this.translate.instant('COMMON.CLOSE'), 
@@ -160,7 +157,6 @@ export class AdministrationComponent implements OnInit {
   private showErrorsAsSnackBar(err: any): void {
     const errors = this.errorHandler.parseRailsErrors(err);
     if (errors.length > 0) {
-      // Traduction du bouton 'Fermer' ici
       this.snackBar.open(
         errors.join(' | '), 
         this.translate.instant('COMMON.CLOSE'), 

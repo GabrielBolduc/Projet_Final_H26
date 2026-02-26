@@ -44,7 +44,11 @@
     "STAGE_OVERLAP": "This stage is already booked for this time slot.",
     "ARTIST_OVERLAP": "This artist is already performing elsewhere at this time.",
     "FESTIVAL_COMPLETED": "This festival is completed.",
-    "blank": "This field is required."
+    "blank": "This field is required.",
+    "INVALID_DATA": "Invalid data.",
+    "INTERNAL_SERVER_ERROR": "Internal Rails server error.",
+    "UNKNOWN": "Unknown",
+    "GENERIC_ERROR": "An error occurred (Code: {{code}})."
   },
   "FESTIVAL": {
     "ADMINISTRATION": "Administration",
@@ -109,7 +113,8 @@
     "DELETE_CONFIRM_BODY": "Are you sure you want to permanently delete this performance?",
     "ARCHIVED_SUCCESS": "Festival archived successfully.",
     "DELETE_ONGOING_ERROR": "Cannot delete an ongoing festival.",
-    "DELETE_SUCCESS": "Festival deleted successfully."
+    "DELETE_SUCCESS": "Festival deleted successfully.",
+    "FESTIVALS_LOAD_ERROR": "Error loading festivals"
   },
   "FORM_ADD_PERFORMANCES": {
     "EDIT_PERFORMANCE": "Edit performance",

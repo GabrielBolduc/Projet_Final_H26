@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal, computed, ViewChild, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,6 @@ import { DateUtils } from '../../../core/utils/date.utils';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
-import { RouterModule } from '@angular/router';
 
 interface DayGroup {
   date: Date;
@@ -71,7 +70,6 @@ export class DashboardComponent implements OnInit {
     { initialValue: this.formatLang(this.translate.getCurrentLang()) }
   );
 
-  // LA MODIFICATION EST ICI : Ajout de 'price' entre 'description' et 'actions'
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'price', 'actions'];
 
   ngOnInit(): void {
@@ -97,7 +95,7 @@ export class DashboardComponent implements OnInit {
       const festivals = await firstValueFrom(this.festivalService.getFestivals());
       this.allFestivals.set(festivals);
     } catch (err) {
-      console.error('Erreur lors du chargement des festivals', err);
+      console.error(this.translate.instant('DASHBOARD.FESTIVALS_LOAD_ERROR'), err);
     }
   }
 
@@ -166,7 +164,13 @@ export class DashboardComponent implements OnInit {
       this.serverErrors.set([]);
       try {
         await firstValueFrom(this.performanceService.deletePerformance(id));
-        this.snackBar.open('Performance supprimée avec succès', 'Fermer', { duration: 3000 });
+        
+        this.snackBar.open(
+          this.translate.instant('DASHBOARD.DELETE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
+        
         if (this.festival()) {
           await this.loadDashboardData(this.festival()!.id);
         }
@@ -179,7 +183,11 @@ export class DashboardComponent implements OnInit {
   private showErrorsAsSnackBar(err: any): void {
     const errors = this.errorHandler.parseRailsErrors(err);
     if (errors.length > 0) {
-      this.snackBar.open(errors.join(' | '), 'Fermer', { duration: 5000 });
+      this.snackBar.open(
+        errors.join(' | '), 
+        this.translate.instant('COMMON.CLOSE'), 
+        { duration: 5000 }
+      );
     }
   }
 }

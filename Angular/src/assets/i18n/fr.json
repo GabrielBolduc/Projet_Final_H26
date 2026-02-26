@@ -44,7 +44,11 @@
     "STAGE_OVERLAP": "Cette scène est déjà occupée sur ce créneau.",
     "ARTIST_OVERLAP": "Cet artiste joue déjà ailleurs sur ce créneau.",
     "FESTIVAL_COMPLETED": "Ce festival est terminé.",
-    "blank": "Ce champ est requis."
+    "blank": "Ce champ est requis.",
+    "INVALID_DATA": "Données invalides.",
+    "INTERNAL_SERVER_ERROR": "Erreur interne du serveur Rails.",
+    "UNKNOWN": "Inconnu",
+    "GENERIC_ERROR": "Une erreur est survenue (Code: {{code}})."
   },
   "FESTIVAL": {
     "ADMINISTRATION": "Administration",
@@ -110,7 +114,9 @@
     "NA": "N/A",
     "EDIT_IMPOSSIBLE": "Modification impossible (Archivé)",
     "DELETE_CONFIRM_TITLE": "Confirmation de suppression",
-    "DELETE_CONFIRM_BODY": "Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible."
+    "DELETE_CONFIRM_BODY": "Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.",
+    "FESTIVALS_LOAD_ERROR": "Erreur lors du chargement des festivals",
+    "DELETE_SUCCESS": "Performance supprimée avec succès"
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",

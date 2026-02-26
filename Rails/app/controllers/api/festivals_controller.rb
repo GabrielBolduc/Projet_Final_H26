@@ -3,18 +3,17 @@ class Api::FestivalsController < ApiController
 
   skip_before_action :authenticate_user!, only: [ :index, :show, :current ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
-  
   before_action :set_festival, only: [ :show, :update, :destroy ]
 
   def index
     festivals = Festival.recent
 
     if params[:status].present?
-      festivals = festivals.where(status: params[:status])
+      festivals = festivals.filter_by_status(params[:status])
     end
 
     unless current_user&.is_a?(Admin)
-      festivals = festivals.where(status: 'ongoing')
+      festivals = festivals.publicly_visible
     end
 
     render json: {
@@ -25,7 +24,7 @@ class Api::FestivalsController < ApiController
 
   def show
     unless current_user&.is_a?(Admin) || @festival.ongoing?
-      return  render json: {
+      return render json: {
         status: "error",
         message: "festival non public"
       }, status: :ok

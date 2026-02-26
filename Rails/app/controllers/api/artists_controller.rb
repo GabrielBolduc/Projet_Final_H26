@@ -4,7 +4,6 @@ class Api::ArtistsController < ApiController
   def index
     @artists = Artist.alphabetical
 
-    # ex: /api/artists?genre=Rock
     if params[:genre].present?
       @artists = @artists.by_genre(params[:genre])
     end

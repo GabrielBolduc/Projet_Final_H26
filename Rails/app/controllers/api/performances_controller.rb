@@ -7,14 +7,14 @@ class Api::PerformancesController < ApiController
   
 
   def index
-    performances = Performance.chronological.includes(:artist, :stage, :festival)
+    performances = Performance.with_details.chronological
     
     if params[:festival_id].present?
-      performances = performances.where(festival_id: params[:festival_id])
+      performances = performances.for_festival(params[:festival_id])
     end
 
     unless current_user&.is_a?(Admin)
-      performances = performances.joins(:festival).where(festivals: {status: 'ongoing'})
+      performances = performances.publicly_visible
     end
     
     render json: {
@@ -87,7 +87,7 @@ class Api::PerformancesController < ApiController
   private
 
   def set_performance
-    @performance = Performance.includes(:artist, :stage, :festival).find(params[:id])
+    @performance = Performance.with_details.find(params[:id])
   end
 
   def not_found_response

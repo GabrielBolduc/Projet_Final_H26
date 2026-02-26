@@ -6,6 +6,8 @@ class Festival < ApplicationRecord
 
   scope :recent, -> { order(start_at: :desc) }
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
+  scope :filter_by_status, ->(status) { where(status: status) }
+  scope :publicly_visible, -> { ongoing }
 
   before_destroy :prevent_destroy_if_ongoing
 

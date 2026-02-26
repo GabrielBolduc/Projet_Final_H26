@@ -3,18 +3,17 @@ class Performance < ApplicationRecord
   belongs_to :stage
   belongs_to :festival
 
-  scope :chronological, -> { order(start_at: :asc) }
-  scope :for_festival, ->(f_id) { where(festival_id: f_id) }
-  scope :active, -> { joins(:festival).merge(Festival.ongoing) }
-  scope :upcoming, -> { where("start_at >= ?", Time.current) }
+  scope :chronological, -> { order(start_at: :asc)}
+  scope :with_details, -> { includes(:artist, :stage, :festival)}
+  scope :for_festival, ->(f_id) { where(festival_id: f_id)}
+  scope :publicly_visible, -> { joins(:festival).where(festivals: {status: 'ongoing'})}
 
   before_update :prevent_modification_if_festival_completed
   before_destroy :prevent_modification_if_festival_completed
 
-  validates :start_at, :end_at, :price, presence: true
-  validates :title, length: { maximum: 20 }
-  validates :price, numericality: { greater_than_or_equal_to: 0 }, presence: true
-  validates :title, presence: true
+  validates :start_at, :end_at, presence: true
+  validates :title, presence: true, length: { maximum: 20 }
+  validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :end_at_after_start_at
   validate :within_festival_dates
   validate :no_stage_overlap

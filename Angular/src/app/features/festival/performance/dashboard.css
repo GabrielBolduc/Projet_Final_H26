@@ -29,7 +29,7 @@
 
 .btn-new {
   flex: 1;
-  max-width: 210px;
+  max-width: 220px;
   border: 2px solid var(--mat-sys-primary);
   color: var(--mat-sys-primary);
   font-weight: bold;

@@ -9,7 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core'; // <-- Ajout de TranslateService
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'; 
 import { FestivalService } from '../../../core/services/festival.service';
@@ -42,6 +42,7 @@ export class FestivalFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private errorHandler = inject(ErrorHandlerService);
   private snackBar = inject(MatSnackBar);
+  private translate = inject(TranslateService); // <-- Injection du service de traduction
 
   minDate = new Date();
 
@@ -61,10 +62,13 @@ export class FestivalFormComponent implements OnInit {
   serverErrors = signal<string[]>([]);
   festivalId: number | null = null;
 
-  statusOptions = [
-    { value: 'draft', label: 'Draft' },
-    { value: 'ongoing', label: 'Ongoing' }
-  ];
+  // Transformé en Getter pour que la traduction se fasse de façon dynamique
+  get statusOptions() {
+    return [
+      { value: 'draft', label: this.translate.instant('FESTIVAL.DRAFT') },
+      { value: 'ongoing', label: this.translate.instant('FESTIVAL.ONGOING') }
+    ];
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -82,7 +86,11 @@ export class FestivalFormComponent implements OnInit {
       const data = await firstValueFrom(this.festivalService.getFestival(this.festivalId));
       this.festivalForm.patchValue(data);
     } catch (err) {
-      this.snackBar.open('Erreur lors du chargement du festival', 'Fermer', { duration: 4000 });
+      this.snackBar.open(
+        this.translate.instant('FESTIVAL.LOAD_ERROR'), 
+        this.translate.instant('COMMON.CLOSE'), 
+        { duration: 4000 }
+      );
     } finally {
       this.isLoading.set(false);
     }
@@ -97,18 +105,31 @@ export class FestivalFormComponent implements OnInit {
     try {
       if (this.isEditMode() && this.festivalId) {
         await firstValueFrom(this.festivalService.updateFestival(this.festivalId, this.festivalForm.value));
-        this.snackBar.open('Festival modifié avec succès', 'Fermer', { duration: 3000 });
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.UPDATE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       } else {
         await firstValueFrom(this.festivalService.createFestival(this.festivalForm.value));
-        this.snackBar.open('Festival créé avec succès', 'Fermer', { duration: 3000 });
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.CREATE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       }
       this.router.navigate(['/admin/festivals']);
     } catch (err) {
       const errors = this.errorHandler.parseRailsErrors(err);
       this.serverErrors.set(errors);
       
-      const errorMessage = errors.length > 0 ? errors[0] : 'Erreur lors de la sauvegarde. Vérifiez les champs.';
-      this.snackBar.open(errorMessage, 'Compris', { duration: 6000 });
+      const errorMessage = errors.length > 0 ? errors[0] : this.translate.instant('FESTIVAL.SAVE_ERROR');
+      
+      this.snackBar.open(
+        errorMessage, 
+        this.translate.instant('COMMON.UNDERSTOOD'), 
+        { duration: 6000 }
+      );
     } finally {
       this.isLoading.set(false);
     }

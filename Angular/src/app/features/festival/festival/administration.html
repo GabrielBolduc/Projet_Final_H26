@@ -4,7 +4,7 @@
     <div class="top-bar-side">
       <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
         <mat-icon>add</mat-icon>
-        Nouveau Festival
+        {{'FESTIVAL.NEW_FESTIVAL' | translate}}
       </button>
     </div>
 
@@ -33,7 +33,18 @@
               <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
             </div>
 
-            <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
+            <div class="extended-details">
+              <span class="info-item">
+                <mat-icon inline>groups</mat-icon>
+                <strong>{{'FESTIVAL.DAILY_CAPACITY' | translate}}:</strong> {{ f.daily_capacity }}
+              </span>
+              <span class="info-item">
+                <mat-icon inline>explore</mat-icon>
+                <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+              </span>
+            </div>
+
+            <p class="address-text"><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
 
             <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['/admin/festivals', f.id, 'dashboard']">
               {{'FESTIVAL.ACCESS_DASHBOARD' | translate}}
@@ -41,11 +52,11 @@
           </div>
 
           <div class="card-actions-side">
-            <button class="icon-btn finish" (click)="openFinishDialog(f)" title="Terminer et archiver">
+            <button class="icon-btn finish" (click)="openFinishDialog(f)" [title]="'COMMON.SAVE' | translate">
               <mat-icon>check_circle_outline</mat-icon>
             </button>
 
-            <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+            <button class="icon-btn edit" (click)="navigateToEdit(f.id)" [title]="'FESTIVAL.UPDATE' | translate">
               <mat-icon>edit_square</mat-icon>
             </button>
           </div>
@@ -73,7 +84,18 @@
                 <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
               </div>
 
-              <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
+              <div class="extended-details">
+                <span class="info-item">
+                  <mat-icon inline>groups</mat-icon>
+                  <strong>{{'FESTIVAL.DAILY_CAPACITY' | translate}}:</strong> {{ f.daily_capacity }}
+                </span>
+                <span class="info-item">
+                  <mat-icon inline>explore</mat-icon>
+                  <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                </span>
+              </div>
+
+              <p class="address-text"><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
               
               <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['/admin/festivals', f.id, 'dashboard']">
                 {{'FESTIVAL.ACCESS_DASHBOARD' | translate}}
@@ -81,10 +103,10 @@
             </div>
 
             <div class="card-actions-side">
-              <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+              <button class="icon-btn edit" (click)="navigateToEdit(f.id)" [title]="'FESTIVAL.UPDATE' | translate">
                 <mat-icon>edit_square</mat-icon>
               </button>
-              <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
+              <button class="icon-btn trash" (click)="deleteFestival(f)" [title]="'COMMON.DELETE' | translate">
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
@@ -114,33 +136,46 @@
                 <span>{{ f.start_at | date:'d MMMM' }} - {{ f.end_at | date:'d MMMM yyyy' }}</span>
               </div>
 
-              <p><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
+              <div class="extended-details">
+                <span class="info-item">
+                  <mat-icon inline>groups</mat-icon>
+                  <strong>{{'FESTIVAL.DAILY_CAPACITY' | translate}}:</strong> {{ f.daily_capacity }}
+                </span>
+                <span class="info-item">
+                  <mat-icon inline>explore</mat-icon>
+                  <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                </span>
+              </div>
+
+              <p class="address-text"><strong>{{'FESTIVAL.ADRESS' | translate}}</strong> {{ f.address }}</p>
               
-              <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['/admin/festivals', f.id, 'dashboard']" style="margin-bottom: 10px;">
+              <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['/admin/festivals', f.id, 'dashboard']">
                 {{'FESTIVAL.ACCESS_DASHBOARD' | translate}}
               </button>
 
-              <div class="kpi-summary" style="margin-top: 10px; font-size: 0.9rem; color: #666; display: flex; align-items: center; gap: 15px;">
-                <span style="display: flex; align-items: center; gap: 4px;">
+              <div class="kpi-summary">
+                <span class="info-item">
                   <mat-icon inline style="color: #ffb400;">star</mat-icon> {{f.satisfaction}} / 5
                 </span>
-                <span style="display: flex; align-items: center; gap: 4px;">
+                <span class="info-item">
                   <mat-icon inline color="primary">trending_up</mat-icon> {{f.other_income | currency:'USD':'symbol':'1.0-0'}}
                 </span>
-                <span style="display: flex; align-items: center; gap: 4px;">
+                <span class="info-item">
                   <mat-icon inline color="warn">trending_down</mat-icon> {{f.other_expense | currency:'USD':'symbol':'1.0-0'}}
                 </span>
 
-                @if (f.comment) {
+                @if (f.comment && f.comment.trim().length > 0) {
                   <button mat-button class="btn-notes" (click)="showNotes(f)">
-                    <mat-icon inline>notes</mat-icon> Voir les notes
+                    <mat-icon inline>notes</mat-icon> {{ 'DASHBOARD.NOTE' | translate }}
                   </button>
+                } @else {
+                  <span style="color: #999; font-style: italic; font-size: 0.85em; margin-left: 10px;">Aucune note</span> 
                 }
               </div>
             </div>
 
             <div class="card-actions-side">
-              <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
+              <button class="icon-btn edit" (click)="navigateToEdit(f.id)" [title]="'FESTIVAL.UPDATE' | translate">
                 <mat-icon>edit_square</mat-icon>
               </button>
             </div>
@@ -154,60 +189,60 @@
 </div>
 
 <ng-template #confirmDialogTemplate>
-  <h2 mat-dialog-title>Supprimer ce festival ?</h2>
+  <h2 mat-dialog-title>{{ 'COMMON.DELETE' | translate }} ?</h2>
   <mat-dialog-content>
-    <p>Êtes-vous sûr de vouloir supprimer définitivement ce festival ? Toutes les données rattachées seront effacées.</p>
+    <p>{{ 'ACCOMMODATIONS.FORM.DELETE_CONFIRM' | translate }}</p> 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Annuler</button>
-    <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">{{ 'COMMON.DELETE' | translate }}</button>
   </mat-dialog-actions>
 </ng-template>
 
 <ng-template #finishDialogTemplate let-data>
-  <h2 mat-dialog-title>Terminer le festival</h2>
+  <h2 mat-dialog-title>{{ 'FESTIVAL.FINISHED' | translate }}</h2>
   <mat-dialog-content>
     <p>{{data.name}}</p>
     
     <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
       <mat-form-field appearance="outline">
-        <mat-label>Satisfaction (1 - 5)</mat-label>
+        <mat-label>{{ 'FESTIVAL.SATISFACTION' | translate }} (1 - 5)</mat-label>
         <input matInput type="number" [(ngModel)]="data.satisfaction" min="1" max="5">
         <mat-icon matSuffix>star</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Autres revenus</mat-label>
+        <mat-label>{{ 'FESTIVAL.OTHER_INCOME' | translate }}</mat-label>
         <input matInput type="number" [(ngModel)]="data.other_income">
         <mat-icon matSuffix>attach_money</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Autres dépenses</mat-label>
+        <mat-label>{{ 'FESTIVAL.OTHER_EXPENSE' | translate }}</mat-label>
         <input matInput type="number" [(ngModel)]="data.other_expense">
         <mat-icon matSuffix>money_off</mat-icon>
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Notes</mat-label>
+        <mat-label>{{ 'DASHBOARD.NOTE' | translate }}</mat-label>
         <textarea matInput [(ngModel)]="data.comment" rows="3"></textarea>
       </mat-form-field>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Annuler</button>
-    <button mat-flat-button color="primary" [mat-dialog-close]="data">Confirmer et Archiver</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-flat-button color="primary" [mat-dialog-close]="data">{{ 'COMMON.SAVE' | translate }}</button>
   </mat-dialog-actions>
 </ng-template>
 
 <ng-template #notesDialogTemplate let-data>
-  <h2 mat-dialog-title class="dialog-title-custom">Notes : {{ data.name }}</h2>
+  <h2 mat-dialog-title class="dialog-title-custom">{{ 'DASHBOARD.NOTE' | translate }} : {{ data.name }}</h2>
   <mat-dialog-content>
     <div class="notes-display-box">
       {{ data.comment }}
     </div>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-flat-button color="accent" mat-dialog-close>Fermer</button>
+    <button mat-flat-button color="accent" mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
   </mat-dialog-actions>
 </ng-template>

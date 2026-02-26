@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from "@angular/router";
-
+import { TranslateModule } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { FestivalService } from '@core/services/festival.service';
@@ -18,7 +18,8 @@ import { Festival } from '@core/models/festival';
       MatButtonModule, 
       MatIconModule, 
       MatCardModule,  
-      MatProgressSpinnerModule
+      MatProgressSpinnerModule,
+      TranslateModule
     ]
 })
 export class Home implements OnInit {

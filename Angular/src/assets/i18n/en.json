@@ -57,7 +57,6 @@
     "FINISHED": "Finished",
     "DRAFT": "Draft",
     "ONGOING": "Ongoing",
-
     "NEW_FESTIVAL": "New Festival",
     "EDIT_FESTIVAL": "Edit Festival",
     "NAME": "Festival Name",
@@ -70,13 +69,21 @@
     "SATISFACTION": "Satisfaction",
     "OTHER_INCOME": "Other Income ($)",
     "OTHER_EXPENSE": "Other Expense ($)",
-    
     "REQUIRE": "This field is required",
     "MAXIMUM": "Maximum length exceeded",
     "CANCEL": "Cancel",
     "SAVE": "Save",
     "UPDATE": "Update",
-    "LOADING": "Loading..."
+    "LOADING": "Loading...",
+    "NO_NOTES": "No notes",
+    "FINISH_FESTIVAL": "Finish Festival",
+    "CONFIRM_ARCHIVE": "Confirm and Archive",
+    "DELETE_TITLE": "Delete this festival?",
+    "DELETE_BODY": "Are you sure you want to permanently delete this festival? All attached data will be erased.",
+    "LOAD_ERROR": "Error loading festival",
+    "UPDATE_SUCCESS": "Festival updated successfully",
+    "CREATE_SUCCESS": "Festival created successfully",
+    "SAVE_ERROR": "Error saving. Please check the fields."
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "New Performance",
@@ -90,7 +97,19 @@
     "START": "Start",
     "END": "End",
     "NOTE": "Notes",
-    "ACTION": "Actions"
+    "ACTION": "Actions",
+    "READ_ONLY_ARCHIVE": "Read-only archive",
+    "FESTIVAL_NOT_FOUND": "Festival not found",
+    "FESTIVAL_NOT_FOUND_DESC": "The requested festival does not exist or has been deleted.",
+    "BACK_TO_ADMIN": "Back to administration",
+    "UNKNOWN": "Unknown",
+    "NA": "N/A",
+    "EDIT_IMPOSSIBLE": "Edit impossible (Archived)",
+    "DELETE_CONFIRM_TITLE": "Confirm deletion",
+    "DELETE_CONFIRM_BODY": "Are you sure you want to permanently delete this performance?",
+    "ARCHIVED_SUCCESS": "Festival archived successfully.",
+    "DELETE_ONGOING_ERROR": "Cannot delete an ongoing festival.",
+    "DELETE_SUCCESS": "Festival deleted successfully."
   },
   "FORM_ADD_PERFORMANCES": {
     "EDIT_PERFORMANCE": "Edit performance",
@@ -363,6 +382,13 @@
   "COMMON": {
     "SAVE": "Save",
     "CANCEL": "Cancel",
-    "DELETE": "Delete"
+    "DELETE": "Delete",
+    "CLOSE": "Close",
+    "BACK": "Back",
+    "EDIT": "Edit",
+    "UNDERSTOOD": "Understood"
+  },
+  "HOME":{
+    "MESSAGE" : "No festivals are currently taking place. Check back later for our next announcements!"
   }
 }

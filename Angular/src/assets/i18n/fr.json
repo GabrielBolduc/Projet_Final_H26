@@ -57,7 +57,6 @@
     "FINISHED": "Terminé",
     "DRAFT": "Brouillon",
     "ONGOING": "En cours",
-
     "NEW_FESTIVAL": "Nouveau Festival",
     "EDIT_FESTIVAL": "Modifier le Festival",
     "NAME": "Nom du festival",
@@ -70,13 +69,24 @@
     "SATISFACTION": "Satisfaction",
     "OTHER_INCOME": "Autres revenus ($)",
     "OTHER_EXPENSE": "Autres dépenses ($)",
-    
     "REQUIRE": "Ce champ est requis",
     "MAXIMUM": "Longueur maximale dépassée",
     "CANCEL": "Annuler",
     "SAVE": "Créer",
     "UPDATE": "Mettre à jour",
-    "LOADING": "Chargement..."
+    "LOADING": "Chargement...",
+    "NO_NOTES": "Aucune note",
+    "FINISH_FESTIVAL": "Terminer le festival",
+    "CONFIRM_ARCHIVE": "Confirmer et Archiver",
+    "DELETE_TITLE": "Supprimer ce festival ?",
+    "DELETE_BODY": "Êtes-vous sûr de vouloir supprimer définitivement ce festival ?",
+    "ARCHIVED_SUCCESS": "Festival archivé avec succès.",
+    "DELETE_ONGOING_ERROR": "Impossible de supprimer le festival en cours.",
+    "DELETE_SUCCESS": "Festival supprimé avec succès.",
+    "LOAD_ERROR": "Erreur lors du chargement du festival",
+    "UPDATE_SUCCESS": "Festival modifié avec succès",
+    "CREATE_SUCCESS": "Festival créé avec succès",
+    "SAVE_ERROR": "Erreur lors de la sauvegarde. Vérifiez les champs."
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "Nouvelle Performance",
@@ -91,7 +101,16 @@
     "END": "Fin",
     "NOTE": "Notes",
     "ACTION": "Actions",
-    "NO_ONGOING": "Aucun festival en cours"
+    "NO_ONGOING": "Aucun festival en cours",
+    "READ_ONLY_ARCHIVE": "Archive en lecture seule",
+    "FESTIVAL_NOT_FOUND": "Festival introuvable",
+    "FESTIVAL_NOT_FOUND_DESC": "Le festival demandé n'existe pas ou a été supprimé.",
+    "BACK_TO_ADMIN": "Retour à l'administration",
+    "UNKNOWN": "Inconnu",
+    "NA": "N/A",
+    "EDIT_IMPOSSIBLE": "Modification impossible (Archivé)",
+    "DELETE_CONFIRM_TITLE": "Confirmation de suppression",
+    "DELETE_CONFIRM_BODY": "Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible."
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",
@@ -359,6 +378,13 @@
   "COMMON": {
     "SAVE": "Enregistrer",
     "CANCEL": "Annuler",
-    "DELETE": "Supprimer"
+    "DELETE": "Supprimer",
+    "CLOSE": "Fermer",
+    "BACK": "Retour",
+    "EDIT": "Modifier",
+    "UNDERSTOOD": "Understood"
+  },
+  "HOME":{
+    "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"
   }
 }

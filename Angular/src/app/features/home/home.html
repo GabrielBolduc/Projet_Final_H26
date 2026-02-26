@@ -6,7 +6,7 @@
   } @else if (ongoingFestival()) {
     <h1>{{ ongoingFestival()?.name }}</h1>
   } @else {
-    <h1>Festify en pause</h1>
-    <p class="subtitle">Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !</p>
+    <h1>Festify</h1>
+    <p class="subtitle">{{'HOME.MESSAGE' | translate}}</p>
   }
 </div>

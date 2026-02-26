@@ -9,13 +9,14 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core'; // <-- Ajout de TranslateService
 import { RouterModule, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { FestivalService } from '../../../core/services/festival.service';
 import { Festival } from '../../../core/models/festival';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+
 @Component({
   selector: 'app-administration',
   standalone: true,
@@ -47,6 +48,7 @@ export class AdministrationComponent implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private translate = inject(TranslateService); 
 
   festivals = signal<Festival[]>([]);
 
@@ -104,10 +106,15 @@ export class AdministrationComponent implements OnInit {
           ...result,
           status: 'completed'
         }));
-        this.snackBar.open("Festival archiver", "Fermer", {duration: 3000})
-        await this.loadFestivals()
-      }catch (err){
-        this.showErrorsAsSnackBar(err)
+        // Traduction ici
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.ARCHIVED_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          {duration: 3000}
+        );
+        await this.loadFestivals();
+      } catch (err) {
+        this.showErrorsAsSnackBar(err);
       }
     }
   }
@@ -122,7 +129,12 @@ export class AdministrationComponent implements OnInit {
 
   async deleteFestival(festival: Festival): Promise<void> {
     if (festival.status === 'ongoing') {
-      this.snackBar.open("Impossible de supprimer le festival en cours.", 'Fermer', { duration: 5000 });
+      // Traduction ici
+      this.snackBar.open(
+        this.translate.instant('FESTIVAL.DELETE_ONGOING_ERROR'), 
+        this.translate.instant('COMMON.CLOSE'), 
+        { duration: 5000 }
+      );
       return;
     }
 
@@ -132,7 +144,12 @@ export class AdministrationComponent implements OnInit {
     if (result) {
       try {
         await firstValueFrom(this.festivalService.deleteFestival(festival.id));
-        this.snackBar.open('Festival supprimé avec succès.', 'Fermer', { duration: 3000 });
+        // Traduction ici
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.DELETE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
         await this.loadFestivals();
       } catch (err) {
         this.showErrorsAsSnackBar(err);
@@ -143,7 +160,12 @@ export class AdministrationComponent implements OnInit {
   private showErrorsAsSnackBar(err: any): void {
     const errors = this.errorHandler.parseRailsErrors(err);
     if (errors.length > 0) {
-      this.snackBar.open(errors.join(' | '), 'Fermer', { duration: 5000 });
+      // Traduction du bouton 'Fermer' ici
+      this.snackBar.open(
+        errors.join(' | '), 
+        this.translate.instant('COMMON.CLOSE'), 
+        { duration: 5000 }
+      );
     }
   }
 }

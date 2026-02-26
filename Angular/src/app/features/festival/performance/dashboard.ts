@@ -19,6 +19,7 @@ import { DateUtils } from '../../../core/utils/date.utils';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
+import { RouterModule } from '@angular/router';
 
 interface DayGroup {
   date: Date;
@@ -38,7 +39,8 @@ interface DayGroup {
     MatSelectModule,
     MatFormFieldModule,  
     TranslateModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RouterModule
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
@@ -69,7 +71,8 @@ export class DashboardComponent implements OnInit {
     { initialValue: this.formatLang(this.translate.getCurrentLang()) }
   );
 
-  displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'actions'];
+  // LA MODIFICATION EST ICI : Ajout de 'price' entre 'description' et 'actions'
+  displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'price', 'actions'];
 
   ngOnInit(): void {
     this.loadAllFestivals();

@@ -1,7 +1,6 @@
-class Api::TicketsController < ApiController
+class Api::TicketsController < Api::ClientController
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
-  before_action :require_client!
   before_action :set_ticket, only: [ :show, :update, :destroy ]
 
   # GET /api/tickets
@@ -27,9 +26,7 @@ class Api::TicketsController < ApiController
 
   # PATCH/PUT /api/tickets/:id
   def update
-    if @ticket.refunded?
-      return render_error("Cannot update a refunded ticket")
-    end
+    return render_error("Cannot update a refunded ticket") if @ticket.refunded?
 
     if @ticket.update(ticket_params)
       render json: {
@@ -44,9 +41,7 @@ class Api::TicketsController < ApiController
   # DELETE /api/tickets/:id
   # Refund semantics: ticket stays in history but is marked as refunded.
   def destroy
-    if @ticket.refunded?
-      return render_error("Ticket already refunded")
-    end
+    return render_error("Ticket already refunded") if @ticket.refunded?
 
     @ticket.update!(refunded: true, refunded_at: Time.current)
 
@@ -67,12 +62,6 @@ class Api::TicketsController < ApiController
                     .find(params[:id])
   end
 
-  def require_client!
-    return if current_user&.is_a?(Client)
-
-    render_error("Client authentication required")
-  end
-
   def handle_not_found
     render_error("Resource not found")
   end
@@ -83,45 +72,33 @@ class Api::TicketsController < ApiController
 
   def format_ticket(ticket)
     package = ticket.package
-
     {
-      id: ticket.id,
-      order_id: ticket.order_id,
-      unique_code: ticket.unique_code,
-      qr_code_url: ticket.generate_qr_code,
-      refunded: ticket.refunded,
-      refunded_at: ticket.refunded_at,
-      price: ticket.price,
+      id:           ticket.id,
+      order_id:     ticket.order_id,
+      unique_code:  ticket.unique_code,
+      qr_code_url:  ticket.generate_qr_code,
+      refunded:     ticket.refunded,
+      refunded_at:  ticket.refunded_at,
+      price:        ticket.price,
       purchased_at: ticket.purchased_at,
-      holder_name: ticket.holder_name,
+      holder_name:  ticket.holder_name,
       holder_email: ticket.holder_email,
       holder_phone: ticket.holder_phone,
       package: {
-        id: package.id,
-        title: package.title,
+        id:          package.id,
+        title:       package.title,
         description: package.description,
-        category: package.category,
-        valid_at: package.valid_at,
-        expired_at: package.expired_at,
+        category:    package.category,
+        valid_at:    package.valid_at,
+        expired_at:  package.expired_at,
         festival_id: package.festival_id,
-        image_url: package_image_url(package)
+        image_url:   package_image_url(package)
       }
     }
   end
 
   def package_image_url(package)
     return nil unless package.image.attached?
-
     rails_blob_url(package.image, host: request.base_url)
-  end
-
-  def render_error(message, errors = nil)
-    payload = {
-      status: "error",
-      message: message
-    }
-    payload[:errors] = errors if errors.present?
-
-    render json: payload, status: :internal_server_error
   end
 end

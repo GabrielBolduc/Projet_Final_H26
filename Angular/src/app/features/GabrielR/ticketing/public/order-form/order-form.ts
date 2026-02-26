@@ -48,6 +48,7 @@ export class TicketingOrderFormComponent {
   isSubmittingOrder = signal(false);
   orderError = signal('');
   orderSuccess = signal('');
+  quantity = signal(1);
 
   packageId = computed(() => Number(this.route.snapshot.paramMap.get('id')));
   isClient = computed(() => this.auth.currentUser()?.isClient ?? false);
@@ -67,7 +68,6 @@ export class TicketingOrderFormComponent {
       if (!Number.isInteger(params.id) || params.id <= 0) {
         return null;
       }
-
       const pkg = await firstValueFrom(this.packageService.getPackage(params.id));
       return pkg;
     }
@@ -80,13 +80,17 @@ export class TicketingOrderFormComponent {
     if (!pkg) {
       return { sold: 0, quota: 0, remaining: 0, percent: 0 };
     }
-
     const sold = pkg.sold ?? 0;
     const quota = pkg.quota ?? 0;
     const remaining = Math.max(0, quota - sold);
     const percent = quota > 0 ? Math.min(100, (sold / quota) * 100) : 0;
-
     return { sold, quota, remaining, percent };
+  });
+
+  totalPrice = computed(() => {
+    const pkg = this.selectedPackage();
+    if (!pkg?.price) return 0;
+    return pkg.price * this.quantity();
   });
 
   constructor() {
@@ -100,26 +104,17 @@ export class TicketingOrderFormComponent {
     }
   }
 
-  get holderNameControl() {
-    return this.orderForm.get('holder_name');
-  }
-
-  get holderEmailControl() {
-    return this.orderForm.get('holder_email');
-  }
-
-  get holderPhoneControl() {
-    return this.orderForm.get('holder_phone');
-  }
-
-  get quantityControl() {
-    return this.orderForm.get('quantity');
-  }
+  get holderNameControl() { return this.orderForm.get('holder_name'); }
+  get holderEmailControl() { return this.orderForm.get('holder_email'); }
+  get holderPhoneControl() { return this.orderForm.get('holder_phone'); }
+  get quantityControl() { return this.orderForm.get('quantity'); }
 
   decreaseQuantity(): void {
     const current = Number(this.quantityControl?.value ?? 1);
-    this.quantityControl?.setValue(Math.max(1, current - 1));
+    const next = Math.max(1, current - 1);
+    this.quantityControl?.setValue(next);
     this.quantityControl?.markAsTouched();
+    this.quantity.set(next);
   }
 
   increaseQuantity(): void {
@@ -129,10 +124,10 @@ export class TicketingOrderFormComponent {
       this.quantityControl?.markAsTouched();
       return;
     }
-
     const next = Math.min(remaining, current + 1);
-    this.quantityControl?.setValue(Math.max(1, next));
+    this.quantityControl?.setValue(next);
     this.quantityControl?.markAsTouched();
+    this.quantity.set(next);
   }
 
   async createOrder(): Promise<void> {
@@ -203,9 +198,7 @@ export class TicketingOrderFormComponent {
 
   redirectToLogin(): void {
     this.router.navigate(['/login'], {
-      queryParams: {
-        returnUrl: `/ticketing/packages/${this.packageId()}/order`
-      }
+      queryParams: { returnUrl: `/ticketing/packages/${this.packageId()}/order` }
     });
   }
 }

@@ -5,13 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Festival } from '../models/festival';
 import { response } from 'express';
 import { error } from 'node:console';
-
-export interface ApiResponse<T> {
-  status: string;
-  data: T;
-  message?: string;
-  errors?: any;
-}
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({ providedIn: 'root' })
 export class FestivalService {

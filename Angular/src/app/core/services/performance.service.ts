@@ -3,14 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Performance } from '../models/performance';
-
-export interface ApiResponse<T = any> {
-  status: 'success' | 'error';
-  data?: T;
-  message?: string;
-  code?: number;
-  errors?: any;
-}
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({ providedIn: 'root' })
 export class PerformanceService {

@@ -2,12 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
 import { Artist } from '../models/artist';
+import { ApiResponse } from '../models/api-response';
 
-interface ApiResponse<T> {
-  status: 'success' | 'error';
-  data: T;
-  message?: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class ArtistService {

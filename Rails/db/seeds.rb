@@ -489,8 +489,6 @@ images.each do |package, filename|
       filename: filename,
       content_type: content_type 
     )
-  else
-    puts "Image non trouvée : #{filename}"
   end
 end
 
@@ -500,11 +498,9 @@ unit_camp_low.save!
 unit_hotel_high.save!
 unit_hotel_mid.save!
 
-puts "\nTicketing seed summary (ongoing festival):"
 [p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|
   sold = pkg.tickets.where(refunded: false).count
   refunded = pkg.tickets.where(refunded: true).count
-  puts "- #{pkg.title}: sold=#{sold}/#{pkg.quota}, refunded=#{refunded}"
 end
 
 

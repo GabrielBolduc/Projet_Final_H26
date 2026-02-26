@@ -13,12 +13,17 @@ class Unit < ApplicationRecord
     "Units::DeluxeTerrain"   => 8
   }.freeze
 
+  ALLOWED_FOOD = ["None", "Canteen", "Room service", "Restaurant"].freeze
+
   enum :water, { no_water: 0, undrinkable: 1, drinkable: 2 }, prefix: true
 
   validates :quantity, numericality: { only_integer: true, greater_than: 0 }
   validates :cost_person_per_night, :parking_cost, numericality: { greater_than_or_equal_to: 0 }
+  validates :quantity, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 100 }
   validates :image, presence: true
   validate :must_have_image
+  validate :type_matches_accommodation_category
+  validate :validate_food_options
 
 
   def max_capacity
@@ -84,6 +89,14 @@ class Unit < ApplicationRecord
       errors.add(:type, "cannot be a terrain for a hotel")
     elsif accommodation.camping? && type.start_with?('Units::SimpleRoom', 'Units::DoubleRoom', 'Units::FamilyRoom')
       errors.add(:type, "cannot be a room for a camping site")
+    end
+  end
+
+  def validate_food_options
+    # Ensure every selected option exists in the ALLOWED_FOOD list
+    invalid = food_options_as_array - ALLOWED_FOOD
+    if invalid.any?
+      errors.add(:food_options, "contains invalid values: #{invalid.join(', ')}")
     end
   end
 end

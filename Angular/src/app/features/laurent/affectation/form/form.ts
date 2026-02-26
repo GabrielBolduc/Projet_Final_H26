@@ -135,6 +135,8 @@ export class FormAffectationComponent {
         this.affectationService.updateAffectation(id, formData).subscribe({
           next: data => {
             console.log('Affectation mise à jour : ', data);
+            this.router.navigate(['/task', this.route.snapshot.paramMap.get('id'), 'affectations']);
+
           },
           error: err => {
             this.showErrorsAsSnackBar(err);
@@ -144,13 +146,14 @@ export class FormAffectationComponent {
         this.affectationService.createAffectation(formData).subscribe({
           next: data => {
             console.log('Affectation créée : ', data);
+            this.router.navigate(['/task', this.route.snapshot.paramMap.get('id'), 'affectations']);
+
           },
           error: err => {
             this.showErrorsAsSnackBar(err);
           }
         });
       }
-     this.router.navigate(['/task', this.route.snapshot.paramMap.get('id'), 'affectations']);
 
     }
     

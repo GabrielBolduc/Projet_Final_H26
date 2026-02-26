@@ -7,20 +7,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-
-// NOUVEAUX IMPORTS POUR LE DROPDOWN
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
-
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { DateUtils } from '../../../core/utils/date.utils'; 
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
 
@@ -39,9 +35,10 @@ interface DayGroup {
     MatTableModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatSelectModule,      // <-- Ajout
-    MatFormFieldModule,   // <-- Ajout
-    TranslateModule
+    MatSelectModule,
+    MatFormFieldModule,  
+    TranslateModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']

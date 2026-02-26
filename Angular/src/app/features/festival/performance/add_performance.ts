@@ -15,7 +15,6 @@ import { Artist } from '../../../core/models/artist';
 import { Stage } from '../../../core/models/stage';
 import { Festival } from '../../../core/models/festival';
 import { DateUtils } from '../../../core/utils/date.utils'; 
-
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -24,6 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const start = control.get('start_time')?.value;
@@ -42,7 +42,7 @@ const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     CommonModule, ReactiveFormsModule,
     MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule,
     MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,
-    TranslateModule
+    TranslateModule,MatProgressSpinnerModule
   ],
   templateUrl: './add_performance.html',
   styleUrls: ['./add_performance.css']

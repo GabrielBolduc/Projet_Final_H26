@@ -10,7 +10,9 @@
     </header>
 
     @if (isLoading()) {
-      <div class="loading-state"><p>{{'DASHBOARD.LOADING' | translate}}</p></div>
+      <div class="spinner-container">
+        <mat-spinner diameter="50" color="primary"></mat-spinner>
+      </div>
     }
 
     @if (!isLoading() && !currentFestival()) {

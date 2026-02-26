@@ -44,8 +44,8 @@
     </header>
 
     @if (isLoading()) {
-      <div class="loading-state" style="text-align: center; padding: 20px;">
-        <p>{{'DASHBOARD.LOADING' | translate}}</p>
+      <div class="spinner-container">
+        <mat-spinner diameter="50" color="primary"></mat-spinner>
       </div>
     }
 

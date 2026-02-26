@@ -110,7 +110,9 @@
       
       <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
         @if (isLoading()) {
-          <span>{{"FORM_ADD_PERFORMANCES.LOADING" | translate}}</span> 
+          <div class="spinner-container">
+            <mat-spinner diameter="50" color="primary"></mat-spinner>
+          </div>
         } @else {
           {{ isEditMode() ? ('FORM_ADD_PERFORMANCES.UPDATE' | translate) : ('FORM_ADD_PERFORMANCES.SAVE' | translate) }}
         }

@@ -4,14 +4,13 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { firstValueFrom } from 'rxjs'; 
-
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
 import { DateUtils } from '../../../core/utils/date.utils'; 
 import { ErrorHandlerService } from '../../../core/services/error-handler.service'; 
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 interface DayGroup {
   date: Date;
   performances: Performance[];
@@ -24,7 +23,8 @@ interface DayGroup {
     CommonModule, 
     MatIconModule,
     MatTableModule,
-    TranslateModule
+    TranslateModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './public_schedule.html',
   styleUrls: ['./public_schedule.css']

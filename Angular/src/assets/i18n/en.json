@@ -9,7 +9,6 @@
   },
   "PUBLIC": {
     "PROGRAMMATION": "Schedule",
-    "LOADING": "Loading schedule...",
     "NO_FESTIVAL_TITLE": "No ongoing festival",
     "NO_FESTIVAL_DESC": "There is currently no active festival. Please check back later!",
     "NO_PERFORMANCES": "No performances are currently scheduled for this festival."

@@ -46,22 +46,24 @@
   <span class="spacer"></span>
 
   <div class="header-actions hide-on-mobile">
-    <a [routerLink]="['/programmation']" class="nav-link">
-      <span>{{ 'NAV.SCHEDULE' | translate }}</span>
-    </a>
-
-    @if (auth.isAdmin()) {
-      <a [routerLink]="['/accommodations']" class="nav-link">
-        <span>{{ 'NAV.ACCOMMODATIONS' | translate }}</span>
+    @if (ongoingFestivalId() || (auth.isLoggedIn() && auth.currentUser()?.isAdmin)) {
+      <a [routerLink]="['/programmation']" class="nav-link">
+        <span>{{ 'NAV.SCHEDULE' | translate }}</span>
       </a>
-    } @else {
-      <a [routerLink]="['/reservations']" class="nav-link">
-        <span>{{ 'NAV.RESERVATION' | translate }}</span>
+
+      @if (auth.isAdmin()) {
+        <a [routerLink]="['/accommodations']" class="nav-link">
+          <span>{{ 'NAV.ACCOMMODATIONS' | translate }}</span>
+        </a>
+      } @else {
+        <a [routerLink]="['/reservations']" class="nav-link">
+          <span>{{ 'NAV.RESERVATION' | translate }}</span>
+        </a>
+      }
+      <a [routerLink]="['/ticketing']" class="nav-link">
+        <span>{{ 'NAV.TICKETING' | translate }}</span>
       </a>
     }
-    <a [routerLink]="['/ticketing']" class="nav-link">
-      <span>{{ 'NAV.TICKETING' | translate }}</span>
-    </a>
     
     <button mat-stroked-button (click)="toggleLanguage()" class="lang-btn">
       <mat-icon>language</mat-icon>
@@ -89,19 +91,29 @@
     </button>
 
     <mat-menu #mobileMenu="matMenu">
-      <button mat-menu-item [routerLink]="['/programmation']">
-        <mat-icon>event</mat-icon>
-        <span>{{ 'NAV.SCHEDULE' | translate }}</span>
-      </button>
+      @if (ongoingFestivalId() || (auth.isLoggedIn() && auth.currentUser()?.isAdmin)) {
+        <button mat-menu-item [routerLink]="['/programmation']">
+          <mat-icon>event</mat-icon>
+          <span>{{ 'NAV.SCHEDULE' | translate }}</span>
+        </button>
 
-      <button mat-menu-item [routerLink]="['/reservations']">
-        <mat-icon>book_online</mat-icon>
-        <span>{{ 'NAV.RESERVATION' | translate }}</span>
-      </button>
-      <button mat-menu-item [routerLink]="['/ticketing']">
-        <mat-icon>confirmation_number</mat-icon>
-        <span>{{ 'NAV.TICKETING' | translate }}</span>
-      </button>
+        @if (auth.isAdmin()) {
+          <button mat-menu-item [routerLink]="['/accommodations']">
+            <mat-icon>hotel</mat-icon>
+            <span>{{ 'NAV.ACCOMMODATIONS' | translate }}</span>
+          </button>
+        } @else {
+          <button mat-menu-item [routerLink]="['/reservations']">
+            <mat-icon>book_online</mat-icon>
+            <span>{{ 'NAV.RESERVATION' | translate }}</span>
+          </button>
+        }
+        
+        <button mat-menu-item [routerLink]="['/ticketing']">
+          <mat-icon>confirmation_number</mat-icon>
+          <span>{{ 'NAV.TICKETING' | translate }}</span>
+        </button>
+      }
 
       @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
         <mat-divider></mat-divider>

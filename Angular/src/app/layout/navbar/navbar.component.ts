@@ -33,17 +33,19 @@ export class NavbarComponent implements OnInit {
   ongoingFestivalId = signal<number | null>(null);
 
   async ngOnInit() {
-    if (this.auth.currentUser()) { 
-      try {
-        const festivals = await firstValueFrom(this.festivalService.getFestivals());
-        const ongoing = festivals.find(f => f.status === 'ongoing');
-        
-        if (ongoing) {
-          this.ongoingFestivalId.set(ongoing.id);
-        }
-      } catch (error) {
-        console.error("Impossible de charger le festival en cours pour la navbar", error);
+    // MODIFICATION : On vérifie s'il y a un festival en cours pour TOUS les utilisateurs (public et connectés)
+    try {
+      const festivals = await firstValueFrom(this.festivalService.getFestivals());
+      const ongoing = festivals.find(f => f.status === 'ongoing');
+      
+      if (ongoing) {
+        this.ongoingFestivalId.set(ongoing.id);
+      } else {
+        this.ongoingFestivalId.set(null);
       }
+    } catch (error) {
+      console.error("Impossible de charger le festival en cours pour la navbar", error);
+      this.ongoingFestivalId.set(null);
     }
   }
 

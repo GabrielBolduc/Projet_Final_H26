@@ -9,14 +9,14 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .page-title {
   margin: 0;
   color: var(--mat-sys-primary);
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 500;
 }
 
 .back-link {
@@ -26,6 +26,68 @@
 .state-message {
   margin: 0;
   color: var(--mat-sys-on-surface-variant);
+}
+
+.order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.order-card {
+  border-radius: 14px;
+  background: var(--mat-sys-surface-container-low);
+  border: 2px solid var(--mat-sys-on-surface);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  padding: 0 !important;
+}
+
+.order-card:hover {
+  transform: translateX(5px);
+  box-shadow: 8px 8px 0px var(--mat-sys-primary);
+}
+
+.order-image {
+  width: 100%;
+  height: 140px;
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  flex-shrink: 0;
+}
+
+.order-id,
+.order-date,
+.ticket-count {
+  padding: 0 16px;
+}
+
+.order-id {
+  margin: 16px 0 6px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--mat-sys-primary);
+}
+
+.order-date {
+  margin: 0 0 4px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.ticket-count {
+  margin: 0 0 16px;
+  color: var(--mat-sys-on-surface);
+}
+
+.order-link {
+  margin: auto 16px 16px;
+  align-self: flex-start;
+  border: 2px solid var(--mat-sys-primary) !important;
+  color: var(--mat-sys-primary);
+  font-weight: bold;
 }
 
 .empty-state {
@@ -38,50 +100,6 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-.order-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 14px;
-}
-
-.order-card {
-  border-radius: 14px;
-  border: 1px solid var(--mat-sys-outline-variant);
-  background: var(--mat-sys-surface-container-lowest);
-  display: flex;
-  flex-direction: column;
-  min-height: 260px;
-}
-
-.order-id {
-  margin: 0 0 8px;
-  font-size: 1.1rem;
-}
-
-.order-date {
-  margin: 0 0 6px;
-  color: var(--mat-sys-on-surface-variant);
-}
-
-.ticket-count {
-  margin: 0 0 14px;
-  color: var(--mat-sys-on-surface);
-}
-
-.order-image {
-  height: 130px;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  border: 1px solid var(--mat-sys-outline-variant);
-  background-size: cover;
-  background-position: center;
-}
-
-.order-link {
-  margin-top: auto;
-  align-self: flex-start;
-}
-
 @media (max-width: 850px) {
   .orders-page {
     padding: 14px 14px 26px;
@@ -90,7 +108,7 @@
   .orders-header {
     flex-direction: column-reverse;
     align-items: stretch;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
   }
 
   .page-title {

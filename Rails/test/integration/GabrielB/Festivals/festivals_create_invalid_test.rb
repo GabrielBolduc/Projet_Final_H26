@@ -240,4 +240,27 @@ class FestivalsCreateInvalidTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
   end
+
+  test "should fail to create a draft festival in the past" do
+    sign_in @admin
+    
+    past_params = @valid_params.merge(
+      start_at: 1.year.ago.to_date.to_s,
+      end_at: (1.year.ago + 4.days).to_date.to_s,
+      status: "draft"
+    )
+
+    # modif ou non
+    assert_no_difference("Festival.count") do
+      post api_festivals_url, params: { festival: past_params }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["start_at"]
+  end
 end

@@ -49,6 +49,6 @@ Rails.application.routes.draw do
   root to: "angular#index"
 
   get "*path", to: "angular#index", constraints: ->(req) do
-    !req.xhr? && req.format.html?
+    !req.xhr? && req.format.html? && !req.path.include?('.')
   end
 end

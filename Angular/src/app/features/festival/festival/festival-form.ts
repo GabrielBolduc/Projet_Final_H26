@@ -11,7 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
-
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'; 
 import { FestivalService } from '../../../core/services/festival.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 
@@ -29,7 +29,8 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    TranslateModule
+    TranslateModule,
+    MatSnackBarModule
   ],
   templateUrl: './festival-form.html',
   styleUrls: ['./festival-form.css']
@@ -40,6 +41,9 @@ export class FestivalFormComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private errorHandler = inject(ErrorHandlerService);
+  private snackBar = inject(MatSnackBar);
+
+  minDate = new Date();
 
   festivalForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -78,7 +82,7 @@ export class FestivalFormComponent implements OnInit {
       const data = await firstValueFrom(this.festivalService.getFestival(this.festivalId));
       this.festivalForm.patchValue(data);
     } catch (err) {
-      this.serverErrors.set(['Erreur lors du chargement du festival']);
+      this.snackBar.open('Erreur lors du chargement du festival', 'Fermer', { duration: 4000 });
     } finally {
       this.isLoading.set(false);
     }
@@ -93,12 +97,18 @@ export class FestivalFormComponent implements OnInit {
     try {
       if (this.isEditMode() && this.festivalId) {
         await firstValueFrom(this.festivalService.updateFestival(this.festivalId, this.festivalForm.value));
+        this.snackBar.open('Festival modifié avec succès', 'Fermer', { duration: 3000 });
       } else {
         await firstValueFrom(this.festivalService.createFestival(this.festivalForm.value));
+        this.snackBar.open('Festival créé avec succès', 'Fermer', { duration: 3000 });
       }
       this.router.navigate(['/admin/festivals']);
     } catch (err) {
-      this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+      const errors = this.errorHandler.parseRailsErrors(err);
+      this.serverErrors.set(errors);
+      
+      const errorMessage = errors.length > 0 ? errors[0] : 'Erreur lors de la sauvegarde. Vérifiez les champs.';
+      this.snackBar.open(errorMessage, 'Compris', { duration: 6000 });
     } finally {
       this.isLoading.set(false);
     }

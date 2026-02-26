@@ -63,7 +63,6 @@ mat-form-field {
   height: 44px;
 }
 
-/* Responsive pour les mobiles */
 @media (max-width: 768px) {
   .grid-row-2, 
   .grid-row-3 {

@@ -9,7 +9,7 @@ class Festival < ApplicationRecord
   scope :filter_by_status, ->(status) { where(status: status) }
   scope :publicly_visible, -> { ongoing }
 
-  before_destroy :prevent_destroy_if_ongoing
+  before_destroy :prevent_destroy_if_active_or_archived
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :start_at, :end_at, :status, :address, :latitude, :longitude, presence: true
@@ -23,6 +23,7 @@ class Festival < ApplicationRecord
 
   validate :end_at_after_start_at
   validate :only_one_ongoing_festival
+  validate :start_at_cannot_be_in_the_past, on: :create
 
   composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
 
@@ -42,10 +43,19 @@ class Festival < ApplicationRecord
     end
   end
 
-  def prevent_destroy_if_ongoing
-    if ongoing?
-      errors.add(:base, "impossible de supprimer un festival ongoing")
+  def prevent_destroy_if_active_or_archived
+    if ongoing? || completed?
+      errors.add(:base, "impossible de supprimer un festival ongoing ou completed")
       throw(:abort)
     end
   end
+
+  def start_at_cannot_be_in_the_past
+    return if start_at.blank? || completed?
+
+    if start_at < Date.today
+      errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive 'completed')")
+    end
+  end
+
 end

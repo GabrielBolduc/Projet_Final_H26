@@ -90,8 +90,8 @@ f = Festival.create!(
 
 f1 = Festival.create!(
   name: "Festify 2025",
-  start_at: Date.new(2025, 7, 10),
-  end_at: Date.new(2025, 7, 12),
+  start_at: Date.new(2027, 7, 10),
+  end_at: Date.new(2027, 7, 12),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
@@ -105,8 +105,8 @@ f1 = Festival.create!(
 
 f2 = Festival.create!(
   name: "Festify 2024",
-  start_at: Date.new(2024, 7, 15),
-  end_at: Date.new(2024, 7, 20),
+  start_at: Date.new(2026, 9, 15),
+  end_at: Date.new(2026, 9, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
@@ -262,7 +262,7 @@ Performance.create!(
   artist: artist2
 )
 
-f2.update!(status: "completed")
+f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 15),)
 
 # Alexandre
 acc1 = Accommodation.create!(

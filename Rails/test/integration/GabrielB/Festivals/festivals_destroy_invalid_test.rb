@@ -59,4 +59,23 @@ class FestivalsDestroyInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "Impossible de supprimer ce festival.", json["message"]
     assert_not_nil json["errors"]
   end
+
+  test "should fail to delete if festival is completed" do
+    sign_in @admin
+    @ongoing_festival.update!(status: "completed")
+
+    # modif ou non
+    assert_no_difference("Festival.count") do
+      delete api_festival_url(@ongoing_festival), as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_equal "Impossible de supprimer ce festival.", json["message"]
+    assert_not_nil json["errors"]
+  end
 end

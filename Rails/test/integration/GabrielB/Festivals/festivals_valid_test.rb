@@ -150,4 +150,33 @@ class FestivalsValidTest < ActionDispatch::IntegrationTest
     assert_equal "Festival supprimé avec succès.", json["message"]
     assert_nil json["data"]
   end
+
+  test "should succeed to create a completed festival in the past" do
+    sign_in @admin
+
+    archive_params = {
+      festival: {
+        name: "Festival Archive 2025",
+        start_at: 1.year.ago.to_date.to_s,
+        end_at: (1.year.ago + 4.days).to_date.to_s,
+        status: "completed",
+        address: "123 Rue de l'Archive",
+        daily_capacity: 5000,
+        latitude: 45.4042,
+        longitude: -71.8929
+      }
+    }
+
+    # modif ou non
+    assert_difference("Festival.count", 1) do
+      post api_festivals_url, params: archive_params, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "success", json["status"]
+  end
 end

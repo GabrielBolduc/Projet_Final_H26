@@ -48,10 +48,6 @@
             <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
               <mat-icon>edit_square</mat-icon>
             </button>
-            
-            <button class="icon-btn trash" [disabled]="f.status === 'ongoing'" (click)="deleteFestival(f)" title="Supprimer">
-              <mat-icon>delete_outline</mat-icon>
-            </button>
           </div>
         </mat-card-content>
       </mat-card>
@@ -146,9 +142,6 @@
             <div class="card-actions-side">
               <button class="icon-btn edit" (click)="navigateToEdit(f.id)" title="Modifier">
                 <mat-icon>edit_square</mat-icon>
-              </button>
-              <button class="icon-btn trash" (click)="deleteFestival(f)" title="Supprimer">
-                <mat-icon>delete_outline</mat-icon>
               </button>
             </div>
           </mat-card-content>

@@ -85,7 +85,7 @@ f = Festival.create!(
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
-  comment: "Bon festival"
+  comment: "Un gros festival"
 )
 
 f1 = Festival.create!(
@@ -163,7 +163,7 @@ artist3 = Artist.create!(
 # perf pour f (ongoing)
 Performance.create!(
   title: "First show",
-  description: "Bon show.",
+  description: "Le premier show",
   price: 55.00,
   start_at: f.start_at.to_time.change(hour: 20, min: 0),
   end_at: f.start_at.to_time.change(hour: 22, min: 0),
@@ -470,7 +470,7 @@ images = {
   p_daily_sold_out => 'daily-ticket.webp',
   p_evening_last_spots => 'evening-ticket.jpg',
   p_completed => 'general-ticket.webp',
-  unit1 => 'hotel-image.jpg',
+  unit1 => 'placeholder-image.jpg',
   unit_hotel_mid => 'hotel-mid.jpg',
   unit_hotel_high => 'hotel-high.jpg',
   unit_camp_low => 'camping-cheap.jpg',
@@ -489,8 +489,6 @@ images.each do |package, filename|
       filename: filename,
       content_type: content_type 
     )
-  else
-    puts "Image non trouvée : #{filename}"
   end
 end
 

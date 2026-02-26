@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
   create_table "accommodations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
@@ -203,7 +203,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_120000) do
     t.column "food_options", "set('None','Canteen','Room service','Restaurant')", default: "None"
     t.decimal "parking_cost", precision: 4, scale: 2, default: "0.0", null: false, unsigned: true
     t.integer "quantity", limit: 1, null: false, unsigned: true
-    t.column "type", "enum('Units::SimpleRoom','Units::DoubleRoom','Units::FamilyRoom','Units::SmallTerrain','Units::StandardTerrain','Units::DeluxeTerrain')", null: false
+    t.string "type", null: false
     t.datetime "updated_at", null: false
     t.integer "water", limit: 1, default: 0
     t.boolean "wifi", default: false, null: false

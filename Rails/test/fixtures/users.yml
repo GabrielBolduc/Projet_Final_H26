@@ -22,3 +22,9 @@ three:
   email: admin@test.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
 
+four:
+  name: "other_client"
+  type: Client
+  email: user_four@example.com
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+

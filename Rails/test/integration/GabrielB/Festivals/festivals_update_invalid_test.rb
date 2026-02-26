@@ -250,4 +250,36 @@ class FestivalsUpdateInvalidTest < ActionDispatch::IntegrationTest
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
   end
+
+  test "should fail to update with start_at in the past" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Festival.count") do
+      put api_festival_url(@festival), params: { festival: { start_at: (Date.today - 1.day).to_s } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+  end
+
+  test "should fail to update with end_at in the past" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Festival.count") do
+      put api_festival_url(@festival), params: { festival: { end_at: (Date.today - 1.day).to_s } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+  end
 end

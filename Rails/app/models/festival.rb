@@ -23,7 +23,7 @@ class Festival < ApplicationRecord
 
   validate :end_at_after_start_at
   validate :only_one_ongoing_festival
-  validate :start_at_cannot_be_in_the_past, on: :create
+  validate :start_at_cannot_be_in_the_past, unless: :completed?
 
   composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
 
@@ -51,10 +51,9 @@ class Festival < ApplicationRecord
   end
 
   def start_at_cannot_be_in_the_past
-    return if start_at.blank? || completed?
 
-    if start_at < Date.today
-      errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive 'completed')")
+    if start_at.present? && start_at < Date.today
+      errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive)")
     end
   end
 

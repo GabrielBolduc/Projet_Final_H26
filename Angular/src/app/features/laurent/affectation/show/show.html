@@ -3,7 +3,7 @@
   <mat-card class="detail-card">
 
     <h2 class="page-title">
-      Affectation
+        {{ 'AFFECTATIONS.TITLE' | translate }}    
     </h2>
 
     <mat-divider></mat-divider>
@@ -13,31 +13,31 @@
 
       <h3>
         <mat-icon>person</mat-icon>
-        Utilisateur
+        {{ 'AFFECTATIONS.USER' | translate }}
       </h3>
 
       <div class="info-grid">
 
         <div>
-          <label>Nom</label>
+          <label>{{ 'AFFECTATIONS.NAME' | translate }}</label>
           <p>{{ affectation()?.user?.name }}</p>
         </div>
 
         <div>
-          <label>Email</label>
+          <label>{{ 'AFFECTATIONS.EMAIL' | translate }}</label>
           <p>{{ affectation()?.user?.email }}</p>
         </div>
 
         <div>
-          <label>Téléphone</label>
+          <label>{{ 'AFFECTATIONS.PHONE' | translate }}</label>
           <p>{{ affectation()?.user?.phone_number }}</p>
         </div>
 
         <div>
-          <label>Rôle</label>
+          <label>{{ 'AFFECTATIONS.ABILITY' | translate }}</label>
           <p>{{ affectation()?.user?.ability }}</p>
         </div>
-
+#
       </div>
 
     </section>
@@ -55,13 +55,13 @@
 
       <h3>
         <mat-icon>festival</mat-icon>
-        Festival
+        {{ 'AFFECTATIONS.FESTIVAL' | translate }}
       </h3>
 
       <div class="info-grid">
 
         <div>
-          <label>Nom</label>
+          <label>{{ 'AFFECTATIONS.NAME' | translate }}</label>
           <p>{{ affectation()?.festival?.name }}</p>
         </div>
 
@@ -79,25 +79,40 @@
 
       <h3>
         <mat-icon>schedule</mat-icon>
-        Affectation
+        {{ 'AFFECTATIONS.AFFECTATION' | translate }}
       </h3>
 
       <div class="info-grid">
 
         <div>
-          <label>Responsabilité</label>
+          <label>{{ 'AFFECTATIONS.RESPONSABILITY' | translate }}</label>
           <p>{{ affectation()?.responsability }}</p>
         </div>
 
         <div>
-          <label>Début prévu</label>
+          <label>{{ 'AFFECTATIONS.EXPECTED_START' | translate }}</label>
           <p>{{ affectation()?.expected_start | date:'medium' }}</p>
         </div>
 
         <div>
-          <label>Fin prévue</label>
+          <label>{{ 'AFFECTATIONS.EXPECTED_END' | translate }}</label>
           <p>{{ affectation()?.expected_end | date:'medium' }}</p>
+
         </div>
+
+        @if(affectation()?.start){
+            <div>
+                <label>{{ 'AFFECTATIONS.START' | translate }}</label>
+                <p>{{ affectation()?.start | date:'medium' }}</p>
+            </div>
+        }
+
+        @if(affectation()?.end){
+            <div>
+                <label>{{ 'AFFECTATIONS.END' | translate }}</label>
+                <p>{{ affectation()?.end | date:'medium' }}</p>
+            </div>
+        }
 
       </div>
 

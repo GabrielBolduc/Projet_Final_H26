@@ -5,7 +5,8 @@
     "ACCOMMODATIONS": "Hébergements",
     "TICKETING": "Billetterie",
     "SCHEDULE": "Programmation",
-    "ADMIN": "Administration"
+    "ADMIN": "Administration",
+    "AFFECTATIONS": "Affectations"
   },
   "PUBLIC": {
     "PROGRAMMATION": "Programmation",
@@ -283,6 +284,24 @@
     "TITLE_UPDATE": "Mettre à jour la tâche",
     "TITLE_CREATE": "Créer une nouvelle tâche",
     "SELECT_REUSABLE": "Tâches réutilisables"
+  },
+  "AFFECTATIONS": {
+   "ADD": " Ajouter une affectation",
+   "TITLE": "Affectations",
+   "USER": "Utilisateur",
+   "MORE": "En savoir plus",
+    "NAME": "Nom",
+    "EMAIL": "Email",
+    "PHONE": "Téléphone",
+    "ABILITY": "Rôle",
+    "FESTIVAL": "Festival",
+    "RESPONSABILITY": "Responsabilité",
+    "EXPECTED_START": "Début prévu",
+    "EXPECTED_END": "Fin prévue",
+    "START": "Début réel",
+    "END": "Fin réelle",
+    "UPDATE_START": "Mettre à jour la tâche"
+    
   },
   "ACCOMMODATIONS": {
     "ADD": "AJOUTER",

@@ -5,7 +5,9 @@
     "ACCOMMODATIONS": "Accommodations",
     "TICKETING": "Ticketing",
     "SCHEDULE": "Schedule",
-    "ADMIN": "Admin"
+    "ADMIN": "Admin",
+    "AFFECTATIONS": "Affectations"
+    
   },
   "PUBLIC": {
     "PROGRAMMATION": "Schedule",
@@ -281,6 +283,22 @@
     "TITLE_UPDATE": "Edit Task",
     "REUSABLE_TASKS": "Reusable Tasks",
     "SELECT_REUSABLE": "Select reusable tasks"
+  },
+  "AFFECTATIONS": {
+    "ADD": "Add Affectation",
+    "TITLE": "Affectations",
+    "USER": "User",
+    "MORE": "More details",
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "ABILITY": "Role",
+    "RESPONSABILITY": "Responsability",
+    "EXPECTED_START": "Expected start",
+    "EXPECTED_END": "Expected end",
+    "START": "Actual start",
+    "END": "Actual end",
+    "FESTIVAL": "Festival"
   },
   "ACCOMMODATIONS": {
     "ADD": "ADD",

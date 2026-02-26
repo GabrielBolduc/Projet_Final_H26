@@ -11,6 +11,14 @@ class Api::AffectationsController < ApiController
         }, status: :ok
     end
 
+    def get_staff_list
+        @staff_list = Staff.all
+        render json: {
+            status: "success",
+            data: @staff_list.as_json(user_json)
+        }, status: :ok
+    end
+
     def get_by_task
         @affectations = Affectation.where(task_id: params[:task_id]).order(updated_at: :desc)   
         render json: {
@@ -57,6 +65,13 @@ class Api::AffectationsController < ApiController
 
     private
 
+    def user_json
+    {
+        only: [ :id, :name, :email,:phone_number, :ability,:type ]
+    }
+
+    end
+
     def affectation_json
         {
             success: true,
@@ -72,6 +87,7 @@ class Api::AffectationsController < ApiController
                 },
                 user: {
                     only: [ :id, :name, :email,:phone_number, :ability,:type ]
+                }
             }
         }
     end

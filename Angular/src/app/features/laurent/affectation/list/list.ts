@@ -20,7 +20,7 @@ export class ListAffectationsComponent {
   private affectationService = inject(AffectationService);
   public translate = inject(TranslateService);
 
-
+  taskId: number | null = null;
   constructor(private route: ActivatedRoute) {}
 
   affectations = signal<Affectation[]>([]);
@@ -31,7 +31,7 @@ export class ListAffectationsComponent {
     const idParam = this.route.snapshot.paramMap.get('id');
 
     const id = idParam ? Number(idParam) : null;
-
+    this.taskId = id;
        this.affectationService.listAffectationsByTask(id).subscribe(data => { 
         console.log('Tâches reçues : ', data);
         this.affectations.set(data);
@@ -46,5 +46,19 @@ export class ListAffectationsComponent {
   private formatLang(lang: string | undefined): string {
     if (!lang) return 'en'; 
     return lang.split('-')[0];
+  }
+
+  handleClick(id: number) {
+    
+
+    this.affectationService.deleteAffectation(id).subscribe(data =>{ 
+      console.log('affectation reçue : ', data)
+    
+    });
+    this.affectationService.listAffectationsByTask(this.taskId!).subscribe(data => { 
+      console.log('Affectations reçues : ', data);
+      this.affectations.set(data);
+    });
+
   }
 }

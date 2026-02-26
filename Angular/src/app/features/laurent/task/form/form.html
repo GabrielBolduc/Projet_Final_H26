@@ -79,18 +79,18 @@
             <button type="button" mat-stroked-button (click)="fileInput.click()">
               <mat-icon>image</mat-icon> Image de fond
             </button>
+             <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
             <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
             @if (selectedFile) { <span class="file-name">{{ selectedFile.name }}</span> }
           </div>
 
-          @if (previewUrl || existingImageUrl) {
+          @if (displayImageUrl()) {
             <div class="image-thumbnail">
-              <img [src]="previewUrl || existingImageUrl" alt="Aperçu de l'image du billet" class="image-preview">
+              <img [src]="displayImageUrl()" alt="Aperçu de l'image du billet">
             </div>
           }
-        </div>
       
-
+      </div>
 
     <div class="form-actions">
       <button mat-stroked-button type="button" routerLink="/tasks" class="action-btn cancel-btn">

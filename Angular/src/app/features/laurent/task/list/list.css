@@ -80,7 +80,7 @@
 }
 
 .task-thumbnail {
-  width: clamp(150px, 30vw, 250px);
+  max-width: 100%;
   height: auto;
   object-fit: cover;
   border-radius: 8px;
@@ -97,4 +97,9 @@
 
 .icon-btn:hover { 
   transform: scale(1.1); 
+}
+
+.action-section {
+  display: grid;
+  gap: 10px;
 }

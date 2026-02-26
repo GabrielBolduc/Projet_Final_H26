@@ -1,1 +1,109 @@
-<p>show works!</p>
+<div class="detail-page" *ngIf="affectation() as a">
+
+  <mat-card class="detail-card">
+
+    <h2 class="page-title">
+      Affectation
+    </h2>
+
+    <mat-divider></mat-divider>
+
+    <!-- USER SECTION -->
+    <section class="section">
+
+      <h3>
+        <mat-icon>person</mat-icon>
+        Utilisateur
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>Nom</label>
+          <p>{{ affectation()?.user?.name }}</p>
+        </div>
+
+        <div>
+          <label>Email</label>
+          <p>{{ affectation()?.user?.email }}</p>
+        </div>
+
+        <div>
+          <label>Téléphone</label>
+          <p>{{ affectation()?.user?.phone_number }}</p>
+        </div>
+
+        <div>
+          <label>Rôle</label>
+          <p>{{ affectation()?.user?.ability }}</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <mat-divider></mat-divider>
+
+
+
+
+
+    <!-- FESTIVAL SECTION -->
+
+    <section class="section">
+
+      <h3>
+        <mat-icon>festival</mat-icon>
+        Festival
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>Nom</label>
+          <p>{{ affectation()?.festival?.name }}</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <mat-divider></mat-divider>
+
+
+    <!-- AFFECTATION SECTION -->
+
+    <section class="section">
+
+      <h3>
+        <mat-icon>schedule</mat-icon>
+        Affectation
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>Responsabilité</label>
+          <p>{{ affectation()?.responsability }}</p>
+        </div>
+
+        <div>
+          <label>Début prévu</label>
+          <p>{{ affectation()?.expected_start | date:'medium' }}</p>
+        </div>
+
+        <div>
+          <label>Fin prévue</label>
+          <p>{{ affectation()?.expected_end | date:'medium' }}</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+  </mat-card>
+
+</div>

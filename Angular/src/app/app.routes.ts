@@ -179,17 +179,17 @@ export const routes: Routes = [
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path : 'task/affectations/:id',
+                path : 'task/:id/affectations/:affectationId',
                 component: ShowAffectationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'task/affectations/new',
+                path: 'task/:id/affectation/new',
                 component: FormAffectationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
-                path: 'task/affectations/:id/edit',
+                path: 'task/:id/affectation/:affectationId/edit',
                 component: FormAffectationComponent,
                 canActivate: [AuthGuard, adminGuard]
             },

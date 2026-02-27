@@ -70,13 +70,8 @@ export class AdministrationComponent implements OnInit {
 
   async loadFestivals(): Promise<void> {
     try {
-      const response: any = await firstValueFrom(this.festivalService.getFestivals());
-      
-      if (response && response.status === 'error') {
-        this.showErrorsAsSnackBar(response);
-      } else {
-        this.festivals.set(response.data || []);
-      }
+      const festivalsList = await firstValueFrom(this.festivalService.getFestivals());
+      this.festivals.set(festivalsList);
     } catch (err) {
       this.showErrorsAsSnackBar(err);
     }
@@ -89,7 +84,6 @@ export class AdministrationComponent implements OnInit {
     })
   }
 
-  // fin de festival
   async openFinishDialog(festival: Festival): Promise<void> {
     const finishData = {
       satisfaction: 5,
@@ -107,22 +101,18 @@ export class AdministrationComponent implements OnInit {
 
     if (result) {
       try {
-        const response: any = await firstValueFrom(this.festivalService.updateFestival(festival.id, {
+        await firstValueFrom(this.festivalService.updateFestival(festival.id, {
           ...result,
           status: 'completed'
         }));
-        if (response && response.status === 'error') {
-          this.showErrorsAsSnackBar(response);
-        } else {
-          this.snackBar.open(
-            this.translate.instant('FESTIVAL.ARCHIVED_SUCCESS'), 
-            this.translate.instant('COMMON.CLOSE'), 
-            {duration: 3000}
-          );
-          await this.loadFestivals();
-        }
+        
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.ARCHIVED_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          {duration: 3000}
+        );
+        await this.loadFestivals();
       } catch (err) {
-        // Cas de panne réseau majeure
         this.showErrorsAsSnackBar(err);
       }
     }
@@ -151,18 +141,14 @@ export class AdministrationComponent implements OnInit {
 
     if (result) {
       try {
-        const response: any = await firstValueFrom(this.festivalService.deleteFestival(festival.id));
-
-        if (response && response.status === 'error') {
-          this.showErrorsAsSnackBar(response);
-        } else {
-          this.snackBar.open(
-            this.translate.instant('FESTIVAL.DELETE_SUCCESS'), 
-            this.translate.instant('COMMON.CLOSE'), 
-            { duration: 3000 }
-          );
-          await this.loadFestivals();
-        }
+        await firstValueFrom(this.festivalService.deleteFestival(festival.id));
+        
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.DELETE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
+        await this.loadFestivals();
       } catch (err) {
         this.showErrorsAsSnackBar(err);
       }

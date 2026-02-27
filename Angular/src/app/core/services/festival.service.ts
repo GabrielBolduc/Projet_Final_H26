@@ -3,8 +3,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Festival } from '../models/festival';
-import { response } from 'express';
-import { error } from 'node:console';
 import { ApiResponse } from '../models/api-response';
 
 @Injectable({ providedIn: 'root' })
@@ -19,40 +17,40 @@ export class FestivalService {
     return this.http.get<ApiResponse<Festival[]>>(this.API_URL, {params}).pipe(
       map(response => {
         if (response.status === 'success') return response.data || [];
-        throw response
+        throw response;
       }),
       catchError((error) => throwError(() => error))
-    )
+    );
   }
 
   getCurrentFestival(): Observable<Festival | null>{
     return this.http.get<ApiResponse<Festival |null>>(`${this.API_URL}/current`).pipe(
       map(response => {
         if (response.status === 'success') return response.data || null;
-        throw response
+        throw response;
       }),
       catchError((error) => throwError(() => error))
-    )
+    );
   }
 
   getFestival(id: number): Observable<Festival>{
     return this.http.get<ApiResponse<Festival>>(`${this.API_URL}/${id}`).pipe(
       map(response => {
         if (response.status === 'success') return response.data!;
-        throw response
+        throw response;
       }),
       catchError((error) => throwError(() => error))
-    )
+    );
   }
 
   createFestival(payload: any): Observable<any> {
     return this.http.post<ApiResponse<any>>(this.API_URL, {festival: payload}).pipe(
       map(response => {
         if (response.status === 'success') return response;
-        throw response
+        throw response;
       }),
       catchError((error) => throwError(() => error))
-    )
+    );
   }
 
   updateFestival(id: number, payload: any): Observable<any>{
@@ -62,16 +60,16 @@ export class FestivalService {
         throw response;
       }),
       catchError((error) => throwError(() => error))
-    )
+    );
   }
 
   deleteFestival(id: number): Observable<any> {
     return this.http.delete<ApiResponse<any>>(`${this.API_URL}/${id}`).pipe(
       map(response => {
         if (response.status === 'success') return response;
-        throw response
+        throw response;
       }),
       catchError((error) => throwError(() => error))
-    )
+    );
   }
 }

@@ -6,7 +6,6 @@ export class ErrorHandlerService {
   private translate = inject(TranslateService);
 
   parseRailsErrors(response: any): string[] {
-    
     if (response && response.status === "error") {
       const translatedErrorsList: string[] = [];
 
@@ -27,9 +26,13 @@ export class ErrorHandlerService {
       if (translatedErrorsList.length === 0 && response.message) {
         translatedErrorsList.push(response.message);
       }
-
       return translatedErrorsList.length > 0 ? translatedErrorsList : [this.translate.instant('SERVER_ERRORS.UNKNOWN')];
     }
-    return [this.translate.instant('SERVER_ERRORS.GENERIC_ERROR', { code: 'N/A' })];
+
+    if (response instanceof Error || response?.name === 'HttpErrorResponse' || (typeof response?.status === 'number' && response.status >= 400)) {
+       return [this.translate.instant('SERVER_ERRORS.INTERNAL_SERVER_ERROR')];
+    }
+    const fallbackCode = response?.status || 'N/A';
+    return [this.translate.instant('SERVER_ERRORS.GENERIC_ERROR', { code: fallbackCode })];
   }
 }

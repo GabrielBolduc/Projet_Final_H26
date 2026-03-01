@@ -9,11 +9,13 @@ export class ErrorHandlerService {
     if (response && response.status === "error") {
       const translatedErrorsList: string[] = [];
 
+      // traitement erreur de champs (validation)
       if (response.errors && typeof response.errors === 'object') {
         Object.keys(response.errors).forEach(field => {
           const fieldName = field !== 'base' ? `${field.toUpperCase()} : ` : '';
           const errorCodes = Array.isArray(response.errors[field]) ? response.errors[field] : [response.errors[field]];
 
+          // traduction dynamique
           errorCodes.forEach((errorCode: string) => {
             const translationKey = `SERVER_ERRORS.${errorCode}`;
             const translatedMessage = this.translate.instant(translationKey);
@@ -29,9 +31,12 @@ export class ErrorHandlerService {
       return translatedErrorsList.length > 0 ? translatedErrorsList : [this.translate.instant('SERVER_ERRORS.UNKNOWN')];
     }
 
+    // si erreur reseau (500)
     if (response instanceof Error || response?.name === 'HttpErrorResponse' || (typeof response?.status === 'number' && response.status >= 400)) {
        return [this.translate.instant('SERVER_ERRORS.INTERNAL_SERVER_ERROR')];
     }
+    
+    // si rien trouver
     const fallbackCode = response?.status || 'N/A';
     return [this.translate.instant('SERVER_ERRORS.GENERIC_ERROR', { code: fallbackCode })];
   }

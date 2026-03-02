@@ -7,9 +7,9 @@ class Api::AccommodationsController < ApiController
     @festival = Festival.ongoing.first
     return render json: { status: "success", data: [] } if @festival.nil?
 
-    @accommodations = @festival.accommodations
-                              .includes(units: { image_attachment: :blob })
-
+    @accommodations = @festival.accommodations.includes(units: { image_attachment: :blob })
+    
+    @accommodations = @accommodations.search_by_name(params[:name]) if params[:name].present?
     @accommodations = @accommodations.where(category: params[:category]) if params[:category].present? && params[:category] != 'all'
     @accommodations = @accommodations.within_radius(@festival.latitude, @festival.longitude, params[:max_distance]) if params[:max_distance].present?
     @accommodations = @accommodations.with_units_matching(params) if has_unit_filters?

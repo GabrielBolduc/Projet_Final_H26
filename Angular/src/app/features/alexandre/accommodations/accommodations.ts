@@ -39,6 +39,7 @@ export class Accommodations {
 
   // --- SIGNALS FOR UI STATE ---
   currentCategory = computed(() => this.queryParams()?.get('category') || 'all');
+  searchValue = computed(() => this.queryParams()?.get('name') || ''); // Added for search
   maxDistanceValue = computed(() => this.queryParams()?.get('max_distance') || '25');
   maxPriceValue = computed(() => this.queryParams()?.get('max_price') || '500');
   wifiValue = computed(() => this.queryParams()?.get('wifi') === 'true');
@@ -46,6 +47,7 @@ export class Accommodations {
   waterValue = computed(() => this.queryParams()?.get('water') || '');
   unitTypeValue = computed(() => this.queryParams()?.get('type') || '');
   isCamping = computed(() => this.currentCategory() === 'camping');
+  
 
   /**
    * ADAPTIVE FILTERS: Returns only relevant UnitTypes based on selected category.
@@ -67,6 +69,7 @@ export class Accommodations {
     switchMap(params => {
       const filters: SSFFilters = {
         category: (params.get('category') as any) || 'all',
+        name: params.get('name') || undefined, // Map URL 'name' to filter
         max_distance: params.get('max_distance') ? Number(params.get('max_distance')) : undefined,
         wifi: params.get('wifi') === 'true' ? true : undefined,
         electricity: params.get('electricity') === 'true' ? true : undefined,
@@ -100,14 +103,15 @@ export class Accommodations {
 
   /**
    * Updates URL params. 
-   * If switching 'category', it automatically clears 'type' to prevent cross-category errors.
+   * If switching 'category', it automatically clears 'type' and 'name' to prevent cross-category errors.
    */
   updateFilter(key: string, value: any) {
     const extras: any = { [key]: value };
     
-    // Auto-reset room type if changing top-level category
+    // Auto-reset filters if changing top-level category
     if (key === 'category') {
       extras['type'] = null;
+      extras['name'] = null;
     }
 
     this.router.navigate([], {

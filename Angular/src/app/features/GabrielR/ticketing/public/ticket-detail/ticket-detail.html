@@ -38,8 +38,18 @@
       }
 
       <p class="ticket-date">{{ 'TICKETING_PUBLIC.DATE' | translate }}: {{ currentTicket.package.valid_at | date:'yyyy-MM-dd HH:mm' }}</p>
-      <p class="status" [class.refunded]="currentTicket.refunded">
-        {{ currentTicket.refunded ? ('TICKETING_PUBLIC.REFUNDED' | translate) : ('TICKETING_PUBLIC.ACTIVE' | translate) }}
+      
+      <p class="status"
+         [class.refunded]="ticketIsRefunded()"
+         [class.expired]="ticketIsExpired() && !ticketIsRefunded()"
+         [class.active]="!ticketIsRefunded() && !ticketIsExpired()">
+        @if (ticketIsRefunded()) {
+          {{ 'TICKETING_PUBLIC.REFUNDED' | translate }}
+        } @else if (ticketIsExpired()) {
+          {{ 'TICKETING_PUBLIC.EXPIRED' | translate }}
+        } @else {
+          {{ 'TICKETING_PUBLIC.ACTIVE' | translate }}
+        }
       </p>
 
       <form [formGroup]="ticketForm" (ngSubmit)="updateTicketDetails()" class="ticket-form">
@@ -90,7 +100,7 @@
         }
 
         <div class="actions">
-          <button mat-stroked-button type="submit" [disabled]="isSaving() || currentTicket.refunded">
+          <button mat-stroked-button type="submit" [disabled]="isSaving() || ticketIsRefunded() || ticketIsExpired() || ticketForm.pristine">
             {{ 'TICKETING_PUBLIC.UPDATE_TICKET' | translate }}
           </button>
           <button
@@ -98,7 +108,7 @@
             type="button"
             color="warn"
             (click)="refundTicket()"
-            [disabled]="isRefunding() || currentTicket.refunded"
+            [disabled]="isRefunding() || ticketIsRefunded() || ticketIsExpired()"
           >
             {{ 'TICKETING_PUBLIC.REFUND_TICKET' | translate }}
           </button>

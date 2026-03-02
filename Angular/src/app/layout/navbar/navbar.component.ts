@@ -33,7 +33,6 @@ export class NavbarComponent implements OnInit {
   ongoingFestivalId = signal<number | null>(null);
 
   async ngOnInit() {
-    // MODIFICATION : On vérifie s'il y a un festival en cours pour TOUS les utilisateurs (public et connectés)
     try {
       const festivals = await firstValueFrom(this.festivalService.getFestivals());
       const ongoing = festivals.find(f => f.status === 'ongoing');

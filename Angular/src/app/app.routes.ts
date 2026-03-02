@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
-import { Home } from './features/home/home';
 import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
@@ -43,7 +42,7 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: Home
+                component: PublicScheduleComponent
             },
             {
                 path: 'programmation',

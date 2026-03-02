@@ -10,4 +10,12 @@ class Artist < ApplicationRecord
     validates :name, presence: true, length: { maximum: 100 }, uniqueness: true
     validates :genre, presence: true, length: { maximum: 50 }
     validates :popularity, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
+
+    def image_url
+      if image.attached?
+        Rails.application.routes.url_helpers.rails_blob_url(image, only_path: true)
+      else
+        nil
+      end
+    end
 end

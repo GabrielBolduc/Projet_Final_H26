@@ -19,7 +19,13 @@ class Api::PerformancesController < ApiController
     
     render json: {
       status: "success",
-      data: performances.as_json(include: [ :artist, :stage, :festival ])
+      data: performances.as_json(
+        include: {
+          stage: {},
+          festival: {},
+          artist: { methods: [:image_url] }
+        }
+      )
     }, status: :ok
   end
 
@@ -33,7 +39,13 @@ class Api::PerformancesController < ApiController
 
     render json: {
       status: "success",
-      data: @performance.as_json(include: [ :artist, :stage, :festival ])
+      data: @performance.as_json(
+        include: {
+          stage: {},
+          festival: {},
+          artist: { methods: [:image_url] }
+        }
+      )
     }, status: :ok
   end
 
@@ -43,7 +55,14 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-        data: performance.as_json(include: [:artist, :stage, :festival])
+        # CORRECTION ICI
+        data: performance.as_json(
+          include: {
+            stage: {},
+            festival: {},
+            artist: { methods: [:image_url] }
+          }
+        )
       }, status: :ok
     else
       render json: {
@@ -58,7 +77,14 @@ class Api::PerformancesController < ApiController
     if @performance.update(performance_params)
       render json: {
         status: "success",
-        data: @performance.as_json(include: [ :artist, :stage, :festival ])
+        # CORRECTION ICI
+        data: @performance.as_json(
+          include: {
+            stage: {},
+            festival: {},
+            artist: { methods: [:image_url] }
+          }
+        )
       }, status: :ok
     else
       render json: {

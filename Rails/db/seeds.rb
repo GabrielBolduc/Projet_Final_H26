@@ -156,26 +156,27 @@ c_stage = Stage.create!(
     technical_specs: "Small speaker"
 )
 
-artist1 = Artist.create!(
-    name: "Bob",
-    genre: "Rock",
-    popularity: 4,
-    bio: "Good music"
-)
+# --- AJOUT DES ARTISTES ET DES IMAGES ICI ---
+puts "Création des artistes..."
 
-artist2 = Artist.create!(
-    name: "Louis",
-    genre: "Hip hop",
-    popularity: 3,
-    bio: "Good music"
-)
+artist1 = Artist.find_or_initialize_by(name: "Bob")
+artist1.update!(genre: "Rock", popularity: 4, bio: "Good music")
+if File.exist?(Rails.root.join('db', 'files', 'artist1.jpg')) && !artist1.image.attached?
+  artist1.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist1.jpg')), filename: 'artist1.jpg', content_type: 'image/jpeg')
+end
 
-artist3 = Artist.create!(
-    name: "Alice",
-    genre: "Pop",
-    popularity: 4,
-    bio: "Good music"
-)
+artist2 = Artist.find_or_initialize_by(name: "Louis")
+artist2.update!(genre: "Hip hop", popularity: 3, bio: "Good music")
+if File.exist?(Rails.root.join('db', 'files', 'artist2.jpg')) && !artist2.image.attached?
+  artist2.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist2.jpg')), filename: 'artist2.jpg', content_type: 'image/jpeg')
+end
+
+artist3 = Artist.find_or_initialize_by(name: "Alice")
+artist3.update!(genre: "Pop", popularity: 4, bio: "Good music")
+if File.exist?(Rails.root.join('db', 'files', 'artist3.jpg')) && !artist3.image.attached?
+  artist3.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist3.jpg')), filename: 'artist3.jpg', content_type: 'image/jpeg')
+end
+# ---------------------------------------------
 
 # perf pour f (ongoing)
 Performance.create!(
@@ -279,7 +280,7 @@ Performance.create!(
   artist: artist2
 )
 
-f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20),)
+f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20))
 
 # Alexandre
 acc1 = Accommodation.create!(

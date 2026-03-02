@@ -22,7 +22,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     returned_ids = json["data"].map { |pkg| pkg["id"] }
     # Prices: four(40), two(60), seven(75), three(90), one(150)
-    expected_ids = [packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one)].map(&:id)
+    expected_ids = [ packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one) ].map(&:id)
     assert_equal expected_ids, returned_ids
 
     statuses = json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
@@ -34,7 +34,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:five).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:five).id ], json["data"].map { |pkg| pkg["id"] }
     assert_equal [ "completed" ], json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
   end
 
@@ -43,7 +43,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:six).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:six).id ], json["data"].map { |pkg| pkg["id"] }
     assert_equal [ "draft" ], json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
   end
 
@@ -52,8 +52,8 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:five).id], json["data"].map { |pkg| pkg["id"] }
-    assert_equal [@completed_festival.id], json["data"].map { |pkg| pkg["festival_id"] }.uniq
+    assert_equal [ packages(:five).id ], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ @completed_festival.id ], json["data"].map { |pkg| pkg["festival_id"] }.uniq
   end
 
   test "index search is case-insensitive" do
@@ -61,7 +61,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:three).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:three).id ], json["data"].map { |pkg| pkg["id"] }
   end
 
   test "index search with no match returns empty list" do
@@ -78,7 +78,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
-    assert_equal [packages(:four).id, packages(:two).id, packages(:three).id], ids
+    assert_equal [ packages(:four).id, packages(:two).id, packages(:three).id ], ids
   end
 
   test "index categories filter returns empty when all categories are invalid" do
@@ -96,7 +96,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
     # Dates: seven(Aug 03), four(Aug 02), three(Aug 01), two(Aug 01), one(Aug 01)
-    assert_equal [packages(:seven).id, packages(:four).id, packages(:three).id, packages(:two).id, packages(:one).id], ids
+    assert_equal [ packages(:seven).id, packages(:four).id, packages(:three).id, packages(:two).id, packages(:one).id ], ids
   end
 
   test "index supports price_desc sort" do
@@ -106,7 +106,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
     # Prices: one(150), three(90), seven(75), two(60), four(40)
-    assert_equal [packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id], ids
+    assert_equal [ packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id ], ids
   end
 
   # SHOW
@@ -151,10 +151,10 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
   # UPDATE
   test "admin can update package fields" do
     assert_no_difference("Package.count") do
-      put api_package_url(@package), 
-          params: { package: { 
-            title: "Updated Title", 
-            price: 99.99, 
+      put api_package_url(@package),
+          params: { package: {
+            title: "Updated Title",
+            price: 99.99,
             category: "evening",
             valid_at: "2026-08-01 19:00:00",
             expired_at: "2026-08-02 02:00:00"

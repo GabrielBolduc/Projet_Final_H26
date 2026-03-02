@@ -5,7 +5,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @admin = users(:three) 
+    @admin = users(:three)
     @user = users(:one) # Client
     @accommodation = accommodations(:one) # Grand Hotel
   end
@@ -222,7 +222,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
         }, as: :json
 
         # Format json valide
-        assert_response :success 
+        assert_response :success
 
         # Validation de la cohérence de la base de données
         @accommodation.reload
@@ -241,7 +241,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     assert_response :ok
     json_response = JSON.parse(response.body)
     assert_equal "error", json_response["status"]
-    
+
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_not_nil @accommodation.time_car
@@ -254,6 +254,6 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
         }, as: :json
 
         # Contenu du format json
-        assert_equal "success", JSON.parse(response.body)["status"] 
+        assert_equal "success", JSON.parse(response.body)["status"]
     end
 end

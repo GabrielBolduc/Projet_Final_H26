@@ -5,8 +5,8 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @admin = users(:three) 
-    @user = users(:one)   
+    @admin = users(:three)
+    @user = users(:one)
   end
 
   def test_create_denied_for_non_admin
@@ -31,13 +31,13 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
   def test_create_fails_when_no_festival_is_ongoing
     sign_in @admin
-    Festival.update_all(status: 'completed')
+    Festival.update_all(status: "completed")
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
-        name: "No Festival Hotel", 
-        category: "hotel", 
+      accommodation: {
+        name: "No Festival Hotel",
+        category: "hotel",
         address: "123 St",
         latitude: 45, longitude: -73,
         time_car: "00:10:00", time_walk: "00:30:00"
@@ -45,7 +45,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
     }, as: :json
 
     # Format json valide
-    assert_response :ok 
+    assert_response :ok
     json_response = JSON.parse(response.body)
 
     # Contenu du format json
@@ -61,10 +61,10 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
-        name: "High Fee Hotel", 
-        category: "hotel", 
-        commission: 35.00, 
+      accommodation: {
+        name: "High Fee Hotel",
+        category: "hotel",
+        commission: 35.00,
         address: "Rich St",
         latitude: 45.0, longitude: -73.0,
         time_car: "00:05:00", time_walk: "00:15:00"
@@ -102,9 +102,9 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
-        name: "Floating Hotel", 
-        category: "hotel", 
+      accommodation: {
+        name: "Floating Hotel",
+        category: "hotel",
         address: "Ocean",
         time_car: "00:05:00", time_walk: "00:15:00"
       }
@@ -129,13 +129,13 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
-        name: "Time Warp Inn", 
-        category: "hotel", 
+      accommodation: {
+        name: "Time Warp Inn",
+        category: "hotel",
         address: "123 St",
         latitude: 45.0, longitude: -73.0,
-        time_car: "not-a-time", 
-        time_walk: "30 minutes" 
+        time_car: "not-a-time",
+        time_walk: "30 minutes"
       }
     }, as: :json
 
@@ -157,19 +157,19 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
-        name: "Hijacked Hotel", 
-        category: "hotel", 
+      accommodation: {
+        name: "Hijacked Hotel",
+        category: "hotel",
         address: "123 St",
         latitude: 45, longitude: -73,
         time_car: "00:10:00", time_walk: "00:30:00",
-        festival_id: completed_festival.id 
+        festival_id: completed_festival.id
       }
     }, as: :json
 
     # Format json valide
     assert_response :ok
-    
+
     # Contenu du format json
     # Validation de la cohérence de la base de données
     new_acc = Accommodation.find_by(name: "Hijacked Hotel")
@@ -182,11 +182,11 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
+      accommodation: {
         name: "Discount Inn", category: "hotel", address: "123 St",
         latitude: 45, longitude: -73,
         time_car: "00:05:00", time_walk: "00:20:00",
-        commission: -1.5 
+        commission: -1.5
       }
     }, as: :json
 
@@ -208,7 +208,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
+      accommodation: {
         name: long_name, category: "hotel", address: "123 St",
         latitude: 45, longitude: -73,
         time_car: "00:05:00", time_walk: "00:20:00"
@@ -233,7 +233,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Code http
     post api_accommodations_url, params: {
-      accommodation: { 
+      accommodation: {
         name: "Clean Hotel", category: "hotel", address: messy_address,
         latitude: 45.1, longitude: -73.1,
         time_car: "00:10:00", time_walk: "00:30:00"

@@ -13,7 +13,7 @@ class Unit < ApplicationRecord
     "Units::DeluxeTerrain"   => 8
   }.freeze
 
-  ALLOWED_FOOD = ["None", "Canteen", "Room service", "Restaurant"].freeze
+  ALLOWED_FOOD = [ "None", "Canteen", "Room service", "Restaurant" ].freeze
 
   enum :water, { no_water: 0, undrinkable: 1, drinkable: 2 }, prefix: true
 
@@ -96,9 +96,9 @@ class Unit < ApplicationRecord
   end
 
   def type_matches_accommodation_category
-    if accommodation.hotel? && type.start_with?('Units::SmallTerrain', 'Units::StandardTerrain', 'Units::DeluxeTerrain')
+    if accommodation.hotel? && type.start_with?("Units::SmallTerrain", "Units::StandardTerrain", "Units::DeluxeTerrain")
       errors.add(:type, "cannot be a terrain for a hotel")
-    elsif accommodation.camping? && type.start_with?('Units::SimpleRoom', 'Units::DoubleRoom', 'Units::FamilyRoom')
+    elsif accommodation.camping? && type.start_with?("Units::SimpleRoom", "Units::DoubleRoom", "Units::FamilyRoom")
       errors.add(:type, "cannot be a room for a camping site")
     end
   end
@@ -117,4 +117,3 @@ class Unit < ApplicationRecord
     end
   end
 end
-

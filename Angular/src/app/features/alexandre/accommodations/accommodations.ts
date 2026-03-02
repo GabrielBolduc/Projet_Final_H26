@@ -2,15 +2,20 @@ import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { ActivatedRoute, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { switchMap, map, of, tap } from 'rxjs'; 
+import { catchError } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card'; 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
-import { switchMap, map, of, tap } from 'rxjs'; 
-import { catchError } from 'rxjs/operators';
-import { TranslateModule } from '@ngx-translate/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { AccommodationWithImage, SSFFilters } from '@core/models/accommodation';
@@ -21,13 +26,14 @@ import { AuthService } from '@core/services/auth.service';
   selector: 'app-accommodations',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatIconModule, MatButtonModule,
-    RouterLink, RouterLinkActive, TranslateModule, MatMenuModule,
-    MatDividerModule, MatProgressSpinnerModule
+    CommonModule, RouterLink, RouterLinkActive, TranslateModule,
+    MatCardModule, MatIconModule, MatButtonModule, MatMenuModule,
+    MatDividerModule, MatProgressSpinnerModule, MatFormFieldModule,
+    MatInputModule, MatSelectModule, MatSliderModule, MatChipsModule
   ],
   templateUrl: './accommodations.html',
   styleUrls: ['./accommodations.css']
-})
+})  
 export class Accommodations {
   private route = inject(ActivatedRoute);
   private service = inject(AccommodationsService);
@@ -37,30 +43,22 @@ export class Accommodations {
   private queryParams = toSignal(this.route.queryParamMap);
   isLoading = signal(false);
 
-  // --- SIGNALS FOR UI STATE ---
   currentCategory = computed(() => this.queryParams()?.get('category') || 'all');
-  searchValue = computed(() => this.queryParams()?.get('name') || ''); // Added for search
-  maxDistanceValue = computed(() => this.queryParams()?.get('max_distance') || '25');
-  maxPriceValue = computed(() => this.queryParams()?.get('max_price') || '500');
+  searchValue = computed(() => this.queryParams()?.get('name') || '');
+  maxDistanceValue = computed(() => Number(this.queryParams()?.get('max_distance') || 25));
+  maxPriceValue = computed(() => Number(this.queryParams()?.get('max_price') || 500));
   wifiValue = computed(() => this.queryParams()?.get('wifi') === 'true');
   electricityValue = computed(() => this.queryParams()?.get('electricity') === 'true');
   waterValue = computed(() => this.queryParams()?.get('water') || '');
   unitTypeValue = computed(() => this.queryParams()?.get('type') || '');
   isCamping = computed(() => this.currentCategory() === 'camping');
   
-
-  /**
-   * ADAPTIVE FILTERS: Returns only relevant UnitTypes based on selected category.
-   */
   availableUnitTypes = computed(() => {
     const category = this.currentCategory();
     const allTypes = Object.values(UnitType);
     
-    if (category === 'hotel') {
-      return allTypes.filter(t => t.includes('Room'));
-    } else if (category === 'camping') {
-      return allTypes.filter(t => t.includes('Terrain'));
-    }
+    if (category === 'hotel') return allTypes.filter(t => t.includes('Room'));
+    if (category === 'camping') return allTypes.filter(t => t.includes('Terrain'));
     return allTypes;
   });
 
@@ -69,7 +67,7 @@ export class Accommodations {
     switchMap(params => {
       const filters: SSFFilters = {
         category: (params.get('category') as any) || 'all',
-        name: params.get('name') || undefined, // Map URL 'name' to filter
+        name: params.get('name') || undefined,
         max_distance: params.get('max_distance') ? Number(params.get('max_distance')) : undefined,
         wifi: params.get('wifi') === 'true' ? true : undefined,
         electricity: params.get('electricity') === 'true' ? true : undefined,
@@ -85,30 +83,21 @@ export class Accommodations {
         })
       );
     }),
-    map(accs => {
-      return accs.map(acc => {
-        const units = acc.units || [];
-        const urls = units.map(u => u.image_url).filter((url): url is string => !!url);
-        const displayImage = urls.length > 0 
-          ? urls[Math.floor(Math.random() * urls.length)] 
-          : 'assets/placeholder-image.png';
+    map(accs => accs.map(acc => {
+      const urls = (acc.units || []).map(u => u.image_url).filter((url): url is string => !!url);
+      const displayImage = urls.length > 0 
+        ? urls[Math.floor(Math.random() * urls.length)] 
+        : 'assets/placeholder-image.png';
 
-        return { ...acc, displayImage } as AccommodationWithImage;
-      });
-    }),
+      return { ...acc, displayImage } as AccommodationWithImage;
+    })),
     tap(() => this.isLoading.set(false))
   );
 
   accommodations = toSignal(this.accommodations$, { initialValue: [] as AccommodationWithImage[] });
 
-  /**
-   * Updates URL params. 
-   * If switching 'category', it automatically clears 'type' and 'name' to prevent cross-category errors.
-   */
   updateFilter(key: string, value: any) {
     const extras: any = { [key]: value };
-    
-    // Auto-reset filters if changing top-level category
     if (key === 'category') {
       extras['type'] = null;
       extras['name'] = null;

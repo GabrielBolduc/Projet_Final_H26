@@ -7,15 +7,15 @@ class Api::ArtistsController < ApiController
     if params[:genre].present?
       @artists = @artists.by_genre(params[:genre])
     end
-    
+
     render json: {
-      status: 'success',
+      status: "success",
       data: @artists
     }, status: :ok
   end
 
-  private 
-  
+  private
+
   def not_found_response
     render json: {
       status: "error",

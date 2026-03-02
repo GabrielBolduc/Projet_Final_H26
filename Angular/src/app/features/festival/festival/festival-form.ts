@@ -82,21 +82,14 @@ export class FestivalFormComponent implements OnInit {
     if (!this.festivalId) return;
     this.isLoading.set(true);
     try {
-      const response: any = await firstValueFrom(this.festivalService.getFestival(this.festivalId));
+      const data = await firstValueFrom(this.festivalService.getFestival(this.festivalId));
       
-      if (response && response.status === 'error') {
-        this.snackBar.open(
-          this.translate.instant('FESTIVAL.LOAD_ERROR'), 
-          this.translate.instant('COMMON.CLOSE'), 
-          { duration: 4000 }
-        );
-      } else {
-        const data = response.data || response;
-        if (data.start_at) data.start_at = new Date(data.start_at);
-        if (data.end_at) data.end_at = new Date(data.end_at);
-        
-        this.festivalForm.patchValue(data);
-      }
+      this.festivalForm.patchValue({
+        ...data,
+        start_at: data.start_at ? new Date(data.start_at) : null,
+        end_at: data.end_at ? new Date(data.end_at) : null
+      });
+
     } catch (err) {
       this.snackBar.open(
         this.translate.instant('FESTIVAL.LOAD_ERROR'), 
@@ -115,34 +108,22 @@ export class FestivalFormComponent implements OnInit {
     this.serverErrors.set([]);
 
     try {
-      const request$ = this.isEditMode() && this.festivalId
-        ? this.festivalService.updateFestival(this.festivalId, this.festivalForm.value)
-        : this.festivalService.createFestival(this.festivalForm.value);
-
-      const response: any = await firstValueFrom(request$);
-
-      if (response && response.status === 'error') {
-        const errors = this.errorHandler.parseRailsErrors(response);
-        this.serverErrors.set(errors);
-        
-        const errorMessage = errors.length > 0 ? errors[0] : this.translate.instant('FESTIVAL.SAVE_ERROR');
+      if (this.isEditMode() && this.festivalId) {
+        await firstValueFrom(this.festivalService.updateFestival(this.festivalId, this.festivalForm.value));
         this.snackBar.open(
-          errorMessage, 
-          this.translate.instant('COMMON.UNDERSTOOD'), 
-          { duration: 6000 }
-        );
-      } else {
-        const successMessage = this.isEditMode() 
-          ? this.translate.instant('FESTIVAL.UPDATE_SUCCESS')
-          : this.translate.instant('FESTIVAL.CREATE_SUCCESS');
-
-        this.snackBar.open(
-          successMessage, 
+          this.translate.instant('FESTIVAL.UPDATE_SUCCESS'), 
           this.translate.instant('COMMON.CLOSE'), 
           { duration: 3000 }
         );
-        this.router.navigate(['/admin/festivals']);
+      } else {
+        await firstValueFrom(this.festivalService.createFestival(this.festivalForm.value));
+        this.snackBar.open(
+          this.translate.instant('FESTIVAL.CREATE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       }
+      this.router.navigate(['/admin/festivals']);
     } catch (err) {
       const errors = this.errorHandler.parseRailsErrors(err);
       this.serverErrors.set(errors);

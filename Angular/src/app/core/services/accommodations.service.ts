@@ -2,14 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Accommodation } from '../models/accommodation';
-
-
-interface ApiResponse<T> {
-  status: 'success' | 'error';
-  data: T;
-  message?: string;
-  code?: number;   
-}
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +51,8 @@ export class AccommodationsService {
     if (response.status === 'success') {
       return response.data;
     } else {
-      throw new Error(response.message || `Error ${response.code}`);
+      const errorMessage = response.message || 'Server Error';
+      throw new Error(errorMessage);
     }
   }
 }

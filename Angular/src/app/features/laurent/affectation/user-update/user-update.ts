@@ -14,7 +14,7 @@ import { MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-user-update',
-  imports: [MatLabel,MatButtonModule, MatCardModule, MatIconModule, CommonModule, TranslateModule,RouterLink],
+  imports: [MatButtonModule, MatCardModule, MatIconModule, CommonModule, TranslateModule,RouterLink],
   templateUrl: './user-update.html',
   styleUrl: './user-update.css',
 })

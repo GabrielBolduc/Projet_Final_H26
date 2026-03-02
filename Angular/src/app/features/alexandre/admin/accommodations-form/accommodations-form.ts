@@ -1,4 +1,5 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, OnInit, inject, ViewChild, TemplateRef } from '@angular/core'; // Add ViewChild, TemplateRef
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // Add Dialog imports
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
   imports: [
     ReactiveFormsModule, MatCardModule, MatFormFieldModule, 
     MatInputModule, MatSelectModule, MatSlideToggleModule, 
-    MatButtonModule, RouterLink, MatIconModule, TranslateModule
+    MatButtonModule, RouterLink, MatIconModule, TranslateModule, MatDialogModule
   ],
   templateUrl: './accommodations-form.html',
   styleUrl: './accommodations-form.css'
@@ -28,7 +29,9 @@ export class AccommodationsForm implements OnInit {
   private router = inject(Router);        
   private service = inject(AccommodationsService);
   private translate = inject(TranslateService);
+  private dialog = inject(MatDialog);
   coordRegex = /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/;
+  @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
   
   form: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -156,25 +159,33 @@ export class AccommodationsForm implements OnInit {
   onDelete() {
     const id = this.accommodationId();
     if (!id) return;
-    
+    const dialogRef = this.dialog.open(this.confirmDialogTemplate, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.executeDelete(id);
+      }
+    });
+  }
+
+  private executeDelete(id: number) {
     const categoryValue = this.form.getRawValue().category;
     const categoryLabel = this.getCategoryString(categoryValue);
-    const confirmMsg = this.translate.instant('ACCOMMODATIONS.FORM.DELETE_CONFIRM');
 
-    if (confirm(confirmMsg)) {
-      this.isLoading.set(true);
-      this.service.deleteAccommodation(id).subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          this.router.navigate(['/accommodations'], { 
-            queryParams: { category: categoryLabel } 
-          });
-        },
-        error: (err) => {
-          this.serverErrors.set([err.message]);
-          this.isLoading.set(false);
-        }
-      });
-    }
+    this.isLoading.set(true);
+    this.service.deleteAccommodation(id).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.router.navigate(['/accommodations'], { 
+          queryParams: { category: categoryLabel } 
+        });
+      },
+      error: (err) => {
+        this.serverErrors.set([err.message]);
+        this.isLoading.set(false);
+      }
+    });
   }
 }

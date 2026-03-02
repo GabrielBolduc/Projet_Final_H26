@@ -1,37 +1,126 @@
 <div class="full-height">
-  <div class="admin-header" *ngIf="isAdmin">
-      <button mat-flat-button 
-              class="brutalist-add-btn" 
-              [routerLink]="['/accommodations-form']"
-              [queryParams]="{ category: (currentCategory$ | async) }">
-        <mat-icon>add_circle</mat-icon> 
-        <span>{{ 'ACCOMMODATIONS.ADD' | translate }}</span>
-      </button>
+  <div class="admin-header">
+    <button *ngIf="isAdmin" mat-flat-button 
+            class="brutalist-add-btn" 
+            [routerLink]="['/accommodations-form']"
+            [queryParams]="{ category: currentCategory() }"> 
+      <mat-icon>add_circle</mat-icon> 
+      <span>{{ 'ACCOMMODATIONS.ADD' | translate }}</span>
+    </button>
+
     <div class="header-actions">
-        <button mat-flat-button class="brutalist-add-btn" 
-                [routerLink]="['/accommodations']" 
-                [queryParams]="{ category: 'all' }"
-                routerLinkActive="active-filter"
-                [routerLinkActiveOptions]="{ exact: false }">
+      <button *ngIf="isAdmin" mat-flat-button class="brutalist-add-btn" 
+              [routerLink]="['/accommodations']" 
+              [queryParams]="{ category: 'all' }"
+              routerLinkActive="active-filter"
+              [routerLinkActiveOptions]="{ exact: false }">
         {{ 'ACCOMMODATIONS.ALL' | translate }}
-        </button>
-        <button mat-flat-button class="brutalist-add-btn" 
-                [routerLink]="['/accommodations']" 
-                [queryParams]="{ category: 'hotel' }"
-                routerLinkActive="active-filter">
+      </button>
+      <button *ngIf="isAdmin" mat-flat-button class="brutalist-add-btn" 
+              [routerLink]="['/accommodations']" 
+              [queryParams]="{ category: 'hotel' }"
+              routerLinkActive="active-filter">
         {{ 'ACCOMMODATIONS.HOTELS' | translate }}
-        </button>
-        <button mat-flat-button class="brutalist-add-btn" 
-                [routerLink]="['/accommodations']" 
-                [queryParams]="{ category: 'camping' }"
-                routerLinkActive="active-filter">
+      </button>
+      <button *ngIf="isAdmin" mat-flat-button class="brutalist-add-btn" 
+              [routerLink]="['/accommodations']" 
+              [queryParams]="{ category: 'camping' }"
+              routerLinkActive="active-filter">
         {{ 'ACCOMMODATIONS.CAMPINGS' | translate }}
-        </button>
+      </button>
+
+      <button mat-flat-button class="brutalist-add-btn" 
+              [matMenuTriggerFor]="filterMenu" 
+              #trigger="matMenuTrigger">
+        <mat-icon>filter_list</mat-icon>
+        {{ 'ACCOMMODATIONS.FILTERS' | translate }}
+      </button>
     </div>
   </div>
 
-  <div class="accommodations-grid">
-    <a *ngFor="let acc of accommodations$ | async" 
+  <mat-menu #filterMenu="matMenu" class="brutalist-full-width-menu">
+    <div class="filter-menu-content" (click)="$event.stopPropagation()">
+      <div class="filter-container">
+
+        <div class="filter-top-bar">
+          <span class="filter-status-text">
+            {{ accommodations().length }} {{ 'ACCOMMODATIONS.RESULTS_FOUND' | translate }}
+          </span>
+          <button mat-icon-button class="brutalist-close-btn" (click)="trigger.closeMenu()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="filter-section">
+          <div class="filter-group">
+            <label>{{ 'ACCOMMODATIONS.MAX_DISTANCE' | translate }} ({{ maxDistanceValue() }} km)</label>
+            <input type="range" min="1" max="100" step="1" 
+                   [value]="maxDistanceValue()" 
+                   (change)="updateFilter('max_distance', $any($event.target).value)">
+          </div>
+          <div class="filter-group">
+            <label>{{ 'ACCOMMODATIONS.MAX_PRICE' | translate }} ({{ maxPriceValue() }}$)</label>
+            <input type="range" min="0" max="500" step="10" 
+                   [value]="maxPriceValue()" 
+                   (change)="updateFilter('max_price', $any($event.target).value)">
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="filter-section">
+        <div class="filter-group">
+          <label>{{ (isCamping() ? 'ACCOMMODATIONS.TERRAIN_TYPE' : 'ACCOMMODATIONS.ROOM_TYPE') | translate }}</label>
+          
+          <select [value]="unitTypeValue()" (change)="updateFilter('type', $any($event.target).value)">
+            <option value="">{{ 'ACCOMMODATIONS.ANY' | translate }}</option>
+            
+            <option *ngFor="let type of availableUnitTypes()" [value]="type">
+              {{ 'UNITS.TYPES.' + type.replace('Units::', '') | translate }}
+            </option>
+          </select>
+        </div>
+
+          <div class="filter-group" *ngIf="isCamping() || currentCategory() === 'all'">
+            <label>{{ 'ACCOMMODATIONS.WATER' | translate }}</label>
+            <select [value]="waterValue()" (change)="updateFilter('water', $any($event.target).value)">
+              <option value="">{{ 'ACCOMMODATIONS.ANY' | translate }}</option>
+              <option value="drinkable">{{ 'ACCOMMODATIONS.DRINKABLE' | translate }}</option>
+              <option value="undrinkable">{{ 'ACCOMMODATIONS.UNDRINKABLE' | translate }}</option>
+            </select>
+          </div>
+
+          <button mat-stroked-button 
+                  [class.active-amenity]="wifiValue()"
+                  (click)="updateFilter('wifi', wifiValue() ? null : 'true')">
+            <mat-icon>{{ wifiValue() ? 'wifi' : 'wifi_off' }}</mat-icon>
+            WiFi
+          </button>
+          <button *ngIf="isCamping() || currentCategory() === 'all'"
+                  mat-stroked-button 
+                  [class.active-amenity]="electricityValue()"
+                  (click)="updateFilter('electricity', electricityValue() ? null : 'true')">
+            <mat-icon>bolt</mat-icon>
+            {{ 'ACCOMMODATIONS.ELECTRICITY' | translate }}
+          </button>
+        </div>
+
+        <button mat-button (click)="resetFilters()" class="full-width-reset">
+          <mat-icon>refresh</mat-icon>
+          {{ 'ACCOMMODATIONS.RESET' | translate }}
+        </button>
+      </div>
+    </div>
+  </mat-menu>
+
+  <div class="main-display" *ngIf="isLoading()">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <div class="accommodations-grid" *ngIf="!isLoading()">
+    <a *ngFor="let acc of accommodations()" 
       [routerLink]="['/accommodations-details', acc.id]"
       class="card-link">
       
@@ -48,7 +137,7 @@
     </a>
   </div>
 
-  <div class="main-display" *ngIf="(accommodations$ | async)?.length === 0">
+  <div class="main-display" *ngIf="!isLoading() && accommodations().length === 0">
     <p>{{ 'ACCOMMODATIONS.NOT_FOUND' | translate }}</p>
   </div>
 </div>

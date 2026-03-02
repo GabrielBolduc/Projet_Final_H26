@@ -41,7 +41,7 @@
         <input matInput type="number" formControlName="cost_person_per_night">
         @if (form.get('cost_person_per_night')?.hasError('required')) { <mat-error>{{ 'UNITS.FORM.REQUIRED' | translate }}</mat-error> }
         @if (form.get('cost_person_per_night')?.hasError('min')) { <mat-error>{{ 'UNITS.FORM.MIN_VALUE' | translate }}</mat-error> }
-        @if (form.get('parking_cost')?.hasError('max')) { <mat-error>{{ 'UNITS.FORM.MAX_COST' | translate }}</mat-error> }
+        @if (form.get('cost_person_per_night')?.hasError('max')) { <mat-error>{{ 'UNITS.FORM.MAX_COST' | translate }}</mat-error> }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
@@ -60,6 +60,7 @@
         <input matInput type="number" formControlName="quantity">
         @if (form.get('quantity')?.hasError('required')) { <mat-error>{{ 'UNITS.FORM.REQUIRED' | translate }}</mat-error> }
         @if (form.get('quantity')?.hasError('min')) { <mat-error>{{ 'UNITS.FORM.MIN_VALUE' | translate }}</mat-error> }
+        @if (form.get('quantity')?.hasError('max')) { <mat-error>{{ 'UNITS.FORM.MAX_QUANTITY' | translate }}</mat-error> }
       </mat-form-field>
     </div>
 
@@ -108,7 +109,7 @@
       <button mat-stroked-button type="button" [routerLink]="['/units', accommodationId()]" class="action-btn cancel-btn">
         {{ 'COMMON.CANCEL' | translate }}
       </button>
-      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
+      <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading() || (!isEditMode() && !selectedFile())">
         {{ (isLoading() ? 'COMMON.PROCESSING' : 'COMMON.SAVE') | translate }}
       </button>
     </div>

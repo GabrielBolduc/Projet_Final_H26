@@ -1,6 +1,6 @@
-import { Component, computed, inject, resource, signal, TemplateRef, ViewChild } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, resource, signal, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,14 +29,17 @@ import { Package } from '../../../../core/models/package';
   templateUrl: './ticketing-admin.html',
   styleUrls: ['./ticketing-admin.css']
 })
-export class AdminTicketingComponent {
+export class AdminTicketingComponent implements OnInit {
   @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<unknown>;
 
   private packageService = inject(PackageService);
   private festivalService = inject(FestivalService);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private translate = inject(TranslateService);
+
+  private initialized = false;
 
   searchQuery = signal('');
   sortOption = signal<PackageSort>('date_asc');
@@ -77,6 +80,38 @@ export class AdminTicketingComponent {
     this.activePackagesResource.isLoading() ||
     this.archivedPackagesResource.isLoading()
   );
+
+  constructor() {
+    effect(() => {
+      if (!this.initialized) return;
+
+      const queryParams = {
+        q: this.searchQuery() || null,
+        sort: this.sortOption() === 'date_asc' ? null : this.sortOption()
+      };
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        queryParamsHandling: 'merge',
+        replaceUrl: true
+      });
+    });
+  }
+
+  ngOnInit(): void {
+    const params = this.route.snapshot.queryParams;
+
+    if (params['q']) {
+      this.searchQuery.set(params['q']);
+    }
+
+    if (params['sort']) {
+      this.sortOption.set(params['sort'] as PackageSort);
+    }
+
+    this.initialized = true;
+  }
 
   openForm(pkg?: Package) {
     if (pkg && pkg.id) {

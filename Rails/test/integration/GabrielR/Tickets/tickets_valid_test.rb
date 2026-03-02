@@ -48,9 +48,9 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    refunded_flags = json["data"].map { |t| t["refunded"] }
-    assert_includes refunded_flags, true
-    assert_includes refunded_flags, false
+    refunded_at_values = json["data"].map { |t| t["refunded_at"] }
+    assert refunded_at_values.any?(&:present?), "Expected at least one refunded ticket"
+    assert refunded_at_values.any?(&:blank?), "Expected at least one active ticket"
   end
 
   test "index does not return tickets belonging to another client" do
@@ -72,7 +72,7 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ticket = json["data"].first
-    %w[id order_id unique_code qr_code_url refunded refunded_at price
+    %w[id order_id unique_code qr_code_url refunded_at price
        purchased_at holder_name holder_email holder_phone package].each do |field|
       assert ticket.key?(field), "Expected field '#{field}' to be present"
     end
@@ -91,7 +91,7 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     assert_equal @ticket.holder_email, json.dig("data", "holder_email")
     assert_equal @ticket.holder_phone, json.dig("data", "holder_phone")
     assert_equal @ticket.price.to_f, json.dig("data", "price").to_f
-    assert_equal false, json.dig("data", "refunded")
+    assert_nil json.dig("data", "refunded_at")
   end
 
   test "show includes package info" do
@@ -112,13 +112,12 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     assert json.dig("data").key?("qr_code_url")
   end
 
-  test "show returns refunded ticket with refunded true and refunded_at set" do
+  test "show returns refunded ticket with refunded_at set" do
     get api_ticket_url(@refunded_ticket)
     assert_response :ok
 
     json = parsed_body
     assert_equal "success", json["status"]
-    assert_equal true, json.dig("data", "refunded")
     assert json.dig("data", "refunded_at").present?
   end
 
@@ -195,7 +194,7 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     @ticket.reload
-    assert_equal false, @ticket.refunded
+    assert_not @ticket.refunded?
     assert_equal original_price, @ticket.price
   end
 
@@ -209,7 +208,6 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     assert_equal "success", json["status"]
-    assert_equal true, json.dig("data", "refunded")
     assert json.dig("data", "refunded_at").present?
     assert @ticket.reload.refunded?
   end
@@ -251,7 +249,7 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     assert_equal "success", json["status"]
-    assert_equal true, json.dig("data", "refunded")
+    assert json.dig("data", "refunded_at").present?
     assert_equal @refunded_ticket.id, json.dig("data", "id")
   end
 

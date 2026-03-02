@@ -211,6 +211,7 @@
     "CLIENT_ONLY_ORDERS": "Order history is available for client accounts only.",
     "NO_ORDERS": "No order yet.",
     "TICKETS": "tickets",
+    "TICKET": "Ticket",
     "VIEW_ORDER": "View order",
     "ORDER_DETAILS": "Order details",
     "VIEW_TICKET": "View ticket",

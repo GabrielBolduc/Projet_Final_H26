@@ -1,5 +1,5 @@
 <div class="order-detail-page">
-  <header class="detail-header">
+  <header class="order-header">
     <a mat-button routerLink="/ticketing/orders" class="back-link">
       <mat-icon>arrow_back</mat-icon>
       {{ 'TICKETING_PUBLIC.MY_ORDERS' | translate }}
@@ -22,8 +22,8 @@
               }
               <strong class="ticket-title">{{ ticket.package.title }}</strong>
               <p class="ticket-meta">{{ ticket.price | currency:'CAD':'symbol-narrow' }} - {{ ticket.holder_name }}</p>
-              <span class="ticket-status" [class.refunded]="ticket.refunded">
-                {{ ticket.refunded ? ('TICKETING_PUBLIC.REFUNDED' | translate) : ('TICKETING_PUBLIC.ACTIVE' | translate) }}
+              <span class="ticket-status" [class.refunded]="isRefunded(ticket)">
+                {{ isRefunded(ticket) ? ('TICKETING_PUBLIC.REFUNDED' | translate) : ('TICKETING_PUBLIC.ACTIVE' | translate) }}
               </span>
             </div>
             <a mat-stroked-button [routerLink]="['/ticketing/tickets', ticket.id]">

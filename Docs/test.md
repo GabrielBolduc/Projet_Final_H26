@@ -100,7 +100,7 @@
 * **[holder_name]** : String requis (Max 100).
 * **[holder_email]** : String requis (Max 255). Format email valide.
 * **[holder_phone]** : String (Max 20).
-* **[refunded]** : Booléen. Défaut `FALSE`.
+* **[refunded_at]** : `DATETIME`. Défaut `NULL`. Si présent, le billet est remboursé.
 
 ## [LOGIQUE MÉTIER]
 * **Trigger** : Vérification du quota (Sold Out) avant insertion.

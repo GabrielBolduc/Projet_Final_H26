@@ -5,7 +5,6 @@ export interface Ticket {
   order_id: number;
   unique_code: string;
   qr_code_url?: string | null;
-  refunded: boolean;
   refunded_at: string | null;
   price: number;
   purchased_at?: string;
@@ -13,6 +12,10 @@ export interface Ticket {
   holder_email: string;
   holder_phone: string;
   package: Package;
+}
+
+export function isRefunded(ticket: Ticket | null | undefined): boolean {
+  return !!ticket?.refunded_at;
 }
 
 export interface UpdateTicketPayload {

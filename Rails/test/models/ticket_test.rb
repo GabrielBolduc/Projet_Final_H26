@@ -20,7 +20,7 @@ class TicketTest < ActiveSupport::TestCase
 
   test "valid_at_scan? returns false when ticket is refunded" do
     ticket = tickets(:one)
-    ticket.update_column(:refunded, true)
+    ticket.update_column(:refunded_at, Time.current)
     scan_time = ticket.package.valid_at + 1.hour
 
     assert_not ticket.valid_at_scan?(scan_time)

@@ -11,7 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { Ticket } from '@core/models/ticket';
+import { Ticket, isRefunded } from '@core/models/ticket';
 import { TicketService } from '@core/services/ticket.service';
 
 @Component({
@@ -44,13 +44,16 @@ export class TicketingTicketDetailComponent implements OnInit {
     const orderId = this.ticket()?.order_id;
     return orderId ? ['/ticketing/orders', orderId] : ['/ticketing/orders'];
   });
+  
+  ticketIsRefunded = computed(() => isRefunded(this.ticket()));
+
   qrIsInvalid = computed(() => {
     const currentTicket = this.ticket();
     if (!currentTicket) {
       return false;
     }
 
-    if (currentTicket.refunded) {
+    if (this.ticketIsRefunded()) {
       return true;
     }
 
@@ -100,7 +103,7 @@ export class TicketingTicketDetailComponent implements OnInit {
       return;
     }
 
-    if (currentTicket.refunded) {
+    if (this.ticketIsRefunded()) {
       this.formError.set('Refunded tickets cannot be modified.');
       return;
     }
@@ -142,7 +145,7 @@ export class TicketingTicketDetailComponent implements OnInit {
       return;
     }
 
-    if (currentTicket.refunded) {
+    if (this.ticketIsRefunded()) {
       this.formError.set('Ticket is already refunded.');
       return;
     }

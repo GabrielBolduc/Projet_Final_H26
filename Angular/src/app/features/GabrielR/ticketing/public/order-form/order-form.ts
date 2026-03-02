@@ -1,6 +1,6 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, resource, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AuthService } from '@core/services/auth.service';
 import { PackageService } from '@core/services/package.service';
@@ -32,12 +33,13 @@ import { Package } from '@core/models/package';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDividerModule
   ],
   templateUrl: './order-form.html',
   styleUrl: './order-form.css'
 })
-export class TicketingOrderFormComponent {
+export class TicketingOrderFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
@@ -56,10 +58,8 @@ export class TicketingOrderFormComponent {
   currentUser = computed(() => this.auth.currentUser());
 
   orderForm: FormGroup = this.fb.group({
-    holder_name: ['', [Validators.required, Validators.maxLength(100)]],
-    holder_email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-    holder_phone: ['', [Validators.required, Validators.maxLength(20), Validators.pattern(/^[0-9+\-() ]+$/)]],
-    quantity: [1, [Validators.required, Validators.min(1)]]
+    quantity: [1, [Validators.required, Validators.min(1)]],
+    tickets: this.fb.array([])
   });
 
   packageResource = resource<Package | null, { id: number }>({
@@ -93,41 +93,70 @@ export class TicketingOrderFormComponent {
     return pkg.price * this.quantity();
   });
 
-  constructor() {
-    const user = this.auth.currentUser();
-    if (user) {
-      this.orderForm.patchValue({
-        holder_name: user.name ?? '',
-        holder_email: user.email ?? '',
-        holder_phone: user.phone_number ?? ''
-      });
+  get ticketsFormArray(): FormArray {
+    return this.orderForm.get('tickets') as FormArray;
+  }
+
+  get quantityControl() { return this.orderForm.get('quantity'); }
+
+  ngOnInit(): void {
+    this.syncTicketsWithQuantity();
+  }
+
+  private createTicketGroup(): FormGroup {
+    return this.fb.group({
+      holder_name: ['', [Validators.required, Validators.maxLength(100)]],
+      holder_email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      holder_phone: ['', [Validators.required, Validators.maxLength(20), Validators.pattern(/^[0-9+\-() ]+$/)]]
+    });
+  }
+
+  private syncTicketsWithQuantity(): void {
+    const targetCount = this.quantity();
+    const currentCount = this.ticketsFormArray.length;
+
+    if (targetCount > currentCount) {
+      for (let i = currentCount; i < targetCount; i++) {
+        const group = this.createTicketGroup();
+        // For the first ticket, or if only one, pre-fill with current user info
+        if (i === 0 && this.currentUser()) {
+          const user = this.currentUser();
+          group.patchValue({
+            holder_name: user?.name ?? '',
+            holder_email: user?.email ?? '',
+            holder_phone: user?.phone_number ?? ''
+          });
+        }
+        this.ticketsFormArray.push(group);
+      }
+    } else if (targetCount < currentCount) {
+      for (let i = currentCount; i > targetCount; i--) {
+        this.ticketsFormArray.removeAt(i - 1);
+      }
     }
   }
 
-  get holderNameControl() { return this.orderForm.get('holder_name'); }
-  get holderEmailControl() { return this.orderForm.get('holder_email'); }
-  get holderPhoneControl() { return this.orderForm.get('holder_phone'); }
-  get quantityControl() { return this.orderForm.get('quantity'); }
-
   decreaseQuantity(): void {
-    const current = Number(this.quantityControl?.value ?? 1);
+    const current = this.quantity();
     const next = Math.max(1, current - 1);
-    this.quantityControl?.setValue(next);
-    this.quantityControl?.markAsTouched();
-    this.quantity.set(next);
+    if (next !== current) {
+      this.quantity.set(next);
+      this.quantityControl?.setValue(next);
+      this.syncTicketsWithQuantity();
+    }
   }
 
   increaseQuantity(): void {
-    const current = Number(this.quantityControl?.value ?? 1);
+    const current = this.quantity();
     const remaining = this.packageAvailability().remaining;
-    if (remaining <= 0) {
-      this.quantityControl?.markAsTouched();
-      return;
-    }
+    if (remaining <= 0) return;
+
     const next = Math.min(remaining, current + 1);
-    this.quantityControl?.setValue(next);
-    this.quantityControl?.markAsTouched();
-    this.quantity.set(next);
+    if (next !== current) {
+      this.quantity.set(next);
+      this.quantityControl?.setValue(next);
+      this.syncTicketsWithQuantity();
+    }
   }
 
   async createOrder(): Promise<void> {
@@ -151,12 +180,7 @@ export class TicketingOrderFormComponent {
       return;
     }
 
-    const quantity = Number(this.quantityControl?.value ?? 0);
-    if (!Number.isInteger(quantity) || quantity <= 0) {
-      this.orderError.set('Quantity must be greater than 0.');
-      return;
-    }
-
+    const quantity = this.quantity();
     const remaining = this.packageAvailability().remaining;
     if (remaining <= 0) {
       this.orderError.set('This package is sold out.');
@@ -171,12 +195,16 @@ export class TicketingOrderFormComponent {
     this.isSubmittingOrder.set(true);
 
     try {
+      const tickets = this.ticketsFormArray.value.map((t: any) => ({
+        holder_name: String(t.holder_name ?? '').trim(),
+        holder_email: String(t.holder_email ?? '').trim(),
+        holder_phone: String(t.holder_phone ?? '').trim()
+      }));
+
       const createdOrder = await firstValueFrom(this.orderService.createOrder({
         package_id: pkg.id,
         quantity,
-        holder_name: String(this.holderNameControl?.value ?? '').trim(),
-        holder_email: String(this.holderEmailControl?.value ?? '').trim(),
-        holder_phone: String(this.holderPhoneControl?.value ?? '').trim()
+        tickets
       }));
 
       this.orderSuccess.set('Order confirmed successfully.');

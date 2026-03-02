@@ -212,6 +212,7 @@
     "CLIENT_ONLY_ORDERS": "L'historique des commandes est réservé aux comptes client.",
     "NO_ORDERS": "Aucune commande pour le moment.",
     "TICKETS": "billets",
+    "TICKET": "Billet",
     "VIEW_ORDER": "Voir la commande",
     "ORDER_DETAILS": "Détails de la commande",
     "VIEW_TICKET": "Voir le billet",

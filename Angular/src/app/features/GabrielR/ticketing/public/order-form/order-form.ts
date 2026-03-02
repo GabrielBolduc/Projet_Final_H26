@@ -118,7 +118,7 @@ export class TicketingOrderFormComponent implements OnInit {
     if (targetCount > currentCount) {
       for (let i = currentCount; i < targetCount; i++) {
         const group = this.createTicketGroup();
-        // For the first ticket, or if only one, pre-fill with current user info
+        // premier billet, ou si juste un, informations du user actuel.
         if (i === 0 && this.currentUser()) {
           const user = this.currentUser();
           group.patchValue({

@@ -1,10 +1,12 @@
 class Api::FestivalsController < ApiController
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
+  # a simplifier
   skip_before_action :authenticate_user!, only: [ :index, :show, :current ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_festival, only: [ :show, :update, :destroy ]
 
+
+  # index, current, show a simplifier
   def index
     festivals = Festival.recent
 

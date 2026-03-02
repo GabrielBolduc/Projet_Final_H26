@@ -156,7 +156,6 @@ c_stage = Stage.create!(
     technical_specs: "Small speaker"
 )
 
-# --- AJOUT DES ARTISTES ET DES IMAGES ICI ---
 puts "Création des artistes..."
 
 artist1 = Artist.find_or_initialize_by(name: "Bob")
@@ -176,7 +175,6 @@ artist3.update!(genre: "Pop", popularity: 4, bio: "Good music")
 if File.exist?(Rails.root.join('db', 'files', 'artist3.jpg')) && !artist3.image.attached?
   artist3.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist3.jpg')), filename: 'artist3.jpg', content_type: 'image/jpeg')
 end
-# ---------------------------------------------
 
 # perf pour f (ongoing)
 Performance.create!(

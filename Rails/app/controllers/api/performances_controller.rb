@@ -55,7 +55,6 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-        # CORRECTION ICI
         data: performance.as_json(
           include: {
             stage: {},

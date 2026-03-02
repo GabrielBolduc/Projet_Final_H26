@@ -1,0 +1,84 @@
+<mat-card class="artist-card">
+  <h2>{{ isEditMode() ? 'Modifier l\'artiste' : 'Ajouter un artiste' }}</h2>
+
+  @if (isLoading()) {
+    <div style="display: flex; justify-content: center; padding: 40px;">
+      <mat-spinner diameter="50" color="primary"></mat-spinner>
+    </div>
+  } @else {
+    <form [formGroup]="artistForm" (ngSubmit)="onSubmit()" class="artist-form">
+      
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nom de l'artiste</mat-label>
+          <input matInput formControlName="name" placeholder="Ex: Bob Rock">
+          @if (artistForm.get('name')?.hasError('required')) {
+            <mat-error>Le nom est requis</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Genre musical</mat-label>
+          <input matInput formControlName="genre" placeholder="Ex: Rock, Pop, Jazz">
+          @if (artistForm.get('genre')?.hasError('required')) {
+            <mat-error>Le genre est requis</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      <div class="grid-row-2 custom-align-row">
+        <div class="popularity-selector">
+          <span class="pop-label">Popularité :</span>
+          <div class="stars">
+            @for (s of [1,2,3,4,5]; track s) {
+              <mat-icon 
+                (click)="setPopularity(s)" 
+                [class.active]="artistForm.value.popularity >= s">
+                star
+              </mat-icon>
+            }
+          </div>
+        </div>
+
+        <div class="image-upload-wrapper">
+          <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+          <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()" class="full-width upload-btn">
+            <mat-icon>upload</mat-icon> Choisir une photo
+          </button>
+        </div>
+      </div>
+
+      @if (imagePreview()) {
+        <div class="image-preview-container">
+          <img [src]="imagePreview()" alt="Aperçu de la photo de l'artiste">
+        </div>
+      }
+
+      <mat-form-field appearance="outline" class="full-width" style="margin-top: 15px;">
+        <mat-label>Biographie</mat-label>
+        <textarea matInput formControlName="bio" rows="5"></textarea>
+      </mat-form-field>
+
+      @if (serverErrors().length > 0) {
+        <div class="form-error">
+          @for (err of serverErrors(); track err) { <div>{{ err }}</div> }
+        </div>
+      }
+
+      <div class="form-actions">
+        <button mat-stroked-button type="button" routerLink="/admin/artistes" class="action-btn cancel-btn">
+          Annuler
+        </button>
+        
+        <button mat-flat-button color="accent" type="submit" class="action-btn submit-btn" [disabled]="artistForm.invalid || isSaving()">
+          @if (isSaving()) {
+            <span>Enregistrement...</span> 
+          } @else {
+            {{ isEditMode() ? 'Modifier' : 'Ajouter' }}
+          }
+        </button>
+      </div>
+
+    </form>
+  }
+</mat-card>

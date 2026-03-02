@@ -145,7 +145,8 @@
     "FESTIVAL": "Festivals",
     "PROG": "Programmation",
     "TASK": "Tâches",
-    "TICKET": "Billetterie"
+    "TICKET": "Billetterie",
+    "ARTIST": "Artistes"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "Nouveau Forfait",

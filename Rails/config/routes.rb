@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       end
     end
       
-    resources :artists, only: [:index]
+    resources :artists, only: [:index, :show, :create, :update, :destroy]
     resources :stages, only: [:index]
     resources :performances
     resources :reservations

@@ -34,7 +34,8 @@ import { ShowAffectationComponent } from '@features/laurent/affectation/show/sho
 import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
 import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
 import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
-
+import { ArtistsListComponent } from './features/festival/artist/artists_list';
+import { ArtistFormComponent } from './features/festival/artist/artist_form';
 export const routes: Routes = [
     {
         path: '',
@@ -130,7 +131,21 @@ export const routes: Routes = [
                 component: AddPerformanceComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-            
+            {
+                path: 'admin/artistes',
+                component: ArtistsListComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/artistes/ajout', 
+                component: ArtistFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/artistes/edition/:id', 
+                component: ArtistFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
             {
                 path: 'admin/ticketing',
                 component: AdminTicketingComponent,

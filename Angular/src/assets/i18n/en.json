@@ -351,6 +351,8 @@
     "SMALL_TERRAIN": "Small Terrain",
     "STANDARD_TERRAIN": "Standard Terrain",
     "DELUXE_TERRAIN": "Deluxe Terrain",
+    "SEARCH": "Search",
+    "BY_NAME": "Search by name...",
     "DETAILS": {
       "BACK_TO": "Back to",
       "HOTEL": "Hotel",

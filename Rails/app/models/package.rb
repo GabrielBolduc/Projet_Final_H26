@@ -24,9 +24,9 @@ class Package < ApplicationRecord
   end
 
   enum :category, {
-    general: 'GENERAL',
-    daily: 'DAILY',
-    evening: 'EVENING'
+    general: "GENERAL",
+    daily: "DAILY",
+    evening: "EVENING"
   }, default: :general, validate: true
 
   validates :title, presence: true, length: { maximum: 50 }
@@ -135,7 +135,7 @@ class Package < ApplicationRecord
       if valid_at.to_date != expired_at.to_date
         errors.add(:base, "Le forfait journalier doit se limiter à une seule journée.")
       end
-      
+
       start_hour = valid_at.hour + (valid_at.min / 60.0)
       end_hour = expired_at.hour + (expired_at.min / 60.0)
       if start_hour < 6 || end_hour > 18
@@ -164,7 +164,7 @@ class Package < ApplicationRecord
     return unless festival && quota && valid_at && expired_at
     return if errors[:valid_at].any? || errors[:expired_at].any? || errors[:base].any?
 
-    if category.to_s.downcase == 'general'
+    if category.to_s.downcase == "general"
       validate_general_quota
     else
       validate_daily_evening_quota
@@ -204,12 +204,12 @@ class Package < ApplicationRecord
   def image_format_validation
     return unless image.attached?
 
-    acceptable_types = ["image/jpeg", "image/png", "image/webp"]
-    
+    acceptable_types = [ "image/jpeg", "image/png", "image/webp" ]
+
     unless acceptable_types.include?(image.content_type)
       errors.add(:image, "doit être au format JPEG, PNG ou WEBP")
     end
-    
+
     if image.byte_size > 5.megabytes
       errors.add(:image, "est trop volumineuse (max 5MB)")
     end

@@ -3,8 +3,8 @@ class Api::StagesController < ApiController
     @stages = Stage.all
 
     render json: {
-      status: 'success',
-      data: @stages,
+      status: "success",
+      data: @stages
     }, status: :ok
   end
 end

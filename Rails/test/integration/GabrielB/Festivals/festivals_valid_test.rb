@@ -5,8 +5,8 @@ class FestivalsValidTest < ActionDispatch::IntegrationTest
 
   setup do
     @admin = users(:three)
-    @ongoing_festival = festivals(:one) 
-    
+    @ongoing_festival = festivals(:one)
+
     @valid_params = {
       festival: {
         name: "Nouveau Festival",
@@ -61,7 +61,7 @@ class FestivalsValidTest < ActionDispatch::IntegrationTest
   test "should return current ongoing festival" do
     # modif ou non
     assert_no_difference("Festival.count") do
-      get current_api_festivals_url, as: :json 
+      get current_api_festivals_url, as: :json
     end
 
     # code http

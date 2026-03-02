@@ -7,48 +7,47 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api, defaults: { format: :json } do
-    
-    resources :festivals, only: [:index, :show, :create, :update, :destroy] do
+    resources :festivals, only: [ :index, :show, :create, :update, :destroy ] do
       collection do
-        get 'current'
+        get "current"
       end
     end
 
     resources :tasks do
       collection do
-        get 'get_reusable', to: 'tasks#get_reusable'
+        get "get_reusable", to: "tasks#get_reusable"
       end
     end
-      
-    resources :artists, only: [:index]
-    resources :stages, only: [:index]
+
+    resources :artists, only: [ :index ]
+    resources :stages, only: [ :index ]
     resources :performances
     resources :reservations
     resources :orders, only: [ :index, :show, :create ]
     resources :tickets, only: [ :index, :show, :update, :destroy ]
-    
+
     resources :accommodations do
       resources :units, shallow: true
     end
-    
+
     resources :packages
-    
+
     namespace :admin do
-      resources :orders, only: [:index, :show]
+      resources :orders, only: [ :index, :show ]
     end
-    
+
     resources :affectations do
       collection do
-        get 'get_by_user/:user_id',
-            to: 'affectations#get_by_user',
+        get "get_by_user/:user_id",
+            to: "affectations#get_by_user",
             as: :get_by_user
 
-        get 'get_by_task/:task_id',
-            to: 'affectations#get_by_task',
+        get "get_by_task/:task_id",
+            to: "affectations#get_by_task",
             as: :get_by_task
 
-        get 'get_staff_list',
-            to: 'affectations#get_staff_list',
+        get "get_staff_list",
+            to: "affectations#get_staff_list",
             as: :get_staff_list
       end
     end
@@ -57,6 +56,6 @@ Rails.application.routes.draw do
   root to: "angular#index"
 
   get "*path", to: "angular#index", constraints: ->(req) do
-    !req.xhr? && req.format.html? && !req.path.include?('.')
+    !req.xhr? && req.format.html? && !req.path.include?(".")
   end
 end

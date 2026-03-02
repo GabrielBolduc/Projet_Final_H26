@@ -17,7 +17,4 @@ class Affectation < ApplicationRecord
       errors.add(:expected_end, "doit etre apres la date de debut")
     end
   end
-
-
-  
 end

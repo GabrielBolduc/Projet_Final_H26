@@ -38,8 +38,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
       render json: {
         status: "error",
         message: "validation failed",
-        errors: resource.errors.full_messages,
-        
+        errors: resource.errors.full_messages
+
       }, status: :ok
     end
   end

@@ -27,7 +27,7 @@ class ReservationInvalidTest < ActionDispatch::IntegrationTest
         end
 
         # Code http
-        assert_response :success 
+        assert_response :success
 
         # Format json valide
         json = JSON.parse(response.body)
@@ -39,7 +39,7 @@ class ReservationInvalidTest < ActionDispatch::IntegrationTest
 
     test "should not create overlapping reservation on same unit" do
         existing = reservations(:one)
-    
+
         existing.update_columns(unit_id: @unit.id, festival_id: @festival.id)
 
         # Validation de la cohérence de la base de données
@@ -154,7 +154,7 @@ class ReservationInvalidTest < ActionDispatch::IntegrationTest
     assert_no_difference("Reservation.count") do
       post api_reservations_url, params: {
         reservation: {
-          arrival_at: nil, 
+          arrival_at: nil,
           departure_at: nil,
           reservation_name: "",
           unit_id: @unit.id,

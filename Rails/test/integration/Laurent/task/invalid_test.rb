@@ -44,7 +44,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     assert_equal "not_found", json["error"]
     end
 
-    
+
     test "should not get tasks list but and return JSON" do
         # la base de donnée n'a pas changer
         assert_no_difference("Task.count") do
@@ -77,7 +77,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         assert_equal "error", json["status"]
     end
 
-    
+
     test "can not update task user logout" do
         # base de donnees
         assert_no_difference "Task.count" do
@@ -113,7 +113,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         assert json_response["errors"].any?, "Errors should be present for invalid param"
     end
 
-    
+
     test "delete non-existent task" do
         sign_in users(:one)
 

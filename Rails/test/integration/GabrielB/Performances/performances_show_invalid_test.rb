@@ -2,7 +2,7 @@ require "test_helper"
 
 class PerformancesShowInvalidTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
-  
+
   setup do
     @performance = performances(:one)
   end
@@ -25,7 +25,7 @@ class PerformancesShowInvalidTest < ActionDispatch::IntegrationTest
 
   test "should forbid access if performance is not ongoing and user is not admin" do
     @performance.festival.update!(status: "draft")
-    
+
     # modif ou non
     assert_no_difference("Performance.count") do
       get api_performance_url(@performance), as: :json

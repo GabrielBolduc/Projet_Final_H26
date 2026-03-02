@@ -353,6 +353,8 @@
     "SMALL_TERRAIN": "Petit Terrain",
     "STANDARD_TERRAIN": "Terrain Standard",
     "DELUXE_TERRAIN": "Terrain de Luxe",
+    "SEARCH": "Rechercher",
+    "BY_NAME": "Rechercher par nom...",
     "DETAILS": {
       "BACK_TO": "Retour vers",
       "HOTEL": "Hôtel",

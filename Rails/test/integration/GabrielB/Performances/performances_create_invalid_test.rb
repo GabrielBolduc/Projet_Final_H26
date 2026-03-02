@@ -6,7 +6,7 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
   setup do
     @admin = users(:three)
     @client = users(:two)
-    
+
     @existing_performance = performances(:one)
 
     @valid_params = {
@@ -191,8 +191,8 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-      post api_performances_url, params: { 
-        performance: @valid_params.merge(start_at: "2026-08-02T20:00:00Z", end_at: "2026-08-02T18:00:00Z") 
+      post api_performances_url, params: {
+        performance: @valid_params.merge(start_at: "2026-08-02T20:00:00Z", end_at: "2026-08-02T18:00:00Z")
       }, as: :json
     end
 
@@ -209,8 +209,8 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-      post api_performances_url, params: { 
-        performance: @valid_params.merge(start_at: "2099-01-01T20:00:00Z", end_at: "2099-01-01T22:00:00Z") 
+      post api_performances_url, params: {
+        performance: @valid_params.merge(start_at: "2099-01-01T20:00:00Z", end_at: "2099-01-01T22:00:00Z")
       }, as: :json
     end
 
@@ -227,12 +227,12 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-      post api_performances_url, params: { 
+      post api_performances_url, params: {
         performance: @valid_params.merge(
-          stage_id: @existing_performance.stage_id, 
-          start_at: @existing_performance.start_at, 
+          stage_id: @existing_performance.stage_id,
+          start_at: @existing_performance.start_at,
           end_at: @existing_performance.end_at
-        ) 
+        )
       }, as: :json
     end
 
@@ -249,12 +249,12 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-      post api_performances_url, params: { 
+      post api_performances_url, params: {
         performance: @valid_params.merge(
-          artist_id: @existing_performance.artist_id, 
-          start_at: @existing_performance.start_at, 
+          artist_id: @existing_performance.artist_id,
+          start_at: @existing_performance.start_at,
           end_at: @existing_performance.end_at
-        ) 
+        )
       }, as: :json
     end
 
@@ -271,13 +271,12 @@ class PerformancesCreateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-
-      post api_performances_url, params: { 
+      post api_performances_url, params: {
         performance: @valid_params.merge(
           festival_id: festivals(:two).id,
-          start_at: "2025-07-05T20:00:00Z", 
+          start_at: "2025-07-05T20:00:00Z",
           end_at: "2025-07-05T22:00:00Z"
-        ) 
+        )
       }, as: :json
     end
 

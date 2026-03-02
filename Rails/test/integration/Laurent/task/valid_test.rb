@@ -10,7 +10,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     @task_four = tasks(:four)
     @task_five = tasks(:five)
   end
- 
+
  test "should show one task and return JSON" do
     sign_in users(:one)
     # base de donnees
@@ -34,7 +34,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     assert_equal @task_one.priority, json_response["data"]["priority"]
   end
 
-   # get /api/tasks
+  # get /api/tasks
   test "should get tasks list and return JSON" do
     sign_in users(:one)
     # la base de donnée n'a pas changer

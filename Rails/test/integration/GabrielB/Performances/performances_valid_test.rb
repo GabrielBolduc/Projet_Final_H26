@@ -12,7 +12,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
         title: "Show valid",
         description: "Un bon show",
         price: 59.99,
-        start_at: "2026-08-02T20:00:00Z", 
+        start_at: "2026-08-02T20:00:00Z",
         end_at: "2026-08-02T22:00:00Z",
         artist_id: artists(:one).id,
         stage_id: stages(:one).id,
@@ -62,7 +62,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     assert_no_difference("Performance.count") do
       get api_performances_url(festival_id: festivals(:one).id), as: :json
     end
-    
+
     # code http
     assert_response :ok
 
@@ -128,7 +128,7 @@ class PerformancesValidTest < ActionDispatch::IntegrationTest
     assert_equal "success", json["status"]
     assert_equal "Titre Modifié", json["data"]["title"]
   end
-  
+
   test "admin should delete a performance" do
     sign_in @admin
 

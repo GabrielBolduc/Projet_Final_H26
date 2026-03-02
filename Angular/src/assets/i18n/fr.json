@@ -40,7 +40,7 @@
     "CONNECT": "Connexion"
   },
   "SERVER_ERRORS": {
-    "END_BEFORE_START": "L'heure de fin doit être strictement après l'heure de début.",
+    "END_BEFORE_START": "L'heure de fin doit être après l'heure de début.",
     "OUTSIDE_FESTIVAL_DATES": "La performance doit avoir lieu pendant les dates du festival.",
     "STAGE_OVERLAP": "Cette scène est déjà occupée sur ce créneau.",
     "ARTIST_OVERLAP": "Cet artiste joue déjà ailleurs sur ce créneau.",
@@ -52,7 +52,7 @@
     "GENERIC_ERROR": "Une erreur est survenue (Code: {{code}})."
   },
   "FESTIVAL": {
-    "ADMINISTRATION": "Administration",
+    "ADMINISTRATION": "Festival",
     "HELLO": "Bonjour",
     "CURRENT_FESTIVAL": "Festival en cours",
     "DRAFTS": "Festivals en préparation",
@@ -62,7 +62,7 @@
     "FINISHED": "Terminé",
     "DRAFT": "Brouillon",
     "ONGOING": "En cours",
-    "NEW_FESTIVAL": "Nouveau Festival",
+    "NEW_FESTIVAL": "Ajouter",
     "EDIT_FESTIVAL": "Modifier le Festival",
     "NAME": "Nom du festival",
     "STATUS": "Statut",
@@ -91,10 +91,11 @@
     "LOAD_ERROR": "Erreur lors du chargement du festival",
     "UPDATE_SUCCESS": "Festival modifié avec succès",
     "CREATE_SUCCESS": "Festival créé avec succès",
-    "SAVE_ERROR": "Erreur lors de la sauvegarde. Vérifiez les champs."
+    "SAVE_ERROR": "Erreur lors de la sauvegarde. Vérifiez les champs.",
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce festival ? Cette action est irréversible."
   },
   "DASHBOARD":{
-    "NEW_PERFORMANCE": "Nouvelle Performance",
+    "NEW_PERFORMANCE": "Ajouter",
     "DASHBOARD": "Performances",
     "LOADING": "Chargement du planning...",
     "NOTHING": "Aucune performance n'est programmée.",

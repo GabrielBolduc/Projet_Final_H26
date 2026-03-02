@@ -40,7 +40,7 @@
     "CONNECT": "Connect"
   },
   "SERVER_ERRORS": {
-    "END_BEFORE_START": "End time must be strictly after start time.",
+    "END_BEFORE_START": "End time must be after start time.",
     "OUTSIDE_FESTIVAL_DATES": "The performance must take place during the festival dates.",
     "STAGE_OVERLAP": "This stage is already booked for this time slot.",
     "ARTIST_OVERLAP": "This artist is already performing elsewhere at this time.",
@@ -52,7 +52,7 @@
     "GENERIC_ERROR": "An error occurred (Code: {{code}})."
   },
   "FESTIVAL": {
-    "ADMINISTRATION": "Administration",
+    "ADMINISTRATION": "Festival",
     "HELLO": "Hello",
     "CURRENT_FESTIVAL": "Current Festival",
     "DRAFTS": "Upcoming Festivals",
@@ -62,7 +62,7 @@
     "FINISHED": "Finished",
     "DRAFT": "Draft",
     "ONGOING": "Ongoing",
-    "NEW_FESTIVAL": "New Festival",
+    "NEW_FESTIVAL": "Add",
     "EDIT_FESTIVAL": "Edit Festival",
     "NAME": "Festival Name",
     "STATUS": "Status",
@@ -88,10 +88,11 @@
     "LOAD_ERROR": "Error loading festival",
     "UPDATE_SUCCESS": "Festival updated successfully",
     "CREATE_SUCCESS": "Festival created successfully",
-    "SAVE_ERROR": "Error saving. Please check the fields."
+    "SAVE_ERROR": "Error saving. Please check the fields.",
+    "DELETE_CONFIRM": "Are you sure you want to delete this festival? This action is irreversible."
   },
   "DASHBOARD":{
-    "NEW_PERFORMANCE": "New Performance",
+    "NEW_PERFORMANCE": "Add",
     "DASHBOARD": "Performances",
     "LOADING": "Loading schedule...",
     "NOTHING": "No performance is scheduled.",

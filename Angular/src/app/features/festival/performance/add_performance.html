@@ -81,7 +81,7 @@
       </mat-form-field>
     </div>
 
-    @if (form.hasError('timeRangeInvalid') && form.get('start_time')?.touched && form.get('end_time')?.touched) {
+    @if (form.hasError('timeRangeInvalid') && (form.get('start_time')?.touched || form.get('end_time')?.touched)) {
       <div class="time-error">
         {{ 'FORM_ADD_PERFORMANCES.ERROR_HOURS' | translate }}
       </div>

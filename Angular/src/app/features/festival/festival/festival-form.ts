@@ -1,6 +1,6 @@
-import { Component, OnInit, inject, signal, Input } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +14,16 @@ import { firstValueFrom } from 'rxjs';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'; 
 import { FestivalService } from '../../../core/services/festival.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+
+const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const start = control.get('start_at')?.value;
+  const end = control.get('end_at')?.value;
+
+  if (start && end && start > end) {
+    return { dateRangeInvalid: true };
+  }
+  return null;
+};
 
 @Component({
   selector: 'app-festival-form',
@@ -47,15 +57,15 @@ export class FestivalFormComponent implements OnInit {
   minDate = new Date();
 
   festivalForm: FormGroup = this.fb.group({
-    name: ['', [Validators.required, Validators.maxLength(100)]],
+    name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
     status: ['draft', [Validators.required]],
     start_at: ['', [Validators.required]],
     end_at: ['', [Validators.required]],
-    address: ['', [Validators.required]],
-    daily_capacity: [0, [Validators.required, Validators.min(1)]],
-    latitude: [null, [Validators.required]], 
-    longitude: [null, [Validators.required]] 
-  });
+    address: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(250)]],
+    daily_capacity: [0, [Validators.required, Validators.min(1), Validators.max(1000000)]],
+    latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]], 
+    longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]] 
+  }, { validators: dateRangeValidator });
 
   isEditMode = signal(false);
   isLoading = signal(false);

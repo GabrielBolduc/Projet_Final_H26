@@ -73,7 +73,6 @@ export class Ticketing implements OnInit {
 
   packagesResource = resource<Package[], PackageFilters>({
     params: () => ({
-      status: 'ongoing',
       q: this.searchQuery(),
       sort: this.sortOption(),
       categories: this.selectedCategories()

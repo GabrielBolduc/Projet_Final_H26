@@ -279,7 +279,7 @@ Performance.create!(
   artist: artist2
 )
 
-f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 15),)
+f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20),)
 
 # Alexandre
 acc1 = Accommodation.create!(
@@ -447,7 +447,7 @@ ticket_seq = 0
 create_tickets = lambda do |order:, package:, quantity:, refunded_indexes: [], holder_prefix: "Billet"|
   quantity.times do |index|
     ticket_seq += 1
-    refunded = refunded_indexes.include?(index)
+    is_refunded = refunded_indexes.include?(index)
 
     Ticket.create!(
       order: order,
@@ -455,8 +455,7 @@ create_tickets = lambda do |order:, package:, quantity:, refunded_indexes: [], h
       holder_name: "#{holder_prefix} ##{ticket_seq}",
       holder_phone: format("819555%04d", ticket_seq),
       holder_email: "ticket#{ticket_seq}@example.com",
-      refunded: refunded,
-      refunded_at: refunded ? order.purchased_at + 2.hours : nil
+      refunded_at: is_refunded ? order.purchased_at + 2.hours : nil
     )
   end
 end
@@ -516,8 +515,8 @@ unit_hotel_high.save!
 unit_hotel_mid.save!
 
 [p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|
-  sold = pkg.tickets.where(refunded: false).count
-  refunded = pkg.tickets.where(refunded: true).count
+  sold = pkg.tickets.where(refunded_at: nil).count
+  refunded = pkg.tickets.where.not(refunded_at: nil).count
 end
 
 

@@ -119,18 +119,44 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 .quantity-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 6px 24px 0;
-  padding: 8px 12px;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 0 18px;
+  padding: 8px 16px;
   border-radius: 10px;
   border: 2px solid var(--mat-sys-outline);
   background: var(--mat-sys-surface-container-lowest);
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.form-divider {
+  margin: 20px 0;
+}
+
+.holder-group {
+  margin-bottom: 24px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container);
+  border: 1px solid var(--mat-sys-outline-variant);
+}
+
+.holder-title {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--mat-sys-primary);
 }
 
 .actions {
@@ -206,9 +232,8 @@
     padding-right: 16px;
   }
 
-  .quantity-row {
-    margin-left: 16px;
-    margin-right: 16px;
+  .form-grid {
+    grid-template-columns: 1fr;
   }
 
   .error,

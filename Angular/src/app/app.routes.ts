@@ -20,6 +20,7 @@ import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
+import { AdminOrdersComponent } from './features/GabrielR/ticketing/admin/orders/admin-orders';
 import { PackageFormComponent } from './features/GabrielR/ticketing/admin/package-form/package-form';
 import { TicketingOrderFormComponent } from './features/GabrielR/ticketing/public/order-form/order-form';
 import { TicketingOrdersComponent } from './features/GabrielR/ticketing/public/orders/orders';
@@ -134,6 +135,11 @@ export const routes: Routes = [
             {
                 path: 'admin/ticketing',
                 component: AdminTicketingComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/orders',
+                component: AdminOrdersComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

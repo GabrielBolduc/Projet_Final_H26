@@ -21,6 +21,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_equal "success", json["status"]
 
     returned_ids = json["data"].map { |pkg| pkg["id"] }
+    # Prices: four(40), two(60), seven(75), three(90), one(150)
     expected_ids = [packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one)].map(&:id)
     assert_equal expected_ids, returned_ids
 
@@ -94,6 +95,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
+    # Dates: seven(Aug 03), four(Aug 02), three(Aug 01), two(Aug 01), one(Aug 01)
     assert_equal [packages(:seven).id, packages(:four).id, packages(:three).id, packages(:two).id, packages(:one).id], ids
   end
 
@@ -103,6 +105,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
+    # Prices: one(150), three(90), seven(75), two(60), four(40)
     assert_equal [packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id], ids
   end
 
@@ -125,7 +128,9 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
       category: "daily",
       festival_id: @ongoing_festival.id,
       price: 88.50,
-      quota: 20
+      quota: 20,
+      valid_at: "2026-08-02 10:00:00",
+      expired_at: "2026-08-02 17:00:00"
     )
 
     assert_difference("Package.count", 1) do
@@ -146,7 +151,14 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
   # UPDATE
   test "admin can update package fields" do
     assert_no_difference("Package.count") do
-      put api_package_url(@package), params: { package: { title: "Updated Title", price: 99.99, category: "evening" } }, as: :json
+      put api_package_url(@package), 
+          params: { package: { 
+            title: "Updated Title", 
+            price: 99.99, 
+            category: "evening",
+            valid_at: "2026-08-01 19:00:00",
+            expired_at: "2026-08-02 02:00:00"
+          } }, as: :json
     end
 
     assert_response :ok
@@ -189,7 +201,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
       quota: 10,
       category: "general",
       valid_at: "2026-08-02 10:00:00",
-      expired_at: "2026-08-02 20:00:00",
+      expired_at: "2026-08-03 20:00:00",
       festival_id: @ongoing_festival.id
     }
 

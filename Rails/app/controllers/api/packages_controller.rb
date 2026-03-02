@@ -11,7 +11,8 @@ class Api::PackagesController < Api::AdminController
         status: params[:status],
         query: params[:q],
         sort: params[:sort],
-        categories: params[:categories]
+        categories: params[:categories],
+        sold_out: params[:sold_out]
       )
     else
       Package.admin_scope(
@@ -107,9 +108,9 @@ class Api::PackagesController < Api::AdminController
 
   def format_package(package)
     sold_count = if package.association(:tickets).loaded?
-      package.tickets.count { |ticket| !ticket.refunded }
+      package.tickets.count { |ticket| !ticket.refunded? }
     else
-      package.tickets.where(refunded: false).count
+      package.tickets.where(refunded_at: nil).count
     end
 
     json = package.as_json(include: :festival)

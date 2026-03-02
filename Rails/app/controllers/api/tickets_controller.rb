@@ -39,11 +39,15 @@ class Api::TicketsController < Api::ClientController
   end
 
   # DELETE /api/tickets/:id
-  # billet reste dans l'historique mais est marqué comme remboursé
+  # Le billet reste dans l'historique mais est marqué comme remboursé
   def destroy
     return render_error("Ticket already refunded") if @ticket.refunded?
 
-    @ticket.update!(refunded: true, refunded_at: Time.current)
+    if @ticket.package.expired_at < Time.current
+      return render_error("Cannot refund an expired ticket")
+    end
+
+    @ticket.update!(refunded_at: Time.current)
 
     render json: {
       status: "success",
@@ -77,7 +81,6 @@ class Api::TicketsController < Api::ClientController
       order_id:     ticket.order_id,
       unique_code:  ticket.unique_code,
       qr_code_url:  ticket.generate_qr_code,
-      refunded:     ticket.refunded,
       refunded_at:  ticket.refunded_at,
       price:        ticket.price,
       purchased_at: ticket.purchased_at,

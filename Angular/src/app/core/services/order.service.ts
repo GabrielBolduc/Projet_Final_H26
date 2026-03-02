@@ -16,6 +16,7 @@ interface ApiResponse<T> {
 export class OrderService {
   private http = inject(HttpClient);
   private readonly API_URL = '/api/orders';
+  private readonly ADMIN_API_URL = '/api/admin/orders';
 
   getMyOrders(): Observable<Order[]> {
     return this.http.get<ApiResponse<Order[]>>(this.API_URL).pipe(
@@ -50,6 +51,31 @@ export class OrderService {
           return response.data;
         }
 
+        throw response;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  // Admin Methods
+  getAllOrders(filters: { festival_id?: number, q?: string, sort?: string } = {}): Observable<any[]> {
+    return this.http.get<ApiResponse<any[]>>(this.ADMIN_API_URL, { params: filters as any }).pipe(
+      map(response => {
+        if (response.status === 'success') {
+          return response.data ?? [];
+        }
+        throw response;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  getAdminOrder(id: number): Observable<any> {
+    return this.http.get<ApiResponse<any>>(`${this.ADMIN_API_URL}/${id}`).pipe(
+      map(response => {
+        if (response.status === 'success') {
+          return response.data;
+        }
         throw response;
       }),
       catchError(this.handleError)

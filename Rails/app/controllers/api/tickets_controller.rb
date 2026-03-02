@@ -39,7 +39,7 @@ class Api::TicketsController < Api::ClientController
   end
 
   # DELETE /api/tickets/:id
-  # billet reste dans l'historique mais est marqué comme remboursé
+  # Le billet reste dans l'historique mais est marqué comme remboursé
   def destroy
     return render_error("Ticket already refunded") if @ticket.refunded?
 

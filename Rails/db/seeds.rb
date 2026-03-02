@@ -279,7 +279,7 @@ Performance.create!(
   artist: artist2
 )
 
-f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 15),)
+f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20),)
 
 # Alexandre
 acc1 = Accommodation.create!(

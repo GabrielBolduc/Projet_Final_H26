@@ -33,6 +33,10 @@ Rails.application.routes.draw do
     
     resources :packages
     
+    namespace :admin do
+      resources :orders, only: [:index, :show]
+    end
+    
     resources :affectations do
       collection do
         get 'get_by_user/:user_id',

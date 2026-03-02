@@ -11,7 +11,8 @@ class Api::PackagesController < Api::AdminController
         status: params[:status],
         query: params[:q],
         sort: params[:sort],
-        categories: params[:categories]
+        categories: params[:categories],
+        sold_out: params[:sold_out]
       )
     else
       Package.admin_scope(

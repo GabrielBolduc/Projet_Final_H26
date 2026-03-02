@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, OnInit, resource, signal, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,7 +21,7 @@ import { Package } from '../../../../core/models/package';
   selector: 'app-admin-ticketing',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatButtonModule, MatIconModule, 
+    CommonModule, RouterLink, MatCardModule, MatButtonModule, MatIconModule, 
     MatProgressBarModule, CurrencyPipe, DatePipe, 
     MatFormFieldModule, MatInputModule, MatSelectModule, MatDialogModule, FormsModule,
     TranslateModule
@@ -43,6 +43,7 @@ export class AdminTicketingComponent implements OnInit {
 
   searchQuery = signal('');
   sortOption = signal<PackageSort>('date_asc');
+  soldOutFilter = signal<string | null>(null);
 
   ongoingFestivalResource = resource({
     loader: () => firstValueFrom(this.festivalService.getFestivals('ongoing'))
@@ -58,7 +59,8 @@ export class AdminTicketingComponent implements OnInit {
         festivalId,
         status: festivalId ? undefined : 'ongoing',
         q: this.searchQuery(),
-        sort: this.sortOption()
+        sort: this.sortOption(),
+        sold_out: this.soldOutFilter() ?? undefined
       };
     },
     loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
@@ -68,7 +70,8 @@ export class AdminTicketingComponent implements OnInit {
     params: () => ({
       status: 'completed',
       q: this.searchQuery(),
-      sort: this.sortOption()
+      sort: this.sortOption(),
+      sold_out: this.soldOutFilter() ?? undefined
     }),
     loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
   });
@@ -87,7 +90,8 @@ export class AdminTicketingComponent implements OnInit {
 
       const queryParams = {
         q: this.searchQuery() || null,
-        sort: this.sortOption() === 'date_asc' ? null : this.sortOption()
+        sort: this.sortOption() === 'date_asc' ? null : this.sortOption(),
+        sold_out: this.soldOutFilter() || null
       };
 
       this.router.navigate([], {
@@ -108,6 +112,10 @@ export class AdminTicketingComponent implements OnInit {
 
     if (params['sort']) {
       this.sortOption.set(params['sort'] as PackageSort);
+    }
+
+    if (params['sold_out']) {
+      this.soldOutFilter.set(params['sold_out']);
     }
 
     this.initialized = true;

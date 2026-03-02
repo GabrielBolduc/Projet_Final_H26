@@ -41,7 +41,8 @@
       
       <p class="status"
          [class.refunded]="ticketIsRefunded()"
-         [class.expired]="ticketIsExpired() && !ticketIsRefunded()">
+         [class.expired]="ticketIsExpired() && !ticketIsRefunded()"
+         [class.active]="!ticketIsRefunded() && !ticketIsExpired()">
         @if (ticketIsRefunded()) {
           {{ 'TICKETING_PUBLIC.REFUNDED' | translate }}
         } @else if (ticketIsExpired()) {

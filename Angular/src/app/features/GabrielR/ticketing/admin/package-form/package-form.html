@@ -46,15 +46,24 @@
 
         <mat-form-field appearance="outline">
           <mat-label>{{ 'PACKAGE_FORM.QUOTA' | translate }}</mat-label>
-          <input matInput type="number" formControlName="quota" min="1">
+          <input matInput type="number" formControlName="quota" [min]="soldCount() || 1">
           @if (form.get('quota')?.hasError('required')) {
             <mat-error>{{ 'PACKAGE_FORM.REQUIRED' | translate }}</mat-error>
           }
           @if (form.get('quota')?.hasError('min')) {
-            <mat-error>{{ 'PACKAGE_FORM.REQUIRED' | translate }}</mat-error>
+            <mat-error>{{ 'PACKAGE_FORM.MIN_QUOTA_SOLD' | translate:{min: (soldCount() || 1)} }}</mat-error>
           }
           @if (form.get('quota')?.hasError('max')) {
-            <mat-error>{{ 'PACKAGE_FORM.MAX_PLACES' | translate:{cap: festivalCapacity()} }}</mat-error>
+            <mat-error>{{ 'PACKAGE_FORM.MAX_PLACES' | translate:{cap: maxAllowedQuota()} }}</mat-error>
+          }
+          @if (form.hasError('quotaExceeded')) {
+            <mat-error>
+              {{ 'PACKAGE_FORM.QUOTA_EXCEEDED_DAY' | translate:{ 
+                  day: form.getError('quotaExceeded').day, 
+                  max: form.getError('quotaExceeded').max, 
+                  current: form.getError('quotaExceeded').current 
+              } }}
+            </mat-error>
           }
         </mat-form-field>
       </div>
@@ -101,6 +110,25 @@
         <div class="time-error">
           {{ 'PACKAGE_FORM.END_AFTER_FESTIVAL' | translate:{ date: (festivalEndLimit() | date:'shortDate') } }}
         </div>
+      }
+
+      @if (form.hasError('generalDurationInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.GENERAL_DURATION_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('dailyDurationInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.DAILY_DURATION_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('dailyHoursInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.DAILY_HOURS_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('eveningDurationInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.EVENING_DURATION_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('eveningStartInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.EVENING_START_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('eveningEndInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.EVENING_END_INVALID' | translate }}</div>
       }
 
       <div class="grid-row-2 file-category-row">

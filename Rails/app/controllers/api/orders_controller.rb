@@ -36,7 +36,6 @@ class Api::OrdersController < Api::ClientController
       order = current_user.orders.create!
 
       if order_params[:tickets].present? && order_params[:tickets].is_a?(Array)
-        # Multiple holders provided from frontend
         order_params[:tickets].take(quantity).each do |t_params|
           order.tickets.create!(
             package:      package,
@@ -46,7 +45,6 @@ class Api::OrdersController < Api::ClientController
           )
         end
 
-        # If fewer holders provided than quantity, fill remaining with current user info
         (quantity - order_params[:tickets].size).times do
           order.tickets.create!(
             package:      package,
@@ -56,7 +54,6 @@ class Api::OrdersController < Api::ClientController
           )
         end
       else
-        # Backward compatibility / single holder fallback
         holder_name  = sanitized_or_default(order_params[:holder_name],  current_user.name)
         holder_email = sanitized_or_default(order_params[:holder_email], current_user.email)
         holder_phone = sanitized_or_default(order_params[:holder_phone], current_user.phone_number)

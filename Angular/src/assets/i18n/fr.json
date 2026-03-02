@@ -309,6 +309,27 @@
     "HOTELS": "HOTELS",
     "CAMPINGS": "CAMPINGS",
     "NOT_FOUND": "Aucun hébergement trouvé.",
+    "FILTERS": "FILTRES",
+    "RESULTS_FOUND": "Résultats Trouvés",
+    "ANY": "Peu importe",
+    "MAX_DISTANCE": "Distance Max",
+    "MAX_PRICE": "Prix Max",
+    "TYPE": "Type",
+    "WATER": "Accès Eau",
+    "WIFI": "Wi-Fi",
+    "ELECTRICITY": "Électricité",
+    "AMENITIES": "Équipements",
+    "RESET": "Réinitialiser",
+    "DRINKABLE": "Potable",
+    "UNDRINKABLE": "Non-potable",
+    "ROOM_TYPE": "Type de Chambre",
+    "TERRAIN_TYPE": "Type de Terrain",
+    "SIMPLE_ROOM": "Chambre Simple",
+    "DOUBLE_ROOM": "Chambre Double",
+    "FAMILY_ROOM": "Chambre Familiale",
+    "SMALL_TERRAIN": "Petit Terrain",
+    "STANDARD_TERRAIN": "Terrain Standard",
+    "DELUXE_TERRAIN": "Terrain de Luxe",
     "DETAILS": {
       "BACK_TO": "Retour aux",
       "HOTEL": "Hôtels",
@@ -369,6 +390,7 @@
     "PARKING": "Frais de parking",
     "FOOD": "Options de restauration",
     "UPLOAD_IMAGE": "Télécharger une image",
+    "NO_UNITS_AVAILABLE": "Aucune unité disponible pour la réservation",
     "TYPES": {
       "ROOMS_HEADER": "Chambres d'hôtes",
       "TERRAINS_HEADER": "Terrains de camping",
@@ -397,7 +419,9 @@
       "HOTEL_NO_TERRAIN": "Un hôtel ne peut pas avoir de terrains de camping.",
       "CAMPING_NO_ROOM": "Un terrain de camping ne peut pas avoir de chambre",
       "MAX_PARKING": "Le coût du stationnement ne peut pas être égale ou dépasser 100 $",
-      "MAX_COST": "Le coût de l'unité ne peut pas être égale ou dépasser 1000 $"
+      "MAX_COST": "Le coût de l'unité ne peut pas être égale ou dépasser 1000 $",
+      "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer cette unité ? Cette action est irréversible.",
+      "MAX_QUANTITY": "Un type d'unité ne peut pas avoir plus de 255 unités disponible."
     }
   },
   "COMMON": {

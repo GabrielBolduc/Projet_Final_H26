@@ -108,3 +108,16 @@
     </div>
   </form>
 </mat-card>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>{{ 'COMMON.DELETE' | translate }}?</h2>
+  <mat-dialog-content>
+    <p>{{ 'ACCOMMODATIONS.FORM.DELETE_CONFIRM' | translate }}</p> 
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">
+      {{ 'COMMON.DELETE' | translate }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>

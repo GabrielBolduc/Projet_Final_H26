@@ -75,7 +75,7 @@ class Unit < ApplicationRecord
     is_a?(Units::DeluxeTerrain)
   end
 
-  scope :by_type, ->(types) { where(type: types) }
+  scope :by_type, ->(types) { where(type: types) if types.present? }
   scope :has_wifi, ->(value) { where(wifi: value) if value.present? }
   scope :has_electricity, ->(value) { where(electricity: value) if value.present? }
   scope :with_food_option, ->(option) {

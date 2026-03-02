@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ViewChild, TemplateRef } from '@angular/core'; 
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'; 
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,8 +19,9 @@ import { Unit } from '@core/models/unit';
     MatCardModule, 
     MatButtonModule, 
     MatIconModule, 
-    MatProgressBarModule, 
-    TranslateModule
+    MatProgressBarModule,
+    TranslateModule,
+    MatDialogModule
   ],
   templateUrl: './units.html',
   styleUrl: './units.css',
@@ -29,9 +31,12 @@ export class Units implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private accService = inject(AccommodationsService);
+  private dialog = inject(MatDialog);
+  @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
 
   accommodationId = signal<number | null>(null);
   parentCategory = signal<number | string | null>(null);
+  accommodationName = signal<string>('');
   units = signal<Unit[]>([]);
 
   ngOnInit(): void {
@@ -40,13 +45,14 @@ export class Units implements OnInit {
       const numericId = Number(id);
       this.accommodationId.set(numericId);
       this.loadUnits(numericId);
-      this.fetchParentCategory(numericId);
+      this.fetchAccommodationDetails(numericId);
     }
   }
 
-  private fetchParentCategory(accId: number) {
+  private fetchAccommodationDetails(accId: number) {
     this.accService.getAccommodation(accId).subscribe(acc => {
       this.parentCategory.set(acc.category);
+      this.accommodationName.set(acc.name);
     });
   }
 
@@ -72,16 +78,22 @@ export class Units implements OnInit {
   }
 
   deleteUnit(unit: Unit): void {
-    if (unit.id && confirm('Are you sure you want to delete this unit?')) {
-      this.service.deleteUnit(unit.id).subscribe({
-        next: () => {
-          this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
-        },
-        error: (err) => {
-          console.error('Delete failed:', err);
-        }
-      });
-    }
+    if (!unit.id) return;
+
+    const dialogRef = this.dialog.open(this.confirmDialogTemplate, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && unit.id) {
+        this.service.deleteUnit(unit.id).subscribe({
+          next: () => {
+            this.units.update(prevUnits => prevUnits.filter(u => u.id !== unit.id));
+          },
+          error: (err) => console.error('Delete failed:', err)
+        });
+      }
+    });
   }
 
   formatType(type: string | null | undefined): string {

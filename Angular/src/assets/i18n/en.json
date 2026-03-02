@@ -306,6 +306,27 @@
     "HOTELS": "HOTELS",
     "CAMPINGS": "CAMPINGS",
     "NOT_FOUND": "No accommodations found.",
+    "FILTERS": "FILTERS",
+    "RESULTS_FOUND": "Results Found",
+    "ANY": "Any",
+    "MAX_DISTANCE": "Distance Max",
+    "MAX_PRICE": "Max Price",
+    "TYPE": "Type",
+    "WATER": "Water Access",
+    "WIFI": "Wi-Fi",
+    "ELECTRICITY": "Electricity",
+    "AMENITIES": "Amenities",
+    "RESET": "Reset Filters",
+    "DRINKABLE": "Drinkable",
+    "UNDRINKABLE": "Undrinkable",
+    "ROOM_TYPE": "Room Type",
+    "TERRAIN_TYPE": "Terrain Type",
+    "SIMPLE_ROOM": "Simple Room",
+    "DOUBLE_ROOM": "Double Room",
+    "FAMILY_ROOM": "Family Room",
+    "SMALL_TERRAIN": "Small Terrain",
+    "STANDARD_TERRAIN": "Standard Terrain",
+    "DELUXE_TERRAIN": "Deluxe Terrain",
     "DETAILS": {
       "BACK_TO": "Back to",
       "HOTEL": "Hotel",
@@ -371,6 +392,7 @@
     "FEATURES": "Features",
     "AVAILABLE_QTY": "Available Quantity",
     "UNITS": "Units",
+    "NO_UNITS_AVAILABLE": "No units currently available for booking",
     "TYPES": {
       "ROOMS_HEADER": "Guest Rooms",
       "TERRAINS_HEADER": "Camping Terrains",
@@ -399,7 +421,9 @@
       "HOTEL_NO_TERRAIN": "A hotel cannot have camping terrains.",
       "CAMPING_NO_ROOM": "A camping site cannot have rooms.",
       "MAX_PARKING": "Parking cost cannot be equal or above to $100",
-      "MAX_COST": "Unit cost cannot be equal or above $1000"
+      "MAX_COST": "Unit cost cannot be equal or above $1000",
+      "DELETE_CONFIRM": "Are you sure you want to delete this unit? This action cannot be undone.",
+      "MAX_QUANTITY": "A unit type cannot have more than 255 units available"
     }
   },
   "COMMON": {

@@ -23,16 +23,22 @@ class Accommodation < ApplicationRecord
     )
   }
   scope :with_units_matching, ->(p) {
-    joins(:units).merge(
-      Unit.all.then { |u|
-        u = u.has_wifi(true) if p[:wifi] == 'true'
-        u = u.has_electricity(true) if p[:electricity] == 'true'
-        u = u.with_water_quality(p[:water]) if p[:water].present?
-        u = u.with_min_capacity(p[:min_people]) if p[:min_people].present?
-        u = u.price_under(p[:max_price]) if p[:max_price].present?
-        u
-      }
-    ).distinct
+    unit_query = Unit.all
+
+    if p[:category] == 'camping'
+      unit_query = unit_query.where("type LIKE ?", "Units::%Terrain%")
+    elsif p[:category] == 'hotel'
+      unit_query = unit_query.where("type LIKE ?", "Units::%Room%")
+    end
+
+    unit_query = unit_query.where(type: p[:type]) if p[:type].present?
+    
+    unit_query = unit_query.has_wifi(true) if p[:wifi] == 'true'
+    unit_query = unit_query.has_electricity(true) if p[:electricity] == 'true'
+    unit_query = unit_query.with_water_quality(p[:water]) if p[:water].present?
+    unit_query = unit_query.price_under(p[:max_price]) if p[:max_price].present?
+
+    joins(:units).merge(unit_query).distinct
   }
 
   before_validation :strip_fields

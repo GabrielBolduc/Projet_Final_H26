@@ -1,9 +1,10 @@
-
-.brutalist-add-btn, .fest-card, select, .filter-group input[type="range"], .amenities-flex button, .brutalist-close-btn {
+.brutalist-add-btn, .fest-card, select, .filter-group input[type="range"], 
+.filter-group input[type="text"], .amenities-flex button, .brutalist-close-btn {
   border: 2px solid #000;
 }
 
-.brutalist-add-btn, .amenities-flex button, .nav-label .title, .sub-label, .filter-group label {
+.brutalist-add-btn, .amenities-flex button, .nav-label .title, 
+.sub-label, .filter-group label, .filter-group input[type="text"]::placeholder {
   text-transform: uppercase;
 }
 
@@ -61,16 +62,22 @@
 .filter-group { display: flex; flex-direction: column; gap: 8px; }
 .filter-group label { font-weight: 900; font-size: 0.75rem; color: var(--mat-sys-on-surface); }
 
-select, .amenities-flex { height: 48px; }
+select, .filter-group input[type="text"] { 
+  height: 48px; 
+  padding: 0 12px; 
+  font-weight: 800; 
+  background: #fff; 
+  border-radius: 0; 
+  cursor: pointer;
+  font-family: inherit;
+}
 
-select { padding: 0 12px; font-weight: 800; background: #fff; border-radius: 0; cursor: pointer; }
-
-.amenities-flex { display: flex; gap: 12px; }
+.amenities-flex { display: flex; gap: 12px; height: 48px; }
 .amenities-flex button {
   flex: 1; height: 100%; border-radius: 8px;
   font-weight: 800; background: #fff;
 }
-.active-amenity { background: #000; color: #fff; }
+.active-amenity { background: #FFF; color: #000; }
 
 input[type="range"] { appearance: none; -webkit-appearance: none; width: 100%; height: 8px; background: #e0e0e0; outline: none; }
 input[type="range"]::-webkit-slider-thumb { appearance: none; width: 24px; height: 24px; background: var(--mat-sys-primary); border: 2px solid #000; }
@@ -93,29 +100,11 @@ input[type="range"]::-moz-range-thumb { width: 24px; height: 24px; background: v
 .nav-label { padding: 12px 8px; text-align: center; background: #fff; }
 .nav-label .title { 
   font-family: 'Public Sans', 'Arial Black', sans-serif;
-  font-weight: 900; 
-  font-size: 0.85rem; 
-  letter-spacing: -0.5px; 
-  line-height: 1.1; 
-  color: #000; 
-  margin-bottom: 4px; 
-  display: block;
+  font-weight: 900; font-size: 0.85rem; letter-spacing: -0.5px; line-height: 1.1; color: #000; margin-bottom: 4px; display: block;
 }
 .sub-label { 
   font-family: 'Public Sans', sans-serif;
-  font-weight: 600; 
-  font-size: 0.65rem; 
-  color: #000; 
-  letter-spacing: 0.5px;
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
-  display: block;
-}
-
-@media (max-width: 768px) {
-  .admin-header { padding: 15px; justify-content: center; }
-  .filter-section { grid-template-columns: 1fr; gap: 20px; }
+  font-weight: 600; font-size: 0.65rem; color: #000; letter-spacing: 0.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;
 }
 
 @media (max-width: 480px) {

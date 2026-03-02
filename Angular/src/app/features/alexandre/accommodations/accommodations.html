@@ -54,6 +54,15 @@
         <mat-divider></mat-divider>
 
         <div class="filter-section">
+          <!-- SEARCH BAR: Low-budget reuse of .filter-group -->
+          <div class="filter-group">
+            <label>{{ 'ACCOMMODATIONS.SEARCH' | translate }}</label>
+            <input type="text" 
+                   [placeholder]="'ACCOMMODATIONS.BY_NAME' | translate"
+                   [value]="searchValue()" 
+                   (input)="updateFilter('name', $any($event.target).value)">
+          </div>
+
           <div class="filter-group">
             <label>{{ 'ACCOMMODATIONS.MAX_DISTANCE' | translate }} ({{ maxDistanceValue() }} km)</label>
             <input type="range" min="1" max="100" step="1" 
@@ -71,17 +80,16 @@
         <mat-divider></mat-divider>
 
         <div class="filter-section">
-        <div class="filter-group">
-          <label>{{ (isCamping() ? 'ACCOMMODATIONS.TERRAIN_TYPE' : 'ACCOMMODATIONS.ROOM_TYPE') | translate }}</label>
-          
-          <select [value]="unitTypeValue()" (change)="updateFilter('type', $any($event.target).value)">
-            <option value="">{{ 'ACCOMMODATIONS.ANY' | translate }}</option>
+          <div class="filter-group">
+            <label>{{ (isCamping() ? 'ACCOMMODATIONS.TERRAIN_TYPE' : 'ACCOMMODATIONS.ROOM_TYPE') | translate }}</label>
             
-            <option *ngFor="let type of availableUnitTypes()" [value]="type">
-              {{ 'UNITS.TYPES.' + type.replace('Units::', '') | translate }}
-            </option>
-          </select>
-        </div>
+            <select [value]="unitTypeValue()" (change)="updateFilter('type', $any($event.target).value)">
+              <option value="">{{ 'ACCOMMODATIONS.ANY' | translate }}</option>
+              <option *ngFor="let type of availableUnitTypes()" [value]="type">
+                {{ 'UNITS.TYPES.' + type.replace('Units::', '') | translate }}
+              </option>
+            </select>
+          </div>
 
           <div class="filter-group" *ngIf="isCamping() || currentCategory() === 'all'">
             <label>{{ 'ACCOMMODATIONS.WATER' | translate }}</label>
@@ -92,19 +100,21 @@
             </select>
           </div>
 
-          <button mat-stroked-button 
-                  [class.active-amenity]="wifiValue()"
-                  (click)="updateFilter('wifi', wifiValue() ? null : 'true')">
-            <mat-icon>{{ wifiValue() ? 'wifi' : 'wifi_off' }}</mat-icon>
-            WiFi
-          </button>
-          <button *ngIf="isCamping() || currentCategory() === 'all'"
-                  mat-stroked-button 
-                  [class.active-amenity]="electricityValue()"
-                  (click)="updateFilter('electricity', electricityValue() ? null : 'true')">
-            <mat-icon>bolt</mat-icon>
-            {{ 'ACCOMMODATIONS.ELECTRICITY' | translate }}
-          </button>
+          <div class="amenities-flex">
+            <button mat-stroked-button 
+                    [class.active-amenity]="wifiValue()"
+                    (click)="updateFilter('wifi', wifiValue() ? null : 'true')">
+              <mat-icon>{{ wifiValue() ? 'wifi' : 'wifi_off' }}</mat-icon>
+              WiFi
+            </button>
+            <button *ngIf="isCamping() || currentCategory() === 'all'"
+                    mat-stroked-button 
+                    [class.active-amenity]="electricityValue()"
+                    (click)="updateFilter('electricity', electricityValue() ? null : 'true')">
+              <mat-icon>bolt</mat-icon>
+              {{ 'ACCOMMODATIONS.ELECTRICITY' | translate }}
+            </button>
+          </div>
         </div>
 
         <button mat-button (click)="resetFilters()" class="full-width-reset">

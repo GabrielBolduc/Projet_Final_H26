@@ -10,7 +10,7 @@ class Accommodation < ApplicationRecord
   validates :latitude, :longitude, presence: true
   validates :time_car, :time_walk, presence: true
 
-  scope :search_by_name, ->(name) { where("name ILIKE ?", "%#{name}%") }
+  scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
   scope :within_walk_time, ->(max_time) { where("time_walk <= ?", max_time) }
   scope :within_radius, ->(f_lat, f_lng, radius_km) {
     radius_meters = radius_km.to_f * 1000

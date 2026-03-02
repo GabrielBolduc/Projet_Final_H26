@@ -7,6 +7,7 @@ export enum AccommodationCategory {
 
 export interface SSFFilters {
   category?: AccommodationCategory | 'all';
+  name?: string;
   max_distance?: number
   wifi?: boolean;
   water?: string;

@@ -43,12 +43,11 @@ class Unit < ApplicationRecord
     end
   end
 
-  def as_json(options = {})
-    super(options).merge({
-      type: self.type,
-      food_options: food_options_as_array,
+  def formatted_json
+    as_json.merge({
+      image_url: image.attached? ? Rails.application.routes.url_helpers.url_for(image) : nil,
       max_capacity: max_capacity,
-      water: self.water
+      food_options: food_options_as_array
     })
   end
 
@@ -76,6 +75,18 @@ class Unit < ApplicationRecord
     is_a?(Units::DeluxeTerrain)
   end
 
+  scope :by_type, ->(types) { where(type: types) }
+  scope :has_wifi, ->(value) { where(wifi: value) if value.present? }
+  scope :has_electricity, ->(value) { where(electricity: value) if value.present? }
+  scope :with_food_option, ->(option) {
+    where("FIND_IN_SET(?, food_options)", option)
+  }
+  scope :price_under, ->(max_price) { where("cost_person_per_night <= ?", max_price) }
+  scope :with_water_quality, ->(quality) {
+    value = quality.is_a?(Integer) ? quality : Unit.waters[quality]
+    where("water >= ?", value) if value.present?
+  }
+
   private
 
   def must_have_image
@@ -93,10 +104,16 @@ class Unit < ApplicationRecord
   end
 
   def validate_food_options
-    # Ensure every selected option exists in the ALLOWED_FOOD list
-    invalid = food_options_as_array - ALLOWED_FOOD
+    options = food_options_as_array
+
+    invalid = options - ALLOWED_FOOD
     if invalid.any?
       errors.add(:food_options, "contains invalid values: #{invalid.join(', ')}")
+      return
+    end
+
+    if options.include?("None") && options.size > 1
+      errors.add(:food_options, "cannot include 'None' alongside other options")
     end
   end
 end

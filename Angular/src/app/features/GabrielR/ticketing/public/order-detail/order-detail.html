@@ -22,9 +22,14 @@
               }
               <strong class="ticket-title">{{ ticket.package.title }}</strong>
               <p class="ticket-meta">{{ ticket.price | currency:'CAD':'symbol-narrow' }} - {{ ticket.holder_name }}</p>
-              <span class="ticket-status" [class.refunded]="isRefunded(ticket)">
-                {{ isRefunded(ticket) ? ('TICKETING_PUBLIC.REFUNDED' | translate) : ('TICKETING_PUBLIC.ACTIVE' | translate) }}
-              </span>
+              
+              @if (isRefunded(ticket)) {
+                <span class="ticket-status refunded">{{ 'TICKETING_PUBLIC.REFUNDED' | translate }}</span>
+              } @else if (isExpired(ticket)) {
+                <span class="ticket-status expired">{{ 'TICKETING_PUBLIC.EXPIRED' | translate }}</span>
+              } @else {
+                <span class="ticket-status active">{{ 'TICKETING_PUBLIC.ACTIVE' | translate }}</span>
+              }
             </div>
             <a mat-stroked-button [routerLink]="['/ticketing/tickets', ticket.id]">
               {{ 'TICKETING_PUBLIC.VIEW_TICKET' | translate }}

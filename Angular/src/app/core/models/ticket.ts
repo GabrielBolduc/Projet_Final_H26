@@ -18,6 +18,11 @@ export function isRefunded(ticket: Ticket | null | undefined): boolean {
   return !!ticket?.refunded_at;
 }
 
+export function isExpired(ticket: Ticket | null | undefined): boolean {
+  if (!ticket?.package.expired_at) return false;
+  return new Date() > new Date(ticket.package.expired_at);
+}
+
 export interface UpdateTicketPayload {
   holder_name: string;
   holder_email: string;

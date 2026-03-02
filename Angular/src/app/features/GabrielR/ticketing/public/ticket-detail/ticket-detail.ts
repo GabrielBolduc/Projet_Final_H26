@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -47,24 +47,16 @@ export class TicketingTicketDetailComponent implements OnInit {
   
   ticketIsRefunded = computed(() => isRefunded(this.ticket()));
 
-  qrIsInvalid = computed(() => {
+  ticketIsExpired = computed(() => {
     const currentTicket = this.ticket();
-    if (!currentTicket) {
-      return false;
-    }
-
-    if (this.ticketIsRefunded()) {
-      return true;
-    }
+    if (!currentTicket) return false;
 
     const expiredAt = this.toDate(currentTicket.package.expired_at);
-    if (!expiredAt) {
-      return true;
-    }
-
-    const now = new Date();
-    return now > expiredAt;
+    return !!expiredAt && new Date() > expiredAt;
   });
+
+  qrIsInvalid = computed(() => this.ticketIsRefunded() || this.ticketIsExpired());
+
   isLoading = signal(true);
   isSaving = signal(false);
   isRefunding = signal(false);
@@ -89,6 +81,16 @@ export class TicketingTicketDetailComponent implements OnInit {
     return this.ticketForm.get('holder_phone');
   }
 
+  constructor() {
+    effect(() => {
+      if (this.ticketIsRefunded() || this.ticketIsExpired()) {
+        this.ticketForm.disable();
+      } else {
+        this.ticketForm.enable();
+      }
+    });
+  }
+
   async ngOnInit(): Promise<void> {
     await this.loadTicket();
   }
@@ -105,6 +107,11 @@ export class TicketingTicketDetailComponent implements OnInit {
 
     if (this.ticketIsRefunded()) {
       this.formError.set('Refunded tickets cannot be modified.');
+      return;
+    }
+
+    if (this.ticketIsExpired()) {
+      this.formError.set('Expired tickets cannot be modified.');
       return;
     }
 
@@ -147,6 +154,11 @@ export class TicketingTicketDetailComponent implements OnInit {
 
     if (this.ticketIsRefunded()) {
       this.formError.set('Ticket is already refunded.');
+      return;
+    }
+
+    if (this.ticketIsExpired()) {
+      this.formError.set('Expired tickets cannot be refunded.');
       return;
     }
 

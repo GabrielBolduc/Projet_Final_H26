@@ -144,6 +144,11 @@
   color: var(--mat-sys-on-error);
 }
 
+.status.expired {
+  background-color: var(--mat-sys-outline);
+  color: var(--mat-sys-on-surface-variant);
+}
+
 .ticket-form {
   display: grid;
   gap: 10px;

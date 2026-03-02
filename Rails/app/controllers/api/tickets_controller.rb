@@ -43,6 +43,10 @@ class Api::TicketsController < Api::ClientController
   def destroy
     return render_error("Ticket already refunded") if @ticket.refunded?
 
+    if @ticket.package.expired_at < Time.current
+      return render_error("Cannot refund an expired ticket")
+    end
+
     @ticket.update!(refunded_at: Time.current)
 
     render json: {

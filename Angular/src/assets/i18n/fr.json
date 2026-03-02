@@ -221,6 +221,7 @@
     "REFUND_CONFIRM": "Rembourser ce billet ?",
     "ACTIVE": "Billet actif",
     "REFUNDED": "Billet remboursé",
+    "EXPIRED": "Billet expiré",
     "ORDER_NOT_FOUND": "Commande introuvable.",
     "SELECT_ORDER_PROMPT": "Sélectionnez une commande pour voir les détails des billets.",
     "TICKET_DETAILS": "Détails du billet",

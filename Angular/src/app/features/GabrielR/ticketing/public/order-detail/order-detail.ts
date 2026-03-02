@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { Order } from '@core/models/order';
 import { OrderService } from '@core/services/order.service';
-import { isRefunded } from '@core/models/ticket';
+import { isRefunded, isExpired } from '@core/models/ticket';
 
 @Component({
   selector: 'app-ticketing-order-detail',
@@ -49,4 +49,5 @@ export class TicketingOrderDetailComponent {
   isLoading = computed(() => this.orderResource.isLoading());
 
   protected isRefunded = isRefunded;
+  protected isExpired = isExpired;
 }

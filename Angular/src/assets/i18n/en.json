@@ -220,6 +220,7 @@
     "REFUND_CONFIRM": "Refund this ticket?",
     "ACTIVE": "Active ticket",
     "REFUNDED": "Refunded ticket",
+    "EXPIRED": "Expired ticket",
     "ORDER_NOT_FOUND": "Order not found.",
     "SELECT_ORDER_PROMPT": "Select an order to view ticket details.",
     "TICKET_DETAILS": "Ticket details",

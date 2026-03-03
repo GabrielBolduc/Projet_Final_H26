@@ -18,6 +18,7 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
 import { FestivalService } from '../../../../../core/services/festival.service';
+import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { PackageService } from '../../../../../core/services/package.service';
 import { Festival } from '@core/models/festival';
 import { Package } from '@core/models/package';
@@ -38,7 +39,7 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     const [eHours, eMinutes] = expiredTime.split(':').map(Number);
     end.setHours(eHours, eMinutes, 0);
 
-    if (start >= end) {
+    if (start > end) {
       return { dateRangeInvalid: true };
     }
   }
@@ -64,6 +65,7 @@ export class PackageFormComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   
   private festivalService = inject(FestivalService);
+  private errorHandler = inject(ErrorHandlerService);
   private packageService = inject(PackageService); 
   private translate = inject(TranslateService);
 
@@ -117,26 +119,43 @@ export class PackageFormComponent implements OnInit {
       
       return Math.max(0, totalCapacity - otherGeneralQuota);
     } else {
-      const otherDailyPackages = this.existingPackages().filter(p => p.id !== this.packageId && p.category.toLowerCase() !== 'general');
+      const otherNonGeneralPackages = this.existingPackages()
+        .filter(p => p.id !== this.packageId && p.category.toLowerCase() !== 'general');
+
       const start = new Date(validDate);
+      start.setHours(0, 0, 0, 0);
       const end = new Date(expiredDate);
+      end.setHours(0, 0, 0, 0);
+
+      const daysToCheck: Date[] = [];
+      if (category === 'evening') {
+        daysToCheck.push(new Date(start));
+      } else {
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          daysToCheck.push(new Date(d));
+        }
+      }
+
+      const packageConsumesDay = (pkg: Package, day: Date): boolean => {
+        const pkgCategory = pkg.category.toLowerCase();
+        const pkgStart = new Date(pkg.valid_at);
+        pkgStart.setHours(0, 0, 0, 0);
+        const pkgEnd = new Date(pkg.expired_at);
+        pkgEnd.setHours(0, 0, 0, 0);
+
+        if (pkgCategory === 'evening') {
+          return day.getTime() === pkgStart.getTime();
+        }
+
+        return day >= pkgStart && day <= pkgEnd;
+      };
+
       let minRemaining = cap;
 
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        const currentDate = new Date(d);
-        currentDate.setHours(0, 0, 0, 0);
-
-        const dailySum = otherDailyPackages.reduce((sum, p) => {
-          const pStart = new Date(p.valid_at);
-          pStart.setHours(0, 0, 0, 0);
-          const pEnd = new Date(p.expired_at);
-          pEnd.setHours(23, 59, 59, 999);
-
-          if (currentDate >= pStart && currentDate <= pEnd) {
-            return sum + (p.quota || 0);
-          }
-          return sum;
-        }, 0);
+      for (const currentDate of daysToCheck) {
+        const dailySum = otherNonGeneralPackages.reduce((sum, p) => (
+          packageConsumesDay(p, currentDate) ? sum + (p.quota || 0) : sum
+        ), 0);
 
         minRemaining = Math.min(minRemaining, cap - dailySum);
       }
@@ -147,6 +166,7 @@ export class PackageFormComponent implements OnInit {
   selectedFile: File | null = null;
   previewUrl = signal<string | null>(null);
   existingImageUrl = signal<string | null>(null);
+  fileError = signal<string | null>(null);
   displayImageUrl = computed(() => this.previewUrl() ?? this.existingImageUrl());
   
   isEditMode = signal(false);
@@ -267,9 +287,19 @@ export class PackageFormComponent implements OnInit {
     quotaControl.setValidators([
       Validators.required, 
       Validators.min(min), 
-      Validators.max(max)
+      Validators.max(max),
+      this.integerValidator()
     ]);
     quotaControl.updateValueAndValidity({ emitEvent: false });
+  }
+
+  private integerValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      if (value === null || value === undefined || value === '') return null;
+
+      return Number.isInteger(Number(value)) ? null : { integerInvalid: true };
+    };
   }
 
   private festivalBoundsValidator(): ValidatorFn {
@@ -332,8 +362,11 @@ export class PackageFormComponent implements OnInit {
 
       switch (category) {
         case 'general':
-          if (start.toDateString() === end.toDateString()) {
-            return { generalDurationInvalid: true };
+          if (vTime !== '00:00') {
+            return { generalStartInvalid: true };
+          }
+          if (eTime !== '23:59') {
+            return { generalEndInvalid: true };
           }
           break;
         case 'daily':
@@ -353,10 +386,13 @@ export class PackageFormComponent implements OnInit {
           if (!isSameDay && !isNextDay) {
             return { eveningDurationInvalid: true };
           }
-          if (sHourDec < 18 && sHourDec >= 6) {
+          if (isSameDay && vTime === '00:00' && eTime === '23:59') {
+            return { eveningFullDayInvalid: true };
+          }
+          if (sHourDec < 18) {
             return { eveningStartInvalid: true };
           }
-          if (isNextDay && eHourDec > 6.0001) {
+          if (isNextDay && eHourDec > 6) {
             return { eveningEndInvalid: true };
           }
           break;
@@ -377,7 +413,27 @@ export class PackageFormComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
+    this.fileError.set(null);
+
     if (file) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        this.selectedFile = null;
+        this.previewUrl.set(null);
+        this.fileError.set(this.translate.instant('PACKAGE_FORM.IMAGE_TYPE_INVALID'));
+        input.value = '';
+        return;
+      }
+
+      const maxBytes = 5 * 1024 * 1024;
+      if (file.size > maxBytes) {
+        this.selectedFile = null;
+        this.previewUrl.set(null);
+        this.fileError.set(this.translate.instant('PACKAGE_FORM.IMAGE_SIZE_INVALID'));
+        input.value = '';
+        return;
+      }
+
       this.selectedFile = file;
       const reader = new FileReader();
       reader.onload = () => { this.previewUrl.set(reader.result as string); };
@@ -387,6 +443,9 @@ export class PackageFormComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     this.serverErrors.set([]);
+    this.form.markAllAsTouched();
+
+    if (this.fileError()) return;
     if (this.form.invalid) return;
 
     this.isLoading.set(true);
@@ -410,7 +469,7 @@ export class PackageFormComponent implements OnInit {
       }
       this.router.navigate(['/admin/ticketing']);
     } catch (err: any) {
-      this.serverErrors.set([err?.message || this.translate.instant('PACKAGE_FORM.GENERIC_ERROR')]);
+      this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
     } finally {
       this.isLoading.set(false);
     }

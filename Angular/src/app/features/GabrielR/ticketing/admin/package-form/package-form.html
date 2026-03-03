@@ -56,6 +56,9 @@
           @if (form.get('quota')?.hasError('max')) {
             <mat-error>{{ 'PACKAGE_FORM.MAX_PLACES' | translate:{cap: maxAllowedQuota()} }}</mat-error>
           }
+          @if (form.get('quota')?.hasError('integerInvalid')) {
+            <mat-error>{{ 'PACKAGE_FORM.QUOTA_INTEGER_INVALID' | translate }}</mat-error>
+          }
           @if (form.hasError('quotaExceeded')) {
             <mat-error>
               {{ 'PACKAGE_FORM.QUOTA_EXCEEDED_DAY' | translate:{ 
@@ -96,24 +99,27 @@
         </mat-form-field>
       </div>
 
-      @if (form.hasError('dateRangeInvalid') && (form.get('expired_date')?.touched || form.get('expired_time')?.touched)) {
+      @if (form.hasError('dateRangeInvalid') && form.dirty) {
         <div class="time-error">
           {{ 'PACKAGE_FORM.END_AFTER_START' | translate }}
         </div>
       }
-      @if (form.hasError('validBeforeFestival') && (form.get('valid_date')?.touched || form.get('valid_time')?.touched)) {
+      @if (form.hasError('validBeforeFestival') && form.dirty) {
         <div class="time-error">
           {{ 'PACKAGE_FORM.START_BEFORE_FESTIVAL' | translate:{ date: (festivalStartLimit() | date:'shortDate') } }}
         </div>
       }
-      @if (form.hasError('expiredAfterFestival') && (form.get('expired_date')?.touched || form.get('expired_time')?.touched)) {
+      @if (form.hasError('expiredAfterFestival') && form.dirty) {
         <div class="time-error">
           {{ 'PACKAGE_FORM.END_AFTER_FESTIVAL' | translate:{ date: (festivalEndLimit() | date:'shortDate') } }}
         </div>
       }
 
-      @if (form.hasError('generalDurationInvalid')) {
-        <div class="time-error">{{ 'PACKAGE_FORM.GENERAL_DURATION_INVALID' | translate }}</div>
+      @if (form.hasError('generalStartInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.GENERAL_START_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('generalEndInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.GENERAL_END_INVALID' | translate }}</div>
       }
       @if (form.hasError('dailyDurationInvalid')) {
         <div class="time-error">{{ 'PACKAGE_FORM.DAILY_DURATION_INVALID' | translate }}</div>
@@ -123,6 +129,9 @@
       }
       @if (form.hasError('eveningDurationInvalid')) {
         <div class="time-error">{{ 'PACKAGE_FORM.EVENING_DURATION_INVALID' | translate }}</div>
+      }
+      @if (form.hasError('eveningFullDayInvalid')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.EVENING_FULL_DAY_INVALID' | translate }}</div>
       }
       @if (form.hasError('eveningStartInvalid')) {
         <div class="time-error">{{ 'PACKAGE_FORM.EVENING_START_INVALID' | translate }}</div>
@@ -149,6 +158,9 @@
             <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" accept="image/jpeg,image/png,image/webp">
             @if (selectedFile) { <span class="file-name">{{ selectedFile.name }}</span> }
           </div>
+          @if (fileError()) {
+            <div class="time-error">{{ fileError() }}</div>
+          }
 
           @if (displayImageUrl()) {
             <div class="image-thumbnail">
@@ -163,7 +175,7 @@
           {{ 'PACKAGE_FORM.CANCEL' | translate }}
         </button>
         
-        <button mat-flat-button color="primary" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
+        <button mat-flat-button color="primary" type="submit" class="action-btn submit-btn" [disabled]="isLoading()">
           @if (isLoading()) {
             <span>{{ 'PACKAGE_FORM.PROCESSING' | translate }}</span> 
           } @else {

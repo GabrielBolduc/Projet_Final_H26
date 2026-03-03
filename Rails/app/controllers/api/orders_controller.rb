@@ -29,45 +29,46 @@ class Api::OrdersController < Api::ClientController
     quantity = order_params[:quantity].to_i
 
     return render_error("Quantity must be greater than 0") if quantity <= 0
-ActiveRecord::Base.transaction do
-  order = current_user.orders.create!
+    order = nil
+    ActiveRecord::Base.transaction do
+      order = current_user.orders.create!
 
-  if order_params[:tickets].present? && order_params[:tickets].is_a?(Array)
-    # Détenteurs multiples fournis depuis le frontend
-    order_params[:tickets].take(quantity).each do |t_params|
-      order.tickets.create!(
-        package:      package,
-        holder_name:  sanitized_or_default(t_params[:holder_name],  current_user.name),
-        holder_email: sanitized_or_default(t_params[:holder_email], current_user.email),
-        holder_phone: sanitized_or_default(t_params[:holder_phone], current_user.phone_number)
-      )
-    end
+      if order_params[:tickets].present? && order_params[:tickets].is_a?(Array)
+        # Détenteurs multiples fournis depuis le frontend
+        order_params[:tickets].take(quantity).each do |t_params|
+          order.tickets.create!(
+            package:      package,
+            holder_name:  sanitized_or_default(t_params[:holder_name],  current_user.name),
+            holder_email: sanitized_or_default(t_params[:holder_email], current_user.email),
+            holder_phone: sanitized_or_default(t_params[:holder_phone], current_user.phone_number)
+          )
+        end
 
-    # Si moins de détenteurs fournis que de quantité, remplir le reste avec les infos du user actuel
-    (quantity - order_params[:tickets].size).times do
-      order.tickets.create!(
-        package:      package,
-        holder_name:  current_user.name,
-        holder_email: current_user.email,
-        holder_phone: current_user.phone_number
-      )
-    end
-  else
-    # Compatibilité ascendante / repli sur détenteur unique
-    holder_name  = sanitized_or_default(order_params[:holder_name],  current_user.name)
-    holder_email = sanitized_or_default(order_params[:holder_email], current_user.email)
-    holder_phone = sanitized_or_default(order_params[:holder_phone], current_user.phone_number)
+        # Si moins de détenteurs fournis que de quantité, remplir le reste avec les infos du user actuel
+        (quantity - order_params[:tickets].size).times do
+          order.tickets.create!(
+            package:      package,
+            holder_name:  current_user.name,
+            holder_email: current_user.email,
+            holder_phone: current_user.phone_number
+          )
+        end
+      else
+        # Compatibilité ascendante / repli sur détenteur unique
+        holder_name  = sanitized_or_default(order_params[:holder_name],  current_user.name)
+        holder_email = sanitized_or_default(order_params[:holder_email], current_user.email)
+        holder_phone = sanitized_or_default(order_params[:holder_phone], current_user.phone_number)
 
-    quantity.times do
-      order.tickets.create!(
-        package:      package,
-        holder_name:  holder_name,
-        holder_email: holder_email,
-        holder_phone: holder_phone
-      )
+        quantity.times do
+          order.tickets.create!(
+            package:      package,
+            holder_name:  holder_name,
+            holder_email: holder_email,
+            holder_phone: holder_phone
+          )
+        end
+      end
     end
-  end
-end
 
 
     render json: {

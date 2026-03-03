@@ -8,7 +8,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms'; 
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
@@ -23,7 +25,7 @@ import { Package } from '../../../../core/models/package';
   imports: [
     CommonModule, RouterLink, MatCardModule, MatButtonModule, MatIconModule, 
     MatProgressBarModule, CurrencyPipe, DatePipe, 
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatDialogModule, FormsModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatCheckboxModule, MatDialogModule, MatSnackBarModule, FormsModule,
     TranslateModule
   ],
   templateUrl: './ticketing-admin.html',
@@ -37,13 +39,14 @@ export class AdminTicketingComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
   private translate = inject(TranslateService);
 
   private initialized = false;
 
   searchQuery = signal('');
   sortOption = signal<PackageSort>('date_asc');
-  soldOutFilter = signal<string | null>(null);
+  soldOutOnly = signal(false);
 
   ongoingFestivalResource = resource({
     loader: () => firstValueFrom(this.festivalService.getFestivals('ongoing'))
@@ -60,7 +63,7 @@ export class AdminTicketingComponent implements OnInit {
         status: festivalId ? undefined : 'ongoing',
         q: this.searchQuery(),
         sort: this.sortOption(),
-        sold_out: this.soldOutFilter() ?? undefined
+        sold_out: this.soldOutOnly() ? 'true' : undefined
       };
     },
     loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
@@ -71,7 +74,7 @@ export class AdminTicketingComponent implements OnInit {
       status: 'completed',
       q: this.searchQuery(),
       sort: this.sortOption(),
-      sold_out: this.soldOutFilter() ?? undefined
+      sold_out: this.soldOutOnly() ? 'true' : undefined
     }),
     loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
   });
@@ -91,7 +94,7 @@ export class AdminTicketingComponent implements OnInit {
       const queryParams = {
         q: this.searchQuery() || null,
         sort: this.sortOption() === 'date_asc' ? null : this.sortOption(),
-        sold_out: this.soldOutFilter() || null
+        sold_out: this.soldOutOnly() ? 'true' : null
       };
 
       this.router.navigate([], {
@@ -114,9 +117,7 @@ export class AdminTicketingComponent implements OnInit {
       this.sortOption.set(params['sort'] as PackageSort);
     }
 
-    if (params['sold_out']) {
-      this.soldOutFilter.set(params['sold_out']);
-    }
+    this.soldOutOnly.set(params['sold_out'] === 'true');
 
     this.initialized = true;
   }
@@ -146,10 +147,23 @@ export class AdminTicketingComponent implements OnInit {
 
     try {
       await firstValueFrom(this.packageService.deletePackage(pkg.id));
+      await this.openTranslatedSnackBar('TICKETING_ADMIN.DELETE_SUCCESS', 3000);
       this.activePackagesResource.reload();
-    } catch (err: any) {
-      const msg = err.message || this.translate.instant('TICKETING_ADMIN.DELETE_ERROR');
-      alert(msg);
+      this.archivedPackagesResource.reload();
+    } catch {
+      await this.openTranslatedSnackBar('TICKETING_ADMIN.DELETE_ERROR', 5000);
     }
+  }
+
+  private async openTranslatedSnackBar(messageKey: string, duration: number): Promise<void> {
+    const labels = await firstValueFrom(this.translate.get([messageKey, 'COMMON.CLOSE']));
+    const message = labels[messageKey] ?? this.translate.instant(messageKey);
+    const closeLabel = labels['COMMON.CLOSE'] ?? this.translate.instant('COMMON.CLOSE');
+
+    this.snackBar.open(
+      message,
+      closeLabel,
+      { duration }
+    );
   }
 }

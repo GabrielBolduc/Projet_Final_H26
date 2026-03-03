@@ -3,7 +3,7 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +14,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 
 import { AuthService } from '@core/services/auth.service';
+import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { PackageService } from '@core/services/package.service';
 import { OrderService } from '@core/services/order.service';
 import { Package } from '@core/models/package';
@@ -44,12 +45,16 @@ export class TicketingOrderFormComponent implements OnInit {
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private translate = inject(TranslateService);
   private packageService = inject(PackageService);
   private orderService = inject(OrderService);
+  private errorHandler = inject(ErrorHandlerService);
 
   isSubmittingOrder = signal(false);
   orderError = signal('');
+  orderErrorParams = signal<Record<string, unknown> | undefined>(undefined);
   orderSuccess = signal('');
+  orderSuccessParams = signal<Record<string, unknown> | undefined>(undefined);
   quantity = signal(1);
 
   packageId = computed(() => Number(this.route.snapshot.paramMap.get('id')));
@@ -160,35 +165,35 @@ export class TicketingOrderFormComponent implements OnInit {
   }
 
   async createOrder(): Promise<void> {
-    this.orderError.set('');
-    this.orderSuccess.set('');
+    this.setOrderErrorText('');
+    this.setOrderSuccessText('');
 
     const pkg = this.selectedPackage();
     if (!pkg?.id) {
-      this.orderError.set('Package not found.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.PACKAGE_NOT_FOUND');
       return;
     }
 
     if (!this.isClient()) {
-      this.orderError.set('Only clients can create ticket orders.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.CLIENT_ONLY');
       return;
     }
 
     this.orderForm.markAllAsTouched();
     if (this.orderForm.invalid) {
-      this.orderError.set('Please correct the invalid fields.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.FORM_INVALID');
       return;
     }
 
     const quantity = this.quantity();
     const remaining = this.packageAvailability().remaining;
     if (remaining <= 0) {
-      this.orderError.set('This package is sold out.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.SOLD_OUT');
       return;
     }
 
     if (quantity > remaining) {
-      this.orderError.set(`Only ${remaining} ticket(s) are still available.`);
+      this.setOrderErrorKey('TICKETING_PUBLIC.REMAINING_TICKETS', { count: remaining });
       return;
     }
 
@@ -207,18 +212,15 @@ export class TicketingOrderFormComponent implements OnInit {
         tickets
       }));
 
-      this.orderSuccess.set('Order confirmed successfully.');
-      this.router.navigate(['/ticketing/orders', createdOrder.id]);
-    } catch (err: any) {
-      const message = err?.message;
-      const errors = err?.errors;
-
-      if (errors && typeof errors === 'object') {
-        const flattened = Object.values(errors).flat().join(' | ');
-        this.orderError.set(flattened || 'Unable to create order.');
+      this.setOrderSuccessKey('TICKETING_PUBLIC.ORDER_CONFIRMED');
+      if (createdOrder?.id && Number.isInteger(createdOrder.id)) {
+        this.router.navigate(['/ticketing/orders', createdOrder.id]);
       } else {
-        this.orderError.set(String(message || 'Unable to create order.'));
+        this.router.navigate(['/ticketing/orders']);
       }
+    } catch (err: any) {
+      const parsedErrors = this.errorHandler.parseRailsErrors(err);
+      this.setOrderErrorText(parsedErrors.join(' | '));
     } finally {
       this.isSubmittingOrder.set(false);
     }
@@ -228,5 +230,25 @@ export class TicketingOrderFormComponent implements OnInit {
     this.router.navigate(['/login'], {
       queryParams: { returnUrl: `/ticketing/packages/${this.packageId()}/order` }
     });
+  }
+
+  private setOrderErrorKey(key: string, params?: Record<string, unknown>): void {
+    this.orderError.set(key);
+    this.orderErrorParams.set(params);
+  }
+
+  private setOrderErrorText(message: string): void {
+    this.orderError.set(message);
+    this.orderErrorParams.set(undefined);
+  }
+
+  private setOrderSuccessKey(key: string, params?: Record<string, unknown>): void {
+    this.orderSuccess.set(key);
+    this.orderSuccessParams.set(params);
+  }
+
+  private setOrderSuccessText(message: string): void {
+    this.orderSuccess.set(message);
+    this.orderSuccessParams.set(undefined);
   }
 }

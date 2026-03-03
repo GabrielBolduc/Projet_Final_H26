@@ -414,8 +414,8 @@ p_general = Package.create!(
   price: 150.00,
   quota: 4,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 10),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 0),
+  valid_at: f.start_at.to_time.change(hour: 0),
+  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
   festival: f
 )
 
@@ -463,14 +463,47 @@ p_evening_last_spots = Package.create!(
   festival: f
 )
 
+p_daily_day2 = Package.create!(
+  title: "Billet Journalier - Jour 2",
+  description: "Accès à la deuxième journée du festival.",
+  price: 64.99,
+  quota: 8,
+  category: "daily",
+  valid_at: (f.start_at + 2.days).in_time_zone('America/New_York').change(hour: 10, min: 0),
+  expired_at: (f.start_at + 2.days).in_time_zone('America/New_York').change(hour: 17, min: 0),
+  festival: f
+)
+
+p_evening_overnight = Package.create!(
+  title: "Billet Soirée (Nuit Blanche)",
+  description: "Accès du soir jusqu'à la nuit (jusqu'à 02:00).",
+  price: 89.99,
+  quota: 4,
+  category: "evening",
+  valid_at: (f.start_at + 2.days).in_time_zone('America/New_York').change(hour: 21, min: 0),
+  expired_at: (f.start_at + 3.days).in_time_zone('America/New_York').change(hour: 2, min: 0),
+  festival: f
+)
+
+p_general_flex = Package.create!(
+  title: "Passeport Festival Flex",
+  description: "Passeport général avec quota plus élevé pour tests de volume.",
+  price: 175.00,
+  quota: 10,
+  category: "general",
+  valid_at: f.start_at.to_time.change(hour: 0),
+  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
+  festival: f
+)
+
 p_completed = Package.create!(
   title: "Passeport Archive",
   description: "Forfait d'un festival terminé pour valider l'affichage des archives.",
   price: 130.00,
   quota: 3,
   category: "general",
-  valid_at: f2.start_at.to_time.change(hour: 10),
-  expired_at: f2.end_at.to_time.change(hour: 23),
+  valid_at: f2.start_at.to_time.change(hour: 0),
+  expired_at: f2.end_at.to_time.change(hour: 23, min: 59),
   festival: f2
 )
 
@@ -482,6 +515,11 @@ order_daily_2 = Order.create!(user: c3, purchased_at: f.start_at.to_time.change(
 order_daily_sold_out_1 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 5))
 order_daily_sold_out_2 = Order.create!(user: c3, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 20))
 order_evening_last_spots = Order.create!(user: c, purchased_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 10))
+order_daily_day2_1 = Order.create!(user: c2, purchased_at: (f.start_at + 2.days).to_time.change(hour: 9, min: 50))
+order_daily_day2_2 = Order.create!(user: c3, purchased_at: (f.start_at + 2.days).to_time.change(hour: 10, min: 25))
+order_evening_overnight = Order.create!(user: c, purchased_at: (f.start_at + 2.days).to_time.change(hour: 20, min: 55))
+order_general_flex_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 8, min: 40))
+order_general_flex_2 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 9, min: 5))
 order_completed = Order.create!(user: c, purchased_at: f2.start_at.to_time.change(hour: 12, min: 0))
 
 ticket_seq = 0
@@ -520,6 +558,17 @@ create_tickets.call(order: order_evening_last_spots, package: p_evening_last_spo
 # Cas 5: Forfait archivé (1 actif + 1 remboursé)
 create_tickets.call(order: order_completed, package: p_completed, quantity: 2, refunded_indexes: [ 1 ], holder_prefix: "Archive")
 
+# Cas 6: Journalier jour 2 (5 actifs + 1 remboursé sur quota 8)
+create_tickets.call(order: order_daily_day2_1, package: p_daily_day2, quantity: 3, refunded_indexes: [ 1 ], holder_prefix: "Daily Day2")
+create_tickets.call(order: order_daily_day2_2, package: p_daily_day2, quantity: 3, holder_prefix: "Daily Day2")
+
+# Cas 7: Soirée de nuit (3/4 actifs)
+create_tickets.call(order: order_evening_overnight, package: p_evening_overnight, quantity: 3, holder_prefix: "Overnight")
+
+# Cas 8: Passeport flex (4 actifs + 2 remboursés, quota 10)
+create_tickets.call(order: order_general_flex_1, package: p_general_flex, quantity: 3, refunded_indexes: [ 0 ], holder_prefix: "General Flex")
+create_tickets.call(order: order_general_flex_2, package: p_general_flex, quantity: 3, refunded_indexes: [ 2 ], holder_prefix: "General Flex")
+
 # Attachement des images
 images = {
   p_general => 'general-ticket.webp',
@@ -527,6 +576,9 @@ images = {
   p_evening => 'evening-ticket.jpg',
   p_daily_sold_out => 'daily-ticket.webp',
   p_evening_last_spots => 'evening-ticket.jpg',
+  p_daily_day2 => 'daily-ticket.webp',
+  p_evening_overnight => 'evening-ticket.jpg',
+  p_general_flex => 'general-ticket.webp',
   p_completed => 'general-ticket.webp',
   unit1 => 'hotel-image.jpg',
   unit_hotel_mid => 'hotel-mid.jpg',
@@ -556,7 +608,7 @@ unit_camp_low.save!
 unit_hotel_high.save!
 unit_hotel_mid.save!
 
-[ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots ].each do |pkg|
+[ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots, p_daily_day2, p_evening_overnight, p_general_flex ].each do |pkg|
   sold = pkg.tickets.where(refunded_at: nil).count
   refunded = pkg.tickets.where.not(refunded_at: nil).count
 end

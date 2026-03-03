@@ -236,6 +236,17 @@
     grid-template-columns: 1fr;
   }
 
+  .quantity-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .quantity-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
   .error,
   .success {
     margin-left: 16px;

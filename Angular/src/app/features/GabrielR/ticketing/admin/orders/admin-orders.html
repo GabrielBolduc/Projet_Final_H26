@@ -53,10 +53,10 @@
     @for (order of orders(); track order.id) {
       <mat-expansion-panel class="order-panel" (opened)="loadOrderDetail(order.id)">
         <mat-expansion-panel-header>
-          <mat-panel-title>
+          <mat-panel-title class="panel-title">
             <strong>#{{ order.id }}</strong> - {{ order.client_name }}
           </mat-panel-title>
-          <mat-panel-description>
+          <mat-panel-description class="panel-description">
             {{ order.purchased_at | date:'yyyy-MM-dd HH:mm' }} | 
             {{ order.ticket_count }} {{ 'TICKETING_PUBLIC.TICKETS' | translate }} | 
             {{ order.total_price | currency:'CAD':'symbol-narrow' }}

@@ -4,6 +4,7 @@ import { Signup } from './features/auth/signup/signup';
 import { Notfound } from './core/notfound/notfound';
 import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
+import { ReservationsAdmin } from '@features/alexandre/admin/reservations-admin/reservations-admin';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
 import { AccommodationsDetails } from '@features/alexandre/accommodations-details/accommodations-details';
 import { AccommodationsForm } from '@features/alexandre/admin/accommodations-form/accommodations-form';
@@ -57,6 +58,11 @@ export const routes: Routes = [
         path: 'reservations-form',
         component: ReservationsForm,
         canActivate: [AuthGuard]
+    },
+    {
+        path: 'reservations-admin',
+        component: ReservationsAdmin,
+        canActivate: [AuthGuard, adminGuard]
     },
     {
         path: 'accommodations',

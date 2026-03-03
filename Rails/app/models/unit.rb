@@ -1,7 +1,7 @@
 
 class Unit < ApplicationRecord
   belongs_to :accommodation
-  has_many :reservations, dependent: :destroy
+  has_many :reservations, dependent: :nullify
   has_one_attached :image
 
   CAPACITIES = {

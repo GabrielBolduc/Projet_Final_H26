@@ -44,6 +44,11 @@
           <mat-icon>local_activity</mat-icon>
           <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
         </button>
+
+        <button mat-menu-item [routerLink]="['/accommodations']">
+          <mat-icon>hotel</mat-icon>
+          <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
+        </button>
       </mat-menu>
     }
   </div>
@@ -57,8 +62,8 @@
       </a>
 
       @if (auth.isAdmin()) {
-        <a [routerLink]="['/accommodations']" class="nav-link">
-          <span>{{ 'NAV.ACCOMMODATIONS' | translate }}</span>
+        <a [routerLink]="['/reservations-admin']" class="nav-link">
+          <span>{{ 'NAV.RESERVATION' | translate }}</span>
         </a>
       } @else {
         <a [routerLink]="['/reservations']" class="nav-link">
@@ -103,9 +108,9 @@
         </button>
 
         @if (auth.isAdmin()) {
-          <button mat-menu-item [routerLink]="['/accommodations']">
-            <mat-icon>hotel</mat-icon>
-            <span>{{ 'NAV.ACCOMMODATIONS' | translate }}</span>
+          <button mat-menu-item [routerLink]="['/reservations-admin']">
+            <mat-icon>book_online</mat-icon>
+            <span>{{ 'NAV.RESERVATION' | translate }}</span>
           </button>
         } @else {
           <button mat-menu-item [routerLink]="['/reservations']">
@@ -148,6 +153,11 @@
         <button mat-menu-item [routerLink]="['/admin/ticketing']">
           <mat-icon>local_activity</mat-icon>
           <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/accommodations']">
+          <mat-icon>hotel</mat-icon>
+          <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
         </button>
       }
 

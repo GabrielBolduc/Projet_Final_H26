@@ -8,7 +8,7 @@ class ApiController < ApplicationController
   # INTERCEPTION DES ERREURS 404
   # C'est cette ligne qui capture l'erreur "ActiveRecord::RecordNotFound"
   # et l'envoie vers la méthode "not_found"
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :success
 
   # --- Helpers ---
 
@@ -30,6 +30,13 @@ class ApiController < ApplicationController
       status: "error",
       message: "Validation failed",
       errors: record.errors.messages
+    }, status: :ok
+  end
+
+  def render_validation_success(record)
+    render json: {
+      status: "success",
+      data: record.as_json
     }, status: :ok
   end
   

@@ -425,8 +425,8 @@ p_daily = Package.create!(
   price: 60.00,
   quota: 6,
   category: "daily",
-  valid_at: f.start_at.to_time.change(hour: 10),
-  expired_at: f.start_at.to_time.change(hour: 17),
+  valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
+  expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
   festival: f
 )
 
@@ -436,8 +436,8 @@ p_evening = Package.create!(
   price: 72.99,
   quota: 5,
   category: "evening",
-  valid_at: f.start_at.to_time.change(hour: 19),
-  expired_at: f.start_at.to_time.change(hour: 23),
+  valid_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 19, min: 0),
+  expired_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 23, min: 0),
   festival: f
 )
 
@@ -447,8 +447,8 @@ p_daily_sold_out = Package.create!(
   price: 55.00,
   quota: 2,
   category: "daily",
-  valid_at: (f.start_at + 1.day).to_time.change(hour: 10),
-  expired_at: (f.start_at + 1.day).to_time.change(hour: 17),
+  valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
+  expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
   festival: f
 )
 
@@ -458,8 +458,8 @@ p_evening_last_spots = Package.create!(
   price: 79.99,
   quota: 3,
   category: "evening",
-  valid_at: (f.start_at + 1.day).to_time.change(hour: 19),
-  expired_at: (f.start_at + 1.day).to_time.change(hour: 23),
+  valid_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 19, min: 0),
+  expired_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 23, min: 0),
   festival: f
 )
 

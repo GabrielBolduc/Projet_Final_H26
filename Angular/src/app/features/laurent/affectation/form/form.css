@@ -48,12 +48,7 @@ mat-select {
   margin-top: 25px;
 }
 
-/* Hover effect */
 
-.form-card:hover {
-  box-shadow: 8px 8px 0px var(--mat-sys-primary);
-  transition: 0.2s ease;
-}
 
 /* Validation messages */
 

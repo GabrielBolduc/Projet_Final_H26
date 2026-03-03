@@ -17,6 +17,9 @@
 
     <div class="affectation-list">
 
+      @if(affectations().length === 0) {
+        <p class="state-message">aucune affectation trouver</p>
+      } 
       @for (affectation of affectations(); track affectation.id) {
 
         <mat-card class="affectation-card">
@@ -25,7 +28,6 @@
 
             <div class="user-section">
 
-              <mat-icon class="user-icon">{{ 'AFFECTATIONS.USER' | translate }}</mat-icon>
 
               <div>
                 <div class="user-name">
@@ -46,7 +48,7 @@
               <div class="info-row">
                 <mat-icon>assignment</mat-icon>
 
-                {{ affectation.responsability }}
+                <p class="info-affectation">{{ affectation.responsability }}</p>
               </div>
 
               <div class="info-row">
@@ -89,3 +91,14 @@
   </main>
 
 </div>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>Supprimer cette affectation ?</h2>
+  <mat-dialog-content>
+    <p>Êtes-vous sûr de vouloir supprimer définitivement cette affectation ?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+  </mat-dialog-actions>
+</ng-template>

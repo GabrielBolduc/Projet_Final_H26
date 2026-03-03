@@ -29,13 +29,15 @@ import { PublicScheduleComponent } from './features/festival/public_programation
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin.guard';
-import { ListAffectationsComponent } from '@features/laurent/affectation/list/list';
+import { ListAffectations } from '@features/laurent/affectation/list/list';
 import { ShowAffectationComponent } from '@features/laurent/affectation/show/show';
 import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
 import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
 import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
 import { ArtistsListComponent } from './features/festival/artist/artists_list';
 import { ArtistFormComponent } from './features/festival/artist/artist_form';
+import { staffGuard } from '@core/guards/staff-guard';
+
 export const routes: Routes = [
     {
         path: '',
@@ -211,7 +213,7 @@ export const routes: Routes = [
             },
             {
                 path: 'task/:id/affectations',
-                component: ListAffectationsComponent,
+                component: ListAffectations,
                 canActivate: [AuthGuard, adminGuard]
             },
             {
@@ -232,17 +234,17 @@ export const routes: Routes = [
             {
                 path: 'affectations',
                 component: UserListAffectationComponent,
-                canActivate: [AuthGuard, adminGuard]
+                canActivate: [AuthGuard, staffGuard ]
             },
             {
                 path: 'affectations/:affectationId',
                 component: ShowAffectationComponent,
-                canActivate: [AuthGuard, adminGuard]
+                canActivate: [AuthGuard, staffGuard]
             },
             {
                 path: 'affectations/edit/:id',
                 component: UserUpdateAffectationComponent,
-                canActivate: [AuthGuard, adminGuard]
+                canActivate: [AuthGuard, staffGuard]
             },
             {
                 path: '**',

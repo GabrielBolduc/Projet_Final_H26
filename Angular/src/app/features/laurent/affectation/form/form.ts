@@ -25,7 +25,7 @@ import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-form',
-  imports: [MatDividerModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,MatCheckboxModule, TranslateModule],
+  imports: [MatDividerModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule, MatCheckboxModule, TranslateModule, RouterLink],
   templateUrl: './form.html',
   styleUrl: './form.css',
 })
@@ -39,7 +39,7 @@ export class FormAffectationComponent {
     private affectationService = inject(AffectationService);
     private festivalService = inject(FestivalService);
     private errorHandler = inject(ErrorHandlerService);
-    
+    taskId: number | null = null;
     
 
     form: FormGroup = new FormBuilder().group({
@@ -72,6 +72,14 @@ export class FormAffectationComponent {
 
     
       const id = idParam ? Number(idParam) : null;
+      
+
+       const idParamTask = this.route.snapshot.paramMap.get('id');
+
+    
+      const taskid = idParamTask ? Number(idParamTask) : null;
+
+      this.taskId = taskid;
 
       console.log( id);
 

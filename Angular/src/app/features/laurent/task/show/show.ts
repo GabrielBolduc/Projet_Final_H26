@@ -8,10 +8,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ListAffectations } from '@features/laurent/affectation/list/list';
 
 @Component({
   selector: 'app-show',
-  imports: [MatCardModule, MatButtonModule,MatIconModule,CommonModule, TranslateModule],
+  standalone: true,
+  imports: [MatCardModule, MatButtonModule,MatIconModule,CommonModule, TranslateModule, ListAffectations],
   templateUrl: './show.html',
   styleUrl: './show.css',
 })

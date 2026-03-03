@@ -61,7 +61,6 @@ export class PublicScheduleComponent implements OnInit {
   public translate = inject(TranslateService);
   private sanitizer = inject(DomSanitizer);
 
-  // --- DATA ---
   currentFestival = signal<Festival | null>(null);
   rawPerformances = signal<Performance[]>([]);
   festivalArtists = signal<FestivalArtist[]>([]);

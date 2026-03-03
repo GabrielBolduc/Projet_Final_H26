@@ -414,8 +414,8 @@ p_general = Package.create!(
   price: 150.00,
   quota: 4,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 0),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
+  valid_at: f.start_at.beginning_of_day,
+  expired_at: f.end_at.end_of_day,
   festival: f
 )
 
@@ -491,8 +491,8 @@ p_general_flex = Package.create!(
   price: 175.00,
   quota: 10,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 0),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
+  valid_at: f.start_at.beginning_of_day,
+  expired_at: f.end_at.end_of_day,
   festival: f
 )
 
@@ -502,8 +502,8 @@ p_completed = Package.create!(
   price: 130.00,
   quota: 3,
   category: "general",
-  valid_at: f2.start_at.to_time.change(hour: 0),
-  expired_at: f2.end_at.to_time.change(hour: 23, min: 59),
+  valid_at: f2.start_at.beginning_of_day,
+  expired_at: f2.end_at.end_of_day,
   festival: f2
 )
 

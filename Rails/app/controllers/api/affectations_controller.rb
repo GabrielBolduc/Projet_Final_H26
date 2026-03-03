@@ -12,7 +12,7 @@ class Api::AffectationsController < ApiController
     end
 
     def get_staff_list
-        @staff_list = Staff.all
+        @staff_list = Affectation.where(user_id: params[:user_id]).order(updated_at: :desc)
         render json: {
             status: "success",
             data: @staff_list.as_json(user_json)

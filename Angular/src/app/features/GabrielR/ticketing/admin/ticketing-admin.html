@@ -40,6 +40,8 @@
       <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
         <mat-option value="date_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
         <mat-option value="date_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
+        <mat-option value="price_asc">{{ 'TICKETING_ADMIN.PRICE_ASC' | translate }}</mat-option>
+        <mat-option value="price_desc">{{ 'TICKETING_ADMIN.PRICE_DESC' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </section>

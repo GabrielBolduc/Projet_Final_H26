@@ -17,21 +17,13 @@
 
   <section class="toolbar">
     <div class="toolbar-top">
-      <mat-form-field appearance="outline" class="search-field">
-        <mat-label>{{ 'TICKETING_PUBLIC.SEARCH' | translate }}</mat-label>
-        <input
-          matInput
-          [ngModel]="searchQuery()"
-          [ngModelOptions]="{updateOn: 'blur'}"
-          (ngModelChange)="searchQuery.set($event)"
-          (keyup.enter)="$any($event.target).blur()"
-        >
-        <mat-icon matPrefix>search</mat-icon>
-        @if (searchQuery()) {
-          <button mat-icon-button matSuffix (click)="searchQuery.set('')" [attr.aria-label]="'Clear'">
-            <mat-icon>close</mat-icon>
-          </button>
-        }
+      <mat-form-field appearance="outline" class="day-field">
+        <mat-label>{{ 'TICKETING_PUBLIC.DAY_PICKER' | translate }}</mat-label>
+        <mat-select [ngModel]="selectedWeekday()" (ngModelChange)="selectedWeekday.set($event)">
+          @for (option of weekdayOptions; track option.labelKey) {
+            <mat-option [value]="option.value">{{ option.labelKey | translate }}</mat-option>
+          }
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="sort-field">
@@ -68,7 +60,7 @@
   <section class="catalog-list">
     @if (isLoading()) {
       <p class="empty-state">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
-    } @else if (packages().length === 0) {
+    } @else if (filteredPackages().length === 0) {
       <mat-card class="empty-state-card">
         <mat-card-content class="empty-state-content">
           <mat-icon class="empty-state-icon">{{ emptyStateIcon() }}</mat-icon>
@@ -78,7 +70,7 @@
       </mat-card>
     } @else {
       <div class="package-grid">
-        @for (pkg of packages(); track pkg.id) {
+        @for (pkg of filteredPackages(); track pkg.id) {
           <mat-card class="package-card">
             <div
               class="package-visual"

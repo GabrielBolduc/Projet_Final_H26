@@ -27,14 +27,13 @@
       }
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="filter-select">
-      <mat-label>État des ventes</mat-label>
-      <mat-select [ngModel]="soldOutFilter()" (ngModelChange)="soldOutFilter.set($event)">
-        <mat-option [value]="null">Tous les états</mat-option>
-        <mat-option value="false">Places disponibles</mat-option>
-        <mat-option value="true">Complet (Sold Out)</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <mat-checkbox
+      class="sold-out-checkbox"
+      [ngModel]="soldOutOnly()"
+      (ngModelChange)="soldOutOnly.set($event)"
+    >
+      {{ 'TICKETING_ADMIN.SOLD_OUT_FILTER' | translate }}
+    </mat-checkbox>
 
     <mat-form-field appearance="outline" class="sort-select">
       <mat-label>{{ 'TICKETING_ADMIN.SORT_BY' | translate }}</mat-label>

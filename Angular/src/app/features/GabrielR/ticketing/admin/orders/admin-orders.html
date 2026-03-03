@@ -11,13 +11,23 @@
     <div class="filters-grid">
       <mat-form-field appearance="outline">
         <mat-label>{{ 'TICKETING_ADMIN.SEARCH_CLIENT' | translate }}</mat-label>
-        <input matInput [(ngModel)]="searchQuery" placeholder="Ex: Jean Dupont">
-        <mat-icon matSuffix>search</mat-icon>
+        <input
+          matInput
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          placeholder="Ex: Jean Dupont"
+        >
+        <mat-icon matPrefix>search</mat-icon>
+        @if (searchQuery()) {
+          <button mat-icon-button matSuffix (click)="searchQuery.set('')" [attr.aria-label]="'Clear'">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'TICKETING_ADMIN.FILTER_FESTIVAL' | translate }}</mat-label>
-        <mat-select [(ngModel)]="selectedFestivalId">
+        <mat-select [ngModel]="selectedFestivalId()" (ngModelChange)="selectedFestivalId.set($event)">
           <mat-option [value]="null">{{ 'TICKETING_ADMIN.ALL_FESTIVALS' | translate }}</mat-option>
           @for (fest of festivals(); track fest.id) {
             <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
@@ -27,7 +37,7 @@
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'TICKETING_ADMIN.SORT_DATE' | translate }}</mat-label>
-        <mat-select [(ngModel)]="sortOption">
+        <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
           <mat-option value="desc">{{ 'TICKETING_ADMIN.NEWEST_FIRST' | translate }}</mat-option>
           <mat-option value="asc">{{ 'TICKETING_ADMIN.OLDEST_FIRST' | translate }}</mat-option>
         </mat-select>

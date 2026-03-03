@@ -93,14 +93,14 @@
         </mat-form-field>
 
         @if (formError()) {
-          <p class="error">{{ formError() }}</p>
+          <p class="error">{{ formError() | translate: formErrorParams() }}</p>
         }
         @if (formSuccess()) {
-          <p class="success">{{ formSuccess() }}</p>
+          <p class="success">{{ formSuccess() | translate: formSuccessParams() }}</p>
         }
 
         <div class="actions">
-          <button mat-stroked-button type="submit" [disabled]="isSaving() || ticketIsRefunded() || ticketIsExpired() || ticketForm.pristine">
+          <button mat-stroked-button type="submit" [disabled]="isSaving() || ticketIsRefunded() || ticketIsExpired()">
             {{ 'TICKETING_PUBLIC.UPDATE_TICKET' | translate }}
           </button>
           <button
@@ -119,3 +119,17 @@
     <p class="empty-state">{{ 'TICKETING_PUBLIC.TICKET_NOT_FOUND' | translate }}</p>
   }
 </div>
+
+<ng-template #refundConfirmDialogTemplate>
+  <h2 mat-dialog-title>{{ 'TICKETING_PUBLIC.REFUND_DIALOG_TITLE' | translate }}</h2>
+  <mat-dialog-content>
+    <p>{{ 'TICKETING_PUBLIC.REFUND_CONFIRM' | translate }}</p>
+    <p>{{ 'TICKETING_PUBLIC.REFUND_DIALOG_BODY' | translate }}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'TICKETING_PUBLIC.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">
+      {{ 'TICKETING_PUBLIC.REFUND_TICKET' | translate }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>

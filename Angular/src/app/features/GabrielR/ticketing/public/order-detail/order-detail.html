@@ -8,9 +8,11 @@
 
   @if (isLoading()) {
     <p class="state-message">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
+  } @else if (loadError()) {
+    <p class="state-message">{{ loadError() }}</p>
   } @else if (order(); as currentOrder) {
     <mat-card class="detail-card">
-      <h1 class="detail-title">{{ 'TICKETING_PUBLIC.ORDER_DETAILS' | translate }} #{{ currentOrder.id }}</h1>
+      <h1 class="detail-title">{{ 'TICKETING_PUBLIC.ORDER_DETAILS' | translate }}</h1>
       <p class="detail-date">{{ currentOrder.purchased_at | date:'yyyy-MM-dd HH:mm' }}</p>
 
       <div class="ticket-list">

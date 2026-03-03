@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 import { Order } from '@core/models/order';
+import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { OrderService } from '@core/services/order.service';
 import { isRefunded, isExpired } from '@core/models/ticket';
 
@@ -31,6 +32,7 @@ import { isRefunded, isExpired } from '@core/models/ticket';
 export class TicketingOrderDetailComponent {
   private route = inject(ActivatedRoute);
   private orderService = inject(OrderService);
+  private errorHandler = inject(ErrorHandlerService);
 
   orderId = computed(() => Number(this.route.snapshot.paramMap.get('id')));
 
@@ -47,6 +49,11 @@ export class TicketingOrderDetailComponent {
 
   order = computed(() => this.orderResource.value());
   isLoading = computed(() => this.orderResource.isLoading());
+  loadError = computed(() => {
+    const err = this.orderResource.error();
+    if (!err) return '';
+    return this.errorHandler.parseRailsErrors(err).join(' | ');
+  });
 
   protected isRefunded = isRefunded;
   protected isExpired = isExpired;

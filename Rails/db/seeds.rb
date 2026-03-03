@@ -414,8 +414,8 @@ p_general = Package.create!(
   price: 150.00,
   quota: 4,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 10),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 0),
+  valid_at: f.start_at.to_time.change(hour: 0),
+  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
   festival: f
 )
 
@@ -469,8 +469,8 @@ p_completed = Package.create!(
   price: 130.00,
   quota: 3,
   category: "general",
-  valid_at: f2.start_at.to_time.change(hour: 10),
-  expired_at: f2.end_at.to_time.change(hour: 23),
+  valid_at: f2.start_at.to_time.change(hour: 0),
+  expired_at: f2.end_at.to_time.change(hour: 23, min: 59),
   festival: f2
 )
 

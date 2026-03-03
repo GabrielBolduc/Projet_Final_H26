@@ -2,15 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { ApiResponse } from '../models/api-response';
 import { Package } from '../models/package';
-
-interface ApiResponse<T> {
-  status: string;
-  code?: number;
-  message?: string;
-  data: T;
-  errors?: any;
-}
 
 export type PackageStatus = 'draft' | 'ongoing' | 'completed';
 export type PackageSort = 'date_asc' | 'date_desc' | 'price_asc' | 'price_desc';
@@ -21,6 +14,7 @@ export interface PackageFilters {
   q?: string;
   sort?: PackageSort;
   categories?: Array<'general' | 'daily' | 'evening'>;
+  sold_out?: 'true' | 'false' | boolean;
 }
 
 @Injectable({
@@ -49,6 +43,13 @@ export class PackageService {
       params = params.set('sort', filters.sort);
     }
 
+    if (filters.sold_out !== undefined) {
+      const soldOutValue = typeof filters.sold_out === 'boolean'
+        ? String(filters.sold_out)
+        : filters.sold_out;
+      params = params.set('sold_out', soldOutValue);
+    }
+
     if (filters.categories !== undefined) {
       if (filters.categories.length === 0) {
         params = params.append('categories[]', '__none__');
@@ -63,9 +64,8 @@ export class PackageService {
       map(response => {
         if (response.status === 'success') {
           return response.data;
-        } else {
-          throw new Error(response.message || 'Erreur lors du chargement des forfaits');
         }
+        throw response;
       }),
       catchError(this.handleError)
     );
@@ -76,9 +76,8 @@ export class PackageService {
       map(response => {
         if (response.status === 'success') {
           return response.data;
-        } else {
-          throw new Error(response.message || 'Forfait introuvable');
         }
+        throw response;
       }),
       catchError(this.handleError)
     );
@@ -92,9 +91,8 @@ export class PackageService {
       map(response => {
         if (response.status === 'success') {
           return response.data;
-        } else {
-          throw { message: response.message, errors: response.errors };
         }
+        throw response;
       }),
       catchError(this.handleError)
     );
@@ -107,9 +105,8 @@ export class PackageService {
       map(response => {
         if (response.status === 'success') {
           return response.data;
-        } else {
-          throw { message: response.message, errors: response.errors };
         }
+        throw response;
       }),
       catchError(this.handleError)
     );
@@ -121,12 +118,8 @@ export class PackageService {
       map(response => {
         if (response.status === 'success') {
           return;
-        } else {
-          if (response.code === 422 && response.errors) {
-             throw { message: response.message, errors: response.errors };
-          }
-          throw new Error(response.message || 'Erreur lors de la suppression');
         }
+        throw response;
       }),
       catchError(this.handleError)
     );
@@ -134,11 +127,11 @@ export class PackageService {
 
 
   private handleError(error: any) {
-    console.error('Erreur API Package:', error);
-    if (error.errors || (error.message && !error.status)) {
-      return throwError(() => error);
+    if (error?.error) {
+      return throwError(() => error.error);
     }
-    return throwError(() => new Error(error.message || 'Erreur serveur inconnue'));
+
+    return throwError(() => error);
   }
 
   private toFormData(pkg: Partial<Package>, file?: File): FormData {

@@ -109,6 +109,39 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_equal [ packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id ], ids
   end
 
+  test "index sold_out true returns accurate sold count" do
+    sold_out_package = Package.create!(
+      title: "Sold Out Accuracy Package",
+      description: "Used to validate sold count with sold_out filter",
+      price: 42.0,
+      quota: 2,
+      category: "daily",
+      valid_at: "2026-08-02 10:00:00",
+      expired_at: "2026-08-02 17:00:00",
+      festival: @ongoing_festival
+    )
+
+    order = Order.create!(user: users(:one))
+    2.times do |i|
+      Ticket.create!(
+        order: order,
+        package: sold_out_package,
+        holder_name: "Holder #{i}",
+        holder_email: "holder#{i}@example.com",
+        holder_phone: "81955510#{i}"
+      )
+    end
+
+    get api_packages_url, params: { status: "ongoing", sold_out: "true", q: "Sold Out Accuracy Package" }
+    assert_response :ok
+
+    json = parsed_body
+    record = json["data"].find { |pkg| pkg["id"] == sold_out_package.id }
+
+    assert record.present?, "Expected sold-out package to be returned"
+    assert_equal 2, record["sold"]
+  end
+
   # SHOW
   test "show returns package with sold count excluding refunded tickets" do
     get api_package_url(@package)

@@ -11,6 +11,8 @@
     <p class="state-message">{{ 'TICKETING_PUBLIC.CLIENT_ONLY_ORDERS' | translate }}</p>
   } @else if (isLoading()) {
     <p class="state-message">{{ 'TICKETING_PUBLIC.LOADING' | translate }}</p>
+  } @else if (loadError()) {
+    <p class="state-message">{{ loadError() }}</p>
   } @else if (orders().length === 0) {
     <p class="empty-state">{{ 'TICKETING_PUBLIC.NO_ORDERS' | translate }}</p>
   } @else {
@@ -20,7 +22,6 @@
           @if (order.tickets[0]?.package?.image_url) {
             <div class="order-image" [style.background-image]="'url(' + order.tickets[0].package.image_url + ')'"></div>
           }
-          <h3 class="order-id">#{{ order.id }}</h3>
           <p class="order-date">{{ order.purchased_at | date:'yyyy-MM-dd HH:mm' }}</p>
           <p class="ticket-count">{{ order.tickets.length }} {{ 'TICKETING_PUBLIC.TICKETS' | translate }}</p>
           <a mat-stroked-button [routerLink]="['/ticketing/orders', order.id]" class="order-link">

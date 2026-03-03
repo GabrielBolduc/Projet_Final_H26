@@ -121,11 +121,11 @@
           </div>
 
           @if (orderError()) {
-            <p class="error">{{ orderError() }}</p>
+            <p class="error">{{ orderError() | translate: orderErrorParams() }}</p>
           }
 
           @if (orderSuccess()) {
-            <p class="success">{{ orderSuccess() }}</p>
+            <p class="success">{{ orderSuccess() | translate: orderSuccessParams() }}</p>
           }
 
           <div class="actions">

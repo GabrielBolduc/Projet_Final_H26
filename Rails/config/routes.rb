@@ -18,15 +18,9 @@ Rails.application.routes.draw do
         get "get_reusable", to: "tasks#get_reusable"
       end
     end
-<<<<<<< HEAD
       
     resources :artists, only: [:index, :show, :create, :update, :destroy]
     resources :stages, only: [:index]
-=======
-
-    resources :artists, only: [ :index ]
-    resources :stages, only: [ :index ]
->>>>>>> main
     resources :performances
     resources :reservations
     resources :orders, only: [ :index, :show, :create ]

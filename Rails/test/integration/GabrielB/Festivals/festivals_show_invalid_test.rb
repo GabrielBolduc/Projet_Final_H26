@@ -34,6 +34,6 @@ class FestivalsShowInvalidTest < ActionDispatch::IntegrationTest
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal "festival non public", json["message"]
+    assert_equal "Festival non public", json["message"]
   end
 end

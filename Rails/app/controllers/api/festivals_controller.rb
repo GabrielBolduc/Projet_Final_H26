@@ -1,18 +1,12 @@
 class Api::FestivalsController < ApiController
+  before_action :authenticate_user!, only: [:create, :update, :destroy]
+  before_action :require_admin!, only: [:create, :update, :destroy]
+  before_action :set_festival, only: [:show, :update, :destroy]
 
-  # a simplifier
-  skip_before_action :authenticate_user!, only: [ :index, :show, :current ], raise: false
-  before_action :require_admin!, only: [ :create, :update, :destroy ]
-  before_action :set_festival, only: [ :show, :update, :destroy ]
-
-
-  # index, current, show a simplifier
   def index
     festivals = Festival.recent
 
-    if params[:status].present?
-      festivals = festivals.filter_by_status(params[:status])
-    end
+    festivals = festivals.filter_by_status(params[:status]) if params[:status].present?
 
     unless current_user&.is_a?(Admin)
       festivals = festivals.publicly_visible
@@ -25,33 +19,25 @@ class Api::FestivalsController < ApiController
   end
 
   def show
-    unless current_user&.is_a?(Admin) || @festival.ongoing?
+    if params[:id] == 'current' && @festival.nil?
       return render json: {
-        status: "error",
-        message: "festival non public"
-      }, status: :ok
-    end
-    render json: {
-      status: "success",
-      data: @festival.as_json
-    }, status: :ok
-  end
-
-  def current
-    festival = Festival.ongoing.first
-
-    if festival
-      render json: {
-        status: "success",
-        data: festival.as_json
-      }, status: :ok
-    else
-      render json: {
         status: "success",
         data: nil,
         message: "Aucun festival en cours"
       }, status: :ok
     end
+
+    unless @festival.ongoing? || current_user&.is_a?(Admin)
+      return render json: {
+        status: "error",
+        message: "Festival non public"
+      }, status: :ok
+    end
+
+    render json: {
+      status: "success",
+      data: @festival.as_json
+    }, status: :ok
   end
 
   def create
@@ -105,7 +91,11 @@ class Api::FestivalsController < ApiController
   private
 
   def set_festival
-    @festival = Festival.find(params[:id])
+    if params[:id] == 'current'
+      @festival = Festival.ongoing.first
+    else
+      @festival = Festival.find(params[:id])
+    end
   end
 
   def not_found_response

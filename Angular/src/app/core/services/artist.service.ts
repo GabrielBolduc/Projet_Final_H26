@@ -3,9 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of, throwError } from 'rxjs';
 import { Artist } from '../models/artist';
 import { ApiResponse } from '../models/api-response';
-import { error } from 'console';
-import { PageEvent } from 'node_modules/@angular/material/types/_paginator-chunk';
-
 
 @Injectable({ providedIn: 'root' })
 export class ArtistService {

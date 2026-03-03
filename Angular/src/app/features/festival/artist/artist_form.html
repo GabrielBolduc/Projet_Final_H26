@@ -11,7 +11,7 @@
       <div class="grid-row-2">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nom de l'artiste</mat-label>
-          <input matInput formControlName="name" placeholder="Ex: Bob Rock">
+          <input matInput formControlName="name">
           @if (artistForm.get('name')?.hasError('required')) {
             <mat-error>Le nom est requis</mat-error>
           }
@@ -19,7 +19,7 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Genre musical</mat-label>
-          <input matInput formControlName="genre" placeholder="Ex: Rock, Pop, Jazz">
+          <input matInput formControlName="genre">
           @if (artistForm.get('genre')?.hasError('required')) {
             <mat-error>Le genre est requis</mat-error>
           }

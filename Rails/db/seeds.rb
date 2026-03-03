@@ -160,7 +160,7 @@ artist1 = Artist.create!(
   name: "Bob",
   genre: "Rock",
   popularity: 4,
-  bio: "Good music"
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget.  "
 )
 artist1.reload
 
@@ -174,7 +174,7 @@ artist2 = Artist.create!(
   name: "Louis",
   genre: "Hip hop",
   popularity: 3,
-  bio: "Good music"
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget.  "
 )
 artist2.image.attach(
   io: File.open(Rails.root.join('db/files/artist2.jpg')),
@@ -186,7 +186,7 @@ artist3 = Artist.create!(
   name: "Alice",
   genre: "Pop",
   popularity: 4,
-  bio: "Good music"
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget.  "
 )
 artist3.image.attach(
   io: File.open(Rails.root.join('db/files/artist3.jpg')),

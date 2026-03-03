@@ -1,71 +1,76 @@
 class Api::ReservationsController < ApiController
-  skip_before_action :authenticate_user!, only: [ :index ], raise: false
-  before_action :set_reservation, only: [ :update, :destroy ]
+  before_action :set_reservation, only: [ :show, :update, :destroy ]
+  before_action :require_permission!, only: [ :show, :update, :destroy ]
 
   def index
-    if current_user
-      @reservations = current_user.reservations.includes(unit: { image_attachment: :blob })
-    else
-      @reservations = Reservation.none
+    # If no user is logged in, return empty data immediately
+    if current_user.nil?
+      return render json: { status: "success", data: [], message: "Not logged in" }
     end
 
-    render_success(format_reservations(@reservations))
+    # Only run this if current_user exists
+    base_query = admin_user? ? Reservation.all : current_user.reservations
+    
+    if params[:history] == 'true'
+      @reservations = base_query.where(unit_id: nil)
+    else
+      @reservations = base_query.where.not(unit_id: nil)
+    end
+
+    render json: {
+      status: "success",
+      data: @reservations.order(created_at: :desc).map(&:as_json)
+    }
+  end
+
+  def show
+    render_validation_success(@reservation)
   end
 
   def create
-    @reservation = current_user.reservations.build(reservation_params)
+    @reservation = Reservation.new(reservation_params)
+    @reservation.user = current_user unless admin_user? && params[:reservation][:user_id]
 
     if @reservation.save
-      render_success(@reservation.as_json(include: :unit), :created)
+      render_validation_success(@reservation)
     else
-      render_error(@reservation.errors.full_messages, 422)
+      render_validation_error(@reservation)
     end
   end
 
   def update
     if @reservation.update(reservation_params)
-      render_success(@reservation.as_json(include: :unit))
+      render_validation_success(@reservation)
     else
-      render_error(@reservation.errors.full_messages, 422)
+      render_validation_error(@reservation)
     end
   end
 
   def destroy
-    if @reservation.destroy
+    if @reservation.update(unit_id: nil)
       render json: { status: "success", message: "Reservation cancelled" }, status: :ok
     else
-      render_error("Could not cancel reservation", 400)
+      render_validation_error(@reservation)
     end
   end
-
 
   private
 
   def set_reservation
-    @reservation = current_user.reservations.find_by(id: params[:id])
-    render_error("Reservation not found", 404) unless @reservation
+    @reservation = Reservation.find(params[:id])
+  end
+
+  def require_permission!
+    unless admin_user? || @reservation.user_id == current_user.id
+      render_error("Accès refusé : Propriétaire requis.")
+    end
   end
 
   def reservation_params
     params.require(:reservation).permit(
-      :arrival_at, :departure_at, :nb_of_people,
-      :reservation_name, :phone_number, :unit_id, :festival_id
+      :unit_id, :festival_id, :user_id, 
+      :arrival_at, :departure_at, :nb_of_people, 
+      :reservation_name, :phone_number
     )
-  end
-
-  def format_reservations(reservations)
-    reservations.map do |res|
-      res.as_json(include: { unit: { only: [ :type, :cost_person_per_night ] } }).merge(
-        "unit_image_url" => res.unit.image.attached? ? url_for(res.unit.image) : nil
-      )
-    end
-  end
-
-  def render_success(data, status = :ok)
-    render json: { status: "success", data: data }, status: status
-  end
-
-  def render_error(message, code)
-    render json: { status: "error", message: message, code: code }, status: :ok
   end
 end

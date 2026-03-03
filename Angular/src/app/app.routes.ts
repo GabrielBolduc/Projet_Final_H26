@@ -28,7 +28,6 @@ import { PublicScheduleComponent } from './features/festival/public_programation
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
 import { adminGuard } from './core/guards/admin.guard';
-import { ListAffectationsComponent } from '@features/laurent/affectation/list/list';
 import { ShowAffectationComponent } from '@features/laurent/affectation/show/show';
 import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
 import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
@@ -208,11 +207,6 @@ export const routes: Routes = [
     {
         path: 'tasks/:id', 
         component: TaskShowComponent,
-        canActivate: [AuthGuard, adminGuard]
-    },
-    {
-        path: 'task/:id/affectations',
-        component: ListAffectationsComponent,
         canActivate: [AuthGuard, adminGuard]
     },
     {

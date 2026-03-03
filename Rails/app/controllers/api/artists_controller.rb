@@ -1,9 +1,4 @@
 class Api::ArtistsController < ApiController
-<<<<<<< HEAD
-=======
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
-
->>>>>>> main
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_artist, only: [ :show, :update, :destroy ]
@@ -88,8 +83,4 @@ class Api::ArtistsController < ApiController
   def artist_params
     params.require(:artist).permit(:name, :genre, :bio, :popularity, :image)
   end
-<<<<<<< HEAD
 end
-=======
-end
->>>>>>> main

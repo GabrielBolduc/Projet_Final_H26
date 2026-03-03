@@ -82,6 +82,20 @@ export class Ticketing implements OnInit {
 
   packages = computed(() => this.packagesResource.value() ?? []);
   isLoading = computed(() => this.packagesResource.isLoading());
+  hasActiveFilters = computed(() =>
+    this.searchQuery().trim().length > 0 || this.selectedCategories().length < 3
+  );
+  emptyStateKey = computed(() => {
+    return this.hasActiveFilters()
+      ? 'TICKETING_PUBLIC.EMPTY'
+      : 'TICKETING_PUBLIC.EMPTY_NO_PACKAGES';
+  });
+  emptyStateTitleKey = computed(() =>
+    this.hasActiveFilters()
+      ? 'TICKETING_PUBLIC.EMPTY_FILTER_TITLE'
+      : 'TICKETING_PUBLIC.EMPTY_NO_PACKAGES_TITLE'
+  );
+  emptyStateIcon = computed(() => (this.hasActiveFilters() ? 'search_off' : 'event_busy'));
 
   constructor() {
     effect(() => {

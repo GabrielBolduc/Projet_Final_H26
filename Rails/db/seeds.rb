@@ -156,25 +156,57 @@ c_stage = Stage.create!(
     technical_specs: "Small speaker"
 )
 
-puts "Création des artistes..."
+artist1 = Artist.create!(
+  name: "Bob",
+  genre: "Rock",
+  popularity: 4,
+  bio: "Good music"
+)
+artist1.reload
 
-artist1 = Artist.find_or_initialize_by(name: "Bob")
-artist1.update!(genre: "Rock", popularity: 4, bio: "Good music")
-if File.exist?(Rails.root.join('db', 'files', 'artist1.jpg')) && !artist1.image.attached?
-  artist1.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist1.jpg')), filename: 'artist1.jpg', content_type: 'image/jpeg')
-end
+artist1.image.attach(
+  io: File.open(Rails.root.join('db/files/artist1.jpg')),
+  filename: 'artist1.jpg',
+  content_type: 'image/jpeg'
+)
 
-artist2 = Artist.find_or_initialize_by(name: "Louis")
-artist2.update!(genre: "Hip hop", popularity: 3, bio: "Good music")
-if File.exist?(Rails.root.join('db', 'files', 'artist2.jpg')) && !artist2.image.attached?
-  artist2.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist2.jpg')), filename: 'artist2.jpg', content_type: 'image/jpeg')
-end
+artist2 = Artist.create!(
+  name: "Louis",
+  genre: "Hip hop",
+  popularity: 3,
+  bio: "Good music"
+)
+artist2.image.attach(
+  io: File.open(Rails.root.join('db/files/artist2.jpg')),
+  filename: 'artist2.jpg',
+  content_type: 'image/jpeg'
+)
 
-artist3 = Artist.find_or_initialize_by(name: "Alice")
-artist3.update!(genre: "Pop", popularity: 4, bio: "Good music")
-if File.exist?(Rails.root.join('db', 'files', 'artist3.jpg')) && !artist3.image.attached?
-  artist3.image.attach(io: File.open(Rails.root.join('db', 'files', 'artist3.jpg')), filename: 'artist3.jpg', content_type: 'image/jpeg')
-end
+artist3 = Artist.create!(
+  name: "Alice",
+  genre: "Pop",
+  popularity: 4,
+  bio: "Good music"
+)
+artist3.image.attach(
+  io: File.open(Rails.root.join('db/files/artist3.jpg')),
+  filename: 'artist3.jpg',
+  content_type: 'image/jpeg'
+)
+
+artist4 = Artist.create!(
+  name: "Jean",
+  genre: "Blues",
+  popularity: 2,
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget. "
+)
+
+artist4.image.attach(
+  io: File.open(Rails.root.join('db/files/artist4.webp')),
+  filename: 'artist4.webp',
+  content_type: 'image/webp'
+)
+
 
 # perf pour f (ongoing)
 Performance.create!(
@@ -208,6 +240,17 @@ Performance.create!(
   festival: f,
   stage: main_stage,
   artist: artist2
+)
+
+Performance.create!(
+  title: "Le show de jean",
+  description: "Good show",
+  price: 5000.00,
+  start_at: (f.start_at + 4.day).to_time.change(hour: 16, min: 0),
+  end_at: (f.start_at + 4.day).to_time.change(hour: 18, min: 0),
+  festival: f,
+  stage: c_stage,
+  artist: artist4
 )
 
 # perf pour f1 (draft)

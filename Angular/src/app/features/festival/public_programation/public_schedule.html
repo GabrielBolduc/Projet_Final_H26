@@ -1,7 +1,6 @@
 <div class="dashboard-layout">
   <main class="admin-page">
     
-   
     @if (isLoading()) {
       <div class="spinner-container">
         <mat-spinner diameter="50" color="primary"></mat-spinner>
@@ -20,22 +19,11 @@
       
       <section class="festival-info">
         <h1 class="festival-name">{{ f.name }}</h1>
-        <div class="festival-meta">
-          <p class="festival-dates">
-            <mat-icon>calendar_today</mat-icon>
-            {{ f.start_at | date:'d MMMM' : undefined : currentLang() }} - 
-            {{ f.end_at | date:'d MMMM yyyy' : undefined : currentLang() }}
-          </p>
-          <p class="festival-address">
-            <mat-icon>location_on</mat-icon>
-            {{ f.address }}
-          </p>
-        </div>
       </section>
 
       @if (festivalArtists().length > 0) {
         <section class="admin-section artists-showcase">
-          <h2 class="section-label">Artist a l'affiche</h2>
+          <h2 class="section-label">{{'PUBLIC.ARTIST' | translate}}</h2>
           
           <div class="artist-grid">
             @for (item of festivalArtists(); track item.artist.id) {
@@ -55,6 +43,7 @@
                   <h4 class="artist-name">{{ item.artist.name }}</h4>
                   
                   <p class="artist-date">
+                    <mat-icon inline>calendar_today</mat-icon>
                     {{ item.date | date:'EEEE d MMMM' : undefined : currentLang() | titlecase }}
                   </p>
                 </mat-card-content>
@@ -78,7 +67,7 @@
       @if (performanceGroups().length > 0) {
         <div class="schedule-section">
           <h2 class="section-label" style="text-align: center; border: none; padding: 0; margin-bottom: 40px; font-size: 2rem;">
-            Horaire Détaillé
+            {{'PUBLIC.SCHEDULE' | translate}}
           </h2>
 
           @for (group of performanceGroups(); track group.date) {
@@ -141,6 +130,57 @@
           <p>{{'DASHBOARD.NOTHING' | translate}}</p>
         </div>
       }
+
+      <div style="margin: 60px 0; border-top: 3px dashed var(--mat-sys-outline-variant); opacity: 0.5;"></div>
+
+      <section class="admin-section location-info-section">
+        <h2 class="section-label">Informations</h2>
+        
+        <div class="info-grid">
+          
+          <mat-card class="info-card">
+            <mat-card-content>
+              <div class="info-item">
+                <mat-icon color="primary">event</mat-icon>
+                <div>
+                  <strong>Dates du festival :</strong><br>
+                  {{ f.start_at | date:'d MMMM' : undefined : currentLang() }} au 
+                  {{ f.end_at | date:'d MMMM yyyy' : undefined : currentLang() }}
+                </div>
+              </div>
+              
+              <div class="info-item" style="margin-top: 25px;">
+                <mat-icon color="primary">location_on</mat-icon>
+                <div>
+                  <strong>Adresse :</strong><br>
+                  {{ f.address }}
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card class="map-card">
+            @if (f.latitude && f.longitude) {
+              <iframe 
+                [src]="getMapUrl(f.latitude, f.longitude)" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            } @else {
+              <div class="no-map">
+                <mat-icon>map</mat-icon>
+                <p>Coordonnées GPS non disponibles</p>
+              </div>
+            }
+          </mat-card>
+
+        </div>
+      </section>
+
     }
   </main>
 </div>

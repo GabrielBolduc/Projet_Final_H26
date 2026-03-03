@@ -12,7 +12,10 @@
     "PROGRAMMATION": "Programmation",
     "NO_FESTIVAL_TITLE": "Aucun festival en cours",
     "NO_FESTIVAL_DESC": "Il n'y a actuellement aucun festival actif. Revenez plus tard !",
-    "NO_PERFORMANCES": "Aucune performance n'est actuellement prévue pour ce festival."
+    "NO_PERFORMANCES": "Aucune performance n'est actuellement prévue pour ce festival.",
+    "LEARN_MORE": "En savoir plus",
+    "ARTIST": "Artiste à l'affiche",
+    "SCHEDULE": "Horaire détaillé "
   },
   "AUTH": {
     "LOGOUT": "Déconnexion",

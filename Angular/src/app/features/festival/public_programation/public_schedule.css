@@ -25,23 +25,6 @@
   letter-spacing: -1px;
 }
 
-.festival-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px; 
-  color: var(--mat-sys-on-surface-variant);
-}
-
-.festival-dates, .festival-address {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px; 
-  font-size: 1.25rem; 
-  font-weight: 500;
-}
-
 .loading-state, .empty-state, .spinner-container {
   text-align: center;
   padding: 60px 20px;
@@ -49,21 +32,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-.empty-state {
-  background: var(--mat-sys-surface-container-low);
-  border: 2px dashed var(--mat-sys-outline);
-  border-radius: 15px;
-  margin-top: 20px;
-}
-
-.empty-icon {
-  font-size: 60px;
-  height: 60px;
-  width: 60px;
-  color: var(--mat-sys-outline);
-  margin-bottom: 20px;
 }
 
 .admin-section {
@@ -234,6 +202,63 @@
 .bold-text { font-weight: 700; }
 .desc-cell { color: var(--mat-sys-on-surface-variant); font-style: italic; }
 
+
+/* --- NOUVEAU: SECTION INFO & CARTE --- */
+.location-info-section {
+  margin-top: 40px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  align-items: stretch;
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--mat-sys-surface-container-lowest);
+  border: 2px solid var(--mat-sys-on-surface);
+  border-radius: 15px;
+  box-shadow: none;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  color: var(--mat-sys-on-surface);
+}
+
+.info-item mat-icon {
+  margin-top: 2px;
+  transform: scale(1.2);
+}
+
+.map-card {
+  height: 350px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 2px solid var(--mat-sys-on-surface);
+  padding: 0;
+  box-shadow: none;
+}
+
+.no-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface-variant);
+}
+
 @media screen and (max-width: 850px) {
   .admin-page { 
     padding: 15px; 
@@ -250,5 +275,14 @@
   
   .mat-column-end_at { 
     display: none; 
+  }
+
+  /* Responsive pour la carte et infos */
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .map-card {
+    height: 300px;
   }
 }

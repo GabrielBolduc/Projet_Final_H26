@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // NOUVEAU IMPORT
 import { firstValueFrom } from 'rxjs'; 
 
 import { PerformanceService } from '../../../core/services/performance.service';
@@ -48,6 +49,7 @@ export class PublicScheduleComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private errorHandler = inject(ErrorHandlerService);
   public translate = inject(TranslateService);
+  private sanitizer = inject(DomSanitizer); // NOUVELLE INJECTION
 
   currentFestival = signal<Festival | null>(null);
   performanceGroups = signal<DayGroup[]>([]);
@@ -128,5 +130,10 @@ export class PublicScheduleComponent implements OnInit {
       date: DateUtils.toDate(key),
       performances: groups[key]
     }));
+  }
+
+  getMapUrl(lat: number, lng: number): SafeResourceUrl {
+    const url = `https://maps.google.com/maps?q=${lat},${lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

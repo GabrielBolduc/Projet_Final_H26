@@ -1,23 +1,23 @@
 class Api::UnitsController < ApiController
-    before_action :set_unit, only: [:show, :update, :destroy] 
-    before_action :require_admin!, except: [:index, :show] 
+    before_action :set_unit, only: [ :show, :update, :destroy ]
+    before_action :require_admin!, except: [ :index, :show ]
 
     def index
         @accommodation = Accommodation.find_by(id: params[:accommodation_id] || params[:id])
         return render_logic_error("Accommodation not found") unless @accommodation
 
         @units = @accommodation.units.with_attached_image
-        
-        render json: { 
-            status: "success", 
-            data: @units.map { |u| format_unit(u) } 
+
+        render json: {
+            status: "success",
+            data: @units.map { |u| format_unit(u) }
         }
     end
 
     def show
-        render json: { 
-            status: "success", 
-            data: @unit.as_json.merge(image_url: @unit.image.attached? ? url_for(@unit.image) : nil) 
+        render json: {
+            status: "success",
+            data: @unit.as_json.merge(image_url: @unit.image.attached? ? url_for(@unit.image) : nil)
         }, status: :ok
     end
 
@@ -56,7 +56,7 @@ class Api::UnitsController < ApiController
 
     def unit_params
         params.require(:unit).permit(
-            :type, :cost_person_per_night, :quantity, :wifi, 
+            :type, :cost_person_per_night, :quantity, :wifi,
             :water, :electricity, :parking_cost, :image,
             food_options: []
         )

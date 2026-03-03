@@ -14,8 +14,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     @affectation_three = affectations(:three)
     @affectation_four = affectations(:four)
     @affectation_five = affectations(:five)
-    
-   
   end
 
 
@@ -69,7 +67,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "should not get  affectations list by task but and return JSON" do
-        # la base de donnée n'a pas changer
+       # la base de donnée n'a pas changer
        assert_no_difference("Affectation.count") do
         get get_by_task_api_affectations_path(task_id: @task_one.id)
         end
@@ -84,7 +82,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         assert_equal "error", json["status"]
     end
 
-    
+
     test "can not update affectation user logout" do
         # base de donnees
         assert_no_difference "Affectation.count" do
@@ -120,7 +118,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         assert json_response["errors"].any?, "Errors should be present for invalid param"
     end
 
-    
+
     test "delete non-existent Affectation" do
         sign_in users(:one)
 
@@ -219,7 +217,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             user_id: nil,
             task_id: nil,
             festival_id: nil,
-            expected_start:nil,
+            expected_start: nil,
             expected_end: nil,
             responsability: ""
         }
@@ -232,7 +230,7 @@ class TasksTest < ActionDispatch::IntegrationTest
             start: nil,
             end: nil,
             festival_id: nil,
-            expected_start:nil,
+            expected_start: nil,
             expected_end: nil,
             responsability: ""
         }

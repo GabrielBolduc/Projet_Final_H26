@@ -2,15 +2,15 @@ require "test_helper"
 
 class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
-  include ActiveJob::TestHelper 
+  include ActiveJob::TestHelper
 
   setup do
     @accommodation = accommodations(:one) # Grand Hotel
     @admin = users(:three) # admin@test.com
     @unit = units(:one)
-    @image = fixture_file_upload('placeholder-image.jpg', 'image/jpeg')
+    @image = fixture_file_upload("placeholder-image.jpg", "image/jpeg")
 
-    @unit.image.attach(@image) 
+    @unit.image.attach(@image)
   end
 
   def test_index_success
@@ -33,9 +33,9 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
   def test_show_unit_success
     perform_enqueued_jobs do
       @unit.image.attach(
-        io: File.open(Rails.root.join('test/fixtures/files/placeholder-image.jpg')),
-        filename: 'placeholder-image.jpg',
-        content_type: 'image/jpeg'
+        io: File.open(Rails.root.join("test/fixtures/files/placeholder-image.jpg")),
+        filename: "placeholder-image.jpg",
+        content_type: "image/jpeg"
       )
       @unit.save!
     end
@@ -50,7 +50,7 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
     # 4. Contenu du format json
     assert_equal "success", json_response["status"]
     assert_not_nil json_response["data"]["image_url"], "image_url is nil. Is @unit.image.attached? returning true in the controller?"
-    
+
     # 5. Validation de la cohérence de la base de données
     assert @unit.reload.image.attached?
   end
@@ -68,7 +68,7 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
         water: "drinkable",
         electricity: true,
         parking_cost: 0.0,
-        food_options: ["Room service"],
+        food_options: [ "Room service" ],
         image: @image
       }
     }
@@ -94,9 +94,9 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
 
     # Code http
     patch api_unit_url(@unit), params: {
-      unit: { 
+      unit: {
         quantity: 50,
-        food_options: ["Canteen", "Restaurant"]
+        food_options: [ "Canteen", "Restaurant" ]
       }
     }, as: :json
 

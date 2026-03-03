@@ -5,6 +5,7 @@ class Api::ArtistsController < ApiController
   before_action :set_artist, only: [ :show, :update, :destroy ]
 
   def index
+<<<<<<< HEAD
     artists = Artist.alphabetical
     
     render json: {
@@ -74,14 +75,34 @@ class Api::ArtistsController < ApiController
     @artist = Artist.find(params[:id])
   end
 
+=======
+    @artists = Artist.alphabetical
+
+    if params[:genre].present?
+      @artists = @artists.by_genre(params[:genre])
+    end
+
+    render json: {
+      status: "success",
+      data: @artists
+    }, status: :ok
+  end
+
+  private
+
+>>>>>>> main
   def not_found_response
     render json: {
       status: "error",
       message: "Artiste introuvable"
     }, status: :ok
   end
+<<<<<<< HEAD
 
   def artist_params
     params.require(:artist).permit(:name, :genre, :bio, :popularity, :image)
   end
 end
+=======
+end
+>>>>>>> main

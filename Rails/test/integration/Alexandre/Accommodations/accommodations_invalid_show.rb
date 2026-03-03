@@ -2,7 +2,6 @@
 require "test_helper"
 
 class Api::AccommodationsControllerInvalidShowTest < ActionDispatch::IntegrationTest
-
   def test_show_accommodation_not_found
     # Code http
     invalid_id = 999999

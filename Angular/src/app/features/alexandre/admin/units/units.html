@@ -4,7 +4,7 @@
       <mat-icon class="material-icons">add</mat-icon> 
       {{ 'UNITS.NEW_UNIT' | translate }}
     </button>
-    <h1 class="header-title">{{ 'UNITS.TITLE' | translate }}</h1>
+    <h1 class="header-title">{{ accommodationName() }}</h1>
     <div class="spacer-right" style="flex: 1; max-width: 250px;"></div>
   </header>
 
@@ -24,7 +24,7 @@
           <div class="ticket-info">
             <div class="info-header">
               <h3>{{ 'UNITS.TYPES.' + formatType(unit.type) | translate }}</h3>
-              <span class="price">{{ unit.cost_person_per_night | currency:'CAD':'symbol-narrow' }} / night</span>
+              <span class="price">{{ unit.cost_person_per_night | currency:'USD':'symbol-narrow' }} / night</span>
             </div>
 
             <div class="date-info">
@@ -41,7 +41,7 @@
             </div>
 
             <p class="description">
-              {{ 'UNITS.PARKING' | translate }}: {{ unit.parking_cost | currency:'CAD' }} |
+              {{ 'UNITS.PARKING' | translate }}: {{ unit.parking_cost | currency:'USD' }} |
               {{ 'UNITS.FOOD' | translate }}: 
               @for (opt of unit.food_options; track opt; let last = $last) {
                 {{ 'UNITS.FOOD_OPTIONS_LABELS.' + opt | translate }}{{ !last ? ', ' : '' }}
@@ -77,3 +77,16 @@
     </div>
   </main>
 </div>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>{{ 'COMMON.DELETE' | translate }}?</h2>
+  <mat-dialog-content>
+    <p>{{ 'UNITS.FORM.DELETE_CONFIRM' | translate }}</p> 
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">
+      {{ 'COMMON.DELETE' | translate }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>

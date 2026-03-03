@@ -5,9 +5,9 @@ class ReservationValidTest < ActionDispatch::IntegrationTest
 
   setup do
     @user = users(:one)
-    @unit = units(:three) 
+    @unit = units(:three)
     @festival = festivals(:one)
-    
+
     sign_in @user
   end
 

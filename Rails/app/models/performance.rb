@@ -3,10 +3,10 @@ class Performance < ApplicationRecord
   belongs_to :stage
   belongs_to :festival
 
-  scope :chronological, -> { order(start_at: :asc)}
-  scope :with_details, -> { includes(:artist, :stage, :festival)}
-  scope :for_festival, ->(f_id) { where(festival_id: f_id)}
-  scope :publicly_visible, -> { joins(:festival).where(festivals: {status: 'ongoing'})}
+  scope :chronological, -> { order(start_at: :asc) }
+  scope :with_details, -> { includes(:artist, :stage, :festival) }
+  scope :for_festival, ->(f_id) { where(festival_id: f_id) }
+  scope :publicly_visible, -> { joins(:festival).where(festivals: { status: "ongoing" }) }
 
   before_update :prevent_modification_if_festival_completed
   before_destroy :prevent_modification_if_festival_completed
@@ -31,7 +31,7 @@ class Performance < ApplicationRecord
 
   def within_festival_dates
     return unless festival && start_at && end_at
-    
+
     if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at
       errors.add(:base, "OUTSIDE_FESTIVAL_DATES")
     end

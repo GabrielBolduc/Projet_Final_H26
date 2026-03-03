@@ -14,8 +14,6 @@ class AffectationsTest < ActionDispatch::IntegrationTest
     @affectation_three = affectations(:three)
     @affectation_four = affectations(:four)
     @affectation_five = affectations(:five)
-    
-   
   end
 
   test "should show one affectation and return JSON" do
@@ -23,7 +21,6 @@ class AffectationsTest < ActionDispatch::IntegrationTest
     # base de donnees
     assert_no_difference("Affectation.count") do
       get api_affectation_path(@affectation_three)
-      
     end
 
     # code http
@@ -33,16 +30,15 @@ class AffectationsTest < ActionDispatch::IntegrationTest
     assert_nothing_raised { JSON.parse(response.body) }
     json_response = JSON.parse(response.body)
 
-     # contenu de reponse
+    # contenu de reponse
     assert_equal @affectation_three.id, json_response["data"]["id"]
     assert_equal @affectation_three.start, json_response["data"]["start"]
     assert_equal @affectation_three.end, json_response["data"]["end"]
     assert_equal @affectation_three.expected_start, json_response["data"]["expected_start"]
     assert_equal @affectation_three.expected_end, json_response["data"]["expected_end"]
     assert_equal @affectation_three.responsability, json_response["data"]["responsability"]
-    
   end
- 
+
     test "should get tasks affectation and return JSON" do
         sign_in users(:three)
         # la base de donnée n'a pas changer
@@ -88,7 +84,7 @@ class AffectationsTest < ActionDispatch::IntegrationTest
         # base de donnees
         assert_difference "Affectation.count", 1 do
             post api_affectations_path, params: { affectation: valid_create_affectation_params }
-            #puts response.body
+          # puts response.body
         end
 
         # format de reponse
@@ -166,5 +162,4 @@ class AffectationsTest < ActionDispatch::IntegrationTest
             responsability: "Responsability Updated"
         }
     end
-
 end

@@ -43,7 +43,7 @@ class PerformancesDestroyInvalidTest < ActionDispatch::IntegrationTest
 
   test "should fail to delete if festival is completed" do
     sign_in @admin
-    
+
     @performance.festival.update!(status: "completed")
 
     # modif ou non

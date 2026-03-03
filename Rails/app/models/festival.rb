@@ -51,10 +51,8 @@ class Festival < ApplicationRecord
   end
 
   def start_at_cannot_be_in_the_past
-
     if start_at.present? && start_at < Date.today
       errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive)")
     end
   end
-
 end

@@ -21,7 +21,7 @@ begin
   Stage.delete_all
   Task.delete_all
   Artist.delete_all
-  Festival.delete_all 
+  Festival.delete_all
   Client.delete_all
   Admin.delete_all
   Staff.delete_all
@@ -128,7 +128,7 @@ f2 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "draft", 
+  status: "draft",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -328,8 +328,8 @@ acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",
   category: :hotel,
   address: "123 Festival Lane, Palm Springs, CA",
-  latitude: 33.8121,
-  longitude: -116.5165,
+  latitude: 46.56571486688975,
+  longitude: -72.72712896089062,
   shuttle: true,
   time_car: Time.parse("00:15:00"),
   time_walk: Time.parse("01:00:00"),
@@ -341,8 +341,8 @@ acc2 = Accommodation.create!(
   name: "Wildwood Luxury Camping",
   category: :camping,
   address: "North Gate, Sector B, Glastonbury",
-  latitude: 51.1557,
-  longitude: -2.5859,
+  latitude: 46.52391224860748,
+  longitude: -72.32665159829943,
   shuttle: false,
   time_car: Time.parse("00:05:00"),
   time_walk: Time.parse("00:10:00"),
@@ -355,7 +355,7 @@ unit1 = Units::SimpleRoom.new(
   cost_person_per_night: 55.00,
   quantity: 10,
   wifi: true,
-  water: 2 ,
+  water: 2,
   electricity: true,
   parking_cost: 0.00,
   food_options: "Room service,Restaurant"
@@ -507,7 +507,7 @@ create_tickets.call(order: order_general_1, package: p_general, quantity: 2, hol
 create_tickets.call(order: order_general_2, package: p_general, quantity: 2, holder_prefix: "General")
 
 # Cas 2: Partiellement vendu (4 actifs + 1 remboursé, quota 6)
-create_tickets.call(order: order_daily_1, package: p_daily, quantity: 3, refunded_indexes: [0], holder_prefix: "Daily")
+create_tickets.call(order: order_daily_1, package: p_daily, quantity: 3, refunded_indexes: [ 0 ], holder_prefix: "Daily")
 create_tickets.call(order: order_daily_2, package: p_daily, quantity: 2, holder_prefix: "Daily")
 
 # Cas 3: Sold out sur un second forfait (2/2 actifs)
@@ -518,7 +518,7 @@ create_tickets.call(order: order_daily_sold_out_2, package: p_daily_sold_out, qu
 create_tickets.call(order: order_evening_last_spots, package: p_evening_last_spots, quantity: 2, holder_prefix: "Evening Last Spots")
 
 # Cas 5: Forfait archivé (1 actif + 1 remboursé)
-create_tickets.call(order: order_completed, package: p_completed, quantity: 2, refunded_indexes: [1], holder_prefix: "Archive")
+create_tickets.call(order: order_completed, package: p_completed, quantity: 2, refunded_indexes: [ 1 ], holder_prefix: "Archive")
 
 # Attachement des images
 images = {
@@ -537,7 +537,7 @@ images = {
 
 images.each do |package, filename|
   path = Rails.root.join('db', 'files', filename)
-  
+
   if File.exist?(path)
     # Détermine le type d'image
     content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
@@ -545,7 +545,7 @@ images.each do |package, filename|
     package.image.attach(
       io: File.open(path),
       filename: filename,
-      content_type: content_type 
+      content_type: content_type
     )
   end
 end
@@ -556,7 +556,7 @@ unit_camp_low.save!
 unit_hotel_high.save!
 unit_hotel_mid.save!
 
-[p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|
+[ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots ].each do |pkg|
   sold = pkg.tickets.where(refunded_at: nil).count
   refunded = pkg.tickets.where.not(refunded_at: nil).count
 end
@@ -630,7 +630,7 @@ Affectation.create!(
     responsability: "Assurer la bonne installation de la scène",
     expected_start: f.start_at.to_time.change(hour: 13, min: 0),
     expected_end: f.start_at.to_time.change(hour: 17, min: 0)
-) 
+)
 
 Affectation.create!(
     user: Staff.first,
@@ -639,4 +639,4 @@ Affectation.create!(
     responsability: "Receptionné la commande de projecteur de projecteur & co",
     expected_start: f.start_at.to_time.change(hour: 9, min: 0),
     expected_end: f.start_at.to_time.change(hour: 10, min: 0)
-) 
+)

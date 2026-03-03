@@ -6,7 +6,7 @@ class FestivalsCreateInvalidTest < ActionDispatch::IntegrationTest
   setup do
     @admin = users(:three)
     @client = users(:two)
-    
+
     @valid_params = {
       name: "Festival Invalide",
       start_at: "2027-07-01",
@@ -243,7 +243,7 @@ class FestivalsCreateInvalidTest < ActionDispatch::IntegrationTest
 
   test "should fail to create a draft festival in the past" do
     sign_in @admin
-    
+
     past_params = @valid_params.merge(
       start_at: 1.year.ago.to_date.to_s,
       end_at: (1.year.ago + 4.days).to_date.to_s,

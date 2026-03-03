@@ -5,7 +5,7 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
     include Devise::Test::IntegrationHelpers
 
     setup do
-        @admin = users(:three) 
+        @admin = users(:three)
         @user = users(:one) # Client
         @staff = users(:two) # Staff
         @accommodation = accommodations(:one) # Grand Hotel
@@ -72,12 +72,12 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
         sign_in @admin
         target_unit = units(:one)
         target_reservation = reservations(:one)
-        
+
         unit_id = target_unit.id
         res_id = target_reservation.id
 
         # Code http
-        assert_difference(["Accommodation.count", "Reservation.count"], -1) do
+        assert_difference([ "Accommodation.count", "Reservation.count" ], -1) do
             assert_difference("Unit.count", -2) do
             delete api_accommodation_url(@accommodation), as: :json
             end
@@ -97,7 +97,7 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
     def test_destroy_accommodation_purges_unit_images
         sign_in @admin
         target_unit = units(:one)
-        target_unit.image.attach(fixture_file_upload('placeholder-image.jpg', 'image/jpeg'))
+        target_unit.image.attach(fixture_file_upload("placeholder-image.jpg", "image/jpeg"))
         target_unit.save!
         blob_id = target_unit.image.blob_id
 

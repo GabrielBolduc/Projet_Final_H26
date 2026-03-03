@@ -117,7 +117,7 @@ class Api::FestivalsController < ApiController
 
   def festival_params
     params.require(:festival).permit(
-      :name, :start_at, :end_at, :status, :address, 
+      :name, :start_at, :end_at, :status, :address,
       :daily_capacity, :satisfaction, :other_income, :other_expense,
       :latitude, :longitude, :comment
     )

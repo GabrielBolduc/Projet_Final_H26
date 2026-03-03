@@ -12,7 +12,7 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
 
         @admin = users(:three)
         sign_in @admin
-        @image = fixture_file_upload('placeholder-image.jpg', 'image/jpeg')
+        @image = fixture_file_upload("placeholder-image.jpg", "image/jpeg")
     end
 
     def test_create_unit_denied_for_client
@@ -24,7 +24,7 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
         }, as: :json
 
         # Format json valide
-        assert_response :ok 
+        assert_response :ok
         json_response = JSON.parse(response.body)
 
         # Contenu du format json
@@ -32,7 +32,7 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
         assert_equal "Access denied: Admin privileges required.", json_response["message"]
 
         # Validation de la cohérence de la base de données
-        assert_no_difference 'Unit.count' do
+        assert_no_difference "Unit.count" do
         end
     end
 
@@ -93,12 +93,12 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
     def test_create_fails_with_negative_costs
         # Validation: numericality: { greater_than_or_equal_to: 0 }
         post api_accommodation_units_url(@accommodation), params: {
-        unit: { 
-            type: "Units::SimpleRoom", 
-            quantity: 1, 
-            cost_person_per_night: -10.0, 
+        unit: {
+            type: "Units::SimpleRoom",
+            quantity: 1,
+            cost_person_per_night: -10.0,
             parking_cost: -5.0,
-            image: @image 
+            image: @image
         }
         }, as: :json
 
@@ -155,21 +155,21 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
         sign_in @admin
 
         post api_accommodation_units_url(@accommodation), params: {
-            unit: { 
-            type: "Units::SimpleRoom", 
-            quantity: 1, 
-            cost_person_per_night: 99.99, 
+            unit: {
+            type: "Units::SimpleRoom",
+            quantity: 1,
+            cost_person_per_night: 99.99,
             image: @image,
-            food_options: ["Caviar Bar"] 
+            food_options: [ "Caviar Bar" ]
             }
         }
 
         assert_response :ok
         json_response = JSON.parse(response.body)
-        
+
         # Contenu du format json
         assert_equal "error", json_response["status"]
-        
+
         all_errors = Array(json_response["message"]).join(" ")
         assert_includes all_errors, "contains invalid values"
 
@@ -180,13 +180,13 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
     def test_create_ignores_forbidden_params
         # Code http
         post api_accommodation_units_url(@accommodation), params: {
-            unit: { 
-                type: "Units::SimpleRoom", 
-                quantity: 1, 
-                cost_person_per_night: 50, 
+            unit: {
+                type: "Units::SimpleRoom",
+                quantity: 1,
+                cost_person_per_night: 50,
                 image: @image,
-                id: 12345, 
-                created_at: 10.years.ago 
+                id: 12345,
+                created_at: 10.years.ago
             }
         }
 
@@ -198,18 +198,18 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
 
     def test_create_fails_with_excessive_quantity
         post api_accommodation_units_url(@accommodation), params: {
-            unit: { 
-            type: "Units::SimpleRoom", 
-            quantity: 150, 
-            cost_person_per_night: 50, 
-            image: @image 
+            unit: {
+            type: "Units::SimpleRoom",
+            quantity: 150,
+            cost_person_per_night: 50,
+            image: @image
             }
         }
 
         assert_response :ok
         json_response = JSON.parse(response.body)
         all_errors = json_response["message"].join(", ")
-        
+
         assert_equal "error", json_response["status"]
         assert_includes all_errors, "must be less than or equal to 100"
     end

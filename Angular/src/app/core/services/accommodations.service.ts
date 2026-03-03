@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { Accommodation } from '../models/accommodation';
+import { Accommodation, SSFFilters } from '../models/accommodation';
 import { ApiResponse } from '../models/api-response';
 
 @Injectable({
@@ -11,8 +11,15 @@ export class AccommodationsService {
   private http = inject(HttpClient); 
   private readonly API_URL = '/api/accommodations'; 
 
-  getAccommodations(category: string): Observable<Accommodation[]> {
-    const params = new HttpParams().set('category', category);
+  getAccommodations(filters: SSFFilters = {}): Observable<Accommodation[]> {
+    let params = new HttpParams();
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== 'all' && value !== '') {
+        params = params.set(key, value.toString());
+      }
+    });
+
     return this.http.get<ApiResponse<Accommodation[]>>(this.API_URL, { params }).pipe(
       map(response => this.handleResponse(response))
     );
@@ -40,7 +47,8 @@ export class AccommodationsService {
     return this.http.delete<ApiResponse<null>>(`${this.API_URL}/${id}`).pipe(
       map(response => {
         if (response.status === 'error') {
-          throw new Error(response.message || 'Delete failed');
+          const errorMessage = response.message || 'Delete failed';
+          throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
         }
         return;
       })
@@ -52,7 +60,7 @@ export class AccommodationsService {
       return response.data;
     } else {
       const errorMessage = response.message || 'Server Error';
-      throw new Error(errorMessage);
+      throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
     }
   }
 }

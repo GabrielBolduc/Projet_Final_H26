@@ -236,7 +236,7 @@ class FestivalsUpdateInvalidTest < ActionDispatch::IntegrationTest
 
   test "should fail to update a second festival to ongoing" do
     sign_in @admin
-    draft_festival = festivals(:two) 
+    draft_festival = festivals(:two)
 
     # modif ou non
     assert_no_difference("Festival.count") do

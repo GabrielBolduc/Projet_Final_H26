@@ -1,10 +1,8 @@
 class Api::PerformancesController < ApiController
-
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_performance, only: [ :show, :update, :destroy ]
   
-
   def index
     performances = Performance.with_details.chronological
     
@@ -54,7 +52,6 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-        # CORRECTION ICI
         data: performance.as_json(
           include: {
             stage: {},
@@ -76,7 +73,6 @@ class Api::PerformancesController < ApiController
     if @performance.update(performance_params)
       render json: {
         status: "success",
-        # CORRECTION ICI
         data: @performance.as_json(
           include: {
             stage: {},

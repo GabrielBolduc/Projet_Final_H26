@@ -1,0 +1,50 @@
+<div class="page-container">
+
+  <div class="theme-accent-circle"></div>
+
+  @if (isLoading()) { <div class="center-state"><mat-spinner diameter="50"></mat-spinner></div> }
+  @if (!isLoading() && error()) { <div class="center-state"><p>{{ error() }}</p><button mat-button (click)="goBack()">Retour</button></div> }
+
+  @if (artist(); as a) {
+    <div class="content-wrapper fade-in">
+      
+      <header class="detail-header">
+        <button mat-button color="primary" class="back-button" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon> Retour
+        </button>
+        <span class="genre-badge">
+          {{ a.genre || 'Genre Varié' }}
+        </span>
+      </header>
+
+      <div class="artist-grid">
+        
+        <div class="image-column">
+          
+          <div class="image-backdrop"></div>
+          
+          <div class="image-frame">
+            @if (a.image_url) {
+              <img [src]="a.image_url" [alt]="a.name" class="artist-img">
+            } @else {
+              <div class="placeholder-img">
+                <mat-icon>music_note</mat-icon> </div>
+            }
+          </div>
+        </div>
+
+        <div class="info-column">
+          <h1 class="artist-name">{{ a.name }}</h1>
+          <div class="divider"></div>
+          <div class="bio-container">
+            <h3 class="section-label">À propos</h3>
+            <p class="bio-text">
+              {{ a.bio || "Biographie à venir..." }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+</div>

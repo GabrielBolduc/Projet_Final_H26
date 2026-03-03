@@ -7,12 +7,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   namespace :api, defaults: { format: :json } do
-    resources :festivals, only: [ :index, :show, :create, :update, :destroy ] do
-      collection do
-        get "current"
-      end
-    end
-
+    resources :festivals, only: [ :index, :show, :create, :update, :destroy ]
+    
     resources :tasks do
       collection do
         get "get_reusable", to: "tasks#get_reusable"
@@ -38,17 +34,9 @@ Rails.application.routes.draw do
 
     resources :affectations do
       collection do
-        get "get_by_user/:user_id",
-            to: "affectations#get_by_user",
-            as: :get_by_user
-
-        get "get_by_task/:task_id",
-            to: "affectations#get_by_task",
-            as: :get_by_task
-
-        get "get_staff_list",
-            to: "affectations#get_staff_list",
-            as: :get_staff_list
+        get "get_by_user/:user_id", to: "affectations#get_by_user", as: :get_by_user
+        get "get_by_task/:task_id", to: "affectations#get_by_task", as: :get_by_task
+        get "get_staff_list", to: "affectations#get_staff_list", as: :get_staff_list
       end
     end
   end

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // NOUVEAU IMPORT
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { firstValueFrom } from 'rxjs'; 
 
 import { PerformanceService } from '../../../core/services/performance.service';
@@ -49,11 +49,11 @@ export class PublicScheduleComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private errorHandler = inject(ErrorHandlerService);
   public translate = inject(TranslateService);
-  private sanitizer = inject(DomSanitizer); // NOUVELLE INJECTION
+  private sanitizer = inject(DomSanitizer);
 
+  // --- SIGNALS D'ÉTAT ---
   currentFestival = signal<Festival | null>(null);
   performanceGroups = signal<DayGroup[]>([]);
-  
   festivalArtists = signal<FestivalArtist[]>([]);
   
   isLoading = signal(true);
@@ -61,6 +61,26 @@ export class PublicScheduleComponent implements OnInit {
   currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description'];
+  
+  mapUrl = computed(() => {
+    const festival = this.currentFestival();
+
+    if (!festival || !festival.latitude || !festival.longitude) {
+      return null;
+    }
+
+    const lat = Number(festival.latitude);
+    const lng = Number(festival.longitude);
+    const offset = 0.005; 
+
+    const minLng = lng - offset;
+    const minLat = lat - offset;
+    const maxLng = lng + offset;
+    const maxLat = lat + offset;
+
+    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${minLng},${minLat},${maxLng},${maxLat}&layer=mapnik&marker=${lat},${lng}`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  });
 
   ngOnInit(): void {
     this.loadSchedule();
@@ -130,10 +150,5 @@ export class PublicScheduleComponent implements OnInit {
       date: DateUtils.toDate(key),
       performances: groups[key]
     }));
-  }
-
-  getMapUrl(lat: number, lng: number): SafeResourceUrl {
-    const url = `https://maps.google.com/maps?q=${lat},${lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

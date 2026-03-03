@@ -21,7 +21,8 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_equal "success", json["status"]
 
     returned_ids = json["data"].map { |pkg| pkg["id"] }
-    expected_ids = [packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one)].map(&:id)
+    # Prices: four(40), two(60), seven(75), three(90), one(150)
+    expected_ids = [ packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one) ].map(&:id)
     assert_equal expected_ids, returned_ids
 
     statuses = json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
@@ -33,7 +34,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:five).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:five).id ], json["data"].map { |pkg| pkg["id"] }
     assert_equal [ "completed" ], json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
   end
 
@@ -42,7 +43,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:six).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:six).id ], json["data"].map { |pkg| pkg["id"] }
     assert_equal [ "draft" ], json["data"].map { |pkg| pkg.dig("festival", "status") }.uniq
   end
 
@@ -51,8 +52,8 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:five).id], json["data"].map { |pkg| pkg["id"] }
-    assert_equal [@completed_festival.id], json["data"].map { |pkg| pkg["festival_id"] }.uniq
+    assert_equal [ packages(:five).id ], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ @completed_festival.id ], json["data"].map { |pkg| pkg["festival_id"] }.uniq
   end
 
   test "index search is case-insensitive" do
@@ -60,7 +61,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_response :ok
 
     json = parsed_body
-    assert_equal [packages(:three).id], json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:three).id ], json["data"].map { |pkg| pkg["id"] }
   end
 
   test "index search with no match returns empty list" do
@@ -77,7 +78,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
-    assert_equal [packages(:four).id, packages(:two).id, packages(:three).id], ids
+    assert_equal [ packages(:four).id, packages(:two).id, packages(:three).id ], ids
   end
 
   test "index categories filter returns empty when all categories are invalid" do
@@ -94,7 +95,8 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
-    assert_equal [packages(:seven).id, packages(:four).id, packages(:three).id, packages(:two).id, packages(:one).id], ids
+    # Dates: seven(Aug 03), four(Aug 02), three(Aug 01), two(Aug 01), one(Aug 01)
+    assert_equal [ packages(:seven).id, packages(:four).id, packages(:three).id, packages(:two).id, packages(:one).id ], ids
   end
 
   test "index supports price_desc sort" do
@@ -103,7 +105,41 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ids = json["data"].map { |pkg| pkg["id"] }
-    assert_equal [packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id], ids
+    # Prices: one(150), three(90), seven(75), two(60), four(40)
+    assert_equal [ packages(:one).id, packages(:three).id, packages(:seven).id, packages(:two).id, packages(:four).id ], ids
+  end
+
+  test "index sold_out true returns accurate sold count" do
+    sold_out_package = Package.create!(
+      title: "Sold Out Accuracy Package",
+      description: "Used to validate sold count with sold_out filter",
+      price: 42.0,
+      quota: 2,
+      category: "daily",
+      valid_at: "2026-08-02 10:00:00",
+      expired_at: "2026-08-02 17:00:00",
+      festival: @ongoing_festival
+    )
+
+    order = Order.create!(user: users(:one))
+    2.times do |i|
+      Ticket.create!(
+        order: order,
+        package: sold_out_package,
+        holder_name: "Holder #{i}",
+        holder_email: "holder#{i}@example.com",
+        holder_phone: "81955510#{i}"
+      )
+    end
+
+    get api_packages_url, params: { status: "ongoing", sold_out: "true", q: "Sold Out Accuracy Package" }
+    assert_response :ok
+
+    json = parsed_body
+    record = json["data"].find { |pkg| pkg["id"] == sold_out_package.id }
+
+    assert record.present?, "Expected sold-out package to be returned"
+    assert_equal 2, record["sold"]
   end
 
   # SHOW
@@ -125,7 +161,9 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
       category: "daily",
       festival_id: @ongoing_festival.id,
       price: 88.50,
-      quota: 20
+      quota: 20,
+      valid_at: "2026-08-02 10:00:00",
+      expired_at: "2026-08-02 17:00:00"
     )
 
     assert_difference("Package.count", 1) do
@@ -146,7 +184,14 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
   # UPDATE
   test "admin can update package fields" do
     assert_no_difference("Package.count") do
-      put api_package_url(@package), params: { package: { title: "Updated Title", price: 99.99, category: "evening" } }, as: :json
+      put api_package_url(@package),
+          params: { package: {
+            title: "Updated Title",
+            price: 99.99,
+            category: "evening",
+            valid_at: "2026-08-01 19:00:00",
+            expired_at: "2026-08-02 02:00:00"
+          } }, as: :json
     end
 
     assert_response :ok
@@ -189,7 +234,7 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
       quota: 10,
       category: "general",
       valid_at: "2026-08-02 10:00:00",
-      expired_at: "2026-08-02 20:00:00",
+      expired_at: "2026-08-03 20:00:00",
       festival_id: @ongoing_festival.id
     }
 

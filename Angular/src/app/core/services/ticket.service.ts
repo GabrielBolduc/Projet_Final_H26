@@ -2,15 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { ApiResponse } from '../models/api-response';
 import { Ticket, UpdateTicketPayload } from '../models/ticket';
-
-interface ApiResponse<T> {
-  status: string;
-  code?: number;
-  message?: string;
-  data: T;
-  errors?: any;
-}
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {

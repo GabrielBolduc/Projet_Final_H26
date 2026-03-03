@@ -16,7 +16,7 @@
         <h1 class="header-title" style="margin: 0; display: flex; align-items: center; gap: 10px;">
           {{'DASHBOARD.DASHBOARD' | translate}}
           @if (isReadOnly()) {
-            <mat-icon style="color: #888; font-size: 20px; width: 20px; height: 20px;" title="Archive en lecture seule">lock</mat-icon>
+            <mat-icon style="color: #888; font-size: 20px; width: 20px; height: 20px;" [title]="'DASHBOARD.READ_ONLY_ARCHIVE' | translate">lock</mat-icon>
           }
         </h1>
         
@@ -25,9 +25,9 @@
             @for (f of allFestivals(); track f.id) {
               <mat-option [value]="f.id">
                 {{ f.name }}
-                @if (f.status === 'completed') { <span style="font-size: 0.8em;">(Completed)</span> }
-                @if (f.status === 'draft') { <span style="font-size: 0.8em;">(Draft)</span> }
-                @if (f.status === 'ongoing') { <span style="font-size: 0.8em;">(Ongoing)</span> }
+                @if (f.status === 'completed') { <span style="font-size: 0.8em;">({{ 'FESTIVAL.FINISHED' | translate }})</span> }
+                @if (f.status === 'draft') { <span style="font-size: 0.8em;">({{ 'FESTIVAL.DRAFT' | translate }})</span> }
+                @if (f.status === 'ongoing') { <span style="font-size: 0.8em;">({{ 'FESTIVAL.ONGOING' | translate }})</span> }
               </mat-option>
             }
           </mat-select>
@@ -37,7 +37,7 @@
       
       <div class="top-bar-side right-align" style="flex: 1; display: flex; justify-content: flex-end;">
         <button mat-button routerLink="/admin/festivals">
-          <mat-icon>arrow_back</mat-icon> Retour
+          <mat-icon>arrow_back</mat-icon> {{ 'COMMON.BACK' | translate }}
         </button>
       </div>
 
@@ -52,10 +52,10 @@
     @if (!isLoading() && !festival()) {
       <div class="empty-state" style="text-align: center; padding: 40px; border: 2px dashed #ccc; border-radius: 12px; margin-top: 20px;">
         <mat-icon style="font-size: 48px; width: 48px; height: 48px; color: #ccc; margin-bottom: 16px;">event_busy</mat-icon>
-        <h2>Festival introuvable</h2>
-        <p>Le festival demandé n'existe pas ou a été supprimé.</p>
+        <h2>{{ 'DASHBOARD.FESTIVAL_NOT_FOUND' | translate }}</h2>
+        <p>{{ 'DASHBOARD.FESTIVAL_NOT_FOUND_DESC' | translate }}</p>
         <button mat-flat-button color="primary" routerLink="/admin/festivals" style="margin-top: 16px;">
-          Retour à l'administration
+          {{ 'DASHBOARD.BACK_TO_ADMIN' | translate }}
         </button>
       </div>
     }
@@ -82,7 +82,7 @@
             <ng-container matColumnDef="artist">
               <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.ARTIST' | translate}} </th>
               <td mat-cell *matCellDef="let perf" class="bold-text"> 
-                {{ perf.artist?.name || 'Inconnu' }} 
+                {{ perf.artist?.name || ('DASHBOARD.UNKNOWN' | translate) }} 
               </td>
             </ng-container>
 
@@ -93,7 +93,7 @@
 
             <ng-container matColumnDef="stage">
               <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.STAGE' | translate}} </th>
-              <td mat-cell *matCellDef="let perf"> {{ perf.stage?.name || 'N/A' }} </td>
+              <td mat-cell *matCellDef="let perf"> {{ perf.stage?.name || ('DASHBOARD.NA' | translate) }} </td>
             </ng-container>
 
             <ng-container matColumnDef="start_at">
@@ -117,19 +117,26 @@
               </td>
             </ng-container>
 
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef> {{'FORM_ADD_PERFORMANCES.PRICE' | translate}} </th>
+              <td mat-cell *matCellDef="let perf"> 
+                {{ perf.price | currency:'USD':'symbol':'1.0-0' }} 
+              </td>
+            </ng-container>
+
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef class="text-center"> {{'DASHBOARD.ACTION' | translate}} </th>
               <td mat-cell *matCellDef="let perf" class="action-cell" style="text-align: center;">
                 
                 @if (!isReadOnly()) {
-                  <button class="icon-btn edit" (click)="navigateToEdit(perf.id!)" title="Modifier">
+                  <button class="icon-btn edit" (click)="navigateToEdit(perf.id!)" [title]="'COMMON.EDIT' | translate">
                     <mat-icon>edit_square</mat-icon>
                   </button>
-                  <button class="icon-btn trash" (click)="deletePerformance(perf.id!)" title="Supprimer">
+                  <button class="icon-btn trash" (click)="deletePerformance(perf.id!)" [title]="'COMMON.DELETE' | translate">
                     <mat-icon>delete_outline</mat-icon>
                   </button>
                 } @else {
-                  <mat-icon style="color: #ccc; font-size: 20px; width: 20px; height: 20px; cursor: not-allowed;" title="Modification impossible (Archivé)">block</mat-icon>
+                  <mat-icon style="color: #ccc; font-size: 20px; width: 20px; height: 20px; cursor: not-allowed;" [title]="'DASHBOARD.EDIT_IMPOSSIBLE' | translate">block</mat-icon>
                 }
 
               </td>
@@ -145,12 +152,12 @@
 </div>
 
 <ng-template #confirmDialogTemplate>
-  <h2 mat-dialog-title>Confirmation de suppression</h2>
+  <h2 mat-dialog-title>{{ 'DASHBOARD.DELETE_CONFIRM_TITLE' | translate }}</h2>
   <mat-dialog-content>
-    <p>Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.</p>
+    <p>{{ 'DASHBOARD.DELETE_CONFIRM_BODY' | translate }}</p>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Annuler</button>
-    <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">{{ 'COMMON.DELETE' | translate }}</button>
   </mat-dialog-actions>
 </ng-template>

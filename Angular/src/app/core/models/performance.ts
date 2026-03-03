@@ -1,3 +1,7 @@
+import { Artist } from './artist';
+import { Stage } from './stage';
+import { Festival } from './festival';
+
 export interface Performance {
   id?: number; 
   title: string;
@@ -10,16 +14,7 @@ export interface Performance {
   artist_id: number;
   stage_id: number;
 
-  festival?: {
-    id: number;
-    name: string;
-  };
-  artist?: {
-    id: number;
-    name: string;
-  };
-  stage?: {
-    id: number;
-    name: string;
-  };
+  artist?: Artist; 
+  stage?: Stage;
+  festival?: Festival;
 }

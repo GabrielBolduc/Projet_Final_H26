@@ -22,7 +22,9 @@
             type="datetime-local"
             formControlName="expected_start">
 
-          <mat-error *ngIf="form.get('expected_start')?.hasError('required')">
+          <mat-icon matSuffix>schedule</mat-icon>
+
+          <mat-error If="form.get('expected_start')?.hasError('required')">
             Le début est obligatoire
           </mat-error>
 
@@ -38,7 +40,7 @@
             formControlName="expected_end">
 
 
-          <mat-error *ngIf="form.get('expected_end')?.hasError('required')">
+          <mat-error If="form.get('expected_end')?.hasError('required')">
             La fin est obligatoire
           </mat-error>
 
@@ -57,11 +59,11 @@
 
           <mat-icon matSuffix>assignment</mat-icon>
 
-          <mat-error *ngIf="form.get('responsability')?.hasError('required')">
+          <mat-error If="form.get('responsability')?.hasError('required')">
             La responsabilité est obligatoire
           </mat-error>
 
-          <mat-error *ngIf="form.get('responsability')?.hasError('maxlength')">
+          <mat-error If="form.get('responsability')?.hasError('maxlength')">
             Maximum 255 caractères
           </mat-error>
 
@@ -87,7 +89,7 @@
 
       </mat-select>
 
-      <mat-error *ngIf="form.get('user_id')?.hasError('required')">
+      <mat-error If="form.get('user_id')?.hasError('required')">
         L'utilisateur est obligatoire
       </mat-error>
 

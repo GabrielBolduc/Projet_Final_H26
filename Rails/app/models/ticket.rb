@@ -37,6 +37,10 @@ class Ticket < ApplicationRecord
     valid_at_scan?(Time.current)
   end
 
+  def refunded?
+    refunded_at.present?
+  end
+
   private
 
   def normalize_scan_time(scan_time)
@@ -54,7 +58,7 @@ class Ticket < ApplicationRecord
   def check_package_quota
     return unless package
 
-    active_ticket_count = package.tickets.where(refunded: false).count
+    active_ticket_count = package.tickets.where(refunded_at: nil).count
     if active_ticket_count >= package.quota
       errors.add(:base, "Le quota pour ce forfait est atteint (Sold Out).")
     end

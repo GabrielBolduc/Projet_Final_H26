@@ -1,10 +1,20 @@
+import { Unit } from './unit';
+
 export enum AccommodationCategory {
-  Hotel = 0,
-  Camping = 1
+  Camping = 0,
+  Hotel = 1
 }
 
-export interface AccommodationWithImage extends Accommodation {
-  displayImage: string;
+export interface SSFFilters {
+  category?: AccommodationCategory | 'all';
+  name?: string;
+  max_distance?: number
+  wifi?: boolean;
+  water?: string;
+  electricity?: boolean;
+  type?: string;
+  max_price?: number;
+  min_people?: number;
 }
 
 export interface Accommodation {
@@ -19,6 +29,11 @@ export interface Accommodation {
   time_walk: string;
   commission: number;
   festival_id: number;
+  units?: Unit[];
   created_at?: Date;
   updated_at?: Date;
+}
+
+export interface AccommodationWithImage extends Accommodation {
+  displayImage: string;
 }

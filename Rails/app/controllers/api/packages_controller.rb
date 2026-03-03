@@ -1,8 +1,7 @@
-class Api::PackagesController < ApiController
+class Api::PackagesController < Api::AdminController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
-
-  before_action :require_admin!, only: [:create, :update, :destroy]
-  before_action :set_package, only: [:show, :update, :destroy]
+  before_action :require_admin!, only: [ :create, :update, :destroy ]
+  before_action :set_package, only: [ :show, :update, :destroy ]
 
   # GET /api/packages
   def index
@@ -12,7 +11,8 @@ class Api::PackagesController < ApiController
         status: params[:status],
         query: params[:q],
         sort: params[:sort],
-        categories: params[:categories]
+        categories: params[:categories],
+        sold_out: params[:sold_out]
       )
     else
       Package.admin_scope(
@@ -22,7 +22,7 @@ class Api::PackagesController < ApiController
         categories: params[:categories]
       )
     end
-    
+
     render json: {
       status: "success",
       data: packages.map { |pkg| format_package(pkg) }
@@ -96,24 +96,10 @@ class Api::PackagesController < ApiController
 
   def package_params
     params.require(:package).permit(
-      :title, :description, :price, :quota, 
-      :category, :valid_at, :expired_at, 
+      :title, :description, :price, :quota,
+      :category, :valid_at, :expired_at,
       :festival_id, :image
     )
-  end
-
-  # Vérification stricte Admin (STI)
-  def require_admin!
-    unless admin_user?
-      render json: {
-        status: "error",
-        message: "Access denied: Admin privileges required."
-      }, status: :ok
-    end
-  end
-
-  def admin_user?
-    current_user&.is_a?(Admin)
   end
 
   def not_found_response
@@ -121,13 +107,10 @@ class Api::PackagesController < ApiController
   end
 
   def format_package(package)
-    sold_count = if package.association(:tickets).loaded?
-      package.tickets.count { |ticket| !ticket.refunded }
-    else
-      package.tickets.where(refunded: false).count
-    end
+    sold_count = package.sold_count
 
     json = package.as_json(include: :festival)
+
     if package.image.attached?
       json.merge(
         image_url: rails_blob_url(package.image, host: request.base_url),
@@ -136,20 +119,5 @@ class Api::PackagesController < ApiController
     else
       json.merge(image_url: nil, sold: sold_count)
     end
-  end
-
-  def render_error(message)
-    render json: {
-      status: "error",
-      message: message
-    }, status: :ok
-  end
-
-  def render_validation_error(record)
-    render json: {
-      status: "error",
-      message: "Validation failed",
-      errors: record.errors
-    }, status: :ok
   end
 end

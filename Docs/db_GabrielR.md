@@ -31,7 +31,7 @@
 
 * id INT PRIMARY KEY AUTO_INCREMENT
 * unique_code VARCHAR(255) NOT NULL UNIQUE
-* refunded BOOLEAN NOT NULL DEFAULT FALSE
+* refunded_at DATETIME DEFAULT NULL
 * purchase_price DECIMAL(10, 2) NOT NULL
 * holder_name VARCHAR(100) NOT NULL
 * holder_email VARCHAR(255) NOT NULL
@@ -73,7 +73,7 @@
 
 * [unique_code] : Doit être unique dans tout le système (UUID recommandé) pour garantir la sécurité du QR Code.
 * [purchase_price] : Enregistre le coût au moment de l'achat (Snapshot) pour l'historique comptable.
-* [refunded] : Par défaut à `FALSE`. Passe à `TRUE` uniquement lors d'un remboursement administratif.
+* [refunded_at] : Par défaut à `NULL`. Contient la date du remboursement administratif. Si présent, le billet est considéré comme remboursé.
 
 ---
 
@@ -100,7 +100,7 @@ BEGIN
     SELECT COUNT(*) INTO current_sold
     FROM Tickets
     WHERE package_id = NEW.package_id
-    AND refunded = FALSE;
+    AND refunded_at IS NULL;
 
     -- Vérifier si on dépasse
     IF current_sold >= max_quota THEN
@@ -108,7 +108,6 @@ BEGIN
         SET MESSAGE_TEXT = 'Error: Ticket quota exceeded for this package (Sold Out).';
     END IF;
 END;
-
 ```
 
 #### Trigger 2 : Snapshot du Prix (Intégrité Historique)

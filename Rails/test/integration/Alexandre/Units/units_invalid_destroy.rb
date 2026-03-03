@@ -70,13 +70,13 @@ class Api::UnitsControllerInvalidDestroyTest < ActionDispatch::IntegrationTest
   def test_destroy_unit_removes_image_attachment
     admin_user = users(:three)
     sign_in admin_user
-    target_unit = units(:one) 
-    
+    target_unit = units(:one)
+
     # Attach image and save
     target_unit.image.attach(
-      io: File.open(Rails.root.join('test/fixtures/files/placeholder-image.jpg')),
-      filename: 'placeholder-image.jpg',
-      content_type: 'image/jpeg'
+      io: File.open(Rails.root.join("test/fixtures/files/placeholder-image.jpg")),
+      filename: "placeholder-image.jpg",
+      content_type: "image/jpeg"
     )
     target_unit.save!
     blob_id = target_unit.image.blob_id
@@ -101,11 +101,11 @@ class Api::UnitsControllerInvalidDestroyTest < ActionDispatch::IntegrationTest
   def test_destroy_unit_cascades_to_reservations
     @admin = users(:three)
     sign_in @admin
-    unit_to_kill = units(:one) 
+    unit_to_kill = units(:one)
     reservation_to_kill = reservations(:one)
 
     # Code http
-    assert_difference(["Unit.count", "Reservation.count"], -1) do
+    assert_difference([ "Unit.count", "Reservation.count" ], -1) do
       delete api_unit_url(unit_to_kill), as: :json
     end
 

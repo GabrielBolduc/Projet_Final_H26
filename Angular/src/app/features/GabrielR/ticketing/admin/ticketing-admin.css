@@ -9,14 +9,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 50px;
+  gap: 20px;
 }
 
 .header-title {
   font-size: 2.2rem;
-  margin: auto;
+  margin: 0;
   font-weight: 800;
   text-align: center;
-  color: var(--mat-sys-primary); 
+  color: var(--mat-sys-primary);
+  line-height: 1.2;
+  flex: 2;
 }
 
 .subtitle {
@@ -43,7 +46,7 @@
   font-size: 0.95rem;
 }
 
-.btn-new {
+.btn-new, .btn-orders {
   flex: 1;
   max-width: 250px;
   border: 2px solid var(--mat-sys-primary) !important;
@@ -53,6 +56,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
 
 .spacer-right {
@@ -60,7 +64,7 @@
   max-width: 250px;
 }
 
-.btn-new:active {
+.btn-new:active, .btn-orders:active {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px var(--mat-sys-on-surface);
 }
@@ -227,6 +231,13 @@
   flex: 1;
 }
 
+.sold-out-checkbox {
+  display: flex;
+  align-items: center;
+  margin: 0 8px;
+  font-weight: 600;
+}
+
 ::ng-deep .mat-mdc-form-field-outline {
   background-color: white;
 }
@@ -237,10 +248,25 @@
   }
 
   .admin-top-bar {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: column-reverse; /* button below title looks better */
+    align-items: stretch;
     gap: 15px;
     margin-bottom: 30px;
+  }
+
+  .header-title {
+    text-align: left;
+    font-size: 1.8rem;
+    line-height: 1.3;
+  }
+
+  .spacer-right {
+    display: none;
+  }
+
+  .btn-new, .btn-orders {
+    max-width: none;
+    width: 100%;
   }
 
   .filters-section {
@@ -251,6 +277,10 @@
   .search-bar, .sort-select {
     width: 100%;
     flex: none;
+  }
+
+  .sold-out-checkbox {
+    margin: 0;
   }
 
   .card-content-layout {

@@ -8,8 +8,8 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     @unit = units(:one) # SimpleRoom at Grand Hotel
     @user = users(:one) # Client
     @admin = users(:three)
-    @image = fixture_file_upload('placeholder-image.jpg', 'image/jpeg')
-    
+    @image = fixture_file_upload("placeholder-image.jpg", "image/jpeg")
+
     @unit.image.attach(@image)
     @unit.save!
 
@@ -167,7 +167,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Code http
     patch api_unit_url(@unit), params: {
-      unit: { food_options: ["Illegal Pizza"] }
+      unit: { food_options: [ "Illegal Pizza" ] }
     }, as: :json
 
     # Format json valide

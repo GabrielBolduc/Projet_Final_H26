@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '@core/services/auth.service';
+import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { Order } from '@core/models/order';
 import { OrderService } from '@core/services/order.service';
 
@@ -30,6 +31,7 @@ import { OrderService } from '@core/services/order.service';
 export class TicketingOrdersComponent {
   private auth = inject(AuthService);
   private orderService = inject(OrderService);
+  private errorHandler = inject(ErrorHandlerService);
 
   isClient = computed(() => this.auth.currentUser()?.isClient ?? false);
 
@@ -46,4 +48,9 @@ export class TicketingOrdersComponent {
 
   orders = computed(() => this.ordersResource.value() ?? []);
   isLoading = computed(() => this.ordersResource.isLoading());
+  loadError = computed(() => {
+    const err = this.ordersResource.error();
+    if (!err) return '';
+    return this.errorHandler.parseRailsErrors(err).join(' | ');
+  });
 }

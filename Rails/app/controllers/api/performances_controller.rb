@@ -1,5 +1,4 @@
 class Api::PerformancesController < ApiController
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
 
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
@@ -19,7 +18,13 @@ class Api::PerformancesController < ApiController
     
     render json: {
       status: "success",
-      data: performances.as_json(include: [ :artist, :stage, :festival ])
+      data: performances.as_json(
+        include: {
+          stage: {},
+          festival: {},
+          artist: { methods: [:image_url] }
+        }
+      )
     }, status: :ok
   end
 
@@ -33,7 +38,13 @@ class Api::PerformancesController < ApiController
 
     render json: {
       status: "success",
-      data: @performance.as_json(include: [ :artist, :stage, :festival ])
+      data: @performance.as_json(
+        include: {
+          stage: {},
+          festival: {},
+          artist: { methods: [:image_url] }
+        }
+      )
     }, status: :ok
   end
 
@@ -43,7 +54,14 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-        data: performance.as_json(include: [:artist, :stage, :festival])
+        # CORRECTION ICI
+        data: performance.as_json(
+          include: {
+            stage: {},
+            festival: {},
+            artist: { methods: [:image_url] }
+          }
+        )
       }, status: :ok
     else
       render json: {
@@ -58,7 +76,14 @@ class Api::PerformancesController < ApiController
     if @performance.update(performance_params)
       render json: {
         status: "success",
-        data: @performance.as_json(include: [ :artist, :stage, :festival ])
+        # CORRECTION ICI
+        data: @performance.as_json(
+          include: {
+            stage: {},
+            festival: {},
+            artist: { methods: [:image_url] }
+          }
+        )
       }, status: :ok
     else
       render json: {

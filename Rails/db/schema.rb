@@ -186,7 +186,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
     t.bigint "order_id", null: false
     t.bigint "package_id", null: false
     t.decimal "price", precision: 10, scale: 2, null: false
-    t.boolean "refunded", default: false
     t.datetime "refunded_at"
     t.string "unique_code", null: false
     t.datetime "updated_at", null: false

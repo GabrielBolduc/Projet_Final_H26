@@ -5,8 +5,8 @@ class FestivalsValidTest < ActionDispatch::IntegrationTest
 
   setup do
     @admin = users(:three)
-    @ongoing_festival = festivals(:one) 
-    
+    @ongoing_festival = festivals(:one)
+
     @valid_params = {
       festival: {
         name: "Nouveau Festival",
@@ -61,7 +61,7 @@ class FestivalsValidTest < ActionDispatch::IntegrationTest
   test "should return current ongoing festival" do
     # modif ou non
     assert_no_difference("Festival.count") do
-      get current_api_festivals_url, as: :json 
+      get current_api_festivals_url, as: :json
     end
 
     # code http
@@ -170,6 +170,31 @@ class FestivalsValidTest < ActionDispatch::IntegrationTest
     # modif ou non
     assert_difference("Festival.count", 1) do
       post api_festivals_url, params: archive_params, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "success", json["status"]
+  end
+
+  test "should succeed to update a festival to the past with completed status" do
+    sign_in @admin
+
+    archive_params = {
+      festival: {
+        status: "completed",
+        start_at: 1.year.ago.to_date.to_s,
+        end_at: (1.year.ago + 4.days).to_date.to_s,
+        name: "Festival Archive Mis à jour"
+      }
+    }
+
+    # modif ou non
+    assert_no_difference("Festival.count") do
+      put api_festival_url(@ongoing_festival), params: archive_params, as: :json
     end
 
     # code http

@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
 import { Notfound } from './core/notfound/notfound';
-import { Home } from './features/home/home';
 import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { Accommodations } from '@features/alexandre/accommodations/accommodations';
@@ -20,6 +19,7 @@ import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
+import { AdminOrdersComponent } from './features/GabrielR/ticketing/admin/orders/admin-orders';
 import { PackageFormComponent } from './features/GabrielR/ticketing/admin/package-form/package-form';
 import { TicketingOrderFormComponent } from './features/GabrielR/ticketing/public/order-form/order-form';
 import { TicketingOrdersComponent } from './features/GabrielR/ticketing/public/orders/orders';
@@ -34,6 +34,8 @@ import { ShowAffectationComponent } from '@features/laurent/affectation/show/sho
 import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
 import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
 import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
+import { ArtistsListComponent } from './features/festival/artist/artists_list';
+import { ArtistFormComponent } from './features/festival/artist/artist_form';
 import { staffGuard } from '@core/guards/staff-guard';
 
 export const routes: Routes = [
@@ -43,7 +45,7 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: Home
+                component: PublicScheduleComponent
             },
             {
                 path: 'programmation',
@@ -131,10 +133,29 @@ export const routes: Routes = [
                 component: AddPerformanceComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
-            
+            {
+                path: 'admin/artistes',
+                component: ArtistsListComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/artistes/ajout', 
+                component: ArtistFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/artistes/edition/:id', 
+                component: ArtistFormComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
             {
                 path: 'admin/ticketing',
                 component: AdminTicketingComponent,
+                canActivate: [AuthGuard, adminGuard]
+            },
+            {
+                path: 'admin/orders',
+                component: AdminOrdersComponent,
                 canActivate: [AuthGuard, adminGuard]
             },
             {

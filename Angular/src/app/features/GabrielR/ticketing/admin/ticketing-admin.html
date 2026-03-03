@@ -3,8 +3,12 @@
       <button mat-stroked-button class="btn-new" (click)="openForm()">
         <mat-icon>add</mat-icon> {{ 'TICKETING_ADMIN.NEW_PACKAGE' | translate }}
       </button>
+
       <h1 class="header-title">{{ 'TICKETING_ADMIN.TITLE' | translate }}</h1>
-      <div class="spacer-right" style="flex: 1; max-width: 250px;"></div>
+
+      <a mat-stroked-button class="btn-orders" routerLink="/admin/orders">
+        <mat-icon>receipt_long</mat-icon> {{ 'TICKETING_ADMIN.VIEW_ORDERS' | translate }}
+      </a>
   </header>
 
   <section class="filters-section">
@@ -14,9 +18,7 @@
         matInput
         [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate"
         [ngModel]="searchQuery()"
-        [ngModelOptions]="{updateOn: 'blur'}"
         (ngModelChange)="searchQuery.set($event)"
-        (keyup.enter)="$any($event.target).blur()"
       >
       @if (searchQuery()) {
         <button mat-icon-button matSuffix (click)="searchQuery.set('')" [attr.aria-label]="'Clear'">
@@ -25,11 +27,21 @@
       }
     </mat-form-field>
 
+    <mat-checkbox
+      class="sold-out-checkbox"
+      [ngModel]="soldOutOnly()"
+      (ngModelChange)="soldOutOnly.set($event)"
+    >
+      {{ 'TICKETING_ADMIN.SOLD_OUT_FILTER' | translate }}
+    </mat-checkbox>
+
     <mat-form-field appearance="outline" class="sort-select">
       <mat-label>{{ 'TICKETING_ADMIN.SORT_BY' | translate }}</mat-label>
       <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
         <mat-option value="date_asc">{{ 'TICKETING_ADMIN.SORT_ASC' | translate }}</mat-option>
         <mat-option value="date_desc">{{ 'TICKETING_ADMIN.SORT_DESC' | translate }}</mat-option>
+        <mat-option value="price_asc">{{ 'TICKETING_ADMIN.PRICE_ASC' | translate }}</mat-option>
+        <mat-option value="price_desc">{{ 'TICKETING_ADMIN.PRICE_DESC' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </section>

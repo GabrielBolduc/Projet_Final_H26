@@ -11,6 +11,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { UnitsService } from '@core/services/units.service';
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { UnitType } from '@core/models/unit';
 
 @Component({
   selector: 'app-units-form',
@@ -33,12 +34,12 @@ export class UnitsForm implements OnInit {
   form: FormGroup = this.fb.group({
     type: ['', Validators.required],
     cost_person_per_night: [0, [Validators.required, Validators.min(0), Validators.max(9999)]],
-    quantity: [1, [Validators.required, Validators.min(1), Validators.max(255)]], // MySQL TinyInt limit
+    quantity: [1, [Validators.required, Validators.min(1), Validators.max(255)]], 
     wifi: [false],
     water: ['no_water', Validators.required],
     electricity: [false],
     parking_cost: [0, [Validators.required, Validators.min(0), Validators.max(99)]],
-    food_options: [[], Validators.required]
+    food_options: [['None'], Validators.required]
   });
 
   unitId = signal<number | null>(null);
@@ -57,6 +58,21 @@ export class UnitsForm implements OnInit {
   constructor() {
     this.form.get('type')?.valueChanges.subscribe(value => {
       this.isTerrain.set(this.TERRAIN_TYPES.includes(value));
+    });
+
+    this.form.get('food_options')?.valueChanges.subscribe((values: string[]) => {
+      if (!values || values.length === 0) return;
+
+      const hasNone = values.includes('None');
+      const lastSelected = values[values.length - 1];
+
+      if (lastSelected === 'None' && values.length > 1) {
+        this.form.get('food_options')?.setValue(['None'], { emitEvent: false });
+      } 
+      else if (hasNone && values.length > 1) {
+        const filtered = values.filter(v => v !== 'None');
+        this.form.get('food_options')?.setValue(filtered, { emitEvent: false });
+      }
     });
   }
 
@@ -88,48 +104,48 @@ export class UnitsForm implements OnInit {
   private fetchParentCategory(accId: number) {
     this.accService.getAccommodation(accId).subscribe(acc => {
       this.parentCategory.set(acc.category);
-    });
-  }
 
-  private loadUnit(id: number) {
-    this.isLoading.set(true);
-    this.service.getUnit(id).subscribe({
-      next: (unit) => {
-        if (!unit) {
-          this.serverErrors.set(['Unit data not found']);
-          this.isLoading.set(false);
-          return;
+      const isCamping = String(acc.category) === 'camping';
+      
+      if (isCamping) {
+        this.isTerrain.set(true);
+        if (!this.isEditMode()) {
+          this.form.patchValue({ type: 'SmallTerrain' }, { emitEvent: true });
         }
-
-        const rawType = unit.type || '';
-        const cleanType = rawType.split('::').pop() || rawType;
-        
-        this.form.patchValue({
-          ...unit,
-          type: cleanType
-        });
-
-        this.accommodationId.set(unit.accommodation_id);
-        
-        this.fetchParentCategory(unit.accommodation_id);
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        this.serverErrors.set([err.message || 'Failed to load unit']);
-        this.isLoading.set(false);
       }
     });
   }
 
+private loadUnit(id: number) {
+  this.isLoading.set(true);
+  this.service.getUnit(id).subscribe({
+    next: (unit) => {
+      if (!unit) return;
+
+      const rawType = unit.type || '';
+      const cleanType = rawType.split('::').pop() as UnitType;
+
+      this.isTerrain.set(this.TERRAIN_TYPES.includes(cleanType));
+
+      this.form.patchValue({
+        ...unit,
+        type: cleanType
+      });
+
+      this.accommodationId.set(unit.accommodation_id);
+      this.fetchParentCategory(unit.accommodation_id);
+      this.isLoading.set(false);
+    },
+    error: (err) => {
+      this.serverErrors.set([err.message]);
+      this.isLoading.set(false);
+    }
+  });
+}
+
   private preparePayload() {
     const rawValue = this.form.value;
-    let food = rawValue.food_options || [];
-
-    if (food.length > 1 && food.includes('None')) {
-      food = food.filter((f: string) => f !== 'None');
-    }
-
-    if (food.length === 0) food = ['None'];
+    const food = rawValue.food_options.length > 0 ? rawValue.food_options : ['None'];
 
     return {
       ...rawValue,

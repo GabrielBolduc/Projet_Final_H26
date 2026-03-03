@@ -21,7 +21,7 @@ begin
   Stage.delete_all
   Task.delete_all
   Artist.delete_all
-  Festival.delete_all 
+  Festival.delete_all
   Client.delete_all
   Admin.delete_all
   Staff.delete_all
@@ -128,7 +128,7 @@ f2 = Festival.create!(
   address: "123 Rue rue, Shawinigan, QC",
   latitude: 46.52673340326582,
   longitude: -72.73930869816652,
-  status: "draft", 
+  status: "draft",
   satisfaction: 4,
   other_income: 15000.00,
   other_expense: 5000.00,
@@ -157,25 +157,56 @@ c_stage = Stage.create!(
 )
 
 artist1 = Artist.create!(
-    name: "Bob",
-    genre: "Rock",
-    popularity: 4,
-    bio: "Good music"
+  name: "Bob",
+  genre: "Rock",
+  popularity: 4,
+  bio: "Good music"
+)
+artist1.reload
+
+artist1.image.attach(
+  io: File.open(Rails.root.join('db/files/artist1.jpg')),
+  filename: 'artist1.jpg',
+  content_type: 'image/jpeg'
 )
 
 artist2 = Artist.create!(
-    name: "Louis",
-    genre: "Hip hop",
-    popularity: 3,
-    bio: "Good music"
+  name: "Louis",
+  genre: "Hip hop",
+  popularity: 3,
+  bio: "Good music"
+)
+artist2.image.attach(
+  io: File.open(Rails.root.join('db/files/artist2.jpg')),
+  filename: 'artist2.jpg',
+  content_type: 'image/jpeg'
 )
 
 artist3 = Artist.create!(
-    name: "Alice",
-    genre: "Pop",
-    popularity: 4,
-    bio: "Good music"
+  name: "Alice",
+  genre: "Pop",
+  popularity: 4,
+  bio: "Good music"
 )
+artist3.image.attach(
+  io: File.open(Rails.root.join('db/files/artist3.jpg')),
+  filename: 'artist3.jpg',
+  content_type: 'image/jpeg'
+)
+
+artist4 = Artist.create!(
+  name: "Jean",
+  genre: "Blues",
+  popularity: 2,
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget. "
+)
+
+artist4.image.attach(
+  io: File.open(Rails.root.join('db/files/artist4.webp')),
+  filename: 'artist4.webp',
+  content_type: 'image/webp'
+)
+
 
 # perf pour f (ongoing)
 Performance.create!(
@@ -209,6 +240,17 @@ Performance.create!(
   festival: f,
   stage: main_stage,
   artist: artist2
+)
+
+Performance.create!(
+  title: "Le show de jean",
+  description: "Good show",
+  price: 5000.00,
+  start_at: (f.start_at + 4.day).to_time.change(hour: 16, min: 0),
+  end_at: (f.start_at + 4.day).to_time.change(hour: 18, min: 0),
+  festival: f,
+  stage: c_stage,
+  artist: artist4
 )
 
 # perf pour f1 (draft)
@@ -279,15 +321,15 @@ Performance.create!(
   artist: artist2
 )
 
-f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 15),)
+f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20))
 
 # Alexandre
 acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",
   category: :hotel,
   address: "123 Festival Lane, Palm Springs, CA",
-  latitude: 33.8121,
-  longitude: -116.5165,
+  latitude: 46.56571486688975,
+  longitude: -72.72712896089062,
   shuttle: true,
   time_car: Time.parse("00:15:00"),
   time_walk: Time.parse("01:00:00"),
@@ -299,8 +341,8 @@ acc2 = Accommodation.create!(
   name: "Wildwood Luxury Camping",
   category: :camping,
   address: "North Gate, Sector B, Glastonbury",
-  latitude: 51.1557,
-  longitude: -2.5859,
+  latitude: 46.52391224860748,
+  longitude: -72.32665159829943,
   shuttle: false,
   time_car: Time.parse("00:05:00"),
   time_walk: Time.parse("00:10:00"),
@@ -313,7 +355,7 @@ unit1 = Units::SimpleRoom.new(
   cost_person_per_night: 55.00,
   quantity: 10,
   wifi: true,
-  water: 2 ,
+  water: 2,
   electricity: true,
   parking_cost: 0.00,
   food_options: "Room service,Restaurant"
@@ -372,8 +414,8 @@ p_general = Package.create!(
   price: 150.00,
   quota: 4,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 10),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 0),
+  valid_at: f.start_at.to_time.change(hour: 0),
+  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
   festival: f
 )
 
@@ -383,8 +425,8 @@ p_daily = Package.create!(
   price: 60.00,
   quota: 6,
   category: "daily",
-  valid_at: f.start_at.to_time.change(hour: 10),
-  expired_at: f.start_at.to_time.change(hour: 17),
+  valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
+  expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
   festival: f
 )
 
@@ -394,8 +436,8 @@ p_evening = Package.create!(
   price: 72.99,
   quota: 5,
   category: "evening",
-  valid_at: f.start_at.to_time.change(hour: 19),
-  expired_at: f.start_at.to_time.change(hour: 23),
+  valid_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 19, min: 0),
+  expired_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 23, min: 0),
   festival: f
 )
 
@@ -405,8 +447,8 @@ p_daily_sold_out = Package.create!(
   price: 55.00,
   quota: 2,
   category: "daily",
-  valid_at: (f.start_at + 1.day).to_time.change(hour: 10),
-  expired_at: (f.start_at + 1.day).to_time.change(hour: 17),
+  valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
+  expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
   festival: f
 )
 
@@ -416,8 +458,41 @@ p_evening_last_spots = Package.create!(
   price: 79.99,
   quota: 3,
   category: "evening",
-  valid_at: (f.start_at + 1.day).to_time.change(hour: 19),
-  expired_at: (f.start_at + 1.day).to_time.change(hour: 23),
+  valid_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 19, min: 0),
+  expired_at: (f.start_at + 1.day).in_time_zone('America/New_York').change(hour: 23, min: 0),
+  festival: f
+)
+
+p_daily_day2 = Package.create!(
+  title: "Billet Journalier - Jour 2",
+  description: "Accès à la deuxième journée du festival.",
+  price: 64.99,
+  quota: 8,
+  category: "daily",
+  valid_at: (f.start_at + 2.days).in_time_zone('America/New_York').change(hour: 10, min: 0),
+  expired_at: (f.start_at + 2.days).in_time_zone('America/New_York').change(hour: 17, min: 0),
+  festival: f
+)
+
+p_evening_overnight = Package.create!(
+  title: "Billet Soirée (Nuit Blanche)",
+  description: "Accès du soir jusqu'à la nuit (jusqu'à 02:00).",
+  price: 89.99,
+  quota: 4,
+  category: "evening",
+  valid_at: (f.start_at + 2.days).in_time_zone('America/New_York').change(hour: 21, min: 0),
+  expired_at: (f.start_at + 3.days).in_time_zone('America/New_York').change(hour: 2, min: 0),
+  festival: f
+)
+
+p_general_flex = Package.create!(
+  title: "Passeport Festival Flex",
+  description: "Passeport général avec quota plus élevé pour tests de volume.",
+  price: 175.00,
+  quota: 10,
+  category: "general",
+  valid_at: f.start_at.to_time.change(hour: 0),
+  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
   festival: f
 )
 
@@ -427,8 +502,8 @@ p_completed = Package.create!(
   price: 130.00,
   quota: 3,
   category: "general",
-  valid_at: f2.start_at.to_time.change(hour: 10),
-  expired_at: f2.end_at.to_time.change(hour: 23),
+  valid_at: f2.start_at.to_time.change(hour: 0),
+  expired_at: f2.end_at.to_time.change(hour: 23, min: 59),
   festival: f2
 )
 
@@ -440,6 +515,11 @@ order_daily_2 = Order.create!(user: c3, purchased_at: f.start_at.to_time.change(
 order_daily_sold_out_1 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 5))
 order_daily_sold_out_2 = Order.create!(user: c3, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 20))
 order_evening_last_spots = Order.create!(user: c, purchased_at: (f.start_at + 1.day).to_time.change(hour: 19, min: 10))
+order_daily_day2_1 = Order.create!(user: c2, purchased_at: (f.start_at + 2.days).to_time.change(hour: 9, min: 50))
+order_daily_day2_2 = Order.create!(user: c3, purchased_at: (f.start_at + 2.days).to_time.change(hour: 10, min: 25))
+order_evening_overnight = Order.create!(user: c, purchased_at: (f.start_at + 2.days).to_time.change(hour: 20, min: 55))
+order_general_flex_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 8, min: 40))
+order_general_flex_2 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 9, min: 5))
 order_completed = Order.create!(user: c, purchased_at: f2.start_at.to_time.change(hour: 12, min: 0))
 
 ticket_seq = 0
@@ -447,7 +527,7 @@ ticket_seq = 0
 create_tickets = lambda do |order:, package:, quantity:, refunded_indexes: [], holder_prefix: "Billet"|
   quantity.times do |index|
     ticket_seq += 1
-    refunded = refunded_indexes.include?(index)
+    is_refunded = refunded_indexes.include?(index)
 
     Ticket.create!(
       order: order,
@@ -455,8 +535,7 @@ create_tickets = lambda do |order:, package:, quantity:, refunded_indexes: [], h
       holder_name: "#{holder_prefix} ##{ticket_seq}",
       holder_phone: format("819555%04d", ticket_seq),
       holder_email: "ticket#{ticket_seq}@example.com",
-      refunded: refunded,
-      refunded_at: refunded ? order.purchased_at + 2.hours : nil
+      refunded_at: is_refunded ? order.purchased_at + 2.hours : nil
     )
   end
 end
@@ -466,7 +545,7 @@ create_tickets.call(order: order_general_1, package: p_general, quantity: 2, hol
 create_tickets.call(order: order_general_2, package: p_general, quantity: 2, holder_prefix: "General")
 
 # Cas 2: Partiellement vendu (4 actifs + 1 remboursé, quota 6)
-create_tickets.call(order: order_daily_1, package: p_daily, quantity: 3, refunded_indexes: [0], holder_prefix: "Daily")
+create_tickets.call(order: order_daily_1, package: p_daily, quantity: 3, refunded_indexes: [ 0 ], holder_prefix: "Daily")
 create_tickets.call(order: order_daily_2, package: p_daily, quantity: 2, holder_prefix: "Daily")
 
 # Cas 3: Sold out sur un second forfait (2/2 actifs)
@@ -477,7 +556,18 @@ create_tickets.call(order: order_daily_sold_out_2, package: p_daily_sold_out, qu
 create_tickets.call(order: order_evening_last_spots, package: p_evening_last_spots, quantity: 2, holder_prefix: "Evening Last Spots")
 
 # Cas 5: Forfait archivé (1 actif + 1 remboursé)
-create_tickets.call(order: order_completed, package: p_completed, quantity: 2, refunded_indexes: [1], holder_prefix: "Archive")
+create_tickets.call(order: order_completed, package: p_completed, quantity: 2, refunded_indexes: [ 1 ], holder_prefix: "Archive")
+
+# Cas 6: Journalier jour 2 (5 actifs + 1 remboursé sur quota 8)
+create_tickets.call(order: order_daily_day2_1, package: p_daily_day2, quantity: 3, refunded_indexes: [ 1 ], holder_prefix: "Daily Day2")
+create_tickets.call(order: order_daily_day2_2, package: p_daily_day2, quantity: 3, holder_prefix: "Daily Day2")
+
+# Cas 7: Soirée de nuit (3/4 actifs)
+create_tickets.call(order: order_evening_overnight, package: p_evening_overnight, quantity: 3, holder_prefix: "Overnight")
+
+# Cas 8: Passeport flex (4 actifs + 2 remboursés, quota 10)
+create_tickets.call(order: order_general_flex_1, package: p_general_flex, quantity: 3, refunded_indexes: [ 0 ], holder_prefix: "General Flex")
+create_tickets.call(order: order_general_flex_2, package: p_general_flex, quantity: 3, refunded_indexes: [ 2 ], holder_prefix: "General Flex")
 
 # Attachement des images
 images = {
@@ -486,6 +576,9 @@ images = {
   p_evening => 'evening-ticket.jpg',
   p_daily_sold_out => 'daily-ticket.webp',
   p_evening_last_spots => 'evening-ticket.jpg',
+  p_daily_day2 => 'daily-ticket.webp',
+  p_evening_overnight => 'evening-ticket.jpg',
+  p_general_flex => 'general-ticket.webp',
   p_completed => 'general-ticket.webp',
   unit1 => 'hotel-image.jpg',
   unit_hotel_mid => 'hotel-mid.jpg',
@@ -496,7 +589,7 @@ images = {
 
 images.each do |package, filename|
   path = Rails.root.join('db', 'files', filename)
-  
+
   if File.exist?(path)
     # Détermine le type d'image
     content_type = filename.end_with?('.jpg', '.jpeg') ? 'image/jpeg' : 'image/webp'
@@ -504,7 +597,7 @@ images.each do |package, filename|
     package.image.attach(
       io: File.open(path),
       filename: filename,
-      content_type: content_type 
+      content_type: content_type
     )
   end
 end
@@ -515,9 +608,9 @@ unit_camp_low.save!
 unit_hotel_high.save!
 unit_hotel_mid.save!
 
-[p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots].each do |pkg|
-  sold = pkg.tickets.where(refunded: false).count
-  refunded = pkg.tickets.where(refunded: true).count
+[ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots, p_daily_day2, p_evening_overnight, p_general_flex ].each do |pkg|
+  sold = pkg.tickets.where(refunded_at: nil).count
+  refunded = pkg.tickets.where.not(refunded_at: nil).count
 end
 
 
@@ -589,7 +682,7 @@ Affectation.create!(
     responsability: "Assurer la bonne installation de la scène",
     expected_start: f.start_at.to_time.change(hour: 13, min: 0),
     expected_end: f.start_at.to_time.change(hour: 17, min: 0)
-) 
+)
 
 Affectation.create!(
     user: Staff.first,

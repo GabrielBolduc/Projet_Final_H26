@@ -7,7 +7,6 @@ class FestivalsShowInvalidTest < ActionDispatch::IntegrationTest
     @draft_festival = festivals(:two)
   end
 
-  # faux id
   test "should return 404 when festival is not found" do
     # modif ou non
     assert_no_difference("Festival.count") do
@@ -23,7 +22,6 @@ class FestivalsShowInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "Resource not found", json["message"]
   end
 
-  # festival non public
   test "should forbid show if festival is not ongoing and user is not admin" do
     # modif ou non
     assert_no_difference("Festival.count") do

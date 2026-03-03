@@ -2,7 +2,6 @@ class Package < ApplicationRecord
   belongs_to :festival
   has_many :tickets, dependent: :restrict_with_error
 
-  # ACTIVESTORAGE
   has_one_attached :image
 
   scope :for_festival, ->(festival_id) { where(festival_id: festival_id) }
@@ -25,9 +24,9 @@ class Package < ApplicationRecord
   end
 
   enum :category, {
-    general: 'GENERAL',
-    daily: 'DAILY',
-    evening: 'EVENING'
+    general: "GENERAL",
+    daily: "DAILY",
+    evening: "EVENING"
   }, default: :general, validate: true
 
   validates :title, presence: true, length: { maximum: 50 }
@@ -37,13 +36,16 @@ class Package < ApplicationRecord
 
   validates :valid_at, :expired_at, presence: true
 
+  # L'ordre des validations est important : les dates doivent être valides avant de vérifier les quotas.
   validate :expired_date_after_valid_date
   validate :image_format_validation
-  validate :quota_cannot_exceed_daily_capacity
   validate :validity_must_be_within_festival_dates
+  validate :validate_category_dates
+  validate :quota_not_less_than_sold
+  validate :quota_cross_validation
 
-  def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil)
-    relation = includes(:festival, :tickets)
+  def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil, sold_out: nil)
+    relation = includes(:festival)
 
     if festival_id.present?
       relation = relation.for_festival(festival_id)
@@ -57,6 +59,17 @@ class Package < ApplicationRecord
     if categories.present?
       category_values = sanitize_category_filters(categories)
       relation = category_values.any? ? relation.for_categories(category_values) : relation.none
+    end
+
+    if sold_out.to_s == "true"
+      relation = relation.joins(:tickets)
+                         .where(tickets: { refunded_at: nil })
+                         .group("packages.id")
+                         .having("COUNT(tickets.id) >= packages.quota")
+    elsif sold_out.to_s == "false"
+      relation = relation.left_joins(:tickets)
+                         .group("packages.id")
+                         .having("packages.quota > COUNT(CASE WHEN tickets.refunded_at IS NULL THEN tickets.id END)")
     end
 
     relation.sorted_for_admin(sort)
@@ -73,13 +86,28 @@ class Package < ApplicationRecord
     valid_keys.map { |key| categories[key] }
   end
 
+  def sold_count
+    tickets.where(refunded_at: nil).count
+  end
+
+  def sold_out?
+    sold_count >= quota
+  end
+
   private
+
+  def quota_not_less_than_sold
+    return unless quota
+    current_sold = sold_count
+    if quota < current_sold
+      errors.add(:quota, "ne peut pas être inférieur au nombre de billets déjà vendus (#{current_sold})")
+    end
+  end
 
   def validity_must_be_within_festival_dates
     return unless festival && valid_at && expired_at
 
     festival_start_limit = festival.start_at.beginning_of_day
-
     festival_end_limit = festival.end_at.end_of_day
 
     if valid_at < festival_start_limit
@@ -91,25 +119,110 @@ class Package < ApplicationRecord
     end
   end
 
-  def quota_cannot_exceed_daily_capacity
-    return unless festival && quota
-    if quota > festival.daily_capacity
-      errors.add(:quota, "ne peut pas dépasser la capacité journalière du festival (#{festival.daily_capacity})")
+  def validate_category_dates
+    return unless category && valid_at && expired_at
+
+    case category.to_sym
+    when :general
+      if valid_at.strftime("%H:%M") != "00:00"
+        errors.add(:valid_at, "doit commencer à 00:00 pour un forfait général.")
+      end
+      if expired_at.strftime("%H:%M") != "23:59"
+        errors.add(:expired_at, "doit se terminer à 23:59 pour un forfait général.")
+      end
+    when :daily
+      if valid_at.to_date != expired_at.to_date
+        errors.add(:base, "Le forfait journalier doit se limiter à une seule journée.")
+      end
+
+      start_hour = valid_at.hour + (valid_at.min / 60.0)
+      end_hour = expired_at.hour + (expired_at.min / 60.0)
+      if start_hour < 6 || end_hour > 18
+        errors.add(:base, "Le forfait journalier doit être compris entre 06:00 et 18:00.")
+      end
+    when :evening
+      start_date = valid_at.to_date
+      end_date = expired_at.to_date
+      day_span = (end_date - start_date).to_i
+
+      if day_span < 0 || day_span > 1
+        errors.add(:base, "Le forfait soirée doit se limiter au même jour ou au lendemain (maximum 06:00).")
+        return
+      end
+
+      if seconds_since_midnight(valid_at) < 18.hours
+        errors.add(:valid_at, "doit commencer à 18:00 ou après pour un forfait soirée.")
+      end
+
+      if day_span == 0
+        if valid_at.strftime("%H:%M") == "00:00" && expired_at.strftime("%H:%M") == "23:59"
+          errors.add(:base, "Le forfait soirée ne peut pas couvrir 00:00 à 23:59 sur une même journée.")
+        end
+      elsif seconds_since_midnight(expired_at) > 6.hours
+        errors.add(:expired_at, "doit se terminer à 06:00 maximum le lendemain.")
+      end
     end
   end
 
-  # Validation du format d'image (JPEG, PNG, WEBP)
+  def quota_cross_validation
+    return unless festival && quota && valid_at && expired_at
+    return if errors[:valid_at].any? || errors[:expired_at].any? || errors[:base].any?
+
+    if category.to_s.downcase == "general"
+      validate_general_quota
+    else
+      validate_daily_evening_quota
+    end
+  end
+
+  def validate_general_quota
+    duration = (festival.end_at - festival.start_at).to_i + 1
+    general_capacity = festival.daily_capacity * duration
+
+    existing_general_quota = festival.packages
+                                     .where(category: :general)
+                                     .where.not(id: id)
+                                     .sum(:quota)
+
+    if (existing_general_quota + quota) > general_capacity
+      remaining = general_capacity - existing_general_quota
+      errors.add(:quota, "total pour les forfaits généraux dépasse la capacité globale (#{general_capacity}). Maximum possible : #{remaining}")
+    end
+  end
+
+  def validate_daily_evening_quota
+    days_to_check = if category.to_sym == :evening
+      [ valid_at.to_date ]
+    else
+      (valid_at.to_date..expired_at.to_date).to_a
+    end
+
+    existing_non_general = festival.packages
+                                 .where.not(category: :general)
+                                 .where.not(id: id)
+                                 .to_a
+
+    days_to_check.each do |day|
+      existing_quota_sum = existing_non_general.sum do |existing_package|
+        quota_capacity_days_for(existing_package).include?(day) ? existing_package.quota.to_i : 0
+      end
+
+      if (existing_quota_sum + quota) > festival.daily_capacity
+        remaining = festival.daily_capacity - existing_quota_sum
+        errors.add(:quota, "pour le #{day} dépasse la capacité journalière pour les billets individuels. Maximum possible : #{remaining} (Capacité: #{festival.daily_capacity}, déjà alloué: #{existing_quota_sum})")
+      end
+    end
+  end
+
   def image_format_validation
     return unless image.attached?
 
-    # formats acceptés
-    acceptable_types = ["image/jpeg", "image/png", "image/webp"]
-    
+    acceptable_types = [ "image/jpeg", "image/png", "image/webp" ]
+
     unless acceptable_types.include?(image.content_type)
       errors.add(:image, "doit être au format JPEG, PNG ou WEBP")
     end
-    
-    # Validation de la taille (ex: Max 5MB)
+
     if image.byte_size > 5.megabytes
       errors.add(:image, "est trop volumineuse (max 5MB)")
     end
@@ -120,6 +233,21 @@ class Package < ApplicationRecord
 
     if expired_at < valid_at
       errors.add(:expired_at, "doit être ultérieure à la date de début")
+    end
+  end
+
+  def seconds_since_midnight(value)
+    value.hour * 3600 + value.min * 60 + value.sec
+  end
+
+  def quota_capacity_days_for(package)
+    case package.category.to_sym
+    when :evening
+      [ package.valid_at.to_date ]
+    when :daily
+      (package.valid_at.to_date..package.expired_at.to_date).to_a
+    else
+      []
     end
   end
 end

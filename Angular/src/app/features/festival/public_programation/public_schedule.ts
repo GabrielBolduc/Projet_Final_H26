@@ -1,19 +1,31 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'; // NOUVEAU IMPORT
 import { firstValueFrom } from 'rxjs'; 
+
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
+import { Artist } from '../../../core/models/artist';
 import { DateUtils } from '../../../core/utils/date.utils'; 
 import { ErrorHandlerService } from '../../../core/services/error-handler.service'; 
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 interface DayGroup {
   date: Date;
   performances: Performance[];
+}
+
+interface FestivalArtist {
+  artist: Artist;
+  date: string;
 }
 
 @Component({
@@ -21,10 +33,13 @@ interface DayGroup {
   standalone: true,
   imports: [
     CommonModule, 
-    MatIconModule,
-    MatTableModule,
+    RouterModule,
     TranslateModule,
     MatProgressSpinnerModule,
+    MatIconModule,
+    MatTableModule,
+    MatCardModule,
+    MatButtonModule
   ],
   templateUrl: './public_schedule.html',
   styleUrls: ['./public_schedule.css']
@@ -34,12 +49,15 @@ export class PublicScheduleComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private errorHandler = inject(ErrorHandlerService);
   public translate = inject(TranslateService);
+  private sanitizer = inject(DomSanitizer); // NOUVELLE INJECTION
 
   currentFestival = signal<Festival | null>(null);
   performanceGroups = signal<DayGroup[]>([]);
+  
+  festivalArtists = signal<FestivalArtist[]>([]);
+  
   isLoading = signal(true);
   serverErrors = signal<string[]>([]); 
-  
   currentLang = signal<string>(this.formatLang(this.translate.getCurrentLang()));
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description'];
@@ -67,12 +85,26 @@ export class PublicScheduleComponent implements OnInit {
 
       if (ongoing) {
         this.currentFestival.set(ongoing);
-        const allPerformances = await firstValueFrom(this.performanceService.getPerformances());
         
+        const allPerformances = await firstValueFrom(this.performanceService.getPerformances());
         const festivalPerformances = allPerformances.filter(p => 
           Number(p.festival_id) === Number(ongoing.id) || (p.festival && Number(p.festival.id) === Number(ongoing.id))
         );
         
+        const artistMap = new Map<number, FestivalArtist>();
+        
+        const sortedForArtists = [...festivalPerformances].sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
+        
+        sortedForArtists.forEach(perf => {
+          if (perf.artist && perf.artist.id && !artistMap.has(perf.artist.id)) {
+            artistMap.set(perf.artist.id, {
+              artist: perf.artist,
+              date: perf.start_at 
+            });
+          }
+        });
+        this.festivalArtists.set(Array.from(artistMap.values()));
+
         const sortedData = festivalPerformances.sort((a, b) => DateUtils.compareDates(a.start_at, b.start_at));
         this.performanceGroups.set(this.groupByDay(sortedData));
       } else {
@@ -90,7 +122,6 @@ export class PublicScheduleComponent implements OnInit {
     
     performances.forEach(perf => {
       const dateKey = DateUtils.toDateStringKey(perf.start_at);
-      
       if (!groups[dateKey]) groups[dateKey] = [];
       groups[dateKey].push(perf);
     });
@@ -99,5 +130,10 @@ export class PublicScheduleComponent implements OnInit {
       date: DateUtils.toDate(key),
       performances: groups[key]
     }));
+  }
+
+  getMapUrl(lat: number, lng: number): SafeResourceUrl {
+    const url = `https://maps.google.com/maps?q=${lat},${lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

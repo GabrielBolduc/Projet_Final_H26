@@ -2,10 +2,9 @@
 require "test_helper"
 
 class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
-
     setup do
-        @accommodation = accommodations(:one) 
-        @other_accommodation = accommodations(:two) 
+        @accommodation = accommodations(:one)
+        @other_accommodation = accommodations(:two)
     end
 
 
@@ -15,7 +14,7 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
         get api_accommodation_units_url(accommodation_id: invalid_id), as: :json
 
         # Format json valide
-        assert_response :ok 
+        assert_response :ok
         json_response = JSON.parse(response.body)
 
         # Contenu du format json
@@ -31,7 +30,7 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
         get "/api/accommodations//units", as: :json
 
         # Format json valide
-        assert_response :ok 
+        assert_response :ok
         json_response = JSON.parse(response.body)
 
         # Contenu du format json
@@ -44,7 +43,7 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
 
     def test_index_does_not_leak_other_accommodation_units
         @other_accommodation = accommodations(:two) # Forest Camping
-        
+
         # Code http
         get api_accommodation_units_url(@accommodation), as: :json
 
@@ -55,7 +54,7 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
         # Contenu du format json
         returned_ids = json_response["data"].map { |u| u["id"] }
         forbidden_ids = @other_accommodation.units.pluck(:id)
-        
+
         assert (returned_ids & forbidden_ids).empty?, "Index leaked units from another accommodation"
 
         # Validation de la cohérence de la base de données
@@ -65,15 +64,15 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
     def test_index_returns_empty_array_when_no_units
         # Code http (Preparation)
         @empty_hotel = Accommodation.create!(
-            name: "Empty Inn", 
-            festival: festivals(:one), 
-            category: 1, 
+            name: "Empty Inn",
+            festival: festivals(:one),
+            category: 1,
             address: "456 Empty St",
             latitude: 45.0000,
             longitude: -73.0000,
-            shuttle: false,     
-            time_car: "00:10:00",   
-            time_walk: "00:30:00",  
+            shuttle: false,
+            time_car: "00:10:00",
+            time_walk: "00:30:00",
             commission: 10.0
         )
 

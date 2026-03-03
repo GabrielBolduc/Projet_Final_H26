@@ -2,7 +2,7 @@ class Api::AffectationsController < ApiController
     before_action :authenticate_user!
     before_action :set_affectation, only: %i[show update destroy]
 
-    
+
 
     def show
        render json: {
@@ -20,7 +20,7 @@ class Api::AffectationsController < ApiController
     end
 
     def get_by_task
-        @affectations = Affectation.where(task_id: params[:task_id]).order(updated_at: :desc)   
+        @affectations = Affectation.where(task_id: params[:task_id]).order(updated_at: :desc)
         render json: {
         status: "success",
         data: @affectations.as_json(affectation_json)
@@ -47,7 +47,7 @@ class Api::AffectationsController < ApiController
     def create
         @affectation = Affectation.new(affectation_params)
         if @affectation.save
-            
+
             render json: @affectation.as_json(affectation_json).merge(success: true), status: :ok
         else
             render json: { success: false, errors: @affectation.errors.full_messages }, status: :unprocessable_entity
@@ -56,7 +56,7 @@ class Api::AffectationsController < ApiController
 
     def update
         if @affectation.update(affectation_params)
-            
+
             render json: @affectation.as_json(affectation_json).merge(success: true), status: :ok
         else
             render json: { success: false, errors: @affectation.errors.full_messages }, status: :unprocessable_entity
@@ -67,26 +67,25 @@ class Api::AffectationsController < ApiController
 
     def user_json
     {
-        only: [ :id, :name, :email,:phone_number, :ability,:type ]
+        only: [ :id, :name, :email, :phone_number, :ability, :type ]
     }
-
     end
 
     def affectation_json
         {
             success: true,
             only: [ :id, :status, :start, :end, :expected_start, :expected_end, :responsability ],
-             
+
             include: {
                 task: {
-                    only: [ :id, :title, :description, :reusable, :difficulty,:priority ],
-                    methods: [ :file_url]
+                    only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
+                    methods: [ :file_url ]
                 },
                 festival: {
                     only: [ :id, :name, :status, :start_date, :end_date ]
                 },
                 user: {
-                    only: [ :id, :name, :email,:phone_number, :ability,:type ]
+                    only: [ :id, :name, :email, :phone_number, :ability, :type ]
                 }
             }
         }
@@ -102,16 +101,15 @@ class Api::AffectationsController < ApiController
 
     def affectation_params
         params.require(:affectation).permit(
-            :user_id, 
+            :user_id,
             :task_id,
-            :festival_id, 
-            :status, 
-            :start, 
-            :end, 
-            :expected_start, 
-            :expected_end, 
+            :festival_id,
+            :status,
+            :start,
+            :end,
+            :expected_start,
+            :expected_end,
             :responsability
             )
     end
-
 end

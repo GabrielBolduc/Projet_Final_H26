@@ -29,6 +29,11 @@
           <mat-icon>event</mat-icon>
           <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
+
+        <button mat-menu-item [routerLink]="['/admin/artistes']">
+          <mat-icon>person</mat-icon>
+          <span>{{'ADMIN_NAV.ARTIST' | translate}}</span>
+        </button>
         
         <button mat-menu-item [routerLink]="['/tasks']">
           <mat-icon>assignment</mat-icon>
@@ -129,11 +134,17 @@
           <mat-icon>event</mat-icon>
           <span>{{'ADMIN_NAV.PROG' | translate}}</span>
         </button>
+
+        <button mat-menu-item [routerLink]="['/admin/artistes']">
+          <mat-icon>person</mat-icon>
+          <span>{{'ADMIN_NAV.ARTIST' | translate}}</span>
+        </button>
         
         <button mat-menu-item [routerLink]="['/tasks']">
           <mat-icon>assignment</mat-icon>
           <span>{{'ADMIN_NAV.TASK' | translate}}</span>
         </button>
+
         <button mat-menu-item [routerLink]="['/admin/ticketing']">
           <mat-icon>local_activity</mat-icon>
           <span>{{'ADMIN_NAV.TICKET' | translate}}</span>

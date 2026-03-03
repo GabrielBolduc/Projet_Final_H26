@@ -6,9 +6,9 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
   setup do
     @admin = users(:three)
     @client = users(:two)
-    
+
     @performance = performances(:one)
-    @performance_two = performances(:two) 
+    @performance_two = performances(:two)
   end
 
   test "should return 404 when updating non-existent performance" do
@@ -225,12 +225,12 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-      put api_performance_url(@performance), params: { 
-        performance: { 
-          stage_id: @performance_two.stage_id, 
-          start_at: @performance_two.start_at, 
-          end_at: @performance_two.end_at 
-        } 
+      put api_performance_url(@performance), params: {
+        performance: {
+          stage_id: @performance_two.stage_id,
+          start_at: @performance_two.start_at,
+          end_at: @performance_two.end_at
+        }
       }, as: :json
     end
 
@@ -247,12 +247,12 @@ class PerformancesUpdateInvalidTest < ActionDispatch::IntegrationTest
 
     # modif ou non
     assert_no_difference("Performance.count") do
-      put api_performance_url(@performance), params: { 
-        performance: { 
-          artist_id: @performance_two.artist_id, 
-          start_at: @performance_two.start_at, 
-          end_at: @performance_two.end_at 
-        } 
+      put api_performance_url(@performance), params: {
+        performance: {
+          artist_id: @performance_two.artist_id,
+          start_at: @performance_two.start_at,
+          end_at: @performance_two.end_at
+        }
       }, as: :json
     end
 

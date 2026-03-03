@@ -1,9 +1,9 @@
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, resource, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,8 +11,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { AuthService } from '@core/services/auth.service';
+import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { PackageService } from '@core/services/package.service';
 import { OrderService } from '@core/services/order.service';
 import { Package } from '@core/models/package';
@@ -32,22 +34,27 @@ import { Package } from '@core/models/package';
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatDividerModule
   ],
   templateUrl: './order-form.html',
   styleUrl: './order-form.css'
 })
-export class TicketingOrderFormComponent {
+export class TicketingOrderFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private translate = inject(TranslateService);
   private packageService = inject(PackageService);
   private orderService = inject(OrderService);
+  private errorHandler = inject(ErrorHandlerService);
 
   isSubmittingOrder = signal(false);
   orderError = signal('');
+  orderErrorParams = signal<Record<string, unknown> | undefined>(undefined);
   orderSuccess = signal('');
+  orderSuccessParams = signal<Record<string, unknown> | undefined>(undefined);
   quantity = signal(1);
 
   packageId = computed(() => Number(this.route.snapshot.paramMap.get('id')));
@@ -56,10 +63,8 @@ export class TicketingOrderFormComponent {
   currentUser = computed(() => this.auth.currentUser());
 
   orderForm: FormGroup = this.fb.group({
-    holder_name: ['', [Validators.required, Validators.maxLength(100)]],
-    holder_email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
-    holder_phone: ['', [Validators.required, Validators.maxLength(20), Validators.pattern(/^[0-9+\-() ]+$/)]],
-    quantity: [1, [Validators.required, Validators.min(1)]]
+    quantity: [1, [Validators.required, Validators.min(1)]],
+    tickets: this.fb.array([])
   });
 
   packageResource = resource<Package | null, { id: number }>({
@@ -93,104 +98,129 @@ export class TicketingOrderFormComponent {
     return pkg.price * this.quantity();
   });
 
-  constructor() {
-    const user = this.auth.currentUser();
-    if (user) {
-      this.orderForm.patchValue({
-        holder_name: user.name ?? '',
-        holder_email: user.email ?? '',
-        holder_phone: user.phone_number ?? ''
-      });
+  get ticketsFormArray(): FormArray {
+    return this.orderForm.get('tickets') as FormArray;
+  }
+
+  get quantityControl() { return this.orderForm.get('quantity'); }
+
+  ngOnInit(): void {
+    this.syncTicketsWithQuantity();
+  }
+
+  private createTicketGroup(): FormGroup {
+    return this.fb.group({
+      holder_name: ['', [Validators.required, Validators.maxLength(100)]],
+      holder_email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
+      holder_phone: ['', [Validators.required, Validators.maxLength(20), Validators.pattern(/^[0-9+\-() ]+$/)]]
+    });
+  }
+
+  private syncTicketsWithQuantity(): void {
+    const targetCount = this.quantity();
+    const currentCount = this.ticketsFormArray.length;
+
+    if (targetCount > currentCount) {
+      for (let i = currentCount; i < targetCount; i++) {
+        const group = this.createTicketGroup();
+        // Premier billet, ou si juste un, informations de l'utilisateur actuel.
+        if (i === 0 && this.currentUser()) {
+          const user = this.currentUser();
+          group.patchValue({
+            holder_name: user?.name ?? '',
+            holder_email: user?.email ?? '',
+            holder_phone: user?.phone_number ?? ''
+          });
+        }
+        this.ticketsFormArray.push(group);
+      }
+    } else if (targetCount < currentCount) {
+      for (let i = currentCount; i > targetCount; i--) {
+        this.ticketsFormArray.removeAt(i - 1);
+      }
     }
   }
 
-  get holderNameControl() { return this.orderForm.get('holder_name'); }
-  get holderEmailControl() { return this.orderForm.get('holder_email'); }
-  get holderPhoneControl() { return this.orderForm.get('holder_phone'); }
-  get quantityControl() { return this.orderForm.get('quantity'); }
-
   decreaseQuantity(): void {
-    const current = Number(this.quantityControl?.value ?? 1);
+    const current = this.quantity();
     const next = Math.max(1, current - 1);
-    this.quantityControl?.setValue(next);
-    this.quantityControl?.markAsTouched();
-    this.quantity.set(next);
+    if (next !== current) {
+      this.quantity.set(next);
+      this.quantityControl?.setValue(next);
+      this.syncTicketsWithQuantity();
+    }
   }
 
   increaseQuantity(): void {
-    const current = Number(this.quantityControl?.value ?? 1);
+    const current = this.quantity();
     const remaining = this.packageAvailability().remaining;
-    if (remaining <= 0) {
-      this.quantityControl?.markAsTouched();
-      return;
-    }
+    if (remaining <= 0) return;
+
     const next = Math.min(remaining, current + 1);
-    this.quantityControl?.setValue(next);
-    this.quantityControl?.markAsTouched();
-    this.quantity.set(next);
+    if (next !== current) {
+      this.quantity.set(next);
+      this.quantityControl?.setValue(next);
+      this.syncTicketsWithQuantity();
+    }
   }
 
   async createOrder(): Promise<void> {
-    this.orderError.set('');
-    this.orderSuccess.set('');
+    this.setOrderErrorText('');
+    this.setOrderSuccessText('');
 
     const pkg = this.selectedPackage();
     if (!pkg?.id) {
-      this.orderError.set('Package not found.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.PACKAGE_NOT_FOUND');
       return;
     }
 
     if (!this.isClient()) {
-      this.orderError.set('Only clients can create ticket orders.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.CLIENT_ONLY');
       return;
     }
 
     this.orderForm.markAllAsTouched();
     if (this.orderForm.invalid) {
-      this.orderError.set('Please correct the invalid fields.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.FORM_INVALID');
       return;
     }
 
-    const quantity = Number(this.quantityControl?.value ?? 0);
-    if (!Number.isInteger(quantity) || quantity <= 0) {
-      this.orderError.set('Quantity must be greater than 0.');
-      return;
-    }
-
+    const quantity = this.quantity();
     const remaining = this.packageAvailability().remaining;
     if (remaining <= 0) {
-      this.orderError.set('This package is sold out.');
+      this.setOrderErrorKey('TICKETING_PUBLIC.SOLD_OUT');
       return;
     }
 
     if (quantity > remaining) {
-      this.orderError.set(`Only ${remaining} ticket(s) are still available.`);
+      this.setOrderErrorKey('TICKETING_PUBLIC.REMAINING_TICKETS', { count: remaining });
       return;
     }
 
     this.isSubmittingOrder.set(true);
 
     try {
+      const tickets = this.ticketsFormArray.value.map((t: any) => ({
+        holder_name: String(t.holder_name ?? '').trim(),
+        holder_email: String(t.holder_email ?? '').trim(),
+        holder_phone: String(t.holder_phone ?? '').trim()
+      }));
+
       const createdOrder = await firstValueFrom(this.orderService.createOrder({
         package_id: pkg.id,
         quantity,
-        holder_name: String(this.holderNameControl?.value ?? '').trim(),
-        holder_email: String(this.holderEmailControl?.value ?? '').trim(),
-        holder_phone: String(this.holderPhoneControl?.value ?? '').trim()
+        tickets
       }));
 
-      this.orderSuccess.set('Order confirmed successfully.');
-      this.router.navigate(['/ticketing/orders', createdOrder.id]);
-    } catch (err: any) {
-      const message = err?.message;
-      const errors = err?.errors;
-
-      if (errors && typeof errors === 'object') {
-        const flattened = Object.values(errors).flat().join(' | ');
-        this.orderError.set(flattened || 'Unable to create order.');
+      this.setOrderSuccessKey('TICKETING_PUBLIC.ORDER_CONFIRMED');
+      if (createdOrder?.id && Number.isInteger(createdOrder.id)) {
+        this.router.navigate(['/ticketing/orders', createdOrder.id]);
       } else {
-        this.orderError.set(String(message || 'Unable to create order.'));
+        this.router.navigate(['/ticketing/orders']);
       }
+    } catch (err: any) {
+      const parsedErrors = this.errorHandler.parseRailsErrors(err);
+      this.setOrderErrorText(parsedErrors.join(' | '));
     } finally {
       this.isSubmittingOrder.set(false);
     }
@@ -200,5 +230,25 @@ export class TicketingOrderFormComponent {
     this.router.navigate(['/login'], {
       queryParams: { returnUrl: `/ticketing/packages/${this.packageId()}/order` }
     });
+  }
+
+  private setOrderErrorKey(key: string, params?: Record<string, unknown>): void {
+    this.orderError.set(key);
+    this.orderErrorParams.set(params);
+  }
+
+  private setOrderErrorText(message: string): void {
+    this.orderError.set(message);
+    this.orderErrorParams.set(undefined);
+  }
+
+  private setOrderSuccessKey(key: string, params?: Record<string, unknown>): void {
+    this.orderSuccess.set(key);
+    this.orderSuccessParams.set(params);
+  }
+
+  private setOrderSuccessText(message: string): void {
+    this.orderSuccess.set(message);
+    this.orderSuccessParams.set(undefined);
   }
 }

@@ -31,7 +31,7 @@ export class ShowAffectationComponent {
     
     const idParam = this.route.snapshot.paramMap.get('affectationId');
 
-    const id = idParam ? Number(idParam) : null;
+    const id = idParam ? Number(idParam) : undefined;
 
        this.affectationService.getAffectation(id).subscribe(data => { 
         console.log('Affectation reçue : ', data);

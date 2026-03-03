@@ -12,6 +12,10 @@
     <section class="admin-section">
       
       <div class="task-list">
+
+        @if(tasks().length === 0) {
+          <p class="state-message">aucune tâche trouver</p>
+        } 
         @for (task of tasks(); track task.id) {
           
           <mat-card class="fest-card">
@@ -52,3 +56,14 @@
     </section>
   </main>
 </div>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>Supprimer cette affectation ?</h2>
+  <mat-dialog-content>
+    <p>Êtes-vous sûr de vouloir supprimer définitivement cette affectation ?</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Annuler</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">Supprimer</button>
+  </mat-dialog-actions>
+</ng-template>

@@ -14,7 +14,7 @@ import { MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-user-update',
-  imports: [MatButtonModule, MatCardModule, MatIconModule, CommonModule, TranslateModule,RouterLink],
+  imports: [MatLabel ,MatButtonModule, MatCardModule, MatIconModule, CommonModule, TranslateModule,RouterLink],
   templateUrl: './user-update.html',
   styleUrl: './user-update.css',
 })
@@ -30,7 +30,7 @@ export class UserUpdateAffectationComponent {
   
     const idParam = this.route.snapshot.paramMap.get('id');
 
-    const id = idParam ? Number(idParam) : null;
+    const id = idParam ? Number(idParam) : undefined;
     
        this.affectationService.getAffectation(id).subscribe(data => { 
         console.log('Tâches reçues : ', data);
@@ -43,7 +43,7 @@ export class UserUpdateAffectationComponent {
   updateStartAffectation() {
     const idParam = this.route.snapshot.paramMap.get('id');
 
-    const id = idParam ? Number(idParam) : null;
+    const id = idParam ? Number(idParam) : undefined;
 
     const now = new Date();
 

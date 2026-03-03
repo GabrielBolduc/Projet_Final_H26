@@ -45,7 +45,7 @@ class Package < ApplicationRecord
   validate :quota_cross_validation
 
   def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil, sold_out: nil)
-    relation = includes(:festival, :tickets)
+    relation = includes(:festival)
 
     if festival_id.present?
       relation = relation.for_festival(festival_id)
@@ -87,11 +87,7 @@ class Package < ApplicationRecord
   end
 
   def sold_count
-    if tickets.loaded?
-      tickets.count { |t| t.refunded_at.nil? }
-    else
-      tickets.where(refunded_at: nil).count
-    end
+    tickets.where(refunded_at: nil).count
   end
 
   def sold_out?
@@ -128,8 +124,11 @@ class Package < ApplicationRecord
 
     case category.to_sym
     when :general
-      if valid_at.to_date == expired_at.to_date
-        errors.add(:base, "Le forfait général doit s'étendre sur au moins 2 jours calendaires.")
+      if valid_at.strftime("%H:%M") != "00:00"
+        errors.add(:valid_at, "doit commencer à 00:00 pour un forfait général.")
+      end
+      if expired_at.strftime("%H:%M") != "23:59"
+        errors.add(:expired_at, "doit se terminer à 23:59 pour un forfait général.")
       end
     when :daily
       if valid_at.to_date != expired_at.to_date
@@ -142,20 +141,25 @@ class Package < ApplicationRecord
         errors.add(:base, "Le forfait journalier doit être compris entre 06:00 et 18:00.")
       end
     when :evening
-      if expired_at.to_date != valid_at.to_date && expired_at.to_date != (valid_at.to_date + 1.day)
-        errors.add(:base, "Le forfait soirée doit se limiter à une nuit (départ le lendemain avant 06:00 max).")
+      start_date = valid_at.to_date
+      end_date = expired_at.to_date
+      day_span = (end_date - start_date).to_i
+
+      if day_span < 0 || day_span > 1
+        errors.add(:base, "Le forfait soirée doit se limiter au même jour ou au lendemain (maximum 06:00).")
+        return
       end
 
-      start_hour = valid_at.hour + (valid_at.min / 60.0)
-      if start_hour < 18 && start_hour >= 6
-        errors.add(:valid_at, "doit commencer après 18:00 pour un forfait soirée.")
+      if seconds_since_midnight(valid_at) < 18.hours
+        errors.add(:valid_at, "doit commencer à 18:00 ou après pour un forfait soirée.")
       end
 
-      if expired_at.to_date > valid_at.to_date
-        end_hour = expired_at.hour + (expired_at.min / 60.0)
-        if end_hour > 6.0001
-          errors.add(:expired_at, "doit se terminer avant 06:00 le lendemain.")
+      if day_span == 0
+        if valid_at.strftime("%H:%M") == "00:00" && expired_at.strftime("%H:%M") == "23:59"
+          errors.add(:base, "Le forfait soirée ne peut pas couvrir 00:00 à 23:59 sur une même journée.")
         end
+      elsif seconds_since_midnight(expired_at) > 6.hours
+        errors.add(:expired_at, "doit se terminer à 06:00 maximum le lendemain.")
       end
     end
   end
@@ -187,12 +191,21 @@ class Package < ApplicationRecord
   end
 
   def validate_daily_evening_quota
-    (valid_at.to_date..expired_at.to_date).each do |day|
-      existing_quota_sum = festival.packages
-                                   .where.not(category: :general)
-                                   .where.not(id: id)
-                                   .select { |p| day.between?(p.valid_at.to_date, p.expired_at.to_date) }
-                                   .sum(&:quota)
+    days_to_check = if category.to_sym == :evening
+      [ valid_at.to_date ]
+    else
+      (valid_at.to_date..expired_at.to_date).to_a
+    end
+
+    existing_non_general = festival.packages
+                                 .where.not(category: :general)
+                                 .where.not(id: id)
+                                 .to_a
+
+    days_to_check.each do |day|
+      existing_quota_sum = existing_non_general.sum do |existing_package|
+        quota_capacity_days_for(existing_package).include?(day) ? existing_package.quota.to_i : 0
+      end
 
       if (existing_quota_sum + quota) > festival.daily_capacity
         remaining = festival.daily_capacity - existing_quota_sum
@@ -220,6 +233,21 @@ class Package < ApplicationRecord
 
     if expired_at < valid_at
       errors.add(:expired_at, "doit être ultérieure à la date de début")
+    end
+  end
+
+  def seconds_since_midnight(value)
+    value.hour * 3600 + value.min * 60 + value.sec
+  end
+
+  def quota_capacity_days_for(package)
+    case package.category.to_sym
+    when :evening
+      [ package.valid_at.to_date ]
+    when :daily
+      (package.valid_at.to_date..package.expired_at.to_date).to_a
+    else
+      []
     end
   end
 end

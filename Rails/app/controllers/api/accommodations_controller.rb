@@ -16,7 +16,7 @@ class Api::AccommodationsController < ApiController
 
     data = @accommodations.map do |acc|
       acc.as_json.merge(
-        units: acc.units.map(&:formatted_json)
+        units: acc.units.map { |u| u.formatted_json(request.base_url) }
       )
     end
 

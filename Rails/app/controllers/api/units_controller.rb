@@ -1,81 +1,80 @@
 class Api::UnitsController < ApiController
-    before_action :set_reservation, only: [ :show, :update, :destroy ]
-    before_action :require_owner_or_admin!, only: [ :show, :update, :destroy ]
+    before_action :set_unit, only: [ :show, :update, :destroy ]
+    before_action :require_admin!, except: [ :index, :show ]
 
-    # List reservations with optional filters
     def index
-        @reservations = if current_user.is_a?(Admin)
-            Reservation.all
-        else
-            current_user.reservations
-        end
+        @accommodation = Accommodation.find(params[:accommodation_id])
+        return render_logic_error("Accommodation not found") unless @accommodation
 
-        # Optional filtering by Unit or Festival
-        @reservations = @reservations.where(unit_id: params[:unit_id]) if params[:unit_id]
-        @reservations = @reservations.where(festival_id: params[:festival_id]) if params[:festival_id]
+        @units = @accommodation.units.with_attached_image
 
         render json: {
             status: "success",
-            data: @reservations
+            data: @units.map { |u| format_unit(u) }
         }
     end
 
     def show
         render json: {
             status: "success",
-            data: @reservation
+            data: @unit.as_json.merge(image_url: @unit.image.attached? ? url_for(@unit.image) : nil)
         }, status: :ok
     end
 
     def create
-        @reservation = Reservation.new(reservation_params)
-        @reservation.user = current_user unless current_user.is_a?(Admin) && params[:reservation][:user_id]
+        @accommodation = Accommodation.find_by(id: params[:accommodation_id])
+        return render_logic_error("Accommodation not found") unless @accommodation
 
-        if @reservation.save
-            render json: { status: "success", data: @reservation }, status: :ok
+        @unit = @accommodation.units.new(unit_params)
+
+        if @unit.save
+            render json: { status: "success", data: @unit }, status: :ok
         else
-            render_logic_error(@reservation.errors.full_messages)
+            render_logic_error(@unit.errors.full_messages)
         end
     end
 
     def update
-        if @reservation.update(reservation_params)
-            render json: { status: "success", data: @reservation }, status: :ok
+        if @unit.update(unit_params)
+            render json: { status: "success", data: @unit }, status: :ok
         else
-            render_logic_error(@reservation.errors.full_messages)
+            render_logic_error(@unit.errors.full_messages)
         end
     end
 
     def destroy
-        if @reservation.destroy
-            render json: { status: "success", message: "Reservation cancelled" }, status: :ok
-        else
-            render_logic_error("Could not cancel reservation")
-        end
+        @unit.destroy
+        render json: { status: "success", message: "Unit deleted" }, status: :ok
     end
 
     private
 
-    def set_reservation
-        @reservation = Reservation.find_by(id: params[:id])
-        render_logic_error("Reservation not found") unless @reservation
+    def set_unit
+        @unit = Unit.find_by(id: params[:id])
+        render_logic_error("Unit not found") unless @unit
     end
 
-    def reservation_params
-        params.require(:reservation).permit(
-            :unit_id, :festival_id, :user_id, 
-            :arrival_at, :departure_at, :nb_of_people, 
-            :reservation_name, :phone_number
+    def unit_params
+        params.require(:unit).permit(
+            :type, :cost_person_per_night, :quantity, :wifi,
+            :water, :electricity, :parking_cost, :image,
+            food_options: []
         )
     end
 
-    def require_owner_or_admin!
-        unless current_user.is_a?(Admin) || @reservation.user_id == current_user.id
-            render_logic_error("Access denied: You do not own this reservation.")
+    def require_admin!
+        unless current_user&.is_a?(Admin)
+        render_logic_error("Access denied: Admin privileges required.")
         end
     end
 
     def render_logic_error(message)
         render json: { status: "error", message: message }, status: :ok
+    end
+
+    def format_unit(unit)
+        unit.as_json.merge({
+            image_url: unit.image.attached? ? url_for(unit.image) : nil
+        })
     end
 end

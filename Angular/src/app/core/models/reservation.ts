@@ -1,5 +1,6 @@
 export interface Reservation {
   id?: number;
+  status: 'active' | 'cancelled' | 'completed';
   
   arrival_at: string | Date; 
   departure_at: string | Date;
@@ -15,4 +16,16 @@ export interface Reservation {
 
   created_at?: string | Date;
   updated_at?: string | Date;
+  unit?: {
+    type: string;
+    image_url: string;
+    cost_person_per_night: number;
+    accommodation?: {
+      name: string;
+      address: string;
+      category: string;
+      latitude: number | string;
+      longitude: number | string;
+    }
+  };
 }

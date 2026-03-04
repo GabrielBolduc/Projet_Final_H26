@@ -7,6 +7,15 @@ export enum UnitType {
   DeluxeTerrain = 'DeluxeTerrain'
 }
 
+export const UnitCapacity: Record<UnitType, number> = {
+  [UnitType.SimpleRoom]: 1,
+  [UnitType.DoubleRoom]: 2,
+  [UnitType.FamilyRoom]: 4,
+  [UnitType.SmallTerrain]: 2,
+  [UnitType.StandardTerrain]: 4,
+  [UnitType.DeluxeTerrain]: 8
+};
+
 export type FoodOption = 'None' | 'Canteen' | 'Room service' | 'Restaurant';
 
 export interface Unit {

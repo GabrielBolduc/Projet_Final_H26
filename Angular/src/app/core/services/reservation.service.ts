@@ -9,10 +9,20 @@ export class ReservationsService {
   private http = inject(HttpClient);
   private readonly BASE_URL = '/api';
 
-  list(filters?: { unit_id?: number; festival_id?: number }): Observable<ApiResponse<Reservation[]>> {
+  list(filters?: { unit_id?: number; festival_id?: number; history?: boolean }): Observable<ApiResponse<Reservation[]>> {
     let params = new HttpParams();
-    if (filters?.unit_id) params = params.set('unit_id', filters.unit_id.toString());
-    if (filters?.festival_id) params = params.set('festival_id', filters.festival_id.toString());
+    
+    if (filters?.unit_id) {
+      params = params.set('unit_id', filters.unit_id.toString());
+    }
+    
+    if (filters?.festival_id) {
+      params = params.set('festival_id', filters.festival_id.toString());
+    }
+    
+    if (filters?.history !== undefined) {
+      params = params.set('history', filters.history.toString());
+    }
 
     return this.http.get<ApiResponse<Reservation[]>>(`${this.BASE_URL}/reservations`, { params });
   }

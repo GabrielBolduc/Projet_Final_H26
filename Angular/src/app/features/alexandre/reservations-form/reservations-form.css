@@ -1,0 +1,145 @@
+/* Container & Card */
+.perf-card {
+  max-width: 750px;
+  margin: 2rem auto; 
+  padding: 1.5rem 2rem; 
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1.25rem; 
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Header Summary Section */
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+}
+
+.header-text strong { display: block; font-size: 1rem; color: #333; }
+.header-text p { margin: 0; font-size: 0.85rem; color: #666; }
+.fest-hint { color: #1976d2; font-weight: 500; }
+
+/* Form Layout */
+.perf-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 15px;
+}
+
+.grid-row-1 {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+}
+
+.grid-row-2 {
+  display: grid;
+  width: 100%;   
+  gap: 12px 20px; 
+  align-items: start;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Material Field Fixes */
+mat-form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* Error Display (Matches AccommodationsForm) */
+.form-error {
+  background-color: #fdecea;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  border-left: 4px solid #b91c1c;
+  font-size: 0.9rem;
+}
+
+/* Pricing Highlight Box */
+.price-box {
+  background: #e8f5e9;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-end;
+  border: 1px solid #c8e6c9;
+  margin-top: 10px;
+}
+
+.price-info { text-align: right; display: flex; flex-direction: column; }
+.price-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #2e7d32; }
+.price-value { font-size: 1.75rem; font-weight: 700; color: #333; }
+
+/* Buttons & Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end; 
+  gap: 12px; 
+  margin-top: 1.5rem; 
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0; 
+}
+
+.action-btn { padding: 0 24px; font-size: 0.95rem; height: 40px; }
+
+/* Calendar "Taken" Styling (Needs ::ng-deep for Material Overlay) */
+::ng-deep .date-taken {
+  background-color: #ffebee !important;
+  color: #b71c1c !important;
+  border-radius: 50%;
+}
+
+/* Responsive Handling */
+@media (max-width: 768px) {
+  .grid-row-2 { grid-template-columns: 1fr; gap: 8px; }
+  .price-box { justify-content: center; text-align: center; }
+  .price-info { text-align: center; }
+}
+
+/* Calendar "Taken" Styling (Dates already booked) */
+::ng-deep .date-taken .mat-calendar-body-cell-content {
+  background-color: #ffebee !important;
+  color: #b71c1c !important;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* Optional: Add a red dot under taken dates for extra clarity */
+::ng-deep .date-taken::after {
+  content: "•";
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+/* Visual style for disabled dates (Outside Min/Max festival range) */
+::ng-deep .mat-calendar-body-disabled {
+  opacity: 0.3;
+}
+
+/* Ensure the range selection color matches your primary theme */
+::ng-deep .mat-calendar-body-in-range::before {
+  background: rgba(25, 118, 210, 0.1) !important;
+}

@@ -55,6 +55,7 @@ class Unit < ApplicationRecord
     end
 
     as_json.merge({
+      type: self.type,
       image_url: full_image_url,
       max_capacity: max_capacity,
       food_options: food_options_as_array

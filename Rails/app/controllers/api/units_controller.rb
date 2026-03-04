@@ -1,4 +1,4 @@
-class Api::ReservationsController < ApiController
+class Api::UnitsController < ApiController
     before_action :set_reservation, only: [ :show, :update, :destroy ]
     before_action :require_owner_or_admin!, only: [ :show, :update, :destroy ]
 

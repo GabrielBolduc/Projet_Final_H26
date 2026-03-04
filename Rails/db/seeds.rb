@@ -621,7 +621,7 @@ res1 = Reservation.create!(
   departure_at: Date.new(2026, 7, 17),
   nb_of_people: 1,
   reservation_name: "Jean Daniel",
-  phone_number: "+1 (819) 533-8888",
+  phone_number: "18195553333",
   user: c,
   unit: unit1,
   festival: f

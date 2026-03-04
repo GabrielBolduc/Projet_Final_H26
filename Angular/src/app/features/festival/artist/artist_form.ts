@@ -12,6 +12,8 @@ import { Artist } from '../../../core/models/artist';
 import { ArtistService } from '../../../core/services/artist.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { MatCardModule } from '@angular/material/card';
+import { TranslateModule, TranslateService } from '@ngx-translate/core'; 
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-artist-form',
@@ -19,7 +21,8 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     CommonModule, ReactiveFormsModule, RouterModule,
     MatFormFieldModule, MatInputModule, MatButtonModule, 
-    MatIconModule, MatProgressSpinnerModule, MatCardModule
+    MatIconModule, MatProgressSpinnerModule, MatCardModule, TranslateModule,
+    MatSnackBarModule
   ],
   templateUrl: './artist_form.html',
   styleUrls: ['./artist_form.css']
@@ -30,6 +33,8 @@ export class ArtistFormComponent implements OnInit {
   private errorHandler = inject(ErrorHandlerService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private snackBar = inject(MatSnackBar); 
+  private translate = inject(TranslateService); 
 
   artistForm: FormGroup;
   isEditMode = signal(false);
@@ -42,7 +47,6 @@ export class ArtistFormComponent implements OnInit {
 
   constructor() {
     this.artistForm = this.fb.group({
-      // Validations strictes : Requis + Max longueur
       name: ['', [Validators.required, Validators.maxLength(100)]],
       genre: ['', [Validators.required, Validators.maxLength(50)]],
       bio: ['', [Validators.maxLength(2000)]],
@@ -50,7 +54,6 @@ export class ArtistFormComponent implements OnInit {
     });
   }
 
-  // Getter pour simplifier le HTML (ex: f['name'])
   get f() { return this.artistForm.controls; }
 
   ngOnInit(): void {
@@ -71,6 +74,11 @@ export class ArtistFormComponent implements OnInit {
       }
     } catch (error) {
       this.serverErrors.set(this.errorHandler.parseRailsErrors(error));
+      this.snackBar.open(
+        this.translate.instant('ARTIST.LOAD_ERROR') || 'Erreur de chargement', 
+        this.translate.instant('COMMON.CLOSE'), 
+        { duration: 4000 }
+      );
     } finally {
       this.isLoading.set(false);
     }
@@ -108,12 +116,32 @@ export class ArtistFormComponent implements OnInit {
       if (this.isEditMode()) {
         const id = this.route.snapshot.params['id'];
         await firstValueFrom(this.artistService.updateArtist(id, artistData, this.selectedFile || undefined));
+
+        this.snackBar.open(
+          this.translate.instant('ARTIST.EDIT_SUCCESS') || 'Artiste modifié', 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       } else {
         await firstValueFrom(this.artistService.createArtist(artistData, this.selectedFile || undefined));
+        
+        this.snackBar.open(
+          this.translate.instant('ARTIST.ADD_SUCCESS') || 'Artiste ajouté', 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       }
       this.router.navigate(['/admin/artistes']);
     } catch (error) {
-      this.serverErrors.set(this.errorHandler.parseRailsErrors(error));
+      const errors = this.errorHandler.parseRailsErrors(error);
+      this.serverErrors.set(errors);
+      
+      const errorMessage = errors.length > 0 ? errors[0] : (this.translate.instant('ARTIST.SAVE_ERROR') || 'Erreur lors de la sauvegarde');
+      this.snackBar.open(
+        errorMessage, 
+        this.translate.instant('COMMON.UNDERSTOOD'), 
+        { duration: 6000 }
+      );
     } finally {
       this.isSaving.set(false);
     }

@@ -63,8 +63,8 @@ class Api::UnitsController < ApiController
 
     def reservation_params
         params.require(:reservation).permit(
-            :unit_id, :festival_id, :user_id, 
-            :arrival_at, :departure_at, :nb_of_people, 
+            :unit_id, :festival_id, :user_id,
+            :arrival_at, :departure_at, :nb_of_people,
             :reservation_name, :phone_number
         )
     end

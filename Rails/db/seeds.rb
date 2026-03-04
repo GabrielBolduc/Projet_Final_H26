@@ -691,7 +691,7 @@ Affectation.create!(
     responsability: "Receptionné la commande de projecteur de projecteur & co",
     expected_start: f.start_at.to_time.change(hour: 9, min: 0),
     expected_end: f.start_at.to_time.change(hour: 10, min: 0)
-) 
+)
 
 Affectation.create!(
     user: Staff.last,

@@ -5,11 +5,11 @@ class Performance < ApplicationRecord
 
 
   scope :with_details, -> { includes(:artist, :stage, :festival) }
-  
+
   scope :chronological, -> { order(start_at: :asc) }
-  
+
   scope :for_festival, ->(f_id) { where(festival_id: f_id) }
-  
+
   scope :by_stage, ->(stage_id) { where(stage_id: stage_id) }
 
 
@@ -33,7 +33,7 @@ class Performance < ApplicationRecord
   validate :festival_must_be_active
 
   private
-  
+
   def end_at_after_start_at
     return if end_at.blank? || start_at.blank?
     if end_at <= start_at

@@ -2,11 +2,11 @@ class Api::PerformancesController < ApiController
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_performance, only: [ :show, :update, :destroy ]
-  
+
   def index
     # 1. Base query optimisée
     performances = Performance.with_details.chronological
-    
+
     # 2. Filtre Festival (Obligatoire généralement)
     if params[:festival_id].present?
       performances = performances.for_festival(params[:festival_id])
@@ -26,7 +26,7 @@ class Api::PerformancesController < ApiController
     unless current_user&.is_a?(Admin)
       performances = performances.publicly_visible
     end
-    
+
     render json: {
       status: "success",
       data: performances.as_json(json_options)
@@ -76,7 +76,7 @@ class Api::PerformancesController < ApiController
         message: "Échec de la mise à jour",
         errors: @performance.errors.messages
       }, status: :ok
-    end 
+    end
   end
 
   def destroy
@@ -113,9 +113,9 @@ class Api::PerformancesController < ApiController
   def json_options
     {
       include: {
-        stage: { only: [:id, :name] },
-        festival: { only: [:id, :name, :status] },
-        artist: { methods: [:image_url], only: [:id, :name, :genre] }
+        stage: { only: [ :id, :name ] },
+        festival: { only: [ :id, :name, :status ] },
+        artist: { methods: [ :image_url ], only: [ :id, :name, :genre ] }
       }
     }
   end

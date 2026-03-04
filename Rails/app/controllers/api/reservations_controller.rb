@@ -10,8 +10,8 @@ class Api::ReservationsController < ApiController
 
     # Only run this if current_user exists
     base_query = admin_user? ? Reservation.all : current_user.reservations
-    
-    if params[:history] == 'true'
+
+    if params[:history] == "true"
       @reservations = base_query.where(unit_id: nil)
     else
       @reservations = base_query.where.not(unit_id: nil)
@@ -68,8 +68,8 @@ class Api::ReservationsController < ApiController
 
   def reservation_params
     params.require(:reservation).permit(
-      :unit_id, :festival_id, :user_id, 
-      :arrival_at, :departure_at, :nb_of_people, 
+      :unit_id, :festival_id, :user_id,
+      :arrival_at, :departure_at, :nb_of_people,
       :reservation_name, :phone_number
     )
   end

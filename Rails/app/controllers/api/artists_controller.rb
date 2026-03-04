@@ -7,18 +7,18 @@ class Api::ArtistsController < ApiController
     artists = Artist.with_attached_image.alphabetical
     artists = artists.search(params[:search]) if params[:search].present?
     artists = artists.by_genre(params[:genre]) if params[:genre].present?
-    artists = artists.headliners if params[:headliners] == 'true'
+    artists = artists.headliners if params[:headliners] == "true"
 
     render json: {
       status: "success",
-      data: artists.as_json(methods: [:image_url])
+      data: artists.as_json(methods: [ :image_url ])
     }, status: :ok
   end
 
   def show
     render json: {
       status: "success",
-      data: @artist.as_json(methods: [:image_url])
+      data: @artist.as_json(methods: [ :image_url ])
     }, status: :ok
   end
 
@@ -28,7 +28,7 @@ class Api::ArtistsController < ApiController
     if artist.save
       render json: {
         status: "success",
-        data: artist.as_json(methods: [:image_url])
+        data: artist.as_json(methods: [ :image_url ])
       }, status: :ok
     else
       render json: {
@@ -43,7 +43,7 @@ class Api::ArtistsController < ApiController
     if @artist.update(artist_params)
       render json: {
         status: "success",
-        data: @artist.as_json(methods: [:image_url])
+        data: @artist.as_json(methods: [ :image_url ])
       }, status: :ok
     else
       render json: {

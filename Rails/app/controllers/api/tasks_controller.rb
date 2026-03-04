@@ -5,15 +5,14 @@ class Api::TasksController < ApiController
 
 
     def index
-
-        #order = params[:order] == 'desc' ? :asc : :desc
+        # order = params[:order] == 'desc' ? :asc : :desc
 
         @tasks = Task.all.order(updated_at: :desc)
 
-        
+
 
         if params[:completed].present?
-        @tasks = @tasks.where.not( id: Affectation.where(end: nil).select(:task_id))
+        @tasks = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id))
         end
 
         if params[:user_name].present?

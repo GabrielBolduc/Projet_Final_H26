@@ -23,7 +23,7 @@ class ApiController < ApplicationController
       errors: record.errors.messages
     }, status: :ok
   end
-  
+
   def render_error(message)
     render json: {
       status: "error",
@@ -35,8 +35,8 @@ class ApiController < ApplicationController
 
   def not_found
     render json: {
-      status: "error",           
+      status: "error",
       message: "Resource not found"
-    }, status: :ok 
+    }, status: :ok
   end
 end

@@ -3,9 +3,9 @@ class Artist < ApplicationRecord
   has_many :performances, dependent: :restrict_with_error
 
   scope :alphabetical, -> { order(name: :asc) }
-  scope :search, ->(query) { where("name LIKE ?", "%#{query}%")}
-  scope :by_genre, ->(genre) { where("genre LIKE ?", "%#{genre}%")}
-  scope :headliners, -> { where(popularity: [4, 5]).order(popularity: :desc) }
+  scope :search, ->(query) { where("name LIKE ?", "%#{query}%") }
+  scope :by_genre, ->(genre) { where("genre LIKE ?", "%#{genre}%") }
+  scope :headliners, -> { where(popularity: [ 4, 5 ]).order(popularity: :desc) }
   scope :with_performances, -> { joins(:performances).distinct }
 
   before_validation :strip_whitespace

@@ -7,8 +7,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { firstValueFrom, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
-
-// Material
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
@@ -17,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { Performance } from '../../../core/models/performance';
@@ -170,8 +167,7 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
     this.serverErrors.set([]);
 
     try {
-      const festivals = await firstValueFrom(this.festivalService.getFestivals());
-      const ongoing = festivals.find(f => f.status === 'ongoing');
+      const ongoing = await firstValueFrom(this.festivalService.getCurrentFestival());
 
       if (ongoing) {
         this.currentFestival.set(ongoing);
@@ -207,4 +203,4 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
       performances: groups[key]
     }));
   }
-}
+} 

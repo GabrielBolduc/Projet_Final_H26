@@ -3,14 +3,12 @@ class Api::ReservationsController < ApiController
   before_action :require_permission!, only: [ :show, :update, :destroy ]
 
   def index
-    if current_user.nil?
-      return render json: { status: "success", data: [], message: "Not logged in" }
-    end
+    return render json: { status: "success", data: [] } if current_user.nil?
 
     query = if admin_user?
               Reservation.all
             elsif params[:history] == 'true'
-              current_user.reservations.cancelled.or(current_user.reservations.completed)
+              current_user.reservations.where(status: [:completed, :cancelled])
             else
               current_user.reservations.active
             end
@@ -19,7 +17,6 @@ class Api::ReservationsController < ApiController
 
     data = @reservations.map do |res|
       json = res.as_json(include: :festival)
-      
       if res.unit
         json[:unit] = res.unit.formatted_json(request.base_url).merge({
           accommodation: res.unit.accommodation.as_json

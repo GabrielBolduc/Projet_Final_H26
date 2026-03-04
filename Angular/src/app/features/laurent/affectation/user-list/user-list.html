@@ -10,6 +10,10 @@
 
     <div class="affectation-list">
 
+      @if (affectations().length === 0) {
+        <p class="state-message">aucune affectation trouver</p>
+      }
+
       @for (affectation of affectations(); track affectation.id) {
 
         <mat-card class="affectation-card">
@@ -41,31 +45,44 @@
 
               <div class="info-row">
                 <mat-icon>schedule</mat-icon>
-                start:
+                expected start:
                 {{ affectation.expected_start | date:'short' }}
               </div>
 
               <div class="info-row">
                 <mat-icon>schedule</mat-icon>
-                end:
+                expected end:
                 {{ affectation.expected_end | date:'short' }}
               </div>
+
+              <div class="info-row">
+               
+                status:
+                @if (affectation.start && affectation.end) {
+                  Terminé
+                } @else if (affectation.start && !affectation.end) {
+                  En cours
+                } @else {
+                  Non commencé
+                }
+              </div>
+              
 
             </div>
 
 
             <div class="action-section">
 
-              <button mat-flat-button color="primary" class="btn-dash" [routerLink]="['affectations', affectation.id]">
+              <button mat-flat-button color="primary" class="btn-dash" [routerLink]="[ affectation.id]">
                 {{ 'AFFECTATIONS.MORE' | translate }}
               </button>
-              @if(affectation.end){
-                <button class="icon-btn edit" [routerLink]="['affectations','edit', affectation.id]" title="Modifier">
-                    <mat-icon>edit_square</mat-icon>
+             
+              @if (!affectation.start || !affectation.end) {
+              <button class="icon-btn edit" [routerLink]="['edit', affectation.id]" title="Modifier">
+                  <mat-icon>edit_square</mat-icon>
                 </button>
               }
-               
-               
+              
             </div>
 
           </mat-card-content>

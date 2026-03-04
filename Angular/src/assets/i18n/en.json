@@ -147,7 +147,8 @@
     "PROG": "Schedule",
     "TASK": "Tasks",
     "TICKET": "Ticketing",
-    "ARTIST": "Artits"
+    "ARTIST": "Artits",
+    "AFFECTATIONS": "Affectations"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "New Package",
@@ -361,7 +362,10 @@
     "EXPECTED_END": "Expected end",
     "START": "Actual start",
     "END": "Actual end",
-    "FESTIVAL": "Festival"
+    "FESTIVAL": "Festival",
+    "TASK": "Task",
+    "UPDATE_START": "Update start time",
+    "START_TASK": "Start task"
   },
   "ACCOMMODATIONS": {
     "ADD": "ADD",

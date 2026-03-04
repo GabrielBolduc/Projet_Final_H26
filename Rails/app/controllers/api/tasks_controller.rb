@@ -1,6 +1,8 @@
 class Api::TasksController < ApiController
     before_action :authenticate_user!
     before_action :set_task, only: %i[show update destroy]
+    before_action :require_admin!, only: [ :create, :update, :destroy ]
+
 
     def index
 

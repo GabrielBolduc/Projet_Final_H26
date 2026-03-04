@@ -149,7 +149,8 @@
     "PROG": "Programmation",
     "TASK": "Tâches",
     "TICKET": "Billetterie",
-    "ARTIST": "Artistes"
+    "ARTIST": "Artistes",
+    "AFFECTATIONS": "Affectations"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "Nouveau Forfait",
@@ -363,7 +364,10 @@
     "EXPECTED_END": "Fin prévue",
     "START": "Début effectif",
     "END": "Fin effective",
-    "FESTIVAL": "Festival"
+    "FESTIVAL": "Festival",
+    "TASK": "Tâche",
+    "UPDATE_START": "Mettre à jour l'heure de début",
+    "START_TASK": "Commencer la tâche"
   },
   "ACCOMMODATIONS": {
     "ADD": "AJOUTER",

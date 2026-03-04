@@ -120,6 +120,16 @@
         </button>
       }
 
+      @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item [routerLink]="['/affectations']">
+          <mat-icon>assignment</mat-icon>
+          <span>{{'ADMIN_NAV.AFFECTATIONS' | translate}}</span>
+        </button>
+        
+      }
+
       @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
         <mat-divider></mat-divider>
         <div mat-subheader style="color: var(--mat-sys-primary); font-weight: bold; padding: 0 16px;">Administration</div>

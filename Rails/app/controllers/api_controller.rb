@@ -14,4 +14,6 @@ class ApiController < ApplicationController
       }, status: :ok
     end
   end
+
+  
 end

@@ -1,7 +1,7 @@
 
 class Unit < ApplicationRecord
   belongs_to :accommodation
-  has_many :reservations, dependent: :destroy
+  has_many :reservations, dependent: :nullify
   has_one_attached :image
 
   CAPACITIES = {
@@ -43,9 +43,19 @@ class Unit < ApplicationRecord
     end
   end
 
-  def formatted_json
+  def formatted_json(base_url = nil)
+    image_path = if image.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+    end
+
+    full_image_url = if image_path && base_url
+      "#{base_url}#{image_path}"
+    else
+      image_path
+    end
+
     as_json.merge({
-      image_url: image.attached? ? Rails.application.routes.url_helpers.url_for(image) : nil,
+      image_url: full_image_url,
       max_capacity: max_capacity,
       food_options: food_options_as_array
     })

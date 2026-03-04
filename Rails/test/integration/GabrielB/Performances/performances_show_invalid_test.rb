@@ -20,7 +20,7 @@ class PerformancesShowInvalidTest < ActionDispatch::IntegrationTest
     # format et donne reponse
     json = JSON.parse(response.body)
     assert_equal "error", json["status"]
-    assert_equal "Performance introuvable.", json["message"]
+    assert_equal "Resource not found", json["message"]
   end
 
   test "should forbid access if performance is not ongoing and user is not admin" do

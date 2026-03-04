@@ -1,6 +1,4 @@
 class Api::ArtistsController < ApiController
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
-
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_artist, only: [ :show, :update, :destroy ]

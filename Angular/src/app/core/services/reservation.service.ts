@@ -1,51 +1,56 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-
-export interface ApiResponse<T> {
-  status: string;
-  data: T;
-  message?: string;
-  code?: number;
-}
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { Reservation } from '@core/models/reservation';
+import { ApiResponse } from '../models/api-response';
 
 @Injectable({ providedIn: 'root' })
-export class ReservationService {
+export class ReservationsService {
   private http = inject(HttpClient);
-  private readonly API_URL = '/api/reservations';
+  private readonly BASE_URL = '/api';
 
-  getReservations(): Observable<ApiResponse<any[]>> {
-    return this.http.get<ApiResponse<any[]>>(this.API_URL).pipe(
-      catchError(error => {
-        console.error('Error fetching reservations', error);
-        return of({ status: 'error', data: [] });
+  list(filters?: { unit_id?: number; festival_id?: number }): Observable<ApiResponse<Reservation[]>> {
+    let params = new HttpParams();
+    if (filters?.unit_id) params = params.set('unit_id', filters.unit_id.toString());
+    if (filters?.festival_id) params = params.set('festival_id', filters.festival_id.toString());
+
+    return this.http.get<ApiResponse<Reservation[]>>(`${this.BASE_URL}/reservations`, { params });
+  }
+
+  get(id: number): Observable<Reservation> {
+    return this.http.get<ApiResponse<Reservation>>(`${this.BASE_URL}/reservations/${id}`).pipe(
+      map(res => this.handleResponse(res))
+    );
+  }
+
+  create(reservation: Partial<Reservation>): Observable<Reservation> {
+    return this.http.post<ApiResponse<Reservation>>(
+      `${this.BASE_URL}/reservations`, 
+      { reservation }
+    ).pipe(map(res => this.handleResponse(res)));
+  }
+
+  update(id: number, reservation: Partial<Reservation>): Observable<Reservation> {
+    return this.http.patch<ApiResponse<Reservation>>(
+      `${this.BASE_URL}/reservations/${id}`, 
+      { reservation }
+    ).pipe(map(res => this.handleResponse(res)));
+  }
+
+  delete(id: number): Observable<void> {
+    return this.http.delete<ApiResponse<null>>(`${this.BASE_URL}/reservations/${id}`).pipe(
+      map(res => {
+        if (res.status === 'error') throw new Error(res.message);
+        return;
       })
     );
   }
 
-  create(reservationData: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(this.API_URL, { reservation: reservationData }).pipe(
-      catchError(error => {
-        console.error('Error creating reservation', error);
-        return of({ status: 'error', data: null });
-      })
-    );
-  }
-
-  update(id: number, reservationData: any): Observable<ApiResponse<any>> {
-    return this.http.put<ApiResponse<any>>(`${this.API_URL}/${id}`, { reservation: reservationData }).pipe(
-      catchError(error => {
-        console.error('Error updating reservation', error);
-        return of({ status: 'error', data: null });
-      })
-    );
-  }
-
-  delete(id: number): Observable<boolean> {
-    return this.http.delete<ApiResponse<any>>(`${this.API_URL}/${id}`).pipe(
-      map(response => response.status === 'success'),
-      catchError(() => of(false))
-    );
+  private handleResponse<T>(response: ApiResponse<T>): T {
+    if (response.status === 'success') {
+      return response.data;
+    } else {
+      throw new Error(response.message || 'An unknown error occurred');
+    }
   }
 }

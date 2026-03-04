@@ -160,7 +160,7 @@ artist1 = Artist.create!(
   name: "Bob",
   genre: "Rock",
   popularity: 4,
-  bio: "Good music"
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget.  "
 )
 artist1.reload
 
@@ -174,7 +174,7 @@ artist2 = Artist.create!(
   name: "Louis",
   genre: "Hip hop",
   popularity: 3,
-  bio: "Good music"
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget.  "
 )
 artist2.image.attach(
   io: File.open(Rails.root.join('db/files/artist2.jpg')),
@@ -186,7 +186,7 @@ artist3 = Artist.create!(
   name: "Alice",
   genre: "Pop",
   popularity: 4,
-  bio: "Good music"
+  bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin magna risus, laoreet imperdiet porttitor in, pulvinar at nibh. Nulla at vulputate enim. Etiam vehicula ligula nec mi euismod imperdiet. Maecenas nulla dolor, egestas eu bibendum eget, sollicitudin eget neque. Nulla facilisi. Ut eu lacus ipsum. Vivamus sit amet dolor justo. Cras a arcu id orci lacinia efficitur eget vehicula libero. Nulla facilisi. Sed eget facilisis eros. Nunc vehicula egestas elit, ut bibendum magna facilisis eget.  "
 )
 artist3.image.attach(
   io: File.open(Rails.root.join('db/files/artist3.jpg')),
@@ -414,8 +414,8 @@ p_general = Package.create!(
   price: 150.00,
   quota: 4,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 0),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
+  valid_at: f.start_at.beginning_of_day,
+  expired_at: f.end_at.end_of_day,
   festival: f
 )
 
@@ -491,8 +491,8 @@ p_general_flex = Package.create!(
   price: 175.00,
   quota: 10,
   category: "general",
-  valid_at: f.start_at.to_time.change(hour: 0),
-  expired_at: f.end_at.to_time.change(hour: 23, min: 59),
+  valid_at: f.start_at.beginning_of_day,
+  expired_at: f.end_at.end_of_day,
   festival: f
 )
 
@@ -502,8 +502,8 @@ p_completed = Package.create!(
   price: 130.00,
   quota: 3,
   category: "general",
-  valid_at: f2.start_at.to_time.change(hour: 0),
-  expired_at: f2.end_at.to_time.change(hour: 23, min: 59),
+  valid_at: f2.start_at.beginning_of_day,
+  expired_at: f2.end_at.end_of_day,
   festival: f2
 )
 
@@ -621,7 +621,7 @@ res1 = Reservation.create!(
   departure_at: Date.new(2026, 7, 17),
   nb_of_people: 1,
   reservation_name: "Jean Daniel",
-  phone_number: "8195338888",
+  phone_number: "18195553333",
   user: c,
   unit: unit1,
   festival: f

@@ -24,114 +24,137 @@
       @if (festivalArtists().length > 0) {
         <section class="admin-section artists-showcase">
           <h2 class="section-label">{{'PUBLIC.ARTIST' | translate}}</h2>
-          
           <div class="artist-grid">
             @for (item of festivalArtists(); track item.artist.id) {
               <mat-card class="artist-card">
-                
                 <div class="image-container">
                   @if (item.artist.image_url) {
                     <img [src]="item.artist.image_url" [alt]="item.artist.name" class="artist-image">
                   } @else {
-                    <div class="placeholder-image">
-                      <mat-icon>person</mat-icon>
-                    </div>
+                    <div class="placeholder-image"><mat-icon>person</mat-icon></div>
                   }
                 </div>
-
                 <mat-card-content class="card-content">
                   <h4 class="artist-name">{{ item.artist.name }}</h4>
-                  
                   <p class="artist-date">
                     <mat-icon inline>calendar_today</mat-icon>
                     {{ item.date | date:'EEEE d MMMM' : undefined : currentLang() | titlecase }}
                   </p>
                 </mat-card-content>
-
                 <mat-card-actions class="card-actions">
                   <a mat-button color="primary" [routerLink]="['/artistes', item.artist.id]">
                     {{ 'PUBLIC.LEARN_MORE' | translate }}
                   </a>
                 </mat-card-actions>
-                
               </mat-card>
             }
           </div>
         </section>
       }
 
-      @if (festivalArtists().length > 0 && performanceGroups().length > 0) {
-        <div style="margin: 60px 0; border-top: 3px dashed var(--mat-sys-outline-variant); opacity: 0.5;"></div>
+      @if (festivalArtists().length > 0 && rawPerformances().length > 0) {
+        <div class="section-divider"></div>
       }
 
-      @if (performanceGroups().length > 0) {
+      @if (rawPerformances().length > 0) {
         <div class="schedule-section">
-          <h2 class="section-label" style="text-align: center; border: none; padding: 0; margin-bottom: 40px; font-size: 2rem;">
+          <h2 class="section-label center-label">
             {{'PUBLIC.SCHEDULE' | translate}}
           </h2>
 
-          @for (group of performanceGroups(); track group.date) {
-            <section class="admin-section">
-              
-              <h3 class="day-title">
-                {{ group.date | date:'EEEE d MMMM' : undefined : currentLang() | titlecase }}
-              </h3>
-              
-              <div class="grid-table-container">
-                <table mat-table [dataSource]="group.performances" class="festify-grid-table">
+          <div class="ssf-toolbar">
+            <mat-form-field appearance="outline" class="ssf-input">
+              <mat-label>Rechercher...</mat-label>
+              <mat-icon matPrefix>search</mat-icon>
+              <input matInput [ngModel]="searchQuery()" (ngModelChange)="updateSearch($event)">
+            </mat-form-field>
 
-                  <ng-container matColumnDef="artist">
-                    <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.ARTIST' | translate}} </th>
-                    <td mat-cell *matCellDef="let perf" class="bold-text"> 
-                      {{ perf.artist?.name || 'Inconnu' }} 
-                    </td>
-                  </ng-container>
+            <mat-form-field appearance="outline" class="ssf-input filter-select">
+              <mat-label>Filtrer par Scène</mat-label>
+              <mat-select [value]="filterStageId()" (selectionChange)="updateFilter($event.value)">
+                <mat-option [value]="null">Toutes les scènes</mat-option>
+                @for (s of availableStages(); track s.id) {
+                  <mat-option [value]="s.id">{{s.name}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
 
-                  <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.TITLE' | translate}} </th>
-                    <td mat-cell *matCellDef="let perf"> {{ perf.title }} </td>
-                  </ng-container>
+            <button mat-stroked-button class="sort-btn" (click)="toggleSort()">
+              <mat-icon>{{ sortDirection() === 'asc' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
+              {{ sortDirection() === 'asc' ? 'Heure Croissante' : 'Heure Décroissante' }}
+            </button>
+          </div>
 
-                  <ng-container matColumnDef="stage">
-                    <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.STAGE' | translate}} </th>
-                    <td mat-cell *matCellDef="let perf"> {{ perf.stage?.name || 'N/A' }} </td>
-                  </ng-container>
+          @if (performanceGroups().length > 0) {
+            @for (group of performanceGroups(); track group.date) {
+              <section class="admin-section">
+                
+                <h3 class="day-title">
+                  {{ group.date | date:'EEEE d MMMM' : undefined : currentLang() | titlecase }}
+                </h3>
+                
+                <div class="grid-table-container">
+                  <table mat-table [dataSource]="group.performances" class="festify-grid-table">
 
-                  <ng-container matColumnDef="start_at">
-                    <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.START' | translate}} </th>
-                    <td mat-cell *matCellDef="let perf"> 
-                      {{ perf.start_at | date:'HH:mm' : undefined : currentLang() }} 
-                    </td>
-                  </ng-container>
+                    <ng-container matColumnDef="artist">
+                      <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.ARTIST' | translate}} </th>
+                      <td mat-cell *matCellDef="let perf" class="bold-text"> 
+                        {{ perf.artist?.name || 'Inconnu' }} 
+                      </td>
+                    </ng-container>
 
-                  <ng-container matColumnDef="end_at">
-                    <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.END' | translate}} </th>
-                    <td mat-cell *matCellDef="let perf"> 
-                      {{ perf.end_at | date:'HH:mm' : undefined : currentLang() }} 
-                    </td>
-                  </ng-container>
+                    <ng-container matColumnDef="title">
+                      <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.TITLE' | translate}} </th>
+                      <td mat-cell *matCellDef="let perf"> {{ perf.title }} </td>
+                    </ng-container>
 
-                   <ng-container matColumnDef="description">
-                    <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.NOTE' | translate}} </th>
-                    <td mat-cell *matCellDef="let perf" class="desc-cell">
-                      {{ perf.description | slice:0:25 }}{{ perf.description && perf.description.length > 25 ? '...' : '' }}
-                    </td>
-                  </ng-container>
+                    <ng-container matColumnDef="stage">
+                      <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.STAGE' | translate}} </th>
+                      <td mat-cell *matCellDef="let perf"> {{ perf.stage?.name || 'N/A' }} </td>
+                    </ng-container>
 
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-              </div>
-            </section>
+                    <ng-container matColumnDef="start_at">
+                      <th mat-header-cell *matHeaderCellDef> 
+                        {{'DASHBOARD.START' | translate}} 
+                      </th>
+                      <td mat-cell *matCellDef="let perf"> 
+                        {{ perf.start_at | date:'HH:mm' : undefined : currentLang() }} 
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="end_at">
+                      <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.END' | translate}} </th>
+                      <td mat-cell *matCellDef="let perf"> 
+                        {{ perf.end_at | date:'HH:mm' : undefined : currentLang() }} 
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="description">
+                      <th mat-header-cell *matHeaderCellDef> {{'DASHBOARD.NOTE' | translate}} </th>
+                      <td mat-cell *matCellDef="let perf" class="desc-cell">
+                        {{ perf.description | slice:0:25 }}{{ perf.description && perf.description.length > 25 ? '...' : '' }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                </div>
+              </section>
+            }
+          } @else {
+            <div class="empty-state-search">
+              <mat-icon>search_off</mat-icon>
+              <p>Aucun résultat pour votre recherche.</p>
+              <button mat-button color="primary" (click)="updateSearch(''); updateFilter(null)">
+                Afficher tout
+              </button>
+            </div>
           }
         </div>
-      } @else if (!isLoading() && festivalArtists().length === 0) {
-        <div class="empty-state">
-          <p>{{'DASHBOARD.NOTHING' | translate}}</p>
-        </div>
-      }
+      } 
 
-      <div style="margin: 60px 0; border-top: 3px dashed var(--mat-sys-outline-variant); opacity: 0.5;"></div>
+      <div class="section-divider"></div>
 
       <section class="admin-section location-info-section">
         <h2 class="section-label">Informations</h2>
@@ -160,15 +183,16 @@
           </mat-card>
 
           <mat-card class="map-card">
-            @if (f.latitude && f.longitude) {
+            @if (mapUrl()) {
               <iframe 
-                [src]="getMapUrl(f.latitude, f.longitude)" 
                 width="100%" 
-                height="100%" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
-                referrerpolicy="no-referrer-when-downgrade">
+                height="350" 
+                frameborder="0" 
+                scrolling="no" 
+                marginheight="0" 
+                marginwidth="0" 
+                [src]="mapUrl()" 
+                style="border: 1px solid #ccc; border-radius: 4px;">
               </iframe>
             } @else {
               <div class="no-map">

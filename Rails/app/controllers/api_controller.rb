@@ -1,16 +1,7 @@
 class ApiController < ApplicationController
-  # Désactive la sécurité CSRF pour les API
   skip_before_action :verify_authenticity_token, raise: false
-  
-  # Pour répondre en JSON proprement
   respond_to :json
-  
-  # INTERCEPTION DES ERREURS 404
-  # C'est cette ligne qui capture l'erreur "ActiveRecord::RecordNotFound"
-  # et l'envoie vers la méthode "not_found"
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
-
-  # --- Helpers ---
 
   def admin_user?
     current_user&.is_a?(Admin)
@@ -30,13 +21,6 @@ class ApiController < ApplicationController
       status: "error",
       message: "Validation failed",
       errors: record.errors.messages
-    }, status: :ok
-  end
-
-  def render_validation_success(record)
-    render json: {
-      status: "success",
-      data: record.as_json
     }, status: :ok
   end
   

@@ -4,8 +4,11 @@ class Api::ArtistsController < ApiController
   before_action :set_artist, only: [ :show, :update, :destroy ]
 
   def index
-    artists = Artist.alphabetical
-    
+    artists = Artist.with_attached_image.alphabetical
+    artists = artists.search(params[:search]) if params[:search].present?
+    artists = artists.by_genre(params[:genre]) if params[:genre].present?
+    artists = artists.headliners if params[:headliners] == 'true'
+
     render json: {
       status: "success",
       data: artists.as_json(methods: [:image_url])
@@ -71,13 +74,6 @@ class Api::ArtistsController < ApiController
 
   def set_artist
     @artist = Artist.find(params[:id])
-  end
-
-  def not_found_response
-    render json: {
-      status: "error",
-      message: "Artiste introuvable"
-    }, status: :ok
   end
 
   def artist_params

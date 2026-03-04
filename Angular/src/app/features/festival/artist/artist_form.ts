@@ -42,12 +42,16 @@ export class ArtistFormComponent implements OnInit {
 
   constructor() {
     this.artistForm = this.fb.group({
-      name: ['', [Validators.required]],
-      genre: ['', [Validators.required]],
-      bio: [''],
-      popularity: [3, [Validators.required, Validators.min(1), Validators.max(5)]]
+      // Validations strictes : Requis + Max longueur
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      genre: ['', [Validators.required, Validators.maxLength(50)]],
+      bio: ['', [Validators.maxLength(2000)]],
+      popularity: [3, [Validators.required, Validators.min(0), Validators.max(5)]]
     });
   }
+
+  // Getter pour simplifier le HTML (ex: f['name'])
+  get f() { return this.artistForm.controls; }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
@@ -84,33 +88,34 @@ export class ArtistFormComponent implements OnInit {
 
   setPopularity(val: number) {
     this.artistForm.patchValue({ popularity: val });
+    this.artistForm.markAsDirty();
   }
 
   async onSubmit() {
-  if (this.artistForm.invalid) return;
+    if (this.artistForm.invalid) return;
 
-  this.isSaving.set(true);
-  this.serverErrors.set([]);
+    this.isSaving.set(true);
+    this.serverErrors.set([]);
 
-  const artistData: Partial<Artist> = {
-    name: this.artistForm.value.name,
-    genre: this.artistForm.value.genre,
-    bio: this.artistForm.value.bio,
-    popularity: this.artistForm.value.popularity
-  };
+    const artistData: Partial<Artist> = {
+      name: this.artistForm.value.name,
+      genre: this.artistForm.value.genre,
+      bio: this.artistForm.value.bio,
+      popularity: this.artistForm.value.popularity
+    };
 
-  try {
-    if (this.isEditMode()) {
-      const id = this.route.snapshot.params['id'];
-      await firstValueFrom(this.artistService.updateArtist(id, artistData, this.selectedFile || undefined));
-    } else {
-      await firstValueFrom(this.artistService.createArtist(artistData, this.selectedFile || undefined));
+    try {
+      if (this.isEditMode()) {
+        const id = this.route.snapshot.params['id'];
+        await firstValueFrom(this.artistService.updateArtist(id, artistData, this.selectedFile || undefined));
+      } else {
+        await firstValueFrom(this.artistService.createArtist(artistData, this.selectedFile || undefined));
+      }
+      this.router.navigate(['/admin/artistes']);
+    } catch (error) {
+      this.serverErrors.set(this.errorHandler.parseRailsErrors(error));
+    } finally {
+      this.isSaving.set(false);
     }
-    this.router.navigate(['/admin/artistes']);
-  } catch (error) {
-    this.serverErrors.set(this.errorHandler.parseRailsErrors(error));
-  } finally {
-    this.isSaving.set(false);
   }
-}
 }

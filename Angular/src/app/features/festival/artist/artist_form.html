@@ -12,16 +12,24 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Nom de l'artiste</mat-label>
           <input matInput formControlName="name">
-          @if (artistForm.get('name')?.hasError('required')) {
+          
+          @if (f['name'].hasError('required')) {
             <mat-error>Le nom est requis</mat-error>
+          }
+          @if (f['name'].hasError('maxlength')) {
+            <mat-error>Maximum 100 caractères</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Genre musical</mat-label>
           <input matInput formControlName="genre">
-          @if (artistForm.get('genre')?.hasError('required')) {
+          
+          @if (f['genre'].hasError('required')) {
             <mat-error>Le genre est requis</mat-error>
+          }
+          @if (f['genre'].hasError('maxlength')) {
+            <mat-error>Maximum 50 caractères</mat-error>
           }
         </mat-form-field>
       </div>
@@ -33,11 +41,17 @@
             @for (s of [1,2,3,4,5]; track s) {
               <mat-icon 
                 (click)="setPopularity(s)" 
-                [class.active]="artistForm.value.popularity >= s">
+                [class.active]="artistForm.value.popularity >= s"
+                style="cursor: pointer;">
                 star
               </mat-icon>
             }
           </div>
+          @if (f['popularity'].invalid) {
+             <mat-error style="font-size: 12px; margin-top: 5px;">
+               La popularité est requise
+             </mat-error>
+          }
         </div>
 
         <div class="image-upload-wrapper">
@@ -57,6 +71,10 @@
       <mat-form-field appearance="outline" class="full-width" style="margin-top: 15px;">
         <mat-label>Biographie</mat-label>
         <textarea matInput formControlName="bio" rows="5"></textarea>
+        
+        @if (f['bio'].hasError('maxlength')) {
+          <mat-error>La biographie est trop longue (max 2000 caractères)</mat-error>
+        }
       </mat-form-field>
 
       @if (serverErrors().length > 0) {

@@ -16,7 +16,11 @@
   width: 300px; 
   margin-top: 15px; 
 }
-
+.status-label {
+  color: #888;
+  font-size: 0.85em;
+  margin-left: 5px;
+}
 .admin-top-bar {
   display: flex;
   justify-content: space-between;
@@ -145,7 +149,12 @@
 }
 
 .action-cell {
-  text-align: center;
+  display: flex !important;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 12px; 
+  min-height: 52px; 
 }
 
 .action-buttons-container {
@@ -201,6 +210,17 @@
   color: var(--mat-sys-on-surface-variant); 
 }
 
+.bold-text, 
+.mat-column {
+  font-weight: 700 !important;
+}
+
+
+.icon-btn {
+  margin: 0 !important;
+  display: inline-flex !important;
+}
+
 @media screen and (max-width: 850px) {
   .admin-page { 
     padding: 15px; 
@@ -222,8 +242,7 @@
   .mat-column-description { 
     display: none; 
   }
-  
-  /* SSF Responsive */
+
   .ssf-toolbar {
     flex-direction: column;
     align-items: stretch;

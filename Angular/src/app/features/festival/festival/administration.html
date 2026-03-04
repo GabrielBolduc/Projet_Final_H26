@@ -40,7 +40,12 @@
               </span>
               <span class="info-item">
                 <mat-icon inline>explore</mat-icon>
-                <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                <a href="https://www.openstreetmap.org/?mlat={{f.latitude}}&mlon={{f.longitude}}#map=16/{{f.latitude}}/{{f.longitude}}" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="osm-link">
+                  <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                </a>
               </span>
             </div>
 
@@ -91,7 +96,12 @@
                 </span>
                 <span class="info-item">
                   <mat-icon inline>explore</mat-icon>
-                  <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                  <a href="https://www.openstreetmap.org/?mlat={{f.latitude}}&mlon={{f.longitude}}#map=16/{{f.latitude}}/{{f.longitude}}" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="osm-link">
+                    <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                  </a>
                 </span>
               </div>
 
@@ -143,7 +153,12 @@
                 </span>
                 <span class="info-item">
                   <mat-icon inline>explore</mat-icon>
-                  <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                  <a href="https://www.openstreetmap.org/?mlat={{f.latitude}}&mlon={{f.longitude}}#map=16/{{f.latitude}}/{{f.longitude}}" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="osm-link">
+                    <strong>Lat:</strong> {{ f.latitude }} | <strong>Lng:</strong> {{ f.longitude }}
+                  </a>
                 </span>
               </div>
 

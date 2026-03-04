@@ -59,6 +59,8 @@ export class AddPerformanceComponent implements OnInit {
   private errorHandler = inject(ErrorHandlerService);
   public translate = inject(TranslateService);
 
+  minDate = new Date(); 
+
   form: FormGroup;
   isEditMode = signal(false);
   performanceId: number | null = null;

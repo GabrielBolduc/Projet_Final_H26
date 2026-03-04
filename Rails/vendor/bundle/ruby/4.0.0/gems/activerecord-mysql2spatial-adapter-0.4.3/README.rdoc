@@ -1,0 +1,204 @@
+== MySQL2 Spatial \ActiveRecord Adapter
+
+The MySQL2 Spatial \ActiveRecord Adapter is an \ActiveRecord connection
+adapter based on the standard mysql2 adapter. It extends the standard
+adapter to provide support for spatial columns and indexes in MySQL,
+using the {RGeo}[http://github.com/dazuma/rgeo] library to represent
+spatial data in Ruby. Like the standard mysql2 adapter, this adapter
+requires the mysql2 gem.
+
+== What This Adapter Provides
+
+=== Spatial Migrations
+
+First, this adapter extends the migration syntax to support creating 
+spatial columns and indexes. To create a spatial column, use the
+<tt>:geometry</tt> type, or any of the OGC spatial types such as
+<tt>:point</tt> or <tt>:line_string</tt>. To create a spatial index, set
+the <tt>:spatial</tt> option to true. Remember that, on some versions of
+MySQL, only the MyISAM engine supports spatial indexes, and the indexed
+column may need to be NOT NULL.
+
+Examples:
+
+  create_table :my_spatial_table, :options => 'ENGINE=MyISAM' do |t|
+    t.column :latlon, :point, :null => false
+    t.line_string :path
+    t.geometry :shape
+  end
+  change_table :my_spatial_table do |t|
+    t.index :latlon, :spatial => true
+  end
+
+=== Spatial Attributes
+
+When this adapter is in use, spatial attributes in your \ActiveRecord
+objects will have RGeo geometry values. You can set spatial attributes
+either to RGeo geometry objects, or to strings in WKT (well-known text)
+format, which the adapter will automatically convert to geometry objects.
+
+Spatial objects in RGeo are tied to a factory that specifies the
+coordinate system as well as other behaviors of the object. You must
+therefore specify a factory for each spatial column (attribute) in your
+\ActiveRecord class. You can either set an explicit factory for a specific
+column, or provide a factory generator that will yield the appropriate
+factory for the table's spatial columns based on their types. For the
+former, call the <tt>set_rgeo_factory_for_column</tt> class method on your
+\ActiveRecord class. For the latter, set the rgeo_factory_generator class
+attribute. This generator should understand at least the <tt>:srid</tt>
+options, which will be provided based on the SRID embedded in the value
+itself, since MySQL does not support SRID or dimension constraints on
+spatial columns themselves. The set_rgeo_factory_for_column and
+rgeo_factory_generator methods are actually implemented and documented in
+the "rgeo-activerecord" gem.
+
+Examples, given the spatial table defined above:
+
+  class MySpatialTable < ActiveRecord::Base
+    
+    # By default, use the GEOS implementation for spatial columns.
+    self.rgeo_factory_generator = RGeo::Geos.method(:factory)
+    
+    # But use a geographic implementation for the :latlon column.
+    set_rgeo_factory_for_column(:latlon, RGeo::Geographic.spherical_factory)
+    
+  end
+
+Now you can interact with the data using the RGeo types:
+
+  rec = MySpatialTable.new
+  rec.latlon = 'POINT(-122 47)'   # You can set by feature object or WKT.
+  loc = rec.latlon                # Accessing always returns a feature object, in
+                                  # this case, a geographic that understands latitude.
+  loc.latitude                    # => 47
+  rec.shape = loc                 # the factory for the :shape column is GEOS, so the
+                                  # value will be cast from geographic to GEOS.
+  RGeo::Geos.is_geos?(rec.shape)  # => true
+
+=== Spatial Queries
+
+You can create simple queries based on objective equality in the same way
+you would on a scalar column:
+
+  rec = MySpatialTable.where(:latlon => RGeo::Geos.factory.point(-122, 47)).first
+
+You can also use WKT:
+
+  rec = MySpatialTable.where(:latlon => 'POINT(-122 47)').first
+
+The adapter also provides experimental support for more complex queries
+such as radius searches. However, these extensions require Arel 2.1
+(which is scheduled for release with Rails 3.1). We do not have these
+documented yet, and the syntax is subject to change. For now, you should
+write more complex queries in SQL.
+
+== Installation And Configuration
+
+=== Installing The Adapter Gem
+
+This adapter has the following requirements:
+
+* Ruby 1.8.7 or later. Ruby 1.9.2 or later preferred.
+* MySQL server 5.0 or later required for spatial extensions.
+* \ActiveRecord 3.0.3 or later. Earlier versions will not work.
+  Should be compatible with Rails versions through 3.2.x.
+* mysql2 gem 0.2.13 or later.
+* rgeo gem 0.3.15 or later.
+* rgeo-activerecord gem 0.4.5 or later.
+
+Install this adapter as a gem:
+
+  gem install activerecord-mysql2spatial-adapter
+
+See the README for the "rgeo" gem, a required dependency, for further
+installation information.
+
+=== Basic Setup
+
+To use this adapter, add this gem, "activerecord-mysql2spatial-adapter",
+to your Gemfile, and then request the adapter name "mysql2spatial" in
+your database connection configuration (which, for a Rails application,
+is in the config/database.yml file). The other database connection
+configuration parameters are the same as for the stock mysql2 adapter,
+so you can create a new Rails application using:
+
+  rails new my_app --database=mysql
+
+...and then just change the adapter name to "mysql2spatial".
+
+== Additional Information
+
+=== Known bugs and limitations
+
+This adapter is not yet well tested. There are probably some bugs and
+holes in the functionality. We aren't using MySQL spatial extensions in
+production at GeoPage, so we would appreciate testing help and feedback
+from anyone who is.
+
+One known issue is that if you want to use Rails's testing rake tasks and
+you have spatial indexes in your schema, you should use the <tt>:sql</tt>
+dump style. e.g. set <tt>config.active_record.schema_format = :sql</tt>.
+The reason is that Rails's Ruby-format schema dumper does not preserve
+the :options used to create the table, specifically setting the
+Engine=MyISAM. Under MySQL Spatial, you may create spatial indexes only
+on MyISAM tables; unfortunately, if you use the Ruby-format schema to
+create your test databases, Rails does not transfer this information
+properly, and your test tables are created as InnoDB. The workaround is
+to use the <tt>:sql</tt> dump format. This has been reported as a bug in
+Rails as of Rails 3.0.3, so we hope it will get rectified at some point.
+
+=== Development and support
+
+Documentation is available at http://dazuma.github.com/activerecord-mysql2spatial-adapter/rdoc
+
+Source code is hosted on Github at http://github.com/dazuma/activerecord-mysql2spatial-adapter
+
+Contributions are welcome. Fork the project on Github.
+
+Report bugs on Github issues at http://github.org/dazuma/activerecord-mysql2spatial-adapter/issues
+
+Support available on the rgeo-users google group at http://groups.google.com/group/rgeo-users
+
+Contact the author at dazuma at gmail dot com.
+
+=== Acknowledgments
+
+The Mysql2Spatial Adapter and its supporting libraries (including RGeo)
+are written by Daniel Azuma (http://www.daniel-azuma.com).
+
+Development is supported by Pirq. (http://www.pirq.com).
+
+This adapter implementation owes some debt to the spatial_adapter plugin
+(http://github.com/fragility/spatial_adapter). Although we made a few
+different design decisions for this adapter, studying the spatial_adapter
+source gave us a head start on the implementation.
+
+=== License
+
+Copyright 2010-2012 Daniel Azuma
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+* Neither the name of the copyright holder, nor the names of any other
+  contributors to this software, may be used to endorse or promote products
+  derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.

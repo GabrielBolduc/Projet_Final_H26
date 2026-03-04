@@ -1,0 +1,19 @@
+current directory: /home/etd/Projet_Final_H26/Rails/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+/snap/ruby/447/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /home/etd/Projet_Final_H26/Rails/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j5 DESTDIR\= sitearchdir\=./.gem.20260212-1932-kd6uw8 sitelibdir\=./.gem.20260212-1932-kd6uw8 clean
+
+current directory: /home/etd/Projet_Final_H26/Rails/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j5 DESTDIR\= sitearchdir\=./.gem.20260212-1932-kd6uw8 sitelibdir\=./.gem.20260212-1932-kd6uw8
+compiling debug.c
+compiling iseq_collector.c
+linking shared-object debug/debug.so
+
+current directory: /home/etd/Projet_Final_H26/Rails/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make -j5 DESTDIR\= sitearchdir\=./.gem.20260212-1932-kd6uw8 sitelibdir\=./.gem.20260212-1932-kd6uw8 install
+/usr/bin/install -c -m 0755 debug.so ./.gem.20260212-1932-kd6uw8/debug
+
+current directory: /home/etd/Projet_Final_H26/Rails/vendor/bundle/ruby/4.0.0/gems/debug-1.11.1/ext/debug
+make DESTDIR\= sitearchdir\=./.gem.20260212-1932-kd6uw8 sitelibdir\=./.gem.20260212-1932-kd6uw8 clean

@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  difficulty: 1
+  priority: 1
+  reusable: false
+  title: firsrt task
+  description: mon oremier test de tâche
+two:
+  difficulty: 5
+  priority: 5
+  reusable: true
+  title: second task
+  description: mon deuxieme test de tâche
+
+three:
+  difficulty: 3
+  priority: 2
+  reusable: false
+  title: third task
+  description: mon troisieme test de tâche
+
+four:
+  difficulty: 2
+  priority: 4
+  reusable: true
+  title: fourth task
+  description: mon quatrieme test de tâche
+
+five:
+  difficulty: 4
+  priority: 3
+  reusable: false
+  title: fifth task
+  description: mon cinquieme test de tâche

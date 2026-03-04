@@ -366,6 +366,8 @@ DEPENDENCIES
   rack-cors
   rails (~> 8.1.2)
   rgeo-activerecord
+  rubocop
+  rubocop-rails
   rubocop-rails-omakase
   solid_cable
   solid_cache

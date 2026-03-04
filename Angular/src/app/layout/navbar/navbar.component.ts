@@ -34,8 +34,7 @@ export class NavbarComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      const festivals = await firstValueFrom(this.festivalService.getFestivals());
-      const ongoing = festivals.find(f => f.status === 'ongoing');
+      const ongoing = await firstValueFrom(this.festivalService.getCurrentFestival());
       
       if (ongoing) {
         this.ongoingFestivalId.set(ongoing.id);

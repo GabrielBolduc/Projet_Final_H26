@@ -9,7 +9,7 @@ class Reservation < ApplicationRecord
 
   validates :arrival_at, :departure_at, :reservation_name, presence: true
   validates :nb_of_people, numericality: { only_integer: true, greater_than: 0 }
-  validates :phone_number, phone: true 
+  validates :phone_number, phone: true
 
   validate :departure_must_be_after_arrival
   validate :capacity_within_limits
@@ -22,7 +22,7 @@ class Reservation < ApplicationRecord
 
   def as_json(options = {})
     formatted_phone = ActionController::Base.helpers.number_to_phone(
-      self.phone_number, 
+      self.phone_number,
       area_code: true
     )
 
@@ -34,7 +34,7 @@ class Reservation < ApplicationRecord
   end
 
   private
-  
+
 
   def capacity_within_limits
     return unless unit && nb_of_people
@@ -83,6 +83,8 @@ class Reservation < ApplicationRecord
       parsed = Phonelib.parse(phone_number)
       if parsed.valid?
         self.phone_number = parsed.national.gsub(/\D/, '') 
+        # On force l'extraction des chiffres sans le '+'
+        self.phone_number = parsed.national.gsub(/\D/, "")
       end
     end
   end

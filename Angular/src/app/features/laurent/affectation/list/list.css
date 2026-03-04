@@ -31,6 +31,8 @@
 .affectation-card {
 
   border-radius: 14px;
+  border: 2px solid var(--mat-sys-on-surface);
+ 
 
   transition: 0.2s;
 }

@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { firstValueFrom } from 'rxjs';
-
 import { ArtistService } from '../../../../app/core/services/artist.service';
 import { Artist } from '../..../../../../core/models/artist';
 

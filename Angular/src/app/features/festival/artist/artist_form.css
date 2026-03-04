@@ -111,8 +111,6 @@ mat-form-field {
 .image-preview-container {
   width: 100%;
   height: 250px;
-  border: 2px dashed #ccc;
-  border-radius: 8px;
   margin-bottom: 20px;
   overflow: hidden;
   display: flex;

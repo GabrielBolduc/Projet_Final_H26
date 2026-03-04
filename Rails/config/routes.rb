@@ -8,15 +8,15 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :festivals, only: [ :index, :show, :create, :update, :destroy ]
-    
+
     resources :tasks do
       collection do
         get "get_reusable", to: "tasks#get_reusable"
       end
     end
-      
-    resources :artists, only: [:index, :show, :create, :update, :destroy]
-    resources :stages, only: [:index]
+
+    resources :artists, only: [ :index, :show, :create, :update, :destroy ]
+    resources :stages, only: [ :index ]
     resources :performances
     resources :reservations
     resources :orders, only: [ :index, :show, :create ]

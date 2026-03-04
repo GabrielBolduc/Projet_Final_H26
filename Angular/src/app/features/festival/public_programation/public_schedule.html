@@ -64,15 +64,15 @@
 
           <div class="ssf-toolbar">
             <mat-form-field appearance="outline" class="ssf-input">
-              <mat-label>Rechercher...</mat-label>
+              <mat-label>{{'PUBLIC.SEARCH' | translate}}</mat-label>
               <mat-icon matPrefix>search</mat-icon>
               <input matInput [ngModel]="searchQuery()" (ngModelChange)="updateSearch($event)">
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="ssf-input filter-select">
-              <mat-label>Filtrer par Scène</mat-label>
+              <mat-label>{{'PUBLIC.FILTER' | translate}}</mat-label>
               <mat-select [value]="filterStageId()" (selectionChange)="updateFilter($event.value)">
-                <mat-option [value]="null">Toutes les scènes</mat-option>
+                <mat-option [value]="null">{{'PUBLIC.ALL_STAGE' | translate}}</mat-option>
                 @for (s of availableStages(); track s.id) {
                   <mat-option [value]="s.id">{{s.name}}</mat-option>
                 }
@@ -81,7 +81,7 @@
 
             <button mat-stroked-button class="sort-btn" (click)="toggleSort()">
               <mat-icon>{{ sortDirection() === 'asc' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
-              {{ sortDirection() === 'asc' ? 'Heure Croissante' : 'Heure Décroissante' }}
+              {{ (sortDirection() === 'asc' ? 'PUBLIC.CROISS' : 'PUBLIC.DECROISS') | translate }}
             </button>
           </div>
 
@@ -145,9 +145,9 @@
           } @else {
             <div class="empty-state-search">
               <mat-icon>search_off</mat-icon>
-              <p>Aucun résultat pour votre recherche.</p>
+              <p>{{'PUBLIC.NOTHING' | translate}}</p>
               <button mat-button color="primary" (click)="updateSearch(''); updateFilter(null)">
-                Afficher tout
+                {{'PUBLIC.SHOW_ALL' | translate}}
               </button>
             </div>
           }
@@ -157,7 +157,7 @@
       <div class="section-divider"></div>
 
       <section class="admin-section location-info-section">
-        <h2 class="section-label">Informations</h2>
+        <h2 class="section-label">{{'PUBLIC.INFORMATION' | translate}}</h2>
         
         <div class="info-grid">
           
@@ -166,8 +166,8 @@
               <div class="info-item">
                 <mat-icon color="primary">event</mat-icon>
                 <div>
-                  <strong>Dates du festival :</strong><br>
-                  {{ f.start_at | date:'d MMMM' : undefined : currentLang() }} au 
+                  <strong>{{'PUBLIC.DATES' | translate}}</strong><br>
+                  {{ f.start_at | date:'d MMMM' : undefined : currentLang() }} {{'PUBLIC.TO' | translate}} 
                   {{ f.end_at | date:'d MMMM yyyy' : undefined : currentLang() }}
                 </div>
               </div>
@@ -175,7 +175,7 @@
               <div class="info-item" style="margin-top: 25px;">
                 <mat-icon color="primary">location_on</mat-icon>
                 <div>
-                  <strong>Adresse :</strong><br>
+                  <strong>{{'PUBLIC.ADRESS' | translate}}</strong><br>
                   {{ f.address }}
                 </div>
               </div>
@@ -197,7 +197,7 @@
             } @else {
               <div class="no-map">
                 <mat-icon>map</mat-icon>
-                <p>Coordonnées GPS non disponibles</p>
+                <p>{{'PUBLIC.NO_MAP' | translate}}</p>
               </div>
             }
           </mat-card>

@@ -2,7 +2,7 @@ class Api::PerformancesController < ApiController
   skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_performance, only: [ :show, :update, :destroy ]
-  
+
   def index
     performances = Performance.with_details.chronological
     
@@ -10,19 +10,21 @@ class Api::PerformancesController < ApiController
       performances = performances.for_festival(params[:festival_id])
     end
 
+    if params[:stage_id].present?
+      performances = performances.by_stage(params[:stage_id])
+    end
+
+    if params[:search].present?
+      performances = performances.search(params[:search])
+    end
+
     unless current_user&.is_a?(Admin)
       performances = performances.publicly_visible
     end
-    
+
     render json: {
       status: "success",
-      data: performances.as_json(
-        include: {
-          stage: {},
-          festival: {},
-          artist: { methods: [:image_url] }
-        }
-      )
+      data: performances.as_json(json_options)
     }, status: :ok
   end
 
@@ -36,13 +38,7 @@ class Api::PerformancesController < ApiController
 
     render json: {
       status: "success",
-      data: @performance.as_json(
-        include: {
-          stage: {},
-          festival: {},
-          artist: { methods: [:image_url] }
-        }
-      )
+      data: @performance.as_json(json_options)
     }, status: :ok
   end
 
@@ -52,13 +48,7 @@ class Api::PerformancesController < ApiController
     if performance.save
       render json: {
         status: "success",
-        data: performance.as_json(
-          include: {
-            stage: {},
-            festival: {},
-            artist: { methods: [:image_url] }
-          }
-        )
+        data: performance.as_json(json_options)
       }, status: :ok
     else
       render json: {
@@ -73,13 +63,7 @@ class Api::PerformancesController < ApiController
     if @performance.update(performance_params)
       render json: {
         status: "success",
-        data: @performance.as_json(
-          include: {
-            stage: {},
-            festival: {},
-            artist: { methods: [:image_url] }
-          }
-        )
+        data: @performance.as_json(json_options)
       }, status: :ok
     else
       render json: {
@@ -87,16 +71,16 @@ class Api::PerformancesController < ApiController
         message: "Échec de la mise à jour",
         errors: @performance.errors.messages
       }, status: :ok
-    end 
+    end
   end
 
   def destroy
     if @performance.destroy
       render json: {
-      status: "success",
-      message: "Performance supprimée avec succes",
-      data: nil
-    }, status: :ok
+        status: "success",
+        message: "Performance supprimée avec succes",
+        data: nil
+      }, status: :ok
     else
       render json: {
         status: "error",
@@ -111,17 +95,20 @@ class Api::PerformancesController < ApiController
     @performance = Performance.with_details.find(params[:id])
   end
 
-  def not_found_response
-    render json: {
-      status: "error",
-      message: "Performance introuvable."
-    }, status: :ok
-  end
-
   def performance_params
     params.require(:performance).permit(
       :title, :description, :price, :start_at, :end_at,
       :artist_id, :stage_id, :festival_id
     )
+  end
+
+  def json_options
+    {
+      include: {
+        stage: { only: [ :id, :name ] },
+        festival: { only: [ :id, :name, :status ] },
+        artist: { methods: [ :image_url ], only: [ :id, :name, :genre ] }
+      }
+    }
   end
 end

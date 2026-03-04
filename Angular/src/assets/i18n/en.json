@@ -15,7 +15,19 @@
     "NO_PERFORMANCES": "No performances are currently scheduled for this festival.",
     "LEARN_MORE": "Learn more",
     "ARTIST": "Featured Artist",
-    "SCHEDULE": "Detailed Schedule"
+    "SCHEDULE": "Detailed Schedule",
+    "SEARCH": "Search artist, show ...",
+    "FILTER": "Filter by Stage",
+    "ALL_STAGE": "All Stages",
+    "CROISS": "Time Ascending",
+    "DECROISS": "Time Descending",
+    "NOTHING": "No results found for your search.",
+    "SHOW_ALL": "Show all",
+    "INFORMATION": "Information",
+    "DATES": "Festival dates",
+    "TO": "to",
+    "ADRESS": "Address:",
+    "NO_MAP": "GPS coordinates not available"
   },
   "AUTH": {
     "LOGOUT": "Disconnect",
@@ -121,6 +133,41 @@
     "DELETE_SUCCESS": "Festival deleted successfully.",
     "FESTIVALS_LOAD_ERROR": "Error loading festivals"
   },
+  "ARTIST": {
+    "EDIT_TITLE": "Edit Artist",
+    "ADD_TITLE": "Add Artist",
+    "NAME_LABEL": "Artist Name",
+    "NAME_REQUIRED": "Name is required",
+    "NAME_MAX": "Maximum 100 characters",
+    "GENRE_LABEL": "Musical Genre",
+    "GENRE_REQUIRED": "Genre is required",
+    "GENRE_MAX": "Maximum 50 characters",
+    "POPULARITY": "Popularity:",
+    "POPULARITY_REQUIRED": "Popularity is required",
+    "UPLOAD_IMAGE": "Choose a photo",
+    "IMAGE_PREVIEW_ALT": "Artist photo preview",
+    "BIO_LABEL": "Biography",
+    "BIO_MAX": "Biography is too long (max 2000 characters)",
+    "CANCEL": "Cancel",
+    "SAVING": "Saving...",
+    "EDIT_BTN": "Update",
+    "ADD_BTN": "Add",
+    "ADD_SUCCESS": "Artist added successfully!",
+    "EDIT_SUCCESS": "Artist updated successfully!",
+    "ERROR_SAVE": "An error occurred while saving.",
+    "DELETE_SUCCESS": "Artist deleted successfully."
+  },
+  "ARTIST_LIST": {
+    "TITLE": "Artist Catalog",
+    "ADD": "Add",
+    "COL_PHOTO": "Photo",
+    "COL_NAME": "Name",
+    "COL_GENRE": "Genre",
+    "COL_POPULARITY": "Popularity",
+    "COL_BIO": "Bio",
+    "VIEW_BIO": "View bio",
+    "COL_ACTIONS": "Action"
+  },
   "FORM_ADD_PERFORMANCES": {
     "EDIT_PERFORMANCE": "Edit performance",
     "NEW_PERFORMANCE": "New performance",
@@ -147,7 +194,8 @@
     "PROG": "Schedule",
     "TASK": "Tasks",
     "TICKET": "Ticketing",
-    "ARTIST": "Artits"
+    "ARTIST": "Artits",
+    "AFFECTATIONS": "Affectations"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "New Package",
@@ -361,7 +409,10 @@
     "EXPECTED_END": "Expected end",
     "START": "Actual start",
     "END": "Actual end",
-    "FESTIVAL": "Festival"
+    "FESTIVAL": "Festival",
+    "TASK": "Task",
+    "UPDATE_START": "Update start time",
+    "START_TASK": "Start task"
   },
   "ACCOMMODATIONS": {
     "ADD": "ADD",

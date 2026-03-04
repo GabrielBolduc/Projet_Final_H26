@@ -12,6 +12,17 @@
   width: 100%;
 }
 
+.osm-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.osm-link:hover {
+  color: #3f51b5; 
+  text-decoration: underline;
+}
+
 .admin-section {
   margin-bottom: 60px;
   width: 100%;

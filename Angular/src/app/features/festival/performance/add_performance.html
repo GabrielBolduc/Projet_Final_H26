@@ -65,7 +65,7 @@
     <div class="grid-row-3">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>{{ 'FORM_ADD_PERFORMANCES.DATE' | translate }}</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date">
+        <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>

@@ -104,8 +104,8 @@ f = Festival.create!(
   end_at: Date.new(2026, 7, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  latitude: 46.52673340326582,
-  longitude: -72.73930869816652,
+  latitude: 46.577793,
+  longitude: -72.710997,
   status: "ongoing",
   satisfaction: 4,
   other_income: 15000.00,
@@ -824,7 +824,7 @@ Affectation.create!(
     responsability: "Receptionné la commande de projecteur de projecteur & co",
     expected_start: f.start_at.to_time.change(hour: 9, min: 0),
     expected_end: f.start_at.to_time.change(hour: 10, min: 0)
-) 
+)
 
 Affectation.create!(
     user: Staff.last,

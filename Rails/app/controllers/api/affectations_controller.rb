@@ -1,6 +1,8 @@
 class Api::AffectationsController < ApiController
     before_action :authenticate_user!
     before_action :set_affectation, only: %i[show update destroy]
+    before_action :require_admin!, only: [ :create, :destroy ]
+
 
 
 
@@ -12,7 +14,7 @@ class Api::AffectationsController < ApiController
     end
 
     def get_staff_list
-        @staff_list = Affectation.where(user_id: params[:user_id]).order(updated_at: :desc)
+        @staff_list = Staff.all
         render json: {
             status: "success",
             data: @staff_list.as_json(user_json)

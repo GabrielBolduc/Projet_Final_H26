@@ -6,6 +6,30 @@
         {{ 'AFFECTATIONS.TITLE' | translate }}    
     </h2>
 
+  
+    <mat-divider></mat-divider>
+
+    <section>
+      <h3>
+        <mat-icon>assignment</mat-icon>
+        {{ 'AFFECTATIONS.TASK' | translate }}
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>{{ 'AFFECTATIONS.NAME' | translate }}</label>
+          <p>{{ affectation()?.task?.title }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.DESCRIPTION' | translate }}</label>
+          <p>{{ affectation()?.task?.description }}</p>
+        </div>
+
+      </div>
+    </section>
+
     <mat-divider></mat-divider>
 
     <!-- USER SECTION -->

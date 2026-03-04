@@ -1,0 +1,43 @@
+.form-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 10px;
+}
+
+.task-description {
+  margin: 15px 0 25px 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.action-container {
+  text-align: center;
+}
+
+.big-action-button {
+
+  font-size: 20px;
+  padding: 20px 40px;
+  border-radius: 12px;
+
+  width: 100%;
+  height: 80px;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+  transition: 0.2s;
+}
+
+.big-action-button:hover {
+
+  transform: scale(1.02);
+
+}
+
+.time-info {
+
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
+
+}

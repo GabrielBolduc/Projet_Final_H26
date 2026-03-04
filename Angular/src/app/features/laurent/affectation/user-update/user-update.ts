@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { AffectationService } from '@core/services/affectation.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Affectation } from '@core/models/affectation';
 import { Task } from '@core/models/task';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,13 +14,14 @@ import { MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-user-update',
-  imports: [MatLabel ,MatButtonModule, MatCardModule, MatIconModule, CommonModule, TranslateModule,RouterLink],
+  imports: [MatButtonModule, MatCardModule, MatIconModule, CommonModule, TranslateModule,RouterLink],
   templateUrl: './user-update.html',
   styleUrl: './user-update.css',
 })
 export class UserUpdateAffectationComponent {
 
   private affectationService = inject(AffectationService);
+  private router = inject(Router);
 
   affectation = signal<Affectation | null>(null);
 
@@ -41,9 +42,14 @@ export class UserUpdateAffectationComponent {
   }
 
   updateStartAffectation() {
+
+
+    
     const idParam = this.route.snapshot.paramMap.get('id');
 
     const id = idParam ? Number(idParam) : undefined;
+
+   
 
     const now = new Date();
 
@@ -68,6 +74,14 @@ export class UserUpdateAffectationComponent {
 
        
         formData.append('affectation[start]', formatted);
+
+      this.affectationService.updateAffectation(id, formData).subscribe(data => { 
+                console.log('Affectation mise à jour : ', data);
+       }
+
+      );
+
+       this.router.navigate(['affectations']);
 
   }
 

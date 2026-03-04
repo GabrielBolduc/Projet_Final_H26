@@ -14,6 +14,8 @@ import { Festival } from '@core/models/festival';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
+import { FormAffectationComponent } from '../form/form';
+
 
 
 @Component({
@@ -71,7 +73,7 @@ export class ListAffectations {
   private formatLang(lang: string | undefined): string {
     if (!lang) return 'en'; 
     return lang.split('-')[0];
-  }
+    }
 
 
     async handleClick(id: number): Promise<void> {
@@ -99,5 +101,48 @@ export class ListAffectations {
     if (errors.length > 0) {
       this.snackBar.open(errors.join(' | '), 'Fermer', { duration: 5000 });
     }
+  }
+
+  openForm() {
+
+    const dialogRef = this.dialog.open(FormAffectationComponent, {
+      width: '600px',
+      data: {
+        taskId: this.taskId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result){
+        this.affectationService
+          .listAffectationsByTask(this.taskId!)
+          .subscribe(data => this.affectations.set(data));
+      }
+
+    });
+
+  }
+
+  openEditForm(affectationId: number) {
+
+    const dialogRef = this.dialog.open(FormAffectationComponent, {
+      width: '600px',
+      data: {
+        taskId: this.taskId,
+        affectationId: affectationId
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result){
+        this.affectationService
+          .listAffectationsByTask(this.taskId!)
+          .subscribe(data => this.affectations.set(data));
+      }
+
+    });
+
   }
 }

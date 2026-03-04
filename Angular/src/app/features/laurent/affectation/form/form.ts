@@ -16,16 +16,18 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { MatDividerModule } from '@angular/material/divider';
 import { FestivalService } from '@core/services/festival.service';
 import { Festival } from '@core/models/festival';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { firstValueFrom } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-form',
-  imports: [MatDividerModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule, MatCheckboxModule, TranslateModule, RouterLink],
+  imports: [MatDividerModule, ReactiveFormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule, MatCheckboxModule, TranslateModule,MatDialogModule,CommonModule],
   templateUrl: './form.html',
   styleUrl: './form.css',
 })
@@ -40,6 +42,9 @@ export class FormAffectationComponent {
     private festivalService = inject(FestivalService);
     private errorHandler = inject(ErrorHandlerService);
     taskId: number | null = null;
+
+    private dialogRef = inject(MatDialogRef<FormAffectationComponent>);
+    data = inject(MAT_DIALOG_DATA);
     
 
     form: FormGroup = new FormBuilder().group({
@@ -68,20 +73,14 @@ export class FormAffectationComponent {
 
     ngOnInit() {
 
-      const idParam = this.route.snapshot.paramMap.get('affectationId');
+      const id = this.data.affectationId ?? null;
+      this.taskId = this.data.taskId;
+      console.log( id, "ID affectation, taskId ", this.taskId);
 
-    
-      const id = idParam ? Number(idParam) : null;
-      
-
-       const idParamTask = this.route.snapshot.paramMap.get('id');
-
-    
-      const taskid = idParamTask ? Number(idParamTask) : null;
-
-      this.taskId = taskid;
-
-      console.log( id);
+      this.affectationService.getStaffList().subscribe(data => { 
+        console.log('Utilisateurs reçus : ', data);
+        this.users.set(data);
+        });
 
       if (id) {
           this.isEditMode = true;
@@ -102,11 +101,6 @@ export class FormAffectationComponent {
         
       }
 
-      this.affectationService.getStaffList().subscribe(data => { 
-      console.log('Utilisateurs reçus : ', data);
-      this.users.set(data);
-      });
-
      this.festivalService.getFestivals().subscribe(data => { 
       console.log('Festivals reçus : ', data);
       this.festivals.set(data);
@@ -126,7 +120,7 @@ export class FormAffectationComponent {
       const formData = new FormData();
 
         formData.append('affectation[user_id]', this.form.value.user_id);
-        formData.append('affectation[task_id]', this.route.snapshot.paramMap.get('id')!);
+        formData.append('affectation[task_id]', String(this.taskId));
         formData.append('affectation[festival_id]', String(this.currentFestival()?.id));
         formData.append('affectation[expected_start]', this.form.value.expected_start);
         formData.append('affectation[expected_end]', this.form.value.expected_end);
@@ -135,32 +129,33 @@ export class FormAffectationComponent {
 
       if (this.isEditMode) {
 
-         const idParam = this.route.snapshot.paramMap.get('affectationId');
-
-    
-          const id = idParam ? Number(idParam) : null;
+           const id = this.data.affectationId ?? null;
 
         this.affectationService.updateAffectation(id, formData).subscribe({
           next: data => {
             console.log('Affectation mise à jour : ', data);
-            this.router.navigate(['/task', this.route.snapshot.paramMap.get('id'), 'affectations']);
+           
 
           },
           error: err => {
             this.showErrorsAsSnackBar(err);
           }
         });
+
+        this.dialogRef.close(true);
       } else {
         this.affectationService.createAffectation(formData).subscribe({
           next: data => {
             console.log('Affectation créée : ', data);
-            this.router.navigate(['/task', this.route.snapshot.paramMap.get('id'), 'affectations']);
+          
 
           },
           error: err => {
             this.showErrorsAsSnackBar(err);
           }
         });
+
+        this.dialogRef.close(true);
       }
 
     }
@@ -209,5 +204,9 @@ export class FormAffectationComponent {
    private showErrorsAsSnackBar(err: any): void {
     const errors = this.errorHandler.parseRailsErrors(err);
   
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }

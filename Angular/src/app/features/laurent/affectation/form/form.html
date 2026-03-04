@@ -1,76 +1,55 @@
-<div class="form-container">
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Modifier Affectation' : 'Nouvelle Affectation' }}
+</h2>
 
-  <mat-card class="form-card">
-    
-    <mat-card-header>
-      <mat-card-title class="title">Nouvelle Affectation</mat-card-title>
-      <mat-card-subtitle class="subtitle">
-        Remplir les informations de planification
-      </mat-card-subtitle>
-    </mat-card-header>
+<mat-dialog-content>
 
-    <mat-card-content>
+  <form [formGroup]="form">
 
-      <form [formGroup]="form" >
+    <!-- Start -->
+    <mat-form-field appearance="outline" class="full-width">
 
-        <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Début prévu</mat-label>
 
-          <mat-label>Début prévu</mat-label>
+      <input
+        matInput
+        type="datetime-local"
+        formControlName="expected_start">
 
-          <input
-            matInput
-            type="datetime-local"
-            formControlName="expected_start">
+      <mat-icon matSuffix>schedule</mat-icon>
 
-          <mat-icon matSuffix>schedule</mat-icon>
-
-          <mat-error If="form.get('expected_start')?.hasError('required')">
-            Le début est obligatoire
-          </mat-error>
-
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-
-          <mat-label>Fin prévue</mat-label>
-
-          <input
-            matInput
-            type="datetime-local"
-            formControlName="expected_end">
+    </mat-form-field>
 
 
-          <mat-error If="form.get('expected_end')?.hasError('required')">
-            La fin est obligatoire
-          </mat-error>
+    <!-- End -->
+    <mat-form-field appearance="outline" class="full-width">
 
-        </mat-form-field>
+      <mat-label>Fin prévue</mat-label>
 
+      <input
+        matInput
+        type="datetime-local"
+        formControlName="expected_end">
 
-        <mat-form-field appearance="outline" class="full-width">
-
-          <mat-label>Responsabilité</mat-label>
-
-          <textarea
-            matInput
-            rows="3"
-            formControlName="responsability">
-          </textarea>
-
-          <mat-icon matSuffix>assignment</mat-icon>
-
-          <mat-error If="form.get('responsability')?.hasError('required')">
-            La responsabilité est obligatoire
-          </mat-error>
-
-          <mat-error If="form.get('responsability')?.hasError('maxlength')">
-            Maximum 255 caractères
-          </mat-error>
-
-        </mat-form-field>
+    </mat-form-field>
 
 
-    <!-- User select -->
+    <!-- Responsability -->
+    <mat-form-field appearance="outline" class="full-width">
+
+      <mat-label>Responsabilité</mat-label>
+
+      <textarea
+        matInput
+        rows="3"
+        formControlName="responsability">
+      </textarea>
+
+      <mat-icon matSuffix>assignment</mat-icon>
+
+    </mat-form-field>
+
+
     <mat-form-field appearance="outline" class="full-width">
 
       <mat-label>Utilisateur</mat-label>
@@ -80,47 +59,34 @@
         @for (user of filteredUsers(); track user.id) {
 
           <mat-option [value]="user.id">
-
             {{ user.name }} — {{ user.ability }}
-
           </mat-option>
 
         }
 
       </mat-select>
 
-      <mat-error If="form.get('user_id')?.hasError('required')">
-        L'utilisateur est obligatoire
-      </mat-error>
-
     </mat-form-field>
 
+  </form>
 
-        <div class="button-row">
-
-          <button
-            mat-stroked-button
-            routerLink="/tasks/affectation" [routerLink]="['/task',taskId,'affectation']">
-            Annuler
-          </button>
-
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="form.invalid" (click)="submit()">
-            Enregistrer
-          </button>
-
-        </div>
-
-      </form>
-
-    </mat-card-content>
-
-  </mat-card>
-
-</div><div>
+</mat-dialog-content>
 
 
-</div>
+<mat-dialog-actions align="end">
+
+  <button mat-button (click)="close()">
+    Annuler
+  </button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="form.invalid"
+    (click)="submit()">
+
+    Enregistrer
+
+  </button>
+
+</mat-dialog-actions>

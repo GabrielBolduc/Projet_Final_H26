@@ -83,7 +83,7 @@ export class AffectationService {
     
       }
 
-      updateAffectation(id: number|null, affectation: FormData) {
+      updateAffectation(id: number|undefined, affectation: FormData) {
         return this.http.patch<ApiResponse<Affectation>>(`api/affectations/${id}`, affectation).pipe(
           map(response => {
                     console.log(response)

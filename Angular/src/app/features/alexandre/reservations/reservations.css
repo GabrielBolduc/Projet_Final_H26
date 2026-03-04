@@ -1,123 +1,162 @@
-/* 1. GLOBAL LAYOUT - Remove the outer box/border */
-.full-height {
-  height: 80vh;
-  /* Removed border, border-radius, and box-shadow */
-  background: transparent !important; 
-  box-shadow: none !important;
-  display: flex;
-}
 
-/* 2. SIDENAV - Remove the sidebar container styling */
-.custom-sidebar {
-  width: 200px !important;
-  background: transparent !important; /* Matches the page background */
-  border-right: none !important;      /* Removes the vertical line separator */
-  box-shadow: none !important;
-}
+.full-height { height: 85vh; background: transparent !important; display: flex; }
+.custom-sidebar { width: 220px !important; background: transparent !important; border: none !important; }
+::ng-deep .mat-drawer-inner-container { display: flex !important; flex-direction: column !important; height: 100% !important; overflow: hidden !important; }
 
-/* Target Material's internal wrapper to keep button distribution */
-::ng-deep .mat-drawer-inner-container {
-  display: flex !important;
-  flex-direction: column !important;
-  height: 100% !important;
-  overflow: hidden !important;
-}
-
-/* 3. NAVIGATION LIST - Distribute your cards evenly */
-.mat-nav-list {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: space-around !important; 
-  height: 100% !important;
-  padding: 10px 0 !important;
-  box-sizing: border-box;
-}
-
-/* 4. THE BUTTONS (KEEPING YOUR EXACT STYLE) */
-.fest-card {
-  width: 150px; 
-  background: var(--mat-sys-surface-container-low);
-  border: 2px solid var(--mat-sys-on-surface);
-  border-radius: 15px;
-  overflow: hidden;
-  transition: all 0.2s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.fest-card:hover {
-  transform: translateX(5px); 
-  box-shadow: 8px 8px 0px var(--mat-sys-primary);
-}
-
+.mat-nav-list { display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: space-around !important; height: 100% !important; padding: 20px 0 !important; }
+.fest-card { width: 150px; background: var(--mat-sys-surface-container-low); border: 2px solid #000; border-radius: 15px; overflow: hidden; transition: all 0.2s ease; display: flex; flex-direction: column; align-items: center; }
+.fest-card:hover { transform: translate(-2px, -2px); box-shadow: 10px 10px 0px var(--mat-sys-primary); }
 .nav-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid #000; }
-.nav-label { padding: 12px 8px; text-align: center; background: #fff; }
-.card-link { 
-  text-decoration: none; 
-}
-.nav-label .title { 
-  font-family: 'Public Sans', 'Arial Black', sans-serif;
-  font-weight: 900; font-size: 0.85rem; letter-spacing: -0.5px; line-height: 1.1; color: #000; margin-bottom: 4px; display: block;
-}
+.nav-label { width: 100%; padding: 12px 8px; text-align: center; background: #fff; border-top: 2px solid #000; }
+.nav-label .title { font-family: 'Public Sans', sans-serif; font-weight: 900; font-size: 0.85rem; text-transform: uppercase; color: #000; }
+.nav-icon { font-size: 32px; width: 32px; height: 32px; padding: 15px; color: #000; }
+.active-history { background: var(--mat-sys-primary) !important; box-shadow: 2px 2px 0px #000 !important; transform: translate(4px, 4px) !important; }
 
-.nav-icon {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  padding: 15px;
-  color: var(--mat-sys-on-surface);
-}
-
-.color-warn {
-  color: #f44336;
-}
-
-/* 6. MAIN DISPLAY - Remove the content container styling */
 .main-display {
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; 
+  align-items: center;  
   background: transparent !important;
-  border: none !important;
+  text-align: center;  
 }
 
-/* Typography for the "floating" empty state */
-.main-display p {
-  font-weight: 700;
+.hero-container { width: 100%; max-width: 1000px; animation: fadeIn 0.4s ease-out; }
+
+.hero-name {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900;
+  font-size: 5rem; 
+  text-transform: uppercase;
+  letter-spacing: -3px;
+  line-height: 0.85;
+  margin-bottom: 10px;
+}
+
+.hero-id {
+  display: inline-block;
+  font-weight: 900;
   font-size: 1.2rem;
-  color: var(--mat-sys-on-surface-variant);
-  text-align: center;
+  background: #000;
+  color: #fff;
+  padding: 4px 12px;
+  margin-bottom: 60px;
 }
 
-.clickable-item {
+.hero-data-grid {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.hero-item {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.hero-item mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: #000;
+}
+
+.hero-text { display: flex; flex-direction: column; }
+
+.hero-text label {
+  font-size: 0.9rem;
+  font-weight: 900;
+  color: #777;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.hero-text p {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  color: #000;
+}
+
+
+.loader { display: flex; justify-content: center; align-items: center; height: 100%; width: 100%; }
+.empty-msg { font-weight: 900; font-size: 2rem; text-transform: uppercase; color: #ccc; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.history-view {
   width: 100%;
-  text-decoration: none;
-  cursor: pointer;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in;
 }
 
-
-.fest-card.active-history {
-  background: var(--mat-sys-primary); /* Use your primary theme color */
-  transform: translate(4px, 4px); /* "Press" the card into the shadow */
-  box-shadow: 4px 4px 0px #000; /* Smaller shadow to simulate being pressed */
+.history-title {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900;
+  font-size: 3rem;
+  text-transform: uppercase;
+  margin-bottom: 40px;
 }
 
-/* 2. Change the Icon color when active */
-.active-history .nav-icon {
-  color: #fff; /* White icon on primary background */
+.history-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* 3. Adjust the Label when active */
-.active-history .nav-label {
-  background: var(--mat-sys-primary-container); /* Subtle shift for the label block */
-  border-top: 2px solid #000;
+.history-item-row {
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 2rem;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s ease;
 }
 
-.active-history .nav-label .title {
-  color: var(--mat-sys-on-primary-container);
+.h-main-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.h-name {
+  font-weight: 900;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+}
+
+.h-dates {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.h-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--mat-sys-primary);
+  font-weight: 900;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+.h-status mat-icon {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 2px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

@@ -77,10 +77,8 @@ class Reservation < ApplicationRecord
 
   def normalize_phone
     if phone_number.present?
-      # On parse le numéro pour valider, puis on extrait uniquement les chiffres
       parsed = Phonelib.parse(phone_number)
       if parsed.valid?
-        # On force l'extraction des chiffres sans le '+'
         self.phone_number = parsed.national.gsub(/\D/, '') 
       end
     end

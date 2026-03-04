@@ -2,48 +2,33 @@
   <mat-sidenav mode="side" opened class="custom-sidebar">
     <mat-nav-list class="mat-nav-list">
       
-      <!-- STATE: User has an active reservation -->
       <ng-container *ngIf="activeReservation(); else noReservation">
         <a [routerLink]="['/reservations', activeReservation()?.id, 'edit']" class="card-link">
           <div class="fest-card">
-            <div class="nav-icon-container">
-              <mat-icon class="nav-icon">edit</mat-icon>
-            </div>
-            <div class="nav-label">
-              <span class="title">{{ 'RESERVATIONS.SIDEBAR.EDIT' | translate }}</span>
-            </div>
+            <div class="nav-icon-container"><mat-icon class="nav-icon">edit</mat-icon></div>
+            <div class="nav-label"><span class="title">{{ 'RESERVATIONS.SIDEBAR.EDIT' | translate }}</span></div>
           </div>
         </a>
 
         <a (click)="onCancel()" class="card-link clickable-item">
           <div class="fest-card">
-            <div class="nav-icon-container">
-              <mat-icon class="nav-icon color-warn">delete_forever</mat-icon>
-            </div>
-            <div class="nav-label">
-              <span class="title">{{ 'RESERVATIONS.SIDEBAR.CANCEL' | translate }}</span>
-            </div>
+            <div class="nav-icon-container"><mat-icon class="nav-icon color-warn">delete_forever</mat-icon></div>
+            <div class="nav-label"><span class="title">{{ 'RESERVATIONS.SIDEBAR.CANCEL' | translate }}</span></div>
           </div>
         </a>
       </ng-container>
 
-      <!-- STATE: No Active Reservation -->
       <ng-template #noReservation>
         <a [routerLink]="['/accommodations']" [queryParams]="{ category: 'camping' }" class="card-link">
           <div class="fest-card">
             <img src="assets/camping-photo.jpeg" alt="Camping" class="nav-image">
-            <div class="nav-label">
-              <span class="title">{{ 'RESERVATIONS.SIDEBAR.RESERVE_CAMPING' | translate }}</span>
-            </div>
+            <div class="nav-label"><span class="title">{{ 'RESERVATIONS.SIDEBAR.RESERVE_CAMPING' | translate }}</span></div>
           </div>
         </a>
-
         <a [routerLink]="['/accommodations']" [queryParams]="{ category: 'hotel' }" class="card-link">
           <div class="fest-card">
             <img src="assets/hotel-photo.jpg" alt="Hotel" class="nav-image">
-            <div class="nav-label">
-              <span class="title">{{ 'RESERVATIONS.SIDEBAR.RESERVE_HOTEL' | translate }}</span>
-            </div>
+            <div class="nav-label"><span class="title">{{ 'RESERVATIONS.SIDEBAR.RESERVE_HOTEL' | translate }}</span></div>
           </div>
         </a>
       </ng-template>
@@ -52,26 +37,71 @@
 
       <a (click)="toggleHistoryView()" class="card-link clickable-item">
         <div class="fest-card" [class.active-history]="showHistory()">
-          <mat-icon class="nav-icon">
-            {{ showHistory() ? 'update' : 'history' }}
-          </mat-icon>
+          <mat-icon class="nav-icon">{{ showHistory() ? 'update' : 'history' }}</mat-icon>
           <div class="nav-label">
-            <span class="title">
-              {{ (showHistory() ? 'RESERVATIONS.SIDEBAR.BACK' : 'RESERVATIONS.SIDEBAR.HISTORY') | translate }}
-            </span>
+            <span class="title">{{ (showHistory() ? 'RESERVATIONS.SIDEBAR.BACK' : 'RESERVATIONS.SIDEBAR.HISTORY') | translate }}</span>
           </div>
         </div>
       </a>
-
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="main-display">
-    <!-- Empty State / No active reservation -->
-    <p *ngIf="!isLoading() && !activeReservation() && !showHistory()">
+    <div *ngIf="isLoading()" class="loader"><mat-spinner diameter="60"></mat-spinner></div>
+
+    <div *ngIf="!isLoading() && activeReservation() && !showHistory()" class="hero-container">
+      <h1 class="hero-name">{{ activeReservation()?.reservation_name }}</h1>
+      <div class="hero-id">#{{ activeReservation()?.id }}</div>
+
+      <div class="hero-data-grid">
+        <div class="hero-item">
+          <mat-icon>calendar_today</mat-icon>
+          <div class="hero-text">
+            <label>{{ 'RESERVATIONS.FIELDS.DATES' | translate }}</label>
+            <p>{{ activeReservation()?.arrival_at | date:'longDate' }} — {{ activeReservation()?.departure_at | date:'longDate' }}</p>
+          </div>
+        </div>
+
+        <div class="hero-item">
+          <mat-icon>people</mat-icon>
+          <div class="hero-text">
+            <label>{{ 'RESERVATIONS.FIELDS.GUESTS' | translate }}</label>
+            <p>{{ activeReservation()?.nb_of_people }} {{ 'RESERVATIONS.FIELDS.PEOPLE' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="hero-item">
+          <mat-icon>phone</mat-icon>
+          <div class="hero-text">
+            <label>{{ 'RESERVATIONS.FIELDS.PHONE' | translate }}</label>
+            <p>{{ activeReservation()?.phone_number }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading() && showHistory()" class="history-view">
+      <h2 class="history-title">{{ 'RESERVATIONS.SIDEBAR.HISTORY' | translate }}</h2>
+      
+      <div *ngIf="historyReservations().length === 0" class="centered-content">
+        <p class="empty-msg">{{ 'RESERVATIONS.HISTORY_EMPTY' | translate }}</p>
+      </div>
+
+      <div class="history-list">
+        <div *ngFor="let res of historyReservations()" class="history-item-row">
+          <div class="h-main-info">
+            <span class="h-name">{{ res.reservation_name }}</span>
+            <span class="h-dates">{{ res.arrival_at | date:'mediumDate' }} - {{ res.departure_at | date:'mediumDate' }}</span>
+          </div>
+          <div class="h-status">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{ 'RESERVATIONS.STATUS.COMPLETED' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="!isLoading() && !activeReservation() && !showHistory()" class="empty-msg">
       {{ 'RESERVATIONS.EMPTY_STATE' | translate }}
     </p>
-
-    <!-- History list or Active details display logic here -->
   </mat-sidenav-content>
 </mat-sidenav-container>

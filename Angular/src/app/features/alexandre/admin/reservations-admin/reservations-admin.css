@@ -1,0 +1,122 @@
+/* --- CONTAINER LAYOUT --- */
+.admin-container {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- HEADER & SEARCH --- */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 30px;
+}
+
+.header-section h1 {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900;
+  font-size: 3rem;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.search-field {
+  width: 300px;
+}
+
+/* Custom styling for Material Input to match neo-brutalist theme */
+::ng-deep .search-field .mat-mdc-text-field-wrapper {
+  background-color: #fff !important;
+  border: 3px solid #000 !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .search-field .mdc-notched-outline__leading,
+::ng-deep .search-field .mdc-notched-outline__notch,
+::ng-deep .search-field .mdc-notched-outline__trailing {
+  border: none !important; /* Hide default border to use our custom one */
+}
+
+/* --- TABLE STYLING --- */
+.table-container {
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+}
+
+/* Header Cells */
+.mat-mdc-header-cell {
+  font-family: 'Public Sans', sans-serif;
+  font-weight: 900 !important;
+  text-transform: uppercase;
+  color: #000 !important;
+  font-size: 0.85rem;
+  background-color: #f0f0f0;
+  border-bottom: 3px solid #000 !important;
+  padding: 16px !important;
+}
+
+/* Body Cells */
+.mat-mdc-cell {
+  padding: 16px !important;
+  font-weight: 600;
+  border-bottom: 1px solid #eee !important;
+}
+
+/* Zebra Striping */
+.mat-mdc-row:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.mat-mdc-row:hover {
+  background-color: #f1f3f9;
+}
+
+/* --- STATUS CHIPS --- */
+.status-chip {
+  display: inline-block;
+  padding: 4px 12px;
+  border: 2px solid #000;
+  border-radius: 4px;
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.status-chip.active {
+  background-color: #00ff00; /* Neon Green */
+  color: #000;
+}
+
+.status-chip.cancelled {
+  background-color: #ff4444; /* Bright Red */
+  color: #fff;
+}
+
+/* --- PAGINATOR --- */
+::ng-deep .mat-mdc-paginator {
+  background-color: #f0f0f0 !important;
+  border-top: 3px solid #000;
+  font-weight: 700;
+}
+
+/* No Data Row */
+.mat-no-data-row {
+  text-align: center;
+  font-weight: 900;
+  text-transform: uppercase;
+  padding: 40px;
+}

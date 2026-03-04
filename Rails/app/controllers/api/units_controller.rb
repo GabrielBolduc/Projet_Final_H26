@@ -4,21 +4,19 @@ class Api::UnitsController < ApiController
 
     def index
         @accommodation = Accommodation.find(params[:accommodation_id])
-        return render_logic_error("Accommodation not found") unless @accommodation
-
         @units = @accommodation.units.with_attached_image
 
         render json: {
             status: "success",
-            data: @units.map { |u| format_unit(u) }
+            data: @units.map { |u| u.formatted_json(request.base_url) }
         }
     end
 
     def show
-        render json: {
-            status: "success",
-            data: @unit.as_json.merge(image_url: @unit.image.attached? ? url_for(@unit.image) : nil)
-        }, status: :ok
+        render json: { 
+            status: "success", 
+            data: @unit.formatted_json(request.base_url) 
+        }
     end
 
     def create
@@ -36,7 +34,10 @@ class Api::UnitsController < ApiController
 
     def update
         if @unit.update(unit_params)
-            render json: { status: "success", data: @unit }, status: :ok
+            render json: { 
+                status: "success", 
+                data: @unit.formatted_json(request.base_url) 
+            }
         else
             render_logic_error(@unit.errors.full_messages)
         end
@@ -73,8 +74,6 @@ class Api::UnitsController < ApiController
     end
 
     def format_unit(unit)
-        unit.as_json.merge({
-            image_url: unit.image.attached? ? url_for(unit.image) : nil
-        })
+        unit.formatted_json(request.base_url)
     end
 end

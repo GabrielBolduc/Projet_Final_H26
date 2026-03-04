@@ -60,7 +60,14 @@ export class Units implements OnInit {
     this.service.getUnitsByAccommodation(id).subscribe({
       next: (res) => {
         if (res.status === 'success' && res.data) {
-          this.units.set([...res.data]);
+          const formattedUnits = res.data.map((unit: any) => ({
+            ...unit,
+            food_options: typeof unit.food_options === 'string' 
+              ? unit.food_options.split(',').map((opt: string) => opt.trim()) 
+              : unit.food_options
+          }));
+          
+          this.units.set(formattedUnits);
         }
       },
       error: (err) => {

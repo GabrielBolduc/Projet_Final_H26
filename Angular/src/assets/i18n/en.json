@@ -436,7 +436,11 @@
   "RESERVATIONS": {
     "SIDEBAR": {
       "RESERVE_CAMPING": "Reserve Camping",
-      "RESERVE_HOTEL": "Reserve Hotel"
+      "RESERVE_HOTEL": "Reserve Hotel",
+      "EDIT": "Edit Reservation",
+      "CANCEL": "Cancel Reservation",
+      "HISTORY": "View History",
+      "BACK": "Go Back"
     },
     "EMPTY_STATE": "No reservations yet..."
   },

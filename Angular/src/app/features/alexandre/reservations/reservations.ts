@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize, take } from 'rxjs/operators';
@@ -27,6 +28,7 @@ import { ApiResponse } from '@core/models/api-response';
     MatDividerModule,
     MatButtonModule,
     MatCardModule,
+    MatProgressSpinnerModule,
     TranslateModule
   ],
   templateUrl: './reservations.html',

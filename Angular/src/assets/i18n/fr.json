@@ -438,7 +438,11 @@
   "RESERVATIONS": {
     "SIDEBAR": {
       "RESERVE_CAMPING": "Réserver Camping",
-      "RESERVE_HOTEL": "Réserver Hôtel"
+      "RESERVE_HOTEL": "Réserver Hôtel",
+      "EDIT": "Modifier Réservation",
+      "CANCEL": "Annuler Réservation",
+      "HISTORY": "Historique",
+      "BACK": "Retour"
     },
     "EMPTY_STATE": "Aucune réservation pour le moment..."
   },
@@ -455,6 +459,11 @@
     "FOOD": "Options de restauration",
     "UPLOAD_IMAGE": "Télécharger une image",
     "NO_UNITS_AVAILABLE": "Aucune unité disponible pour la réservation",
+    "TITLE": "Gestion des Unités",
+    "NEW_UNIT": "Ajouter une Unité",
+    "FEATURES": "Caractéristiques",
+    "AVAILABLE_QTY": "Quantité disponible",
+    "UNITS": "Unités",
     "TYPES": {
       "ROOMS_HEADER": "Chambres d'hôtel",
       "TERRAINS_HEADER": "Terrains de camping",

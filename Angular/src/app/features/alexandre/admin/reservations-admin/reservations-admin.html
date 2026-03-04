@@ -5,7 +5,7 @@
 
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'ADMIN.SEARCH' | translate }}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. John Doe" #input>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Grand Royal Hotel" #input>
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </div>
@@ -49,7 +49,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'ADMIN.UNIT_TYPE' | translate }} </th>
         <td mat-cell *matCellDef="let row"> 
           <span class="unit-type-label" *ngIf="row.unit">
-            {{ row.unit.type?.split('::')[1] || row.unit.type }}
+            {{ 'UNITS.TYPES.' + (row.unit.type?.split('::')[1] || row.unit.type) | translate }}
           </span>
           <span *ngIf="!row.unit">—</span>
         </td>

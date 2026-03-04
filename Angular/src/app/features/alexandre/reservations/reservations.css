@@ -14,12 +14,13 @@
   width: 150px; background: var(--mat-sys-surface-container-low); border: 2px solid #000; 
   border-radius: 15px; overflow: hidden; transition: 0.2s; display: flex; flex-direction: column; align-items: center; flex-shrink: 0; 
 }
+.fest-card:hover { transform: translateY(-5px); box-shadow: 6px 6px 0 var(--mat-sys-primary); }
 .nav-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-bottom: 2px solid #000; }
 .nav-label { width: 100%; padding: 12px 8px; text-align: center; background: #fff; border-top: 2px solid #000; }
-.nav-label .title { font: 900 0.85rem sans-serif; text-transform: uppercase; color: #000; text-decoration: none!important; }
+.nav-label .title { font: 900 0.85rem sans-serif; text-transform: uppercase; color: #000; text-decoration: none; }
 .nav-icon { font-size: 32px; width: 32px; height: 32px; padding: 15px; color: #000; }
 .active-history { background: var(--mat-sys-primary); box-shadow: 2px 2px 0 #000; }
-.card-link { text-decoration: none!important; color: inherit; display: block; }
+.card-link { text-decoration: none; color: inherit; display: block; }
 
 /* --- HERO SECTION --- */
 .hero-container { width: 100%; max-width: 1000px; animation: fadeIn 0.4s ease-out; padding-bottom: 60px; }

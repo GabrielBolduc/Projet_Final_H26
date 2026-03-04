@@ -52,17 +52,13 @@
   <mat-sidenav-content class="main-display">
     <div *ngIf="isLoading()" class="loader"><mat-spinner diameter="60"></mat-spinner></div>
 
-    <!-- ACTIVE RESERVATION VIEW WITH SPLIT LAYOUT -->
     <div *ngIf="!isLoading() && activeReservation() && !showHistory()" class="hero-container">
       <div class="hero-split-layout">
         
-        <!-- LEFT COLUMN: DATA -->
         <div class="hero-details">
           <h1 class="hero-name">{{ activeReservation()?.reservation_name }}</h1>
-          <div class="hero-id">#{{ activeReservation()?.id }}</div>
 
           <div class="hero-data-grid">
-            <!-- UNIT & ACCOMMODATION ITEM -->
             <div class="hero-item" *ngIf="activeReservation()?.unit">
               <mat-icon>home</mat-icon>
               <div class="hero-text">
@@ -111,14 +107,11 @@
           </div>
         </div>
 
-        <!-- RIGHT COLUMN: VISUAL -->
         <div class="hero-visual">
-          <!-- Unit Image -->
           <div class="unit-image-wrapper" *ngIf="activeReservation()?.unit?.image_url">
             <img [src]="activeReservation()?.unit?.image_url" alt="Unit" class="unit-hero-img">
           </div>
 
-          <!-- Map Widget (Matches your public schedule style) -->
           <div class="map-card" *ngIf="mapUrl()">
             <iframe 
               width="100%" 
@@ -136,26 +129,23 @@
       </div>
     </div>
 
-    <!-- HISTORY VIEW -->
     <div *ngIf="!isLoading() && showHistory()" class="history-view">
       <h2 class="history-title">{{ 'RESERVATIONS.SIDEBAR.HISTORY' | translate }}</h2>
       
-      <div *ngIf="historyReservations().length === 0" class="centered-content">
+      <div *ngIf="filteredHistory().length === 0" class="centered-content">
         <p class="empty-msg">{{ 'RESERVATIONS.HISTORY_EMPTY' | translate }}</p>
       </div>
 
       <div class="history-list">
-        <div *ngFor="let res of historyReservations()" class="history-item-row">
+        <div *ngFor="let res of filteredHistory()" class="history-item-row">
           <div class="h-main-info">
             <span class="h-name">{{ res.reservation_name }}</span>
             <span class="h-dates">{{ res.arrival_at | date:'mediumDate' }} - {{ res.departure_at | date:'mediumDate' }}</span>
           </div>
-          <span class="h-name" *ngIf="res.unit?.accommodation">
-            • {{ res.unit?.accommodation?.name }}
-          </span>
-          <div class="h-status">
-            <mat-icon>check_circle</mat-icon>
-            <span>{{ 'RESERVATIONS.STATUS.COMPLETED' | translate }}</span>
+          
+          <div class="h-status" [ngClass]="res.status">
+            <mat-icon>{{ res.status === 'cancelled' ? 'cancel' : 'check_circle' }}</mat-icon>
+            <span>{{ 'RESERVATIONS.STATUS.' + res.status.toUpperCase() | translate }}</span>
           </div>
         </div>
       </div>

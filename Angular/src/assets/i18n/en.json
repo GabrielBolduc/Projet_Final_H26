@@ -435,6 +435,8 @@
   },
   "ADMIN": {
     "SEARCH": "Search",
+    "ACCOMMODATION": "Accommodation",
+    "UNIT_TYPE": "Unit Type",
     "RESERVATIONS": {
       "TITLE": "Reservation Management"
     }

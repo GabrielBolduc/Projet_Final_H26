@@ -78,4 +78,10 @@ export class ReservationsAdmin implements OnInit {
     
     return 'Active';
   }
+
+  getUnitTypeName(type: string | undefined): string {
+    if (!type) return '';
+    const parts = type.split('::');
+    return parts[parts.length - 1];
+  }
 }

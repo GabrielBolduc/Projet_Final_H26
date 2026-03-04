@@ -44,8 +44,13 @@ export class Reservations implements OnInit {
 
   activeReservation = signal<Reservation | null>(null);
   historyReservations = signal<Reservation[]>([]);
+
   showHistory = signal<boolean>(false);
   isLoading = signal<boolean>(true);
+
+  filteredHistory = computed(() => {
+    return this.historyReservations().filter(res => res.status !== 'active');
+  });
 
   mapUrl = computed(() => {
     const res = this.activeReservation();
@@ -57,16 +62,15 @@ export class Reservations implements OnInit {
     const lng = Number(acc.longitude);
     const offset = 0.005; 
     
-    // OpenStreetMap Embed URL with marker
     const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
     
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   });
 
-
   ngOnInit(): void {
     this.refreshData();
   }
+
   refreshData(): void {
     this.isLoading.set(true);
 
@@ -76,12 +80,12 @@ export class Reservations implements OnInit {
       errors: {} 
     };
 
-    const active$ = this.reservationsService.list({ history: false } as any).pipe(
+    const active$ = this.reservationsService.list({ history: false }).pipe(
       take(1),
       catchError(() => of(fallback))
     );
 
-    const history$ = this.reservationsService.list({ history: true } as any).pipe(
+    const history$ = this.reservationsService.list({ history: true }).pipe(
       take(1),
       catchError(() => of(fallback))
     );
@@ -96,17 +100,13 @@ export class Reservations implements OnInit {
       .subscribe({
         next: (results: any) => {
           const activeList = results.active?.data || [];
-
           this.activeReservation.set(activeList.length > 0 ? activeList[0] : null);
           
           this.historyReservations.set(results.history?.data || []);
-          this.cdr.detectChanges();
         },
         error: (err) => {
           console.error("Critical error in refreshData", err);
-          this.activeReservation.set(null);
-          this.historyReservations.set([]);
-          this.cdr.detectChanges();
+          this.isLoading.set(false);
         }
       });
   }
@@ -123,8 +123,8 @@ export class Reservations implements OnInit {
     if (confirm('Are you sure you want to cancel this reservation?')) {
       this.reservationsService.delete(current.id).subscribe({
         next: () => {
-          this.activeReservation.set(null);
-          this.refreshData();
+          this.activeReservation.set(null); 
+          this.refreshData(); 
         },
         error: (err) => alert(err.message || 'Error cancelling reservation')
       });
@@ -137,6 +137,7 @@ export class Reservations implements OnInit {
 
   getUnitTypeName(type: string | undefined): string {
     if (!type) return '';
-    return type.split('::')[1] || type;
+    const parts = type.split('::');
+    return parts[parts.length - 1];
   }
 }

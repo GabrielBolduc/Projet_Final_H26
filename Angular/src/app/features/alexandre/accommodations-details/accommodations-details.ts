@@ -13,6 +13,8 @@ import { Accommodation, AccommodationCategory } from '@core/models/accommodation
 import { AuthService } from '@core/services/auth.service';
 import { UnitsService } from '@core/services/units.service';
 import { Unit, UnitType } from '@core/models/unit';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { signal, effect } from '@angular/core';
 
 @Component({
   selector: 'app-accommodations-details',
@@ -29,6 +31,7 @@ export class AccommodationsDetails {
   private service = inject(AccommodationsService);
   private authService = inject(AuthService);
   private unitsService = inject(UnitsService);
+  private sanitizer = inject(DomSanitizer);
 
   Category = AccommodationCategory;
   categoryNames: Record<number, string> = {
@@ -138,4 +141,21 @@ export class AccommodationsDetails {
   get isAdmin(): boolean {
     return this.authService.isAdmin();
   }
+
+  mapUrl = computed(() => {
+    // Use the accommodation signal from your details page
+    const acc = this.accommodation();
+    if (!acc || !acc.latitude || !acc.longitude) return null;
+
+    const lat = Number(acc.latitude);
+    const lng = Number(acc.longitude);
+    const offset = 0.005; 
+
+    // Fixed: used ${} for the math to execute and corrected the bbox/marker syntax
+    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
+    
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  });
+
+  
 }

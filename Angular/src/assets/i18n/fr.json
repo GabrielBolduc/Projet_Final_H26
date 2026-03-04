@@ -437,6 +437,8 @@
   },
   "ADMIN": {
     "SEARCH": "Rechercher",
+    "ACCOMMODATION": "Hébergement",
+    "UNIT_TYPE": "Type d'unité",
     "RESERVATIONS": {
       "TITLE": "Gestion des Réservations"
     }

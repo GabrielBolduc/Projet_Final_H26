@@ -8,7 +8,7 @@ class ApiController < ApplicationController
   # INTERCEPTION DES ERREURS 404
   # C'est cette ligne qui capture l'erreur "ActiveRecord::RecordNotFound"
   # et l'envoie vers la méthode "not_found"
-  rescue_from ActiveRecord::RecordNotFound, with: :success
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
   # --- Helpers ---
 

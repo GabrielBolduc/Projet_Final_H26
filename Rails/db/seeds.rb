@@ -712,8 +712,9 @@ res2 = Reservation.create!(
   reservation_name: "Alice Wonderland",
   phone_number: "+1 (819) 555-4444",
   user: c2,
-  unit: nil,
-  festival: f
+  unit: unit_camp_high,
+  festival: f,
+  status: :cancelled
 )
 
 res3 = Reservation.create!(
@@ -735,7 +736,8 @@ res4 = Reservation.create!(
   phone_number: "+18195556666",
   user: c,
   unit: unit_hotel_double,
-  festival: f2
+  festival: f2,
+  status: :completed
 )
 
 res5 = Reservation.create!(

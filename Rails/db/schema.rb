@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_04_191903) do
   create_table "accommodations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
@@ -147,6 +147,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_120000) do
     t.integer "nb_of_people", limit: 1, null: false, unsigned: true
     t.string "phone_number", limit: 20, null: false
     t.string "reservation_name", limit: 100, null: false
+    t.integer "status", default: 0, null: false
     t.bigint "unit_id"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false

@@ -1,8 +1,11 @@
 # app/models/reservation.rb
 class Reservation < ApplicationRecord
   belongs_to :user
-  belongs_to :unit, optional: true
+  belongs_to :unit
   belongs_to :festival
+  
+  attribute :status, :integer 
+  enum :status, { active: 0, cancelled: 1, completed: 2 }
 
   validates :arrival_at, :departure_at, :reservation_name, presence: true
   validates :nb_of_people, numericality: { only_integer: true, greater_than: 0 }
@@ -24,7 +27,7 @@ class Reservation < ApplicationRecord
     )
 
     super(options.merge({
-      only: [:id, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at]
+      only: [:id, :status, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at, ]
     })).merge({
       phone_number: formatted_phone
     })
@@ -44,7 +47,8 @@ class Reservation < ApplicationRecord
   def no_overlapping_bookings
     return unless unit && arrival_at && departure_at
 
-    overlaps = Reservation.where(unit_id: unit_id)
+    overlaps = Reservation.active
+                          .where(unit_id: unit_id)
                           .where.not(id: id)
                           .where("arrival_at < ? AND departure_at > ?", departure_at, arrival_at)
 

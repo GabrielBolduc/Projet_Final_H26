@@ -163,3 +163,12 @@ table {
   font-style: italic;
   border: 2px dashed var(--mat-sys-outline-variant);
 }
+
+.unit-type-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--mat-sys-primary);
+  background: var(--mat-sys-primary-container);
+  padding: 2px 8px;
+  border-radius: 4px;
+}

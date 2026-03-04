@@ -1,5 +1,6 @@
 export interface Reservation {
   id?: number;
+  status: 'active' | 'cancelled' | 'completed';
   
   arrival_at: string | Date; 
   departure_at: string | Date;

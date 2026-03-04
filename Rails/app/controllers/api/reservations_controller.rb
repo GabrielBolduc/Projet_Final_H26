@@ -7,13 +7,15 @@ class Api::ReservationsController < ApiController
       return render json: { status: "success", data: [], message: "Not logged in" }
     end
 
-    @reservations = if admin_user?
-      Reservation.all
-    elsif params[:history] == 'true'
-      current_user.reservations.where(unit_id: nil)
-    else
-      current_user.reservations.where.not(unit_id: nil)
-    end.includes(:festival, unit: :accommodation).order(created_at: :desc)
+    query = if admin_user?
+              Reservation.all
+            elsif params[:history] == 'true'
+              current_user.reservations.cancelled.or(current_user.reservations.completed)
+            else
+              current_user.reservations.active
+            end
+
+    @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
 
     data = @reservations.map do |res|
       json = res.as_json(include: :festival)
@@ -54,7 +56,7 @@ class Api::ReservationsController < ApiController
   end
 
   def destroy
-    if @reservation.update(unit_id: nil)
+    if @reservation.cancelled!
       render json: { status: "success", message: "Reservation cancelled" }, status: :ok
     else
       render_validation_error(@reservation)

@@ -8,7 +8,7 @@
         t.string :phone_number, limit: 20, null: false
 
         t.references :user, null: false, foreign_key: true
-        t.references :unit, null: true, foreign_key: true
+        t.references :unit, null: false, foreign_key: true
         t.references :festival, null: false, foreign_key: true
 
         t.timestamps

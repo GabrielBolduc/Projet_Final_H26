@@ -25,8 +25,15 @@ export class ReservationsAdmin implements OnInit {
   private reservationsService = inject(ReservationsService);
 
   dataSource = new MatTableDataSource<Reservation>([]);
-  displayedColumns: string[] = ['id', 'reservation_name', 'arrival_at', 'departure_at', 'nb_of_people', 'phone_number', 'status'];
-  
+  displayedColumns: string[] = [
+    'reservation_name', 
+    'accommodation',
+    'unit_type',
+    'arrival_at', 
+    'departure_at', 
+    'nb_of_people', 
+    'status'
+  ];  
   isLoading = signal<boolean>(true);
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -43,6 +50,11 @@ export class ReservationsAdmin implements OnInit {
         this.dataSource.data = res.data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.dataSource.filterPredicate = (data: Reservation, filter: string) => {
+          const accommodationName = data.unit?.accommodation?.name?.toLowerCase() || '';
+          return accommodationName.includes(filter);
+        };
         this.isLoading.set(false);
       },
       error: () => this.isLoading.set(false)
@@ -58,11 +70,12 @@ export class ReservationsAdmin implements OnInit {
     }
   }
 
-  getReservationStatus(row: any): 'Active' | 'Cancelled' | 'Archived' {
-    if (!row.unit_id) return 'Cancelled';
-    if (row.festival?.status === 'completed') {
-      return 'Archived';
-    }
+  getReservationStatus(row: Reservation): 'Active' | 'Cancelled' | 'Archived' {
+    if (row.status === 'cancelled') return 'Cancelled';
+    
+    const festivalStatus = (row as any).festival?.status;
+    if (festivalStatus === 'completed') return 'Archived';
+    
     return 'Active';
   }
 }

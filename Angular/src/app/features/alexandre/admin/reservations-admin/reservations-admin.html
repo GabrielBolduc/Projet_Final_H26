@@ -13,11 +13,6 @@
   <div class="table-container mat-elevation-z8">
     <table mat-table [dataSource]="dataSource" matSort>
 
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-        <td mat-cell *matCellDef="let row"> #{{row.id}} </td>
-      </ng-container>
-
       <ng-container matColumnDef="reservation_name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'RESERVATIONS.NAME' | translate }} </th>
         <td mat-cell *matCellDef="let row"> {{row.reservation_name}} </td>
@@ -41,6 +36,23 @@
       <ng-container matColumnDef="phone_number">
         <th mat-header-cell *matHeaderCellDef> {{ 'RESERVATIONS.PHONE' | translate }} </th>
         <td mat-cell *matCellDef="let row"> {{row.phone_number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="accommodation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'ADMIN.ACCOMMODATION' | translate }} </th>
+        <td mat-cell *matCellDef="let row"> 
+          {{ row.unit?.accommodation?.name || '—' }} 
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="unit_type">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'ADMIN.UNIT_TYPE' | translate }} </th>
+        <td mat-cell *matCellDef="let row"> 
+          <span class="unit-type-label" *ngIf="row.unit">
+            {{ row.unit.type?.split('::')[1] || row.unit.type }}
+          </span>
+          <span *ngIf="!row.unit">—</span>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="status">

@@ -1,0 +1,146 @@
+<div class="order-page">
+  <a mat-button routerLink="/ticketing" class="back-link">
+    <mat-icon>arrow_back</mat-icon>
+    {{ 'TICKETING_PUBLIC.BACK_TO_CATALOG' | translate }}
+  </a>
+
+  @if (selectedPackage(); as pkg) {
+    <mat-card class="order-card">
+      @if (pkg.image_url) {
+        <div class="ticket-image" [style.background-image]="'url(' + pkg.image_url + ')'"></div>
+      }
+
+      <h1 class="order-title">{{ pkg.title }}</h1>
+      <p class="order-description">{{ pkg.description }}</p>
+
+      <p class="time-window">
+        {{ pkg.valid_at | date:'yyyy-MM-dd HH:mm' }} - {{ pkg.expired_at | date:'yyyy-MM-dd HH:mm' }}
+      </p>
+
+      @if (isAdmin()) {
+        <div class="availability">
+          <div class="labels">
+            <span>{{ 'TICKETING_PUBLIC.AVAILABILITY' | translate }}</span>
+            <span>{{ packageAvailability().sold }} / {{ packageAvailability().quota }}</span>
+          </div>
+          <mat-progress-bar mode="determinate" [value]="packageAvailability().percent"></mat-progress-bar>
+        </div>
+      }
+
+      <p class="price">
+        {{ totalPrice() | currency:'CAD':'symbol-narrow' }}
+        @if (quantity() > 1) {
+          <span class="price-breakdown">
+            ({{ quantity() }} × {{ pkg.price | currency:'CAD':'symbol-narrow' }})
+          </span>
+        }
+      </p>
+      @if (packageAvailability().remaining <= 0) {
+        <p class="sold-out">{{ 'TICKETING_PUBLIC.SOLD_OUT' | translate }}</p>
+      }
+
+      @if (!currentUser()) {
+        <p class="notice">{{ 'TICKETING_PUBLIC.LOGIN_REQUIRED' | translate }}</p>
+        <button mat-flat-button color="primary" (click)="redirectToLogin()">
+          {{ 'AUTH.LOGIN' | translate }}
+        </button>
+      } @else if (!isClient()) {
+        <p class="notice">{{ 'TICKETING_PUBLIC.CLIENT_ONLY' | translate }}</p>
+      } @else {
+        <form [formGroup]="orderForm" (ngSubmit)="createOrder()" class="order-form">
+          <div class="quantity-row">
+            <span>{{ 'TICKETING_PUBLIC.QUANTITY' | translate }}</span>
+            <div class="quantity-controls">
+              <button type="button" mat-icon-button [disabled]="quantity() <= 1" (click)="decreaseQuantity()">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <strong>{{ quantity() }}</strong>
+              <button
+                type="button"
+                mat-icon-button
+                [disabled]="packageAvailability().remaining <= quantity()"
+                (click)="increaseQuantity()"
+              >
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          @if (quantityControl?.hasError('min') && quantityControl?.touched) {
+            <p class="error">{{ 'TICKETING_PUBLIC.INVALID_QUANTITY' | translate }}</p>
+          }
+
+          <mat-divider class="form-divider"></mat-divider>
+
+          <div formArrayName="tickets" class="holders-list">
+            @for (ticketGroup of ticketsFormArray.controls; track $index) {
+              <div [formGroupName]="$index" class="holder-group">
+                <h3 class="holder-title">{{ 'TICKETING_PUBLIC.TICKET' | translate }} #{{ $index + 1 }}</h3>
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'TICKETING_PUBLIC.HOLDER_NAME' | translate }}</mat-label>
+                    <input matInput formControlName="holder_name">
+                    @if (ticketGroup.get('holder_name')?.hasError('required') && ticketGroup.get('holder_name')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.REQUIRED' | translate }}</mat-error>
+                    }
+                    @if (ticketGroup.get('holder_name')?.hasError('maxlength') && ticketGroup.get('holder_name')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.HOLDER_NAME_MAX' | translate }}</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'TICKETING_PUBLIC.HOLDER_EMAIL' | translate }}</mat-label>
+                    <input matInput type="email" formControlName="holder_email">
+                    @if (ticketGroup.get('holder_email')?.hasError('required') && ticketGroup.get('holder_email')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.REQUIRED' | translate }}</mat-error>
+                    }
+                    @if (ticketGroup.get('holder_email')?.hasError('email') && ticketGroup.get('holder_email')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.INVALID_EMAIL' | translate }}</mat-error>
+                    }
+                    @if (ticketGroup.get('holder_email')?.hasError('maxlength') && ticketGroup.get('holder_email')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.HOLDER_EMAIL_MAX' | translate }}</mat-error>
+                    }
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'TICKETING_PUBLIC.HOLDER_PHONE' | translate }}</mat-label>
+                    <input matInput formControlName="holder_phone">
+                    @if (ticketGroup.get('holder_phone')?.hasError('required') && ticketGroup.get('holder_phone')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.REQUIRED' | translate }}</mat-error>
+                    }
+                    @if (ticketGroup.get('holder_phone')?.hasError('pattern') && ticketGroup.get('holder_phone')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.INVALID_PHONE' | translate }}</mat-error>
+                    }
+                    @if (ticketGroup.get('holder_phone')?.hasError('maxlength') && ticketGroup.get('holder_phone')?.touched) {
+                      <mat-error>{{ 'TICKETING_PUBLIC.HOLDER_PHONE_MAX' | translate }}</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (orderError()) {
+            <p class="error">{{ orderError() | translate: orderErrorParams() }}</p>
+          }
+
+          @if (orderSuccess()) {
+            <p class="success">{{ orderSuccess() | translate: orderSuccessParams() }}</p>
+          }
+
+          <div class="actions">
+            <a mat-stroked-button routerLink="/ticketing">{{ 'COMMON.CANCEL' | translate }}</a>
+            <button mat-flat-button color="primary" type="submit" [disabled]="isSubmittingOrder() || packageAvailability().remaining <= 0">
+              {{ 'TICKETING_PUBLIC.CONFIRM_ORDER' | translate }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card>
+  } @else {
+    <mat-card class="missing-card">
+      <p class="notice">{{ 'TICKETING_PUBLIC.PACKAGE_NOT_FOUND' | translate }}</p>
+      <a mat-button routerLink="/ticketing" class="back-link">{{ 'TICKETING_PUBLIC.BACK_TO_CATALOG' | translate }}</a>
+    </mat-card>
+  }
+</div>

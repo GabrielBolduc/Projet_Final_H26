@@ -1,0 +1,475 @@
+0000000000000000000000000000000000000000 8dfe399d1c44eea651206a449e2314ac917c1a7c GabrielBolduc <bolducGabriel@outlook.com> 1770395050 -0500	commit (initial): Initialisation du projet
+8dfe399d1c44eea651206a449e2314ac917c1a7c a1c314178286a0f1d407f464b9a372712acad4fc GabrielBolduc <bolducGabriel@outlook.com> 1770395823 -0500	commit: Rename projet to Rails
+a1c314178286a0f1d407f464b9a372712acad4fc dcf2e09a7c74319f39a91451daf75eaae9db1de7 GabrielBolduc <bolducGabriel@outlook.com> 1770396541 -0500	commit: Add Angular material
+dcf2e09a7c74319f39a91451daf75eaae9db1de7 dcf2e09a7c74319f39a91451daf75eaae9db1de7 GabrielBolduc <bolducGabriel@outlook.com> 1770584917 -0500	checkout: moving from main to main
+dcf2e09a7c74319f39a91451daf75eaae9db1de7 01b5b2f99a7dd1723715bb66b358f9aaaf3c9e25 GabrielBolduc <bolducGabriel@outlook.com> 1770584924 -0500	pull origin main: Fast-forward
+01b5b2f99a7dd1723715bb66b358f9aaaf3c9e25 9c8b42829a39826bc0f8865aed6c0470c59edc22 GabrielBolduc <bolducGabriel@outlook.com> 1770587987 -0500	commit: structure DB
+9c8b42829a39826bc0f8865aed6c0470c59edc22 56da0029c3a57f810560a9c35f7bef5736e6e842 GabrielBolduc <bolducGabriel@outlook.com> 1770644495 -0500	commit: configuration backend
+56da0029c3a57f810560a9c35f7bef5736e6e842 d165f08126049c3baf906501e012cf47e53c9ec1 GabrielBolduc <bolducGabriel@outlook.com> 1770655323 -0500	commit: first test create user
+d165f08126049c3baf906501e012cf47e53c9ec1 5f33d958e3c75c234aeccc52695ffa17be5a8b14 GabrielBolduc <bolducGabriel@outlook.com> 1770657141 -0500	pull origin main: Merge made by the 'ort' strategy.
+5f33d958e3c75c234aeccc52695ffa17be5a8b14 5f33d958e3c75c234aeccc52695ffa17be5a8b14 GabrielBolduc <bolducGabriel@outlook.com> 1770657324 -0500	checkout: moving from main to main
+5f33d958e3c75c234aeccc52695ffa17be5a8b14 a55f60fbbb5d0ff83adbabc94a88366375c0127f GabrielBolduc <bolducGabriel@outlook.com> 1770657418 -0500	commit: edit create test
+a55f60fbbb5d0ff83adbabc94a88366375c0127f 79c2d5a7880b6633cf8ce67752894124df935bf0 GabrielBolduc <bolducGabriel@outlook.com> 1770657708 -0500	pull origin main --rebase: Fast-forward
+79c2d5a7880b6633cf8ce67752894124df935bf0 d87044f1c8dce07c880e442b8c898c8e303f44d5 GabrielBolduc <bolducGabriel@outlook.com> 1770658495 -0500	commit: Edit login/signup button
+d87044f1c8dce07c880e442b8c898c8e303f44d5 0c9bafa4d2f1b32bdef8536c08f6f4b65e6c0cae GabrielBolduc <bolducGabriel@outlook.com> 1770658528 -0500	pull origin main --rebase (start): checkout 0c9bafa4d2f1b32bdef8536c08f6f4b65e6c0cae
+0c9bafa4d2f1b32bdef8536c08f6f4b65e6c0cae d4c83a6d4f0fdd07efd0a0e4e555fba922c6c44f GabrielBolduc <bolducGabriel@outlook.com> 1770658529 -0500	pull origin main --rebase (pick): Edit login/signup button
+d4c83a6d4f0fdd07efd0a0e4e555fba922c6c44f d4c83a6d4f0fdd07efd0a0e4e555fba922c6c44f GabrielBolduc <bolducGabriel@outlook.com> 1770658529 -0500	pull origin main --rebase (finish): returning to refs/heads/main
+d4c83a6d4f0fdd07efd0a0e4e555fba922c6c44f bef224a7c2dea81279db733c6311fdec761291fd GabrielBolduc <bolducGabriel@outlook.com> 1770664405 -0500	commit: Modif api base sur le contenu json
+bef224a7c2dea81279db733c6311fdec761291fd 5f1d1d60cf8984a08ee8614cc9917838752ea737 GabrielBolduc <bolducGabriel@outlook.com> 1770665260 -0500	commit: custon_failure avec gestion api base sur contenu json
+5f1d1d60cf8984a08ee8614cc9917838752ea737 a8a4e54438f33feb488b8c14b8ccba787dce3805 GabrielBolduc <bolducGabriel@outlook.com> 1770687348 -0500	commit: Test registrations & sessions done
+a8a4e54438f33feb488b8c14b8ccba787dce3805 1f73323e1ca906e005d4cbf432d26dc1beb196c2 GabrielBolduc <bolducGabriel@outlook.com> 1770689590 -0500	commit: home component
+1f73323e1ca906e005d4cbf432d26dc1beb196c2 02746601db0fa138038fd6f57d57a876ff6b9773 GabrielBolduc <bolducGabriel@outlook.com> 1770689617 -0500	pull origin main --rebase (start): checkout 02746601db0fa138038fd6f57d57a876ff6b9773
+02746601db0fa138038fd6f57d57a876ff6b9773 f4f8130e04425d975bf2ccc4bb18795d2462c805 GabrielBolduc <bolducGabriel@outlook.com> 1770689617 -0500	pull origin main --rebase (pick): home component
+f4f8130e04425d975bf2ccc4bb18795d2462c805 f4f8130e04425d975bf2ccc4bb18795d2462c805 GabrielBolduc <bolducGabriel@outlook.com> 1770689617 -0500	pull origin main --rebase (finish): returning to refs/heads/main
+f4f8130e04425d975bf2ccc4bb18795d2462c805 56da0029c3a57f810560a9c35f7bef5736e6e842 GabrielBolduc <bolducGabriel@outlook.com> 1770690893 -0500	checkout: moving from main to GabrielB
+56da0029c3a57f810560a9c35f7bef5736e6e842 f4f8130e04425d975bf2ccc4bb18795d2462c805 GabrielBolduc <bolducGabriel@outlook.com> 1770690910 -0500	merge main: Fast-forward
+f4f8130e04425d975bf2ccc4bb18795d2462c805 4fe9702711e67884e0be131868e5e21d1da29cc4 GabrielBolduc <bolducGabriel@outlook.com> 1770730806 -0500	pull origin main --rebase: Fast-forward
+4fe9702711e67884e0be131868e5e21d1da29cc4 f4f8130e04425d975bf2ccc4bb18795d2462c805 GabrielBolduc <bolducGabriel@outlook.com> 1770730913 -0500	checkout: moving from GabrielB to main
+f4f8130e04425d975bf2ccc4bb18795d2462c805 4fe9702711e67884e0be131868e5e21d1da29cc4 GabrielBolduc <bolducGabriel@outlook.com> 1770730921 -0500	pull origin main --rebase: Fast-forward
+4fe9702711e67884e0be131868e5e21d1da29cc4 b58a11715b290b34c3e61ab1fe212b4f91108877 GabrielBolduc <bolducGabriel@outlook.com> 1770732825 -0500	commit: integration rails angular
+b58a11715b290b34c3e61ab1fe212b4f91108877 42cc51495a6e0b6198e8221dcaacc3acdb689ade GabrielBolduc <bolducGabriel@outlook.com> 1770732845 -0500	pull origin main --rebase (start): checkout 42cc51495a6e0b6198e8221dcaacc3acdb689ade
+42cc51495a6e0b6198e8221dcaacc3acdb689ade f1f8c9f557a6a3a1e16aa608ce85c2ed36df6d04 GabrielBolduc <bolducGabriel@outlook.com> 1770732845 -0500	pull origin main --rebase (pick): integration rails angular
+f1f8c9f557a6a3a1e16aa608ce85c2ed36df6d04 f1f8c9f557a6a3a1e16aa608ce85c2ed36df6d04 GabrielBolduc <bolducGabriel@outlook.com> 1770732845 -0500	pull origin main --rebase (finish): returning to refs/heads/main
+f1f8c9f557a6a3a1e16aa608ce85c2ed36df6d04 f1f8c9f557a6a3a1e16aa608ce85c2ed36df6d04 GabrielBolduc <bolducGabriel@outlook.com> 1770733527 -0500	checkout: moving from main to main
+f1f8c9f557a6a3a1e16aa608ce85c2ed36df6d04 89a5e7db76a76f46d3b5d002ab16ab02e5cda967 GabrielBolduc <bolducGabriel@outlook.com> 1770733536 -0500	pull origin main: Fast-forward
+89a5e7db76a76f46d3b5d002ab16ab02e5cda967 4fe9702711e67884e0be131868e5e21d1da29cc4 GabrielBolduc <bolducGabriel@outlook.com> 1770734748 -0500	checkout: moving from main to GabrielB
+4fe9702711e67884e0be131868e5e21d1da29cc4 89a5e7db76a76f46d3b5d002ab16ab02e5cda967 GabrielBolduc <bolducGabriel@outlook.com> 1770734758 -0500	merge main: Fast-forward
+89a5e7db76a76f46d3b5d002ab16ab02e5cda967 e6baea1f6fba87651f807b9e929cd362abc0e899 GabrielBolduc <bolducGabriel@outlook.com> 1770741469 -0500	commit: sti staff,client,admin
+e6baea1f6fba87651f807b9e929cd362abc0e899 89a5e7db76a76f46d3b5d002ab16ab02e5cda967 GabrielBolduc <bolducGabriel@outlook.com> 1770741753 -0500	checkout: moving from GabrielB to main
+89a5e7db76a76f46d3b5d002ab16ab02e5cda967 e6baea1f6fba87651f807b9e929cd362abc0e899 GabrielBolduc <bolducGabriel@outlook.com> 1770741763 -0500	merge GabrielB: Fast-forward
+e6baea1f6fba87651f807b9e929cd362abc0e899 e6baea1f6fba87651f807b9e929cd362abc0e899 GabrielBolduc <bolducGabriel@outlook.com> 1770747851 -0500	checkout: moving from main to GabrielB
+e6baea1f6fba87651f807b9e929cd362abc0e899 732c2b57c21d13d3211c02e594b2085bebac3eb1 GabrielBolduc <bolducGabriel@outlook.com> 1770747895 -0500	commit: test controller correction problemes
+732c2b57c21d13d3211c02e594b2085bebac3eb1 2319fec96e3c35404c78154f5a00ee0756d29ff2 GabrielBolduc <bolducGabriel@outlook.com> 1770748117 -0500	checkout: moving from GabrielB to GabrielR
+2319fec96e3c35404c78154f5a00ee0756d29ff2 e6baea1f6fba87651f807b9e929cd362abc0e899 GabrielBolduc <bolducGabriel@outlook.com> 1770749003 -0500	checkout: moving from GabrielR to main
+e6baea1f6fba87651f807b9e929cd362abc0e899 e8c35bcdb54f229a02109b16e399947dd1a0a1ac GabrielBolduc <bolducGabriel@outlook.com> 1770749014 -0500	pull origin main: Fast-forward
+e8c35bcdb54f229a02109b16e399947dd1a0a1ac 2319fec96e3c35404c78154f5a00ee0756d29ff2 GabrielBolduc <bolducGabriel@outlook.com> 1770749023 -0500	checkout: moving from main to GabrielR
+2319fec96e3c35404c78154f5a00ee0756d29ff2 2319fec96e3c35404c78154f5a00ee0756d29ff2 GabrielBolduc <bolducGabriel@outlook.com> 1770749252 -0500	reset: moving to HEAD
+2319fec96e3c35404c78154f5a00ee0756d29ff2 e8c35bcdb54f229a02109b16e399947dd1a0a1ac GabrielBolduc <bolducGabriel@outlook.com> 1770749268 -0500	checkout: moving from GabrielR to main
+e8c35bcdb54f229a02109b16e399947dd1a0a1ac 732c2b57c21d13d3211c02e594b2085bebac3eb1 GabrielBolduc <bolducGabriel@outlook.com> 1770750041 -0500	checkout: moving from main to GabrielB
+732c2b57c21d13d3211c02e594b2085bebac3eb1 b0f95a2848be0ae80ecfbfe238c16b50f52f99ad GabrielBolduc <bolducGabriel@outlook.com> 1770750047 -0500	merge main: Merge made by the 'ort' strategy.
+b0f95a2848be0ae80ecfbfe238c16b50f52f99ad 2319fec96e3c35404c78154f5a00ee0756d29ff2 GabrielBolduc <bolducGabriel@outlook.com> 1770750222 -0500	checkout: moving from GabrielB to GabrielR
+2319fec96e3c35404c78154f5a00ee0756d29ff2 e8c35bcdb54f229a02109b16e399947dd1a0a1ac GabrielBolduc <bolducGabriel@outlook.com> 1770751566 -0500	checkout: moving from GabrielR to main
+e8c35bcdb54f229a02109b16e399947dd1a0a1ac e9ad42652cd149c58d645f25bb58cc632b2ff2ac GabrielBolduc <bolducGabriel@outlook.com> 1770753545 -0500	commit: Modification models
+e9ad42652cd149c58d645f25bb58cc632b2ff2ac f408a447d75323264bd9c3901d98334a2ed2eb85 GabrielBolduc <bolducGabriel@outlook.com> 1770760216 -0500	commit: modifications de la structure des fichiers
+f408a447d75323264bd9c3901d98334a2ed2eb85 b0f95a2848be0ae80ecfbfe238c16b50f52f99ad GabrielBolduc <bolducGabriel@outlook.com> 1770760448 -0500	checkout: moving from main to GabrielB
+b0f95a2848be0ae80ecfbfe238c16b50f52f99ad fd2ec09e3d218573887ed66f6b8b4799c5523d25 GabrielBolduc <bolducGabriel@outlook.com> 1770760479 -0500	merge origin/main: Merge made by the 'ort' strategy.
+fd2ec09e3d218573887ed66f6b8b4799c5523d25 f408a447d75323264bd9c3901d98334a2ed2eb85 GabrielBolduc <bolducGabriel@outlook.com> 1770760537 -0500	pull origin main --rebase (start): checkout f408a447d75323264bd9c3901d98334a2ed2eb85
+f408a447d75323264bd9c3901d98334a2ed2eb85 5f76eca3a534e4957d27d2182c1bae48bcc6264e GabrielBolduc <bolducGabriel@outlook.com> 1770760537 -0500	pull origin main --rebase (pick): test controller correction problemes
+5f76eca3a534e4957d27d2182c1bae48bcc6264e 5f76eca3a534e4957d27d2182c1bae48bcc6264e GabrielBolduc <bolducGabriel@outlook.com> 1770760537 -0500	pull origin main --rebase (finish): returning to refs/heads/GabrielB
+5f76eca3a534e4957d27d2182c1bae48bcc6264e f408a447d75323264bd9c3901d98334a2ed2eb85 GabrielBolduc <bolducGabriel@outlook.com> 1770760961 -0500	checkout: moving from GabrielB to main
+f408a447d75323264bd9c3901d98334a2ed2eb85 5f76eca3a534e4957d27d2182c1bae48bcc6264e GabrielBolduc <bolducGabriel@outlook.com> 1770761142 -0500	checkout: moving from main to GabrielB
+5f76eca3a534e4957d27d2182c1bae48bcc6264e fe5072e0b91f694ee89cd1d470a0e13ff02b4d75 GabrielBolduc <bolducGabriel@outlook.com> 1770818799 -0500	commit: Ajout fichier de build et login
+fe5072e0b91f694ee89cd1d470a0e13ff02b4d75 f457a3e9a1500a816e667269ba922ef675eaa795 GabrielBolduc <bolducGabriel@outlook.com> 1770818964 -0500	pull origin main: Merge made by the 'ort' strategy.
+f457a3e9a1500a816e667269ba922ef675eaa795 f408a447d75323264bd9c3901d98334a2ed2eb85 GabrielBolduc <bolducGabriel@outlook.com> 1770819135 -0500	checkout: moving from GabrielB to main
+f408a447d75323264bd9c3901d98334a2ed2eb85 f457a3e9a1500a816e667269ba922ef675eaa795 GabrielBolduc <bolducGabriel@outlook.com> 1770819153 -0500	merge GabrielB: Fast-forward
+f457a3e9a1500a816e667269ba922ef675eaa795 76b8e4c44b045caf7645782d669a6d179b91ae93 GabrielBolduc <bolducGabriel@outlook.com> 1770819301 -0500	commit: Commit login
+76b8e4c44b045caf7645782d669a6d179b91ae93 2371e8d7d641c0ca84e9f3ec2c1f1b3dd90af4dd GabrielBolduc <bolducGabriel@outlook.com> 1770820424 -0500	commit: Correctifs mineur form login
+2371e8d7d641c0ca84e9f3ec2c1f1b3dd90af4dd f457a3e9a1500a816e667269ba922ef675eaa795 GabrielBolduc <bolducGabriel@outlook.com> 1770820435 -0500	checkout: moving from main to GabrielB
+f457a3e9a1500a816e667269ba922ef675eaa795 2371e8d7d641c0ca84e9f3ec2c1f1b3dd90af4dd GabrielBolduc <bolducGabriel@outlook.com> 1770820462 -0500	checkout: moving from GabrielB to main
+2371e8d7d641c0ca84e9f3ec2c1f1b3dd90af4dd f457a3e9a1500a816e667269ba922ef675eaa795 GabrielBolduc <bolducGabriel@outlook.com> 1770820629 -0500	checkout: moving from main to GabrielB
+f457a3e9a1500a816e667269ba922ef675eaa795 186a30724b07460626f0c63405c7afc8e8a56c75 GabrielBolduc <bolducGabriel@outlook.com> 1770823548 -0500	commit: correction auth service,navbar et controllers rails
+186a30724b07460626f0c63405c7afc8e8a56c75 2371e8d7d641c0ca84e9f3ec2c1f1b3dd90af4dd GabrielBolduc <bolducGabriel@outlook.com> 1770824098 -0500	checkout: moving from GabrielB to main
+2371e8d7d641c0ca84e9f3ec2c1f1b3dd90af4dd bef4e2569f2bea18cf1d3e02fcb532d96202e926 GabrielBolduc <bolducGabriel@outlook.com> 1770826031 -0500	commit: login fonctionnel
+bef4e2569f2bea18cf1d3e02fcb532d96202e926 69a31a318069788b914f06708332cf4430202f01 GabrielBolduc <bolducGabriel@outlook.com> 1770826458 -0500	pull origin main --rebase (start): checkout 69a31a318069788b914f06708332cf4430202f01
+69a31a318069788b914f06708332cf4430202f01 4e9a160e97a78c7e05730416acd70626b2186529 GabrielBolduc <bolducGabriel@outlook.com> 1770826622 -0500	commit: commit reparation conflit
+4e9a160e97a78c7e05730416acd70626b2186529 bef4e2569f2bea18cf1d3e02fcb532d96202e926 GabrielBolduc <bolducGabriel@outlook.com> 1770826636 -0500	checkout: moving from 4e9a160e97a78c7e05730416acd70626b2186529 to main
+bef4e2569f2bea18cf1d3e02fcb532d96202e926 8482e60eba15fd83f166754e55f3c6292bd3c283 GabrielBolduc <bolducGabriel@outlook.com> 1770827091 -0500	commit: correction mineur rails
+8482e60eba15fd83f166754e55f3c6292bd3c283 8482e60eba15fd83f166754e55f3c6292bd3c283 GabrielBolduc <bolducGabriel@outlook.com> 1770827207 -0500	checkout: moving from main to main
+8482e60eba15fd83f166754e55f3c6292bd3c283 8482e60eba15fd83f166754e55f3c6292bd3c283 GabrielBolduc <bolducGabriel@outlook.com> 1770827403 -0500	checkout: moving from main to GabrielB
+8482e60eba15fd83f166754e55f3c6292bd3c283 83741e630021f9493553550a0b48397b29a71f7d GabrielBolduc <bolducGabriel@outlook.com> 1770830504 -0500	commit: Correction deploiment angular
+83741e630021f9493553550a0b48397b29a71f7d 83741e630021f9493553550a0b48397b29a71f7d GabrielBolduc <bolducGabriel@outlook.com> 1770830998 -0500	checkout: moving from GabrielB to GabrielB
+83741e630021f9493553550a0b48397b29a71f7d 8482e60eba15fd83f166754e55f3c6292bd3c283 GabrielBolduc <bolducGabriel@outlook.com> 1770831014 -0500	checkout: moving from GabrielB to main
+8482e60eba15fd83f166754e55f3c6292bd3c283 06ee639ba923a342676e73939d394c2b44974787 GabrielBolduc <bolducGabriel@outlook.com> 1770831023 -0500	pull origin main: Fast-forward
+06ee639ba923a342676e73939d394c2b44974787 3ac8174d7386a952b989921586f63dd5380bf08c GabrielBolduc <bolducGabriel@outlook.com> 1770831171 -0500	commit (merge): resolution du conflit de routes et fusion de GabrielB
+3ac8174d7386a952b989921586f63dd5380bf08c 0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb GabrielBolduc <bolducGabriel@outlook.com> 1770831325 -0500	commit: Correction routes rails
+0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb 0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb GabrielBolduc <bolducGabriel@outlook.com> 1770831339 -0500	checkout: moving from main to main
+0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb 83741e630021f9493553550a0b48397b29a71f7d GabrielBolduc <bolducGabriel@outlook.com> 1770831350 -0500	checkout: moving from main to GabrielB
+83741e630021f9493553550a0b48397b29a71f7d 0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb GabrielBolduc <bolducGabriel@outlook.com> 1770831354 -0500	merge main: Fast-forward
+0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb 0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb GabrielBolduc <bolducGabriel@outlook.com> 1770831469 -0500	checkout: moving from GabrielB to main
+0d8fedf0d18cf62dd9c1f5161a7ead96a9c6bbcb ff84f528c2a5b6f51aca5e9dd634757d3104330e GabrielBolduc <bolducGabriel@outlook.com> 1770831733 -0500	commit: fix script de build
+ff84f528c2a5b6f51aca5e9dd634757d3104330e f780cfd0ed18357ff619d3d7fc657f6e1e86e63c GabrielBolduc <bolducGabriel@outlook.com> 1770831933 -0500	commit (amend): fix script de build
+f780cfd0ed18357ff619d3d7fc657f6e1e86e63c 8c2b26a31352795602239a5a4432c04c63e6aca1 GabrielBolduc <bolducGabriel@outlook.com> 1770857019 -0500	commit: correction test + traduction
+8c2b26a31352795602239a5a4432c04c63e6aca1 9801f6b528535c9886b9ba5aa3d56edacc050323 GabrielBolduc <bolducGabriel@outlook.com> 1770859534 -0500	commit: correction mineur traduction
+9801f6b528535c9886b9ba5aa3d56edacc050323 30449d2ba3ab8ddeb5b894238bd4fdb96b02230e GabrielBolduc <bolducGabriel@outlook.com> 1770859723 -0500	commit: Correction folder public
+30449d2ba3ab8ddeb5b894238bd4fdb96b02230e 097ac0765a70c426cbf68dfff89be2dd915695b9 GabrielBolduc <bolducGabriel@outlook.com> 1770905285 -0500	commit: FIX: Configuration de déploiement via le dossier browser
+097ac0765a70c426cbf68dfff89be2dd915695b9 4961c9577b9baba3c9b9690ae9abad4f5947536a GabrielBolduc <bolducGabriel@outlook.com> 1770905344 -0500	commit: BUILD: Ajout des fichiers compil dans public/browser
+4961c9577b9baba3c9b9690ae9abad4f5947536a f05bb778f5d1eca2218cdf52010242a8bf6a746c GabrielBolduc <bolducGabriel@outlook.com> 1770905707 -0500	commit: FIX: Retour à la méthode de déploiement par copie (Assets paths fix)
+f05bb778f5d1eca2218cdf52010242a8bf6a746c 2a6347884b8332c62266a5b9dcfa567e6eee4106 GabrielBolduc <bolducGabriel@outlook.com> 1770912990 -0500	commit: add ability sti
+2a6347884b8332c62266a5b9dcfa567e6eee4106 305d50d8a915ea89c01ad018acb2f7e60ccc50c0 GabrielBolduc <bolducGabriel@outlook.com> 1770914583 -0500	commit: CONFIG: Ajustement build ng et baseHref pour deploiement auto
+305d50d8a915ea89c01ad018acb2f7e60ccc50c0 29fee9290bdcfcdac18573a4e03235f6374eff1a GabrielBolduc <bolducGabriel@outlook.com> 1770914602 -0500	pull origin main: Merge made by the 'ort' strategy.
+29fee9290bdcfcdac18573a4e03235f6374eff1a 7ac0ad4ccfaf3a0c0c96f7d6d86837660ff032f2 GabrielBolduc <bolducGabriel@outlook.com> 1770914804 -0500	pull origin main: Fast-forward
+7ac0ad4ccfaf3a0c0c96f7d6d86837660ff032f2 d6029ef5eb7697604015ae06dbfab25b7d0da874 GabrielBolduc <bolducGabriel@outlook.com> 1770914839 -0500	commit: modif docs
+d6029ef5eb7697604015ae06dbfab25b7d0da874 12b728074229bbcae756557a7369860b77d3ea45 GabrielBolduc <bolducGabriel@outlook.com> 1770917027 -0500	commit: fix: public folder
+12b728074229bbcae756557a7369860b77d3ea45 e758787556cf00b574be773c91af94f8f0347622 GabrielBolduc <bolducGabriel@outlook.com> 1770918482 -0500	commit: deploiment prod recine public
+e758787556cf00b574be773c91af94f8f0347622 a3410e2e14bcd67c5c32d4c31383e2ce034bddc4 GabrielBolduc <bolducGabriel@outlook.com> 1770920279 -0500	commit: Deploiment
+a3410e2e14bcd67c5c32d4c31383e2ce034bddc4 ef61813b36c834a7391fd45c4a35cf87bd7aff9d GabrielBolduc <bolducGabriel@outlook.com> 1770925383 -0500	commit: test prod
+ef61813b36c834a7391fd45c4a35cf87bd7aff9d 3e2b6e2c9fea3434c692d0975617d7dbba4e9269 GabrielBolduc <bolducGabriel@outlook.com> 1770925393 -0500	pull: Merge made by the 'ort' strategy.
+3e2b6e2c9fea3434c692d0975617d7dbba4e9269 fa0067e666a3994325cb617a2a092f738d1ea37b GabrielBolduc <bolducGabriel@outlook.com> 1770926696 -0500	commit: fix prod + routes
+fa0067e666a3994325cb617a2a092f738d1ea37b 44e6a3fe9815cae3bbb015e38354a7fb6c6d937c GabrielBolduc <bolducGabriel@outlook.com> 1770928463 -0500	commit: fix router navigate login & signup
+44e6a3fe9815cae3bbb015e38354a7fb6c6d937c 6bab517158bd06edfb4dae82995813412f998b24 GabrielBolduc <bolducGabriel@outlook.com> 1770932723 -0500	commit: FIX: Passage au HashLocationStrategy pour corriger le refresh
+6bab517158bd06edfb4dae82995813412f998b24 df7bfc5eebe6581c566524ff7daa3ae724804001 GabrielBolduc <bolducGabriel@outlook.com> 1770933501 -0500	commit: corrections multiples
+df7bfc5eebe6581c566524ff7daa3ae724804001 3acbb2ac053ec2d493611d2fd429da90634f9162 GabrielBolduc <bolducGabriel@outlook.com> 1770941406 -0500	commit: fix bug 3000
+3acbb2ac053ec2d493611d2fd429da90634f9162 da0d1d72688e111ca437244f551772da809bce3a GabrielBolduc <bolducGabriel@outlook.com> 1770943844 -0500	commit: test complet
+da0d1d72688e111ca437244f551772da809bce3a ac0af5e4c97d7798a741047cd3caaf35147107ad GabrielBolduc <bolducGabriel@outlook.com> 1770945807 -0500	commit: fix bug affichage message d'erreur login & signup
+ac0af5e4c97d7798a741047cd3caaf35147107ad db76c027d53642c8b5d24435d2cc3f1b1401b2c3 GabrielBolduc <bolducGabriel@outlook.com> 1770950750 -0500	commit: docs
+db76c027d53642c8b5d24435d2cc3f1b1401b2c3 e25a53ba69ff10bf15fee4f95a414e860b4ff844 GabrielBolduc <bolducGabriel@outlook.com> 1770954848 -0500	commit: fix probleme ability signup
+e25a53ba69ff10bf15fee4f95a414e860b4ff844 3e066bcf30f7f8a7065fcfb4167e4e74e879e9a9 GabrielBolduc <bolducGabriel@outlook.com> 1770954873 -0500	pull: Merge made by the 'ort' strategy.
+3e066bcf30f7f8a7065fcfb4167e4e74e879e9a9 3cdb7a1fc6c8ebe746bbf41d9ad2bf86b55ff387 GabrielBolduc <bolducGabriel@outlook.com> 1771094300 -0500	commit: creation table Festival
+3cdb7a1fc6c8ebe746bbf41d9ad2bf86b55ff387 a94a83ea73865b129a0b0a74e2831b106d5f3eae GabrielBolduc <bolducGabriel@outlook.com> 1771126993 -0500	pull: Fast-forward
+a94a83ea73865b129a0b0a74e2831b106d5f3eae bfdf861dd014a817d790c53c5e1477a79ce6bc18 GabrielBolduc <bolducGabriel@outlook.com> 1771136723 -0500	commit: delete role use only type for laurent sti
+bfdf861dd014a817d790c53c5e1477a79ce6bc18 d046326b63a240d7898e043a1b6950e9f7080ef4 GabrielBolduc <bolducGabriel@outlook.com> 1771140852 -0500	commit: creation de mes migrations
+d046326b63a240d7898e043a1b6950e9f7080ef4 d046326b63a240d7898e043a1b6950e9f7080ef4 GabrielBolduc <bolducGabriel@outlook.com> 1771141086 -0500	checkout: moving from main to main
+d046326b63a240d7898e043a1b6950e9f7080ef4 d046326b63a240d7898e043a1b6950e9f7080ef4 GabrielBolduc <bolducGabriel@outlook.com> 1771141163 -0500	checkout: moving from main to GabrielB
+d046326b63a240d7898e043a1b6950e9f7080ef4 bef4e2569f2bea18cf1d3e02fcb532d96202e926 GabrielBolduc <bolducGabriel@outlook.com> 1771141291 -0500	rebase (abort): returning to refs/heads/main
+bef4e2569f2bea18cf1d3e02fcb532d96202e926 4fa27ddf2e9bd9258f9713e373a430300c54244e GabrielBolduc <bolducGabriel@outlook.com> 1771141314 -0500	commit: Ajout des modèles Artist, Stage et Performance
+4fa27ddf2e9bd9258f9713e373a430300c54244e 12e95693303d96417266302c44a1a5a708ef2c0e GabrielBolduc <bolducGabriel@outlook.com> 1771199206 -0500	pull: Merge made by the 'ort' strategy.
+12e95693303d96417266302c44a1a5a708ef2c0e d046326b63a240d7898e043a1b6950e9f7080ef4 GabrielBolduc <bolducGabriel@outlook.com> 1771199266 -0500	checkout: moving from main to GabrielB
+d046326b63a240d7898e043a1b6950e9f7080ef4 24d78626719cc27fbbfc31f170a83197b0591f4d GabrielBolduc <bolducGabriel@outlook.com> 1771204120 -0500	commit: nav bar admin
+24d78626719cc27fbbfc31f170a83197b0591f4d db84f6eb8ca9eafa5510e14153f1b4848ffc7a78 GabrielBolduc <bolducGabriel@outlook.com> 1771255373 -0500	commit: Commit migration + model
+db84f6eb8ca9eafa5510e14153f1b4848ffc7a78 12e95693303d96417266302c44a1a5a708ef2c0e GabrielBolduc <bolducGabriel@outlook.com> 1771255784 -0500	checkout: moving from GabrielB to main
+12e95693303d96417266302c44a1a5a708ef2c0e c3dcaf24ec6391a3f2e07fb2e5cd9bff05c9bb66 GabrielBolduc <bolducGabriel@outlook.com> 1771255793 -0500	pull origin main: Merge made by the 'ort' strategy.
+c3dcaf24ec6391a3f2e07fb2e5cd9bff05c9bb66 db84f6eb8ca9eafa5510e14153f1b4848ffc7a78 GabrielBolduc <bolducGabriel@outlook.com> 1771255806 -0500	checkout: moving from main to GabrielB
+db84f6eb8ca9eafa5510e14153f1b4848ffc7a78 db84f6eb8ca9eafa5510e14153f1b4848ffc7a78 GabrielBolduc <bolducGabriel@outlook.com> 1771256103 -0500	reset: moving to HEAD
+db84f6eb8ca9eafa5510e14153f1b4848ffc7a78 d9985ba30a3cba2a3544436fe5ed06b05d00756e GabrielBolduc <bolducGabriel@outlook.com> 1771256157 -0500	merge main: Merge made by the 'ort' strategy.
+d9985ba30a3cba2a3544436fe5ed06b05d00756e d9985ba30a3cba2a3544436fe5ed06b05d00756e GabrielBolduc <bolducGabriel@outlook.com> 1771256434 -0500	reset: moving to HEAD
+d9985ba30a3cba2a3544436fe5ed06b05d00756e c3dcaf24ec6391a3f2e07fb2e5cd9bff05c9bb66 GabrielBolduc <bolducGabriel@outlook.com> 1771256448 -0500	checkout: moving from GabrielB to main
+c3dcaf24ec6391a3f2e07fb2e5cd9bff05c9bb66 d9985ba30a3cba2a3544436fe5ed06b05d00756e GabrielBolduc <bolducGabriel@outlook.com> 1771256510 -0500	checkout: moving from main to GabrielB
+d9985ba30a3cba2a3544436fe5ed06b05d00756e c3dcaf24ec6391a3f2e07fb2e5cd9bff05c9bb66 GabrielBolduc <bolducGabriel@outlook.com> 1771256582 -0500	checkout: moving from GabrielB to main
+c3dcaf24ec6391a3f2e07fb2e5cd9bff05c9bb66 d9985ba30a3cba2a3544436fe5ed06b05d00756e GabrielBolduc <bolducGabriel@outlook.com> 1771256587 -0500	merge GabrielB: Fast-forward
+d9985ba30a3cba2a3544436fe5ed06b05d00756e 37adf8765d92d556d557a66baddbc81ef8c671de GabrielBolduc <bolducGabriel@outlook.com> 1771260109 -0500	pull: Fast-forward
+37adf8765d92d556d557a66baddbc81ef8c671de c9f998194f8bf066135d18e3b9bcb4acb6012ab0 GabrielBolduc <bolducGabriel@outlook.com> 1771260734 -0500	commit: fix model affectation + route angular
+c9f998194f8bf066135d18e3b9bcb4acb6012ab0 d9985ba30a3cba2a3544436fe5ed06b05d00756e GabrielBolduc <bolducGabriel@outlook.com> 1771260815 -0500	checkout: moving from main to GabrielB
+d9985ba30a3cba2a3544436fe5ed06b05d00756e c9f998194f8bf066135d18e3b9bcb4acb6012ab0 GabrielBolduc <bolducGabriel@outlook.com> 1771260847 -0500	checkout: moving from GabrielB to main
+c9f998194f8bf066135d18e3b9bcb4acb6012ab0 1a2836df73413453cc9cf1dc182c41adca35b0b1 GabrielBolduc <bolducGabriel@outlook.com> 1771260853 -0500	pull origin: Fast-forward
+1a2836df73413453cc9cf1dc182c41adca35b0b1 d9985ba30a3cba2a3544436fe5ed06b05d00756e GabrielBolduc <bolducGabriel@outlook.com> 1771260968 -0500	checkout: moving from main to GabrielB
+d9985ba30a3cba2a3544436fe5ed06b05d00756e 1a2836df73413453cc9cf1dc182c41adca35b0b1 GabrielBolduc <bolducGabriel@outlook.com> 1771260996 -0500	merge main: Fast-forward
+1a2836df73413453cc9cf1dc182c41adca35b0b1 85ce158f594d5790e96a6686b589b5ca2626cded GabrielBolduc <bolducGabriel@outlook.com> 1771271874 -0500	commit: Change type point
+85ce158f594d5790e96a6686b589b5ca2626cded 1a2836df73413453cc9cf1dc182c41adca35b0b1 GabrielBolduc <bolducGabriel@outlook.com> 1771273759 -0500	checkout: moving from GabrielB to main
+1a2836df73413453cc9cf1dc182c41adca35b0b1 d045bda2fce7ba853d6488440d2057895ac10744 GabrielBolduc <bolducGabriel@outlook.com> 1771273996 -0500	pull origin main: Fast-forward
+d045bda2fce7ba853d6488440d2057895ac10744 d045bda2fce7ba853d6488440d2057895ac10744 GabrielBolduc <bolducGabriel@outlook.com> 1771274012 -0500	checkout: moving from main to GabrielB
+d045bda2fce7ba853d6488440d2057895ac10744 88c83c90fc8483e421ec0a99902f3ba459d28f76 GabrielBolduc <bolducGabriel@outlook.com> 1771274701 -0500	commit: fix temporaire: point non obligatoire & API controllers
+88c83c90fc8483e421ec0a99902f3ba459d28f76 5268ca9ce38de625a466a59763e28d2fdf71698a GabrielBolduc <bolducGabriel@outlook.com> 1771294886 -0500	commit: backend + front end de festival
+5268ca9ce38de625a466a59763e28d2fdf71698a 34db17305f4a1fd645459a60e4eb5f5a37348612 GabrielBolduc <bolducGabriel@outlook.com> 1771296327 -0500	commit: visuel et layout page administation
+34db17305f4a1fd645459a60e4eb5f5a37348612 d045bda2fce7ba853d6488440d2057895ac10744 GabrielBolduc <bolducGabriel@outlook.com> 1771296386 -0500	checkout: moving from GabrielB to main
+d045bda2fce7ba853d6488440d2057895ac10744 34db17305f4a1fd645459a60e4eb5f5a37348612 GabrielBolduc <bolducGabriel@outlook.com> 1771296402 -0500	merge GabrielB: Fast-forward
+34db17305f4a1fd645459a60e4eb5f5a37348612 34db17305f4a1fd645459a60e4eb5f5a37348612 GabrielBolduc <bolducGabriel@outlook.com> 1771296411 -0500	checkout: moving from main to GabrielB
+34db17305f4a1fd645459a60e4eb5f5a37348612 87594d5d1a357c36ef773c5434622955cee3716b GabrielBolduc <bolducGabriel@outlook.com> 1771298557 -0500	commit: Edit couleur et layout page admin
+87594d5d1a357c36ef773c5434622955cee3716b 34db17305f4a1fd645459a60e4eb5f5a37348612 GabrielBolduc <bolducGabriel@outlook.com> 1771298586 -0500	checkout: moving from GabrielB to main
+34db17305f4a1fd645459a60e4eb5f5a37348612 87594d5d1a357c36ef773c5434622955cee3716b GabrielBolduc <bolducGabriel@outlook.com> 1771298661 -0500	merge GabrielB: Fast-forward
+87594d5d1a357c36ef773c5434622955cee3716b 87594d5d1a357c36ef773c5434622955cee3716b GabrielBolduc <bolducGabriel@outlook.com> 1771335536 -0500	checkout: moving from main to GabrielB
+87594d5d1a357c36ef773c5434622955cee3716b 34e8e51988828aef6c10b83b25ce67a22399d1d1 GabrielBolduc <bolducGabriel@outlook.com> 1771336587 -0500	commit: edit visuel
+34e8e51988828aef6c10b83b25ce67a22399d1d1 87594d5d1a357c36ef773c5434622955cee3716b GabrielBolduc <bolducGabriel@outlook.com> 1771336596 -0500	checkout: moving from GabrielB to main
+87594d5d1a357c36ef773c5434622955cee3716b 02a4cd26e5fe90c5cc6eb4beeea4139b53bff677 GabrielBolduc <bolducGabriel@outlook.com> 1771336601 -0500	pull: Fast-forward
+02a4cd26e5fe90c5cc6eb4beeea4139b53bff677 0aa1231afae2a0de31c4cfa25c4bf64d786e770d GabrielBolduc <bolducGabriel@outlook.com> 1771336627 -0500	merge GabrielB: Merge made by the 'ort' strategy.
+0aa1231afae2a0de31c4cfa25c4bf64d786e770d 34e8e51988828aef6c10b83b25ce67a22399d1d1 GabrielBolduc <bolducGabriel@outlook.com> 1771336644 -0500	checkout: moving from main to GabrielB
+34e8e51988828aef6c10b83b25ce67a22399d1d1 0aa1231afae2a0de31c4cfa25c4bf64d786e770d GabrielBolduc <bolducGabriel@outlook.com> 1771336653 -0500	merge main: Fast-forward
+0aa1231afae2a0de31c4cfa25c4bf64d786e770d 0aa1231afae2a0de31c4cfa25c4bf64d786e770d GabrielBolduc <bolducGabriel@outlook.com> 1771336961 -0500	checkout: moving from GabrielB to main
+0aa1231afae2a0de31c4cfa25c4bf64d786e770d 0aa1231afae2a0de31c4cfa25c4bf64d786e770d GabrielBolduc <bolducGabriel@outlook.com> 1771336997 -0500	checkout: moving from main to GabrielB
+0aa1231afae2a0de31c4cfa25c4bf64d786e770d 693be8756a9efcb872b5c9a8f4eac7d30338fe04 GabrielBolduc <bolducGabriel@outlook.com> 1771338844 -0500	commit: Fix fixtures test
+693be8756a9efcb872b5c9a8f4eac7d30338fe04 7a3e05235db74ed6111338aed8c027a174eef6a9 GabrielBolduc <bolducGabriel@outlook.com> 1771338933 -0500	commit: folder users pour test des users
+7a3e05235db74ed6111338aed8c027a174eef6a9 0aa1231afae2a0de31c4cfa25c4bf64d786e770d GabrielBolduc <bolducGabriel@outlook.com> 1771338959 -0500	checkout: moving from GabrielB to main
+0aa1231afae2a0de31c4cfa25c4bf64d786e770d 7a3e05235db74ed6111338aed8c027a174eef6a9 GabrielBolduc <bolducGabriel@outlook.com> 1771338999 -0500	merge GabrielB: Fast-forward
+7a3e05235db74ed6111338aed8c027a174eef6a9 7a3e05235db74ed6111338aed8c027a174eef6a9 GabrielBolduc <bolducGabriel@outlook.com> 1771339029 -0500	checkout: moving from main to GabrielB
+7a3e05235db74ed6111338aed8c027a174eef6a9 a44fc2abb42679c44686bf838a5684e25f481963 GabrielBolduc <bolducGabriel@outlook.com> 1771342126 -0500	commit: Fix controller festival & service festival
+a44fc2abb42679c44686bf838a5684e25f481963 4511885f59a627fc9a679a1e42ea5b607dd1443b GabrielBolduc <bolducGabriel@outlook.com> 1771342467 -0500	commit: FIX controller festival
+4511885f59a627fc9a679a1e42ea5b607dd1443b 7a3e05235db74ed6111338aed8c027a174eef6a9 GabrielBolduc <bolducGabriel@outlook.com> 1771342486 -0500	checkout: moving from GabrielB to main
+7a3e05235db74ed6111338aed8c027a174eef6a9 2ad5cfd44bcbd2f8711bf798c67500a408ff7a04 GabrielBolduc <bolducGabriel@outlook.com> 1771342495 -0500	pull origin main: Fast-forward
+2ad5cfd44bcbd2f8711bf798c67500a408ff7a04 a43fc27cace3f3f8e982f75cb7d8190d06ecb075 GabrielBolduc <bolducGabriel@outlook.com> 1771342503 -0500	merge GabrielB: Merge made by the 'ort' strategy.
+a43fc27cace3f3f8e982f75cb7d8190d06ecb075 4511885f59a627fc9a679a1e42ea5b607dd1443b GabrielBolduc <bolducGabriel@outlook.com> 1771342524 -0500	checkout: moving from main to GabrielB
+4511885f59a627fc9a679a1e42ea5b607dd1443b a43fc27cace3f3f8e982f75cb7d8190d06ecb075 GabrielBolduc <bolducGabriel@outlook.com> 1771342533 -0500	merge main: Fast-forward
+a43fc27cace3f3f8e982f75cb7d8190d06ecb075 1ccfd0d814444e0406dd6614ebd9dbf49c63bc78 GabrielBolduc <bolducGabriel@outlook.com> 1771343082 -0500	commit: fixtures festival
+1ccfd0d814444e0406dd6614ebd9dbf49c63bc78 a43fc27cace3f3f8e982f75cb7d8190d06ecb075 GabrielBolduc <bolducGabriel@outlook.com> 1771343096 -0500	checkout: moving from GabrielB to main
+a43fc27cace3f3f8e982f75cb7d8190d06ecb075 1ccfd0d814444e0406dd6614ebd9dbf49c63bc78 GabrielBolduc <bolducGabriel@outlook.com> 1771343110 -0500	merge GabrielB: Fast-forward
+1ccfd0d814444e0406dd6614ebd9dbf49c63bc78 4c1f25b77e8c424fb63cc64f351e0722a8336b58 GabrielBolduc <bolducGabriel@outlook.com> 1771352630 -0500	commit: tests festival
+4c1f25b77e8c424fb63cc64f351e0722a8336b58 4c1f25b77e8c424fb63cc64f351e0722a8336b58 GabrielBolduc <bolducGabriel@outlook.com> 1771352818 -0500	reset: moving to HEAD
+4c1f25b77e8c424fb63cc64f351e0722a8336b58 c0a55d7af3668cbe13c9056eea7f2c2d630fdb8d GabrielBolduc <bolducGabriel@outlook.com> 1771352833 -0500	merge origin/main: Merge made by the 'ort' strategy.
+c0a55d7af3668cbe13c9056eea7f2c2d630fdb8d c227b9975a75ef3a15ca633c9a810edfd61d8b50 GabrielBolduc <bolducGabriel@outlook.com> 1771353151 -0500	commit: test festivals
+c227b9975a75ef3a15ca633c9a810edfd61d8b50 1ccfd0d814444e0406dd6614ebd9dbf49c63bc78 GabrielBolduc <bolducGabriel@outlook.com> 1771353197 -0500	checkout: moving from main to GabrielB
+1ccfd0d814444e0406dd6614ebd9dbf49c63bc78 2ec10140108281dea48ad027f90938271fac2c0e GabrielBolduc <bolducGabriel@outlook.com> 1771353328 -0500	commit: Sauvegarde de index.html et autres modifs avant merge
+2ec10140108281dea48ad027f90938271fac2c0e f07ee1a9446f803eeb4e642868545cf8024f0798 GabrielBolduc <bolducGabriel@outlook.com> 1771353332 -0500	merge main: Merge made by the 'ort' strategy.
+f07ee1a9446f803eeb4e642868545cf8024f0798 25b74ef66403d8ced76e402408f79536c2fc6642 GabrielBolduc <bolducGabriel@outlook.com> 1771353374 -0500	pull origin main -X ours: Merge made by the 'ort' strategy.
+25b74ef66403d8ced76e402408f79536c2fc6642 f043e611e0aeb1771a133ae6593b66c1cb17d273 GabrielBolduc <bolducGabriel@outlook.com> 1771353524 -0500	commit: Derniers ajustements avant fusion sur main
+f043e611e0aeb1771a133ae6593b66c1cb17d273 c227b9975a75ef3a15ca633c9a810edfd61d8b50 GabrielBolduc <bolducGabriel@outlook.com> 1771353527 -0500	checkout: moving from GabrielB to main
+c227b9975a75ef3a15ca633c9a810edfd61d8b50 f043e611e0aeb1771a133ae6593b66c1cb17d273 GabrielBolduc <bolducGabriel@outlook.com> 1771353534 -0500	reset: moving to GabrielB
+f043e611e0aeb1771a133ae6593b66c1cb17d273 f043e611e0aeb1771a133ae6593b66c1cb17d273 GabrielBolduc <bolducGabriel@outlook.com> 1771353549 -0500	checkout: moving from main to GabrielB
+f043e611e0aeb1771a133ae6593b66c1cb17d273 67fa9577bbec98fd58c6bef45e212411930222d8 GabrielBolduc <bolducGabriel@outlook.com> 1771355414 -0500	commit: Fix latitude/longitude et rebuild Angular
+67fa9577bbec98fd58c6bef45e212411930222d8 4174596a27669283c617bad3322b7e6118ebe980 GabrielBolduc <bolducGabriel@outlook.com> 1771365971 -0500	commit: controller performances
+4174596a27669283c617bad3322b7e6118ebe980 a0430205308107234fe041585593b28f1ba0989b GabrielBolduc <bolducGabriel@outlook.com> 1771423678 -0500	commit: service et component performances
+a0430205308107234fe041585593b28f1ba0989b f043e611e0aeb1771a133ae6593b66c1cb17d273 GabrielBolduc <bolducGabriel@outlook.com> 1771423687 -0500	checkout: moving from GabrielB to main
+f043e611e0aeb1771a133ae6593b66c1cb17d273 670b114788c97ba26763da58f7c634fd47e4293a GabrielBolduc <bolducGabriel@outlook.com> 1771423692 -0500	pull: Fast-forward
+670b114788c97ba26763da58f7c634fd47e4293a 7a82d2561320cd610ca597ecbeee596d769c0479 GabrielBolduc <bolducGabriel@outlook.com> 1771423997 -0500	commit (merge): Fusion de GabrielB dans main avec résolution des conflits
+7a82d2561320cd610ca597ecbeee596d769c0479 a0430205308107234fe041585593b28f1ba0989b GabrielBolduc <bolducGabriel@outlook.com> 1771424228 -0500	checkout: moving from main to GabrielB
+a0430205308107234fe041585593b28f1ba0989b 7a82d2561320cd610ca597ecbeee596d769c0479 GabrielBolduc <bolducGabriel@outlook.com> 1771425689 -0500	merge main: Fast-forward
+7a82d2561320cd610ca597ecbeee596d769c0479 2be434c65c6c7e792590d10fed0b94666dd1a093 GabrielBolduc <bolducGabriel@outlook.com> 1771429264 -0500	commit: fix sti pour admin et guard
+2be434c65c6c7e792590d10fed0b94666dd1a093 7a82d2561320cd610ca597ecbeee596d769c0479 GabrielBolduc <bolducGabriel@outlook.com> 1771429278 -0500	checkout: moving from GabrielB to main
+7a82d2561320cd610ca597ecbeee596d769c0479 b67d6c82cd7cd43e3b1c00aea757a6aaec558662 GabrielBolduc <bolducGabriel@outlook.com> 1771429288 -0500	pull origin main: Fast-forward
+b67d6c82cd7cd43e3b1c00aea757a6aaec558662 02caccc424e947cf050a8d6841d73238daee51c7 GabrielBolduc <bolducGabriel@outlook.com> 1771429372 -0500	commit (merge): Resolve conflit
+02caccc424e947cf050a8d6841d73238daee51c7 0a20f2598d86399bc2752fdce8a757c59651413b GabrielBolduc <bolducGabriel@outlook.com> 1771429768 -0500	commit: resolve route conflit
+0a20f2598d86399bc2752fdce8a757c59651413b 1979d9177dd8f7a23200dc3ae0395cf4cd366283 GabrielBolduc <bolducGabriel@outlook.com> 1771431103 -0500	commit: fix structure.sql
+1979d9177dd8f7a23200dc3ae0395cf4cd366283 2be434c65c6c7e792590d10fed0b94666dd1a093 GabrielBolduc <bolducGabriel@outlook.com> 1771431194 -0500	checkout: moving from main to GabrielB
+2be434c65c6c7e792590d10fed0b94666dd1a093 cb6b5268b2167c9e652c7685971aa3db6197baf4 GabrielBolduc <bolducGabriel@outlook.com> 1771469726 -0500	commit: commit create et edit de performan & debut traduction
+cb6b5268b2167c9e652c7685971aa3db6197baf4 1979d9177dd8f7a23200dc3ae0395cf4cd366283 GabrielBolduc <bolducGabriel@outlook.com> 1771469742 -0500	checkout: moving from GabrielB to main
+1979d9177dd8f7a23200dc3ae0395cf4cd366283 929cd2d24ded0a3b3039e6d57e85aacd4ea68f56 GabrielBolduc <bolducGabriel@outlook.com> 1771469752 -0500	pull origin main: Fast-forward
+929cd2d24ded0a3b3039e6d57e85aacd4ea68f56 c65e4ae1e1570236de13a8811654f3c499e76975 GabrielBolduc <bolducGabriel@outlook.com> 1771469868 -0500	commit (merge): merge GabrielB to main
+c65e4ae1e1570236de13a8811654f3c499e76975 37dbb9b5ffc62919fed2b1d1aa0792ff6a172aa4 GabrielBolduc <bolducGabriel@outlook.com> 1771470357 -0500	commit: resolve conflit performance model
+37dbb9b5ffc62919fed2b1d1aa0792ff6a172aa4 514d8e5fe6e0a1f92190c1b37697ef97e0870906 GabrielBolduc <bolducGabriel@outlook.com> 1771471725 -0500	commit: resolve encore des conflits de racine
+514d8e5fe6e0a1f92190c1b37697ef97e0870906 763fb6e91e1021da1800b7124769c23a38f3ab18 GabrielBolduc <bolducGabriel@outlook.com> 1771508143 -0500	commit: seed
+763fb6e91e1021da1800b7124769c23a38f3ab18 ca13e2e55474f1033ed1347776c6c56128602b7b GabrielBolduc <bolducGabriel@outlook.com> 1771508567 -0500	pull origin main: Merge made by the 'ort' strategy.
+ca13e2e55474f1033ed1347776c6c56128602b7b 4d0f6a78290024ed95c76bd17201e7c787d6ecc8 GabrielBolduc <bolducGabriel@outlook.com> 1771509174 -0500	commit: commit before merge
+4d0f6a78290024ed95c76bd17201e7c787d6ecc8 cb6b5268b2167c9e652c7685971aa3db6197baf4 GabrielBolduc <bolducGabriel@outlook.com> 1771509184 -0500	checkout: moving from main to GabrielB
+cb6b5268b2167c9e652c7685971aa3db6197baf4 4d0f6a78290024ed95c76bd17201e7c787d6ecc8 GabrielBolduc <bolducGabriel@outlook.com> 1771509196 -0500	merge main: Fast-forward
+4d0f6a78290024ed95c76bd17201e7c787d6ecc8 e7dc63f4163b84b25400d758f23dc3561a09850a GabrielBolduc <bolducGabriel@outlook.com> 1771513072 -0500	commit: edit visuel form et dashboard
+e7dc63f4163b84b25400d758f23dc3561a09850a 4d0f6a78290024ed95c76bd17201e7c787d6ecc8 GabrielBolduc <bolducGabriel@outlook.com> 1771513083 -0500	checkout: moving from GabrielB to main
+4d0f6a78290024ed95c76bd17201e7c787d6ecc8 7ea46a81389eadc7510e5b790da53cc1c76f0b87 GabrielBolduc <bolducGabriel@outlook.com> 1771513093 -0500	pull origin main: Fast-forward
+7ea46a81389eadc7510e5b790da53cc1c76f0b87 e390526372f268e1ff99425acf4cece8b8f1627e GabrielBolduc <bolducGabriel@outlook.com> 1771513286 -0500	commit: Erreur route angular
+e390526372f268e1ff99425acf4cece8b8f1627e a632f815bfcdab57d11a53ae3e4683445f19e1e0 GabrielBolduc <bolducGabriel@outlook.com> 1771513368 -0500	commit (merge): Merge GabrielB
+a632f815bfcdab57d11a53ae3e4683445f19e1e0 b65f881f7f317f451d1fee72595d86a65de5c980 GabrielBolduc <bolducGabriel@outlook.com> 1771514256 -0500	commit: Fix route list-badge
+b65f881f7f317f451d1fee72595d86a65de5c980 e7dc63f4163b84b25400d758f23dc3561a09850a GabrielBolduc <bolducGabriel@outlook.com> 1771514278 -0500	checkout: moving from main to GabrielB
+e7dc63f4163b84b25400d758f23dc3561a09850a d457e3da5b0f99c7815be4c4571f0dfb4c62c533 GabrielBolduc <bolducGabriel@outlook.com> 1771523196 -0500	commit: test rails pour performances
+d457e3da5b0f99c7815be4c4571f0dfb4c62c533 b65f881f7f317f451d1fee72595d86a65de5c980 GabrielBolduc <bolducGabriel@outlook.com> 1771523252 -0500	checkout: moving from GabrielB to main
+b65f881f7f317f451d1fee72595d86a65de5c980 b4006e2d10feb2da47d979d616de0d838247aaa5 GabrielBolduc <bolducGabriel@outlook.com> 1771523263 -0500	pull origin main: Fast-forward
+b4006e2d10feb2da47d979d616de0d838247aaa5 11babe8ce66771490f9aa08c32e3dd2b53eec2f7 GabrielBolduc <bolducGabriel@outlook.com> 1771523645 -0500	pull origin main: Fast-forward
+11babe8ce66771490f9aa08c32e3dd2b53eec2f7 7c27f0ae6be8b48ea508c117eca5668af291c048 GabrielBolduc <bolducGabriel@outlook.com> 1771523978 -0500	commit: pull main
+7c27f0ae6be8b48ea508c117eca5668af291c048 56da067bf7c9aa358ad641b54d1285b46b5705d7 GabrielBolduc <bolducGabriel@outlook.com> 1771523992 -0500	pull: Merge made by the 'ort' strategy.
+56da067bf7c9aa358ad641b54d1285b46b5705d7 d457e3da5b0f99c7815be4c4571f0dfb4c62c533 GabrielBolduc <bolducGabriel@outlook.com> 1771524017 -0500	checkout: moving from main to GabrielB
+d457e3da5b0f99c7815be4c4571f0dfb4c62c533 efcfeb25c303d98afb1bd74318c6515907f1d7b4 GabrielBolduc <bolducGabriel@outlook.com> 1771524044 -0500	merge main: Merge made by the 'ort' strategy.
+efcfeb25c303d98afb1bd74318c6515907f1d7b4 e62aea1fec9424e5ee3b63be52e724a11d37eb07 GabrielBolduc <bolducGabriel@outlook.com> 1771524227 -0500	commit: merge avec main
+e62aea1fec9424e5ee3b63be52e724a11d37eb07 56da067bf7c9aa358ad641b54d1285b46b5705d7 GabrielBolduc <bolducGabriel@outlook.com> 1771524242 -0500	checkout: moving from GabrielB to main
+56da067bf7c9aa358ad641b54d1285b46b5705d7 41ceb8220407ea7513067ddcad94bf2444d9260a GabrielBolduc <bolducGabriel@outlook.com> 1771528642 -0500	commit: list task style
+41ceb8220407ea7513067ddcad94bf2444d9260a dd6e2fda959782ef5bcfaaad24e82e8a9d68255e GabrielBolduc <bolducGabriel@outlook.com> 1771528651 -0500	pull: Merge made by the 'ort' strategy.
+dd6e2fda959782ef5bcfaaad24e82e8a9d68255e 79ab90c0f42a667dfea5380048e80036783e6ad7 GabrielBolduc <bolducGabriel@outlook.com> 1771528734 -0500	commit: pull & structure laurent
+79ab90c0f42a667dfea5380048e80036783e6ad7 e62aea1fec9424e5ee3b63be52e724a11d37eb07 GabrielBolduc <bolducGabriel@outlook.com> 1771529106 -0500	checkout: moving from main to GabrielB
+e62aea1fec9424e5ee3b63be52e724a11d37eb07 79ab90c0f42a667dfea5380048e80036783e6ad7 GabrielBolduc <bolducGabriel@outlook.com> 1771529309 -0500	checkout: moving from GabrielB to main
+79ab90c0f42a667dfea5380048e80036783e6ad7 79ab90c0f42a667dfea5380048e80036783e6ad7 GabrielBolduc <bolducGabriel@outlook.com> 1771529456 -0500	reset: moving to HEAD
+79ab90c0f42a667dfea5380048e80036783e6ad7 92b81f6348c5504c6776c113f83d261648825ffe GabrielBolduc <bolducGabriel@outlook.com> 1771530072 -0500	commit (merge): merge GabrielB
+92b81f6348c5504c6776c113f83d261648825ffe e62aea1fec9424e5ee3b63be52e724a11d37eb07 GabrielBolduc <bolducGabriel@outlook.com> 1771530238 -0500	checkout: moving from main to GabrielB
+e62aea1fec9424e5ee3b63be52e724a11d37eb07 0acaf4d72649a28c12b4e21cf4e8da34db63c15e GabrielBolduc <bolducGabriel@outlook.com> 1771536394 -0500	commit: traduction + responsive + navbar edit
+0acaf4d72649a28c12b4e21cf4e8da34db63c15e 81b9003a921439276d50a0db36675ddab7096d32 GabrielBolduc <bolducGabriel@outlook.com> 1771536587 -0500	commit (merge): resolve public conflit
+81b9003a921439276d50a0db36675ddab7096d32 5c3d18061b444792a46ab36080615c1d676f233a GabrielBolduc <bolducGabriel@outlook.com> 1771536867 -0500	commit: public
+5c3d18061b444792a46ab36080615c1d676f233a 92b81f6348c5504c6776c113f83d261648825ffe GabrielBolduc <bolducGabriel@outlook.com> 1771536879 -0500	checkout: moving from GabrielB to main
+92b81f6348c5504c6776c113f83d261648825ffe f15c559051dd78f87db296bb48248d263a11a465 GabrielBolduc <bolducGabriel@outlook.com> 1771536893 -0500	pull origin main: Fast-forward
+f15c559051dd78f87db296bb48248d263a11a465 c159850fd5bb0025a2a0c09a9468ae35086d517a GabrielBolduc <bolducGabriel@outlook.com> 1771537001 -0500	commit: gitignore public
+c159850fd5bb0025a2a0c09a9468ae35086d517a 87038fd044bb9d084d93c47356af0dd05649688a GabrielBolduc <bolducGabriel@outlook.com> 1771537290 -0500	commit (merge): Merge branch 'GabrielB'
+87038fd044bb9d084d93c47356af0dd05649688a 87038fd044bb9d084d93c47356af0dd05649688a GabrielBolduc <bolducGabriel@outlook.com> 1771537513 -0500	checkout: moving from main to main
+87038fd044bb9d084d93c47356af0dd05649688a 5c3d18061b444792a46ab36080615c1d676f233a GabrielBolduc <bolducGabriel@outlook.com> 1771537519 -0500	checkout: moving from main to GabrielB
+5c3d18061b444792a46ab36080615c1d676f233a 87038fd044bb9d084d93c47356af0dd05649688a GabrielBolduc <bolducGabriel@outlook.com> 1771537526 -0500	merge main: Fast-forward
+87038fd044bb9d084d93c47356af0dd05649688a 87038fd044bb9d084d93c47356af0dd05649688a GabrielBolduc <bolducGabriel@outlook.com> 1771537671 -0500	checkout: moving from GabrielB to main
+87038fd044bb9d084d93c47356af0dd05649688a 0abc40df9f929195982d48adcddb7fd693be39e2 GabrielBolduc <bolducGabriel@outlook.com> 1771537816 -0500	commit: test gitignore
+0abc40df9f929195982d48adcddb7fd693be39e2 45bdcaa12b1b364f3d9e748e26f7ae5b3068a2d4 GabrielBolduc <bolducGabriel@outlook.com> 1771537997 -0500	pull origin main: Fast-forward
+45bdcaa12b1b364f3d9e748e26f7ae5b3068a2d4 336411ba3883fef694c3605a34aa7281f9b28a87 GabrielBolduc <bolducGabriel@outlook.com> 1771538172 -0500	commit: petit fix seed
+336411ba3883fef694c3605a34aa7281f9b28a87 87038fd044bb9d084d93c47356af0dd05649688a GabrielBolduc <bolducGabriel@outlook.com> 1771538254 -0500	checkout: moving from main to GabrielB
+87038fd044bb9d084d93c47356af0dd05649688a 336411ba3883fef694c3605a34aa7281f9b28a87 GabrielBolduc <bolducGabriel@outlook.com> 1771538282 -0500	merge main: Fast-forward
+336411ba3883fef694c3605a34aa7281f9b28a87 82a175491a0aa55fd1b4276b2f828e45487306ec GabrielBolduc <bolducGabriel@outlook.com> 1771551436 -0500	commit: Test,view,model
+82a175491a0aa55fd1b4276b2f828e45487306ec 336411ba3883fef694c3605a34aa7281f9b28a87 GabrielBolduc <bolducGabriel@outlook.com> 1771551455 -0500	checkout: moving from GabrielB to main
+336411ba3883fef694c3605a34aa7281f9b28a87 d22e06b4cbdcf6ea6b23174ceb2cac12d035af9a GabrielBolduc <bolducGabriel@outlook.com> 1771551468 -0500	pull origin main: Fast-forward
+d22e06b4cbdcf6ea6b23174ceb2cac12d035af9a 82a175491a0aa55fd1b4276b2f828e45487306ec GabrielBolduc <bolducGabriel@outlook.com> 1771551529 -0500	checkout: moving from main to GabrielB
+82a175491a0aa55fd1b4276b2f828e45487306ec 20c63db263f11f5834a36abe5b255c61053266e3 GabrielBolduc <bolducGabriel@outlook.com> 1771551604 -0500	commit (merge): merge main
+20c63db263f11f5834a36abe5b255c61053266e3 d22e06b4cbdcf6ea6b23174ceb2cac12d035af9a GabrielBolduc <bolducGabriel@outlook.com> 1771551621 -0500	checkout: moving from GabrielB to main
+d22e06b4cbdcf6ea6b23174ceb2cac12d035af9a 20c63db263f11f5834a36abe5b255c61053266e3 GabrielBolduc <bolducGabriel@outlook.com> 1771551631 -0500	merge GabrielB: Fast-forward
+20c63db263f11f5834a36abe5b255c61053266e3 b72b2cb3939d0df89ec42f54554ef9efb4d67ed5 GabrielBolduc <bolducGabriel@outlook.com> 1771552024 -0500	commit: fix test laurent
+b72b2cb3939d0df89ec42f54554ef9efb4d67ed5 20c63db263f11f5834a36abe5b255c61053266e3 GabrielBolduc <bolducGabriel@outlook.com> 1771553956 -0500	checkout: moving from main to GabrielB
+20c63db263f11f5834a36abe5b255c61053266e3 344eb6e326f5767b211568ad41147254fcb68403 GabrielBolduc <bolducGabriel@outlook.com> 1771556402 -0500	commit: Fix public page + style visuel
+344eb6e326f5767b211568ad41147254fcb68403 b72b2cb3939d0df89ec42f54554ef9efb4d67ed5 GabrielBolduc <bolducGabriel@outlook.com> 1771556411 -0500	checkout: moving from GabrielB to main
+b72b2cb3939d0df89ec42f54554ef9efb4d67ed5 66e1d755e6eb3282a0d9a39f507455a43e9c6638 GabrielBolduc <bolducGabriel@outlook.com> 1771556417 -0500	pull origin main: Fast-forward
+66e1d755e6eb3282a0d9a39f507455a43e9c6638 344eb6e326f5767b211568ad41147254fcb68403 GabrielBolduc <bolducGabriel@outlook.com> 1771556430 -0500	checkout: moving from main to GabrielB
+344eb6e326f5767b211568ad41147254fcb68403 fb4481b9cb972d82c78d4e6218ffe786698580a1 GabrielBolduc <bolducGabriel@outlook.com> 1771556440 -0500	merge main: Merge made by the 'ort' strategy.
+fb4481b9cb972d82c78d4e6218ffe786698580a1 66e1d755e6eb3282a0d9a39f507455a43e9c6638 GabrielBolduc <bolducGabriel@outlook.com> 1771556746 -0500	checkout: moving from GabrielB to main
+66e1d755e6eb3282a0d9a39f507455a43e9c6638 fb4481b9cb972d82c78d4e6218ffe786698580a1 GabrielBolduc <bolducGabriel@outlook.com> 1771556751 -0500	merge GabrielB: Fast-forward
+fb4481b9cb972d82c78d4e6218ffe786698580a1 1e4e9be8099ee18c4d344edc0267e247d47f0dc7 GabrielBolduc <bolducGabriel@outlook.com> 1771557019 -0500	commit: edit budgets projet angular
+1e4e9be8099ee18c4d344edc0267e247d47f0dc7 58124752a2a68e9a78a4b28809292b60d3032eba GabrielBolduc <bolducGabriel@outlook.com> 1771561235 -0500	commit: traduction navbar
+58124752a2a68e9a78a4b28809292b60d3032eba d1801af8ec12718dcbd45c5a0d7111ee58690ce0 GabrielBolduc <bolducGabriel@outlook.com> 1771571770 -0500	commit: FIX : Alexandre a laisser des probleme dans ses seeds donc la prod ne recup pas les seed
+d1801af8ec12718dcbd45c5a0d7111ee58690ce0 b509e479e3fcb502e8c2674ded54df9418dd8e03 GabrielBolduc <bolducGabriel@outlook.com> 1771799230 -0500	commit: environments au lieu de proxy.conf & modifs routes
+b509e479e3fcb502e8c2674ded54df9418dd8e03 ee5443ac6100c2a2487556261924184a12f5cab7 GabrielBolduc <bolducGabriel@outlook.com> 1771808049 -0500	commit: correction restriction login guard
+ee5443ac6100c2a2487556261924184a12f5cab7 f162db35e44cff457177db120e8023698313d9bf GabrielBolduc <bolducGabriel@outlook.com> 1771809138 -0500	commit: Correction controller 200 & structure signal
+f162db35e44cff457177db120e8023698313d9bf 987f43b3eb2e3d23a2bc3555666414153e686125 GabrielBolduc <bolducGabriel@outlook.com> 1771860297 -0500	pull: Fast-forward
+987f43b3eb2e3d23a2bc3555666414153e686125 b6e750866619dd7bed0c6947bed3a76291309db6 GabrielBolduc <bolducGabriel@outlook.com> 1771860365 -0500	commit: retour a rb au lieu de sql et correction prod
+b6e750866619dd7bed0c6947bed3a76291309db6 fb4481b9cb972d82c78d4e6218ffe786698580a1 GabrielBolduc <bolducGabriel@outlook.com> 1771860381 -0500	checkout: moving from main to GabrielB
+fb4481b9cb972d82c78d4e6218ffe786698580a1 b6e750866619dd7bed0c6947bed3a76291309db6 GabrielBolduc <bolducGabriel@outlook.com> 1771860392 -0500	merge main: Fast-forward
+b6e750866619dd7bed0c6947bed3a76291309db6 b6e750866619dd7bed0c6947bed3a76291309db6 GabrielBolduc <bolducGabriel@outlook.com> 1771860475 -0500	checkout: moving from GabrielB to GabrielB
+b6e750866619dd7bed0c6947bed3a76291309db6 b6e750866619dd7bed0c6947bed3a76291309db6 GabrielBolduc <bolducGabriel@outlook.com> 1771860487 -0500	checkout: moving from GabrielB to main
+b6e750866619dd7bed0c6947bed3a76291309db6 23ed6eae690e9d6615b384a2b292ee80526b5124 GabrielBolduc <bolducGabriel@outlook.com> 1771860618 -0500	commit: seed sans image laurent
+23ed6eae690e9d6615b384a2b292ee80526b5124 b6e750866619dd7bed0c6947bed3a76291309db6 GabrielBolduc <bolducGabriel@outlook.com> 1771860637 -0500	checkout: moving from main to GabrielB
+b6e750866619dd7bed0c6947bed3a76291309db6 23ed6eae690e9d6615b384a2b292ee80526b5124 GabrielBolduc <bolducGabriel@outlook.com> 1771860641 -0500	merge main: Fast-forward
+23ed6eae690e9d6615b384a2b292ee80526b5124 6d955824b76b1c749111ff4dd70284559bd222fd GabrielBolduc <bolducGabriel@outlook.com> 1771862044 -0500	commit: changement call api dans mes services
+6d955824b76b1c749111ff4dd70284559bd222fd e6098c1d82202839f16b55a005670c72aa023cce GabrielBolduc <bolducGabriel@outlook.com> 1771871501 -0500	commit: ang : service erreur backend et date utils, correction controller et test
+e6098c1d82202839f16b55a005670c72aa023cce 23ed6eae690e9d6615b384a2b292ee80526b5124 GabrielBolduc <bolducGabriel@outlook.com> 1771871512 -0500	checkout: moving from GabrielB to main
+23ed6eae690e9d6615b384a2b292ee80526b5124 5cb846b917edffbc11b2fd4382081986207ef8cd GabrielBolduc <bolducGabriel@outlook.com> 1771871517 -0500	pull: Fast-forward
+5cb846b917edffbc11b2fd4382081986207ef8cd e6098c1d82202839f16b55a005670c72aa023cce GabrielBolduc <bolducGabriel@outlook.com> 1771871530 -0500	checkout: moving from main to GabrielB
+e6098c1d82202839f16b55a005670c72aa023cce d7986ec7d71121196cb9d8b4b3906f1a4ffcbf32 GabrielBolduc <bolducGabriel@outlook.com> 1771871535 -0500	merge main: Merge made by the 'ort' strategy.
+d7986ec7d71121196cb9d8b4b3906f1a4ffcbf32 95d1f4618cebdbc1b19b78c410f7db18324f58e4 GabrielBolduc <bolducGabriel@outlook.com> 1771871795 -0500	commit: catch les throws
+95d1f4618cebdbc1b19b78c410f7db18324f58e4 5cb846b917edffbc11b2fd4382081986207ef8cd GabrielBolduc <bolducGabriel@outlook.com> 1771873378 -0500	checkout: moving from GabrielB to main
+5cb846b917edffbc11b2fd4382081986207ef8cd bd1a0a919ffb13bc1efd41ee6fa1bf626d20d590 GabrielBolduc <bolducGabriel@outlook.com> 1771873383 -0500	pull: Fast-forward
+bd1a0a919ffb13bc1efd41ee6fa1bf626d20d590 c2359c5a6ae53c5b325ae998804628281fcb6aad GabrielBolduc <bolducGabriel@outlook.com> 1771873432 -0500	merge GabrielB: Merge made by the 'ort' strategy.
+c2359c5a6ae53c5b325ae998804628281fcb6aad 85c0ac7b8c33ee2a5c225adc00e39973167f81e8 GabrielBolduc <bolducGabriel@outlook.com> 1771879129 -0500	commit: FIX code dans les test & component festival
+85c0ac7b8c33ee2a5c225adc00e39973167f81e8 4a19a31d00157138dedda3c1f50c9a90126aed2c GabrielBolduc <bolducGabriel@outlook.com> 1771889888 -0500	commit: Correction de mes controller, scope
+4a19a31d00157138dedda3c1f50c9a90126aed2c 8c223e9c445872c938a1eb3e43472c071e38b835 GabrielBolduc <bolducGabriel@outlook.com> 1771891930 -0500	commit: controller festival CRUDL complet
+8c223e9c445872c938a1eb3e43472c071e38b835 95d1f4618cebdbc1b19b78c410f7db18324f58e4 GabrielBolduc <bolducGabriel@outlook.com> 1771891951 -0500	checkout: moving from main to GabrielB
+95d1f4618cebdbc1b19b78c410f7db18324f58e4 8c223e9c445872c938a1eb3e43472c071e38b835 GabrielBolduc <bolducGabriel@outlook.com> 1771891955 -0500	merge main: Fast-forward
+8c223e9c445872c938a1eb3e43472c071e38b835 1e4fbf7449fb63ada9e176f3c08ec0414c35010c GabrielBolduc <bolducGabriel@outlook.com> 1771893113 -0500	commit: scop controller festival
+1e4fbf7449fb63ada9e176f3c08ec0414c35010c 1e4fbf7449fb63ada9e176f3c08ec0414c35010c GabrielBolduc <bolducGabriel@outlook.com> 1771940178 -0500	checkout: moving from GabrielB to GabrielB
+1e4fbf7449fb63ada9e176f3c08ec0414c35010c 3e18a933a7031e242209418a6bb0d0be41cf0e6a GabrielBolduc <bolducGabriel@outlook.com> 1771942928 -0500	commit: models et controller festival & alert en ang mat
+3e18a933a7031e242209418a6bb0d0be41cf0e6a 8c223e9c445872c938a1eb3e43472c071e38b835 GabrielBolduc <bolducGabriel@outlook.com> 1771942942 -0500	checkout: moving from GabrielB to main
+8c223e9c445872c938a1eb3e43472c071e38b835 ee7eda6e3b252452e10fcbc49befffd669ceaff9 GabrielBolduc <bolducGabriel@outlook.com> 1771942950 -0500	pull: Fast-forward
+ee7eda6e3b252452e10fcbc49befffd669ceaff9 3e18a933a7031e242209418a6bb0d0be41cf0e6a GabrielBolduc <bolducGabriel@outlook.com> 1771942963 -0500	checkout: moving from main to GabrielB
+3e18a933a7031e242209418a6bb0d0be41cf0e6a 40125e91f2b7cf1589461125ee49f3a797eb8732 GabrielBolduc <bolducGabriel@outlook.com> 1771942970 -0500	merge main: Merge made by the 'ort' strategy.
+40125e91f2b7cf1589461125ee49f3a797eb8732 891897f42cafcf3836115b061703dc66dd9dc820 GabrielBolduc <bolducGabriel@outlook.com> 1771956636 -0500	commit: Gestion status partiel + CRUDL partiel
+891897f42cafcf3836115b061703dc66dd9dc820 44a22a06a2b9310db98be5b8aedf0f60095e623b GabrielBolduc <bolducGabriel@outlook.com> 1771957359 -0500	commit: Update
+44a22a06a2b9310db98be5b8aedf0f60095e623b ee7eda6e3b252452e10fcbc49befffd669ceaff9 GabrielBolduc <bolducGabriel@outlook.com> 1771957375 -0500	checkout: moving from GabrielB to main
+ee7eda6e3b252452e10fcbc49befffd669ceaff9 d8bf173dfbcb3bff6dcb7ab51b63a96c91d67279 GabrielBolduc <bolducGabriel@outlook.com> 1771957405 -0500	pull: Fast-forward
+d8bf173dfbcb3bff6dcb7ab51b63a96c91d67279 44a22a06a2b9310db98be5b8aedf0f60095e623b GabrielBolduc <bolducGabriel@outlook.com> 1771957534 -0500	checkout: moving from main to GabrielB
+44a22a06a2b9310db98be5b8aedf0f60095e623b a788d4036c5a5b8f141479a1ef2f2b57be18c3ff GabrielBolduc <bolducGabriel@outlook.com> 1771957821 -0500	commit (merge): merge main
+a788d4036c5a5b8f141479a1ef2f2b57be18c3ff 2b256cd30b3f0798682bb1f6cffa811b82068bd6 GabrielBolduc <bolducGabriel@outlook.com> 1771962926 -0500	commit: Gestion archive/draft/ongoing & card festival
+2b256cd30b3f0798682bb1f6cffa811b82068bd6 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771967158 -0500	commit: performance id different status festival
+798665cfcffdefe114cca518c515d90a6dd90640 d8bf173dfbcb3bff6dcb7ab51b63a96c91d67279 GabrielBolduc <bolducGabriel@outlook.com> 1771976255 -0500	checkout: moving from GabrielB to main
+d8bf173dfbcb3bff6dcb7ab51b63a96c91d67279 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771976268 -0500	checkout: moving from main to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771976321 -0500	checkout: moving from GabrielB to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 d8bf173dfbcb3bff6dcb7ab51b63a96c91d67279 GabrielBolduc <bolducGabriel@outlook.com> 1771976328 -0500	checkout: moving from GabrielB to main
+d8bf173dfbcb3bff6dcb7ab51b63a96c91d67279 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771976346 -0500	merge GabrielB: Fast-forward
+798665cfcffdefe114cca518c515d90a6dd90640 c27a5420819d1925706045cc3532eeb193b86afd GabrielBolduc <bolducGabriel@outlook.com> 1771976391 -0500	commit: component festival
+c27a5420819d1925706045cc3532eeb193b86afd f3b5cc6489fde35bd58c2ca73d23c504e636f2e7 GabrielBolduc <bolducGabriel@outlook.com> 1771979445 -0500	commit: fix programmation navbar
+f3b5cc6489fde35bd58c2ca73d23c504e636f2e7 e72656abc174a7bfc1eb7bb7fd71a860db52da39 GabrielBolduc <bolducGabriel@outlook.com> 1771986254 -0500	pull: Fast-forward
+e72656abc174a7bfc1eb7bb7fd71a860db52da39 fa44b82ca4fe00ada39de2087e681cebefe272b6 GabrielBolduc <bolducGabriel@outlook.com> 1771996426 -0500	pull: Fast-forward
+fa44b82ca4fe00ada39de2087e681cebefe272b6 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771996918 -0500	checkout: moving from main to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771997106 -0500	checkout: moving from GabrielB to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771997120 -0500	checkout: moving from GabrielB to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771997457 -0500	checkout: moving from GabrielB to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 fa44b82ca4fe00ada39de2087e681cebefe272b6 GabrielBolduc <bolducGabriel@outlook.com> 1771997490 -0500	checkout: moving from GabrielB to main
+fa44b82ca4fe00ada39de2087e681cebefe272b6 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1771997518 -0500	checkout: moving from main to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 fa44b82ca4fe00ada39de2087e681cebefe272b6 GabrielBolduc <bolducGabriel@outlook.com> 1771997814 -0500	checkout: moving from GabrielB to main
+fa44b82ca4fe00ada39de2087e681cebefe272b6 5935e7256d4d69cace4fa61400d6aa94158089c0 GabrielBolduc <bolducGabriel@outlook.com> 1772026172 -0500	pull: Fast-forward
+5935e7256d4d69cace4fa61400d6aa94158089c0 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1772026369 -0500	checkout: moving from main to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 5935e7256d4d69cace4fa61400d6aa94158089c0 GabrielBolduc <bolducGabriel@outlook.com> 1772026503 -0500	merge main: Fast-forward
+5935e7256d4d69cace4fa61400d6aa94158089c0 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1772026726 -0500	reset: moving to 798665c
+798665cfcffdefe114cca518c515d90a6dd90640 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1772026740 -0500	reset: moving to 798665c
+798665cfcffdefe114cca518c515d90a6dd90640 5935e7256d4d69cace4fa61400d6aa94158089c0 GabrielBolduc <bolducGabriel@outlook.com> 1772026811 -0500	checkout: moving from GabrielB to main
+5935e7256d4d69cace4fa61400d6aa94158089c0 2d634d72562af7e9ad2ece7cefba6ab022485264 GabrielBolduc <bolducGabriel@outlook.com> 1772028488 -0500	commit: Route reparer
+2d634d72562af7e9ad2ece7cefba6ab022485264 55f613da0b32b40fce5b20ee2e5cf1015d6deb19 GabrielBolduc <bolducGabriel@outlook.com> 1772029642 -0500	pull: Fast-forward
+55f613da0b32b40fce5b20ee2e5cf1015d6deb19 d0779976bba7c52e6562dce5bd83e3ba3004a594 GabrielBolduc <bolducGabriel@outlook.com> 1772030627 -0500	pull: Fast-forward
+d0779976bba7c52e6562dce5bd83e3ba3004a594 92f22a37a4f402772c2065ef8f16e17e8617beae GabrielBolduc <bolducGabriel@outlook.com> 1772031550 -0500	pull: Fast-forward
+92f22a37a4f402772c2065ef8f16e17e8617beae c10da931b913276662b0243a847daa5c4c623b53 GabrielBolduc <bolducGabriel@outlook.com> 1772034655 -0500	commit: Correction seed + securiter controller & models
+c10da931b913276662b0243a847daa5c4c623b53 798665cfcffdefe114cca518c515d90a6dd90640 GabrielBolduc <bolducGabriel@outlook.com> 1772034666 -0500	checkout: moving from main to GabrielB
+798665cfcffdefe114cca518c515d90a6dd90640 c10da931b913276662b0243a847daa5c4c623b53 GabrielBolduc <bolducGabriel@outlook.com> 1772034679 -0500	merge main: Fast-forward
+c10da931b913276662b0243a847daa5c4c623b53 800835a1072c313574e6c0378f2d0af2c2761380 GabrielBolduc <bolducGabriel@outlook.com> 1772038060 -0500	commit: securiter controller et model
+800835a1072c313574e6c0378f2d0af2c2761380 8b83b678c8cb8311cd17f3a064fcb04818221613 GabrielBolduc <bolducGabriel@outlook.com> 1772043348 -0500	commit: require admin dans api controller
+8b83b678c8cb8311cd17f3a064fcb04818221613 c10da931b913276662b0243a847daa5c4c623b53 GabrielBolduc <bolducGabriel@outlook.com> 1772043399 -0500	checkout: moving from GabrielB to main
+c10da931b913276662b0243a847daa5c4c623b53 6ced2db4810309e3dd66d198a829ae747ca127a2 GabrielBolduc <bolducGabriel@outlook.com> 1772043404 -0500	pull: Fast-forward
+6ced2db4810309e3dd66d198a829ae747ca127a2 8b83b678c8cb8311cd17f3a064fcb04818221613 GabrielBolduc <bolducGabriel@outlook.com> 1772043419 -0500	checkout: moving from main to GabrielB
+8b83b678c8cb8311cd17f3a064fcb04818221613 6cbf97ca35a499d42ad1d9513bb25821d8c42cca GabrielBolduc <bolducGabriel@outlook.com> 1772043483 -0500	merge main: Merge made by the 'ort' strategy.
+6cbf97ca35a499d42ad1d9513bb25821d8c42cca 6ced2db4810309e3dd66d198a829ae747ca127a2 GabrielBolduc <bolducGabriel@outlook.com> 1772047263 -0500	checkout: moving from GabrielB to main
+6ced2db4810309e3dd66d198a829ae747ca127a2 0755cf1d82cd13c4b717b5de3c5d5e534a4b155c GabrielBolduc <bolducGabriel@outlook.com> 1772047416 -0500	commit: pull main
+0755cf1d82cd13c4b717b5de3c5d5e534a4b155c 95dff86f1d234549e9482c3035251bd463a2f868 GabrielBolduc <bolducGabriel@outlook.com> 1772047421 -0500	pull: Merge made by the 'ort' strategy.
+95dff86f1d234549e9482c3035251bd463a2f868 6cbf97ca35a499d42ad1d9513bb25821d8c42cca GabrielBolduc <bolducGabriel@outlook.com> 1772047725 -0500	checkout: moving from main to GabrielB
+6cbf97ca35a499d42ad1d9513bb25821d8c42cca 5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 GabrielBolduc <bolducGabriel@outlook.com> 1772047732 -0500	merge main: Merge made by the 'ort' strategy.
+5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 95dff86f1d234549e9482c3035251bd463a2f868 GabrielBolduc <bolducGabriel@outlook.com> 1772047898 -0500	checkout: moving from GabrielB to main
+95dff86f1d234549e9482c3035251bd463a2f868 5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 GabrielBolduc <bolducGabriel@outlook.com> 1772047908 -0500	merge GabrielB: Fast-forward
+                                                                                                                                                                                    5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 GabrielBolduc <bolducGabriel@outlook.com> 1772058592 -0500	checkout: moving from GabrielB to main
+5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 fc931e501d19316af3ce3d46b3ecbdeed953f72e GabrielBolduc <bolducGabriel@outlook.com> 1772063404 -0500	pull: Fast-forward
+fc931e501d19316af3ce3d46b3ecbdeed953f72e 07799ef60f745b11508e5bc98efbc554bdde12a0 GabrielBolduc <bolducGabriel@outlook.com> 1772066612 -0500	commit: merge GabrielB
+07799ef60f745b11508e5bc98efbc554bdde12a0 5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 GabrielBolduc <bolducGabriel@outlook.com> 1772066804 -0500	checkout: moving from main to GabrielB
+5b384f124e63e8774ba9669a8e6cd3fa7e8fa873 07799ef60f745b11508e5bc98efbc554bdde12a0 GabrielBolduc <bolducGabriel@outlook.com> 1772066809 -0500	merge main: Fast-forward
+07799ef60f745b11508e5bc98efbc554bdde12a0 07799ef60f745b11508e5bc98efbc554bdde12a0 GabrielBolduc <bolducGabriel@outlook.com> 1772067001 -0500	checkout: moving from GabrielB to main
+07799ef60f745b11508e5bc98efbc554bdde12a0 6d7a33941d4cef46522300a7a64324b07e40351a GabrielBolduc <bolducGabriel@outlook.com> 1772069125 -0500	commit: fix erreur dans affectation_controller de laurent
+6d7a33941d4cef46522300a7a64324b07e40351a 671f2cd91b9c64591b2ba8e9af17907d623760ae GabrielBolduc <bolducGabriel@outlook.com> 1772071223 -0500	commit: fix: resolve production seed crash
+671f2cd91b9c64591b2ba8e9af17907d623760ae 408b5f9bc3e680243993b4fd4968dfba89eb1b69 GabrielBolduc <bolducGabriel@outlook.com> 1772071250 -0500	pull: Merge made by the 'ort' strategy.
+408b5f9bc3e680243993b4fd4968dfba89eb1b69 a919977f219a4eaae4b7607c2b67d6ca684ae7cf GabrielBolduc <bolducGabriel@outlook.com> 1772072552 -0500	commit: petit fix pour prod staging
+a919977f219a4eaae4b7607c2b67d6ca684ae7cf 07799ef60f745b11508e5bc98efbc554bdde12a0 GabrielBolduc <bolducGabriel@outlook.com> 1772114294 -0500	checkout: moving from main to GabrielB
+07799ef60f745b11508e5bc98efbc554bdde12a0 416428e59d2e09fd923e2c4178a1a655feb2670a GabrielBolduc <bolducGabriel@outlook.com> 1772116880 -0500	commit: update de mes scope
+416428e59d2e09fd923e2c4178a1a655feb2670a b31f9db3795a6c8a314361cdd35e66726ecd9a61 GabrielBolduc <bolducGabriel@outlook.com> 1772116943 -0500	merge main: Merge made by the 'ort' strategy.
+b31f9db3795a6c8a314361cdd35e66726ecd9a61 ffa09bb8f6a588d9d743cb0d674bfb7dbf4f6af0 GabrielBolduc <bolducGabriel@outlook.com> 1772118661 -0500	commit: delete SSR du projet
+ffa09bb8f6a588d9d743cb0d674bfb7dbf4f6af0 ce84bf302e2adcc64c0a57e610c5539699bd5eee GabrielBolduc <bolducGabriel@outlook.com> 1772120161 -0500	commit: api-response uniformiser
+ce84bf302e2adcc64c0a57e610c5539699bd5eee 35da7d75a00f1164df3a48a45c3e0a59e133aa6b GabrielBolduc <bolducGabriel@outlook.com> 1772125540 -0500	commit: test complet
+35da7d75a00f1164df3a48a45c3e0a59e133aa6b 7894ef549052900318683ab56bef46b3789446db GabrielBolduc <bolducGabriel@outlook.com> 1772133067 -0500	commit: fix # fallback
+7894ef549052900318683ab56bef46b3789446db a919977f219a4eaae4b7607c2b67d6ca684ae7cf GabrielBolduc <bolducGabriel@outlook.com> 1772133080 -0500	checkout: moving from GabrielB to main
+a919977f219a4eaae4b7607c2b67d6ca684ae7cf 29428dac9f15afa2c57032b8b35b8d19870aac3a GabrielBolduc <bolducGabriel@outlook.com> 1772133085 -0500	pull: Fast-forward
+29428dac9f15afa2c57032b8b35b8d19870aac3a 7894ef549052900318683ab56bef46b3789446db GabrielBolduc <bolducGabriel@outlook.com> 1772133103 -0500	checkout: moving from main to GabrielB
+7894ef549052900318683ab56bef46b3789446db 182b6ef6b789b251a820cb051b9f5c60e7b47856 GabrielBolduc <bolducGabriel@outlook.com> 1772133109 -0500	merge main: Merge made by the 'ort' strategy.
+182b6ef6b789b251a820cb051b9f5c60e7b47856 ff75ba8fc0c49afd2b110dd13d710271280b7eaa GabrielBolduc <bolducGabriel@outlook.com> 1772134388 -0500	commit: Correction fallback
+ff75ba8fc0c49afd2b110dd13d710271280b7eaa 29428dac9f15afa2c57032b8b35b8d19870aac3a GabrielBolduc <bolducGabriel@outlook.com> 1772134400 -0500	checkout: moving from GabrielB to main
+29428dac9f15afa2c57032b8b35b8d19870aac3a ff75ba8fc0c49afd2b110dd13d710271280b7eaa GabrielBolduc <bolducGabriel@outlook.com> 1772134405 -0500	merge GabrielB: Fast-forward
+ff75ba8fc0c49afd2b110dd13d710271280b7eaa 523a24fe6ab96be1ad6d2718a98a99ed024fce84 GabrielBolduc <bolducGabriel@outlook.com> 1772134813 -0500	commit: fix seed personnel
+523a24fe6ab96be1ad6d2718a98a99ed024fce84 ff75ba8fc0c49afd2b110dd13d710271280b7eaa GabrielBolduc <bolducGabriel@outlook.com> 1772134872 -0500	checkout: moving from main to GabrielB
+ff75ba8fc0c49afd2b110dd13d710271280b7eaa 523a24fe6ab96be1ad6d2718a98a99ed024fce84 GabrielBolduc <bolducGabriel@outlook.com> 1772134892 -0500	merge main: Fast-forward
+523a24fe6ab96be1ad6d2718a98a99ed024fce84 3257e46aa1a870c65e41d40639af3303a546510a GabrielBolduc <bolducGabriel@outlook.com> 1772136589 -0500	commit: test terminer
+3257e46aa1a870c65e41d40639af3303a546510a 3d42ea11e0d5994e4e0225af510b8c4c65928d7d GabrielBolduc <bolducGabriel@outlook.com> 1772141084 -0500	commit: Traduction complete, title, restyle des card, responsive
+3d42ea11e0d5994e4e0225af510b8c4c65928d7d 523a24fe6ab96be1ad6d2718a98a99ed024fce84 GabrielBolduc <bolducGabriel@outlook.com> 1772141123 -0500	checkout: moving from GabrielB to main
+523a24fe6ab96be1ad6d2718a98a99ed024fce84 d3bb29bcd273280a51e7a42d8ea6bb2b3a5547cf GabrielBolduc <bolducGabriel@outlook.com> 1772141127 -0500	pull: Fast-forward
+d3bb29bcd273280a51e7a42d8ea6bb2b3a5547cf 3d42ea11e0d5994e4e0225af510b8c4c65928d7d GabrielBolduc <bolducGabriel@outlook.com> 1772141209 -0500	checkout: moving from main to GabrielB
+3d42ea11e0d5994e4e0225af510b8c4c65928d7d fb880d148b3694cb26fec9a140721077b3d80666 GabrielBolduc <bolducGabriel@outlook.com> 1772141214 -0500	merge main: Merge made by the 'ort' strategy.
+fb880d148b3694cb26fec9a140721077b3d80666 b5698cdda01a53881727741a089b6490d5f199ec GabrielBolduc <bolducGabriel@outlook.com> 1772141470 -0500	commit: correction ngif laurent
+b5698cdda01a53881727741a089b6490d5f199ec d3bb29bcd273280a51e7a42d8ea6bb2b3a5547cf GabrielBolduc <bolducGabriel@outlook.com> 1772141490 -0500	checkout: moving from GabrielB to main
+d3bb29bcd273280a51e7a42d8ea6bb2b3a5547cf b5698cdda01a53881727741a089b6490d5f199ec GabrielBolduc <bolducGabriel@outlook.com> 1772141497 -0500	merge GabrielB: Fast-forward
+b5698cdda01a53881727741a089b6490d5f199ec b5698cdda01a53881727741a089b6490d5f199ec GabrielBolduc <bolducGabriel@outlook.com> 1772141599 -0500	checkout: moving from main to GabrielB
+b5698cdda01a53881727741a089b6490d5f199ec 2e73df8987ecd1e007f1611097693aca32fad006 GabrielBolduc <bolducGabriel@outlook.com> 1772142911 -0500	commit: petite correction error handler
+2e73df8987ecd1e007f1611097693aca32fad006 b5698cdda01a53881727741a089b6490d5f199ec GabrielBolduc <bolducGabriel@outlook.com> 1772143009 -0500	checkout: moving from GabrielB to main
+b5698cdda01a53881727741a089b6490d5f199ec 2e73df8987ecd1e007f1611097693aca32fad006 GabrielBolduc <bolducGabriel@outlook.com> 1772143065 -0500	merge GabrielB: Fast-forward
+                                                                                                                                                                                    2e73df8987ecd1e007f1611097693aca32fad006 2e73df8987ecd1e007f1611097693aca32fad006 GabrielBolduc <bolducGabriel@outlook.com> 1772150391 -0500	checkout: moving from GabrielB to main
+2e73df8987ecd1e007f1611097693aca32fad006 edd8eb8860389853ac1517616b14f70d29c00adf GabrielBolduc <bolducGabriel@outlook.com> 1772150400 -0500	pull origin main: Fast-forward
+edd8eb8860389853ac1517616b14f70d29c00adf 2e73df8987ecd1e007f1611097693aca32fad006 GabrielBolduc <bolducGabriel@outlook.com> 1772150596 -0500	checkout: moving from main to GabrielB
+2e73df8987ecd1e007f1611097693aca32fad006 edd8eb8860389853ac1517616b14f70d29c00adf GabrielBolduc <bolducGabriel@outlook.com> 1772150929 -0500	checkout: moving from GabrielB to main
+edd8eb8860389853ac1517616b14f70d29c00adf cdf5e908c898d3ee5e5cea4a75f7373cc902e9ab GabrielBolduc <bolducGabriel@outlook.com> 1772150934 -0500	pull: Fast-forward
+cdf5e908c898d3ee5e5cea4a75f7373cc902e9ab 2e73df8987ecd1e007f1611097693aca32fad006 GabrielBolduc <bolducGabriel@outlook.com> 1772151114 -0500	checkout: moving from main to GabrielB
+2e73df8987ecd1e007f1611097693aca32fad006 cdf5e908c898d3ee5e5cea4a75f7373cc902e9ab GabrielBolduc <bolducGabriel@outlook.com> 1772151132 -0500	merge main: Fast-forward
+cdf5e908c898d3ee5e5cea4a75f7373cc902e9ab 87efdae39e2cf4e515dffca0763f3ddef63c110e GabrielBolduc <bolducGabriel@outlook.com> 1772153618 -0500	commit: error handler 200ok
+87efdae39e2cf4e515dffca0763f3ddef63c110e cdf5e908c898d3ee5e5cea4a75f7373cc902e9ab GabrielBolduc <bolducGabriel@outlook.com> 1772153625 -0500	checkout: moving from GabrielB to main
+cdf5e908c898d3ee5e5cea4a75f7373cc902e9ab 87efdae39e2cf4e515dffca0763f3ddef63c110e GabrielBolduc <bolducGabriel@outlook.com> 1772153657 -0500	merge GabrielB: Fast-forward
+87efdae39e2cf4e515dffca0763f3ddef63c110e 78e2c3c8f5e14e5d6a80723e449be5eff443798e GabrielBolduc <bolducGabriel@outlook.com> 1772153788 -0500	commit: correction matlabel
+78e2c3c8f5e14e5d6a80723e449be5eff443798e 7b8375aee93292756561ff5686cfc3617ed6b4dd GabrielBolduc <bolducGabriel@outlook.com> 1772156796 -0500	pull: Fast-forward
+7b8375aee93292756561ff5686cfc3617ed6b4dd 2c2208ff426729d4c969a3dc069e792c4a824bea GabrielBolduc <bolducGabriel@outlook.com> 1772156969 -0500	commit: correction bug service
+2c2208ff426729d4c969a3dc069e792c4a824bea 30894698d85df0ec88d8b8a0060d8cf7059dfdb7 GabrielBolduc <bolducGabriel@outlook.com> 1772157552 -0500	pull: Fast-forward
+30894698d85df0ec88d8b8a0060d8cf7059dfdb7 b08ea04f8eb09d598e0da5887bec4e6b1608ba6d GabrielBolduc <bolducGabriel@outlook.com> 1772158103 -0500	commit: fix final
+b08ea04f8eb09d598e0da5887bec4e6b1608ba6d 87efdae39e2cf4e515dffca0763f3ddef63c110e GabrielBolduc <bolducGabriel@outlook.com> 1772405170 -0500	checkout: moving from main to GabrielB
+87efdae39e2cf4e515dffca0763f3ddef63c110e ffd9f3549b6cf637d496ccdc8831a0f615f21765 GabrielBolduc <bolducGabriel@outlook.com> 1772405271 -0500	commit: fix error handler
+ffd9f3549b6cf637d496ccdc8831a0f615f21765 57c3f2a0620f9ee7b4e84b9f0afa19ca6b51e819 GabrielBolduc <bolducGabriel@outlook.com> 1772460017 -0500	commit: ajout adress schedule publique
+57c3f2a0620f9ee7b4e84b9f0afa19ca6b51e819 b08ea04f8eb09d598e0da5887bec4e6b1608ba6d GabrielBolduc <bolducGabriel@outlook.com> 1772460040 -0500	checkout: moving from GabrielB to main
+b08ea04f8eb09d598e0da5887bec4e6b1608ba6d af139250fe0e239c4fe9c398365f170506464ae0 GabrielBolduc <bolducGabriel@outlook.com> 1772460046 -0500	pull: Fast-forward
+af139250fe0e239c4fe9c398365f170506464ae0 57c3f2a0620f9ee7b4e84b9f0afa19ca6b51e819 GabrielBolduc <bolducGabriel@outlook.com> 1772460090 -0500	checkout: moving from main to GabrielB
+57c3f2a0620f9ee7b4e84b9f0afa19ca6b51e819 b46972f405c8e98b20249fc29a9fa86da7dc0eab GabrielBolduc <bolducGabriel@outlook.com> 1772460095 -0500	merge main: Merge made by the 'ort' strategy.
+b46972f405c8e98b20249fc29a9fa86da7dc0eab 492441adc496f81dfdc0c51311a093b8f61bbc8c GabrielBolduc <bolducGabriel@outlook.com> 1772463425 -0500	commit: correction erreur form, card flex, i18 & trad message erreur
+492441adc496f81dfdc0c51311a093b8f61bbc8c 67d9f9eb45eecfbecf5f3fca0a8900c3ec155607 GabrielBolduc <bolducGabriel@outlook.com> 1772475035 -0500	commit: artist controller & public
+67d9f9eb45eecfbecf5f3fca0a8900c3ec155607 af139250fe0e239c4fe9c398365f170506464ae0 GabrielBolduc <bolducGabriel@outlook.com> 1772475051 -0500	checkout: moving from GabrielB to main
+af139250fe0e239c4fe9c398365f170506464ae0 52e3a3ca6d0179223d1f926a4a1fc164ddff31c1 GabrielBolduc <bolducGabriel@outlook.com> 1772475060 -0500	pull: Fast-forward
+52e3a3ca6d0179223d1f926a4a1fc164ddff31c1 67d9f9eb45eecfbecf5f3fca0a8900c3ec155607 GabrielBolduc <bolducGabriel@outlook.com> 1772475156 -0500	checkout: moving from main to GabrielB
+67d9f9eb45eecfbecf5f3fca0a8900c3ec155607 5d3e050dfe79522f36e8ce3adfd4ec876777fcdd GabrielBolduc <bolducGabriel@outlook.com> 1772490080 -0500	commit: list et form artists
+5d3e050dfe79522f36e8ce3adfd4ec876777fcdd cb93527e8c83340d46541804916b6678e371ec3d GabrielBolduc <bolducGabriel@outlook.com> 1772498716 -0500	commit: page publique artists & prog
+cb93527e8c83340d46541804916b6678e371ec3d 52e3a3ca6d0179223d1f926a4a1fc164ddff31c1 GabrielBolduc <bolducGabriel@outlook.com> 1772498727 -0500	checkout: moving from GabrielB to main
+52e3a3ca6d0179223d1f926a4a1fc164ddff31c1 81af8c1745d1cbd86325ddcb61be98028d04b95c GabrielBolduc <bolducGabriel@outlook.com> 1772498731 -0500	pull: Fast-forward
+81af8c1745d1cbd86325ddcb61be98028d04b95c 81af8c1745d1cbd86325ddcb61be98028d04b95c GabrielBolduc <bolducGabriel@outlook.com> 1772498756 -0500	reset: moving to HEAD
+81af8c1745d1cbd86325ddcb61be98028d04b95c cb93527e8c83340d46541804916b6678e371ec3d GabrielBolduc <bolducGabriel@outlook.com> 1772498764 -0500	checkout: moving from main to GabrielB
+cb93527e8c83340d46541804916b6678e371ec3d 8154f907c5da22e5bea08ab036d14f1a57cdd1a1 GabrielBolduc <bolducGabriel@outlook.com> 1772498808 -0500	commit (merge): merge main
+8154f907c5da22e5bea08ab036d14f1a57cdd1a1 168dfb712a496cce51b2a854e8fde2cf3791636d GabrielBolduc <bolducGabriel@outlook.com> 1772499740 -0500	commit: fix conflit
+168dfb712a496cce51b2a854e8fde2cf3791636d 81af8c1745d1cbd86325ddcb61be98028d04b95c GabrielBolduc <bolducGabriel@outlook.com> 1772499756 -0500	checkout: moving from GabrielB to main
+81af8c1745d1cbd86325ddcb61be98028d04b95c 168dfb712a496cce51b2a854e8fde2cf3791636d GabrielBolduc <bolducGabriel@outlook.com> 1772499766 -0500	merge GabrielB: Fast-forward
+168dfb712a496cce51b2a854e8fde2cf3791636d 92f41a6970590f0557e3c6769688c736767736d7 GabrielBolduc <bolducGabriel@outlook.com> 1772501716 -0500	commit: fix seed probleme start_at
+92f41a6970590f0557e3c6769688c736767736d7 168dfb712a496cce51b2a854e8fde2cf3791636d GabrielBolduc <bolducGabriel@outlook.com> 1772545444 -0500	checkout: moving from main to GabrielB
+168dfb712a496cce51b2a854e8fde2cf3791636d 10ba2c9764d450fe9a24c3b5bb29a6fb3dbca3ab GabrielBolduc <bolducGabriel@outlook.com> 1772566797 -0500	commit: public schedule, artist info & ssf
+10ba2c9764d450fe9a24c3b5bb29a6fb3dbca3ab 92f41a6970590f0557e3c6769688c736767736d7 GabrielBolduc <bolducGabriel@outlook.com> 1772567437 -0500	checkout: moving from GabrielB to main
+92f41a6970590f0557e3c6769688c736767736d7 5f560c49363b85dd17a40c38d26b3e8f018d35c2 GabrielBolduc <bolducGabriel@outlook.com> 1772567442 -0500	pull: Fast-forward
+5f560c49363b85dd17a40c38d26b3e8f018d35c2 10ba2c9764d450fe9a24c3b5bb29a6fb3dbca3ab GabrielBolduc <bolducGabriel@outlook.com> 1772567676 -0500	checkout: moving from main to GabrielB
+10ba2c9764d450fe9a24c3b5bb29a6fb3dbca3ab 10ba2c9764d450fe9a24c3b5bb29a6fb3dbca3ab GabrielBolduc <bolducGabriel@outlook.com> 1772567736 -0500	reset: moving to HEAD
+10ba2c9764d450fe9a24c3b5bb29a6fb3dbca3ab fd2232cae8448828bb58f06f9f7199de6b452107 GabrielBolduc <bolducGabriel@outlook.com> 1772567822 -0500	commit (merge): merge main
+fd2232cae8448828bb58f06f9f7199de6b452107 a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c GabrielBolduc <bolducGabriel@outlook.com> 1772567913 -0500	commit: fix controller artists
+a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c 5f560c49363b85dd17a40c38d26b3e8f018d35c2 GabrielBolduc <bolducGabriel@outlook.com> 1772568174 -0500	checkout: moving from GabrielB to main
+5f560c49363b85dd17a40c38d26b3e8f018d35c2 a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c GabrielBolduc <bolducGabriel@outlook.com> 1772568206 -0500	checkout: moving from main to GabrielB
+a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c 5f560c49363b85dd17a40c38d26b3e8f018d35c2 GabrielBolduc <bolducGabriel@outlook.com> 1772568499 -0500	checkout: moving from GabrielB to main
+5f560c49363b85dd17a40c38d26b3e8f018d35c2 a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c GabrielBolduc <bolducGabriel@outlook.com> 1772568560 -0500	checkout: moving from main to GabrielB
+a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c 5f560c49363b85dd17a40c38d26b3e8f018d35c2 GabrielBolduc <bolducGabriel@outlook.com> 1772568588 -0500	checkout: moving from GabrielB to main
+5f560c49363b85dd17a40c38d26b3e8f018d35c2 a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c GabrielBolduc <bolducGabriel@outlook.com> 1772568594 -0500	merge GabrielB: Fast-forward
+a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c c19e40c3789aac0d250a1cffe55eaf96810a4c0e GabrielBolduc <bolducGabriel@outlook.com> 1772568631 -0500	pull: Fast-forward
+c19e40c3789aac0d250a1cffe55eaf96810a4c0e a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c GabrielBolduc <bolducGabriel@outlook.com> 1772568900 -0500	checkout: moving from main to GabrielB
+a9da7a10a82697a6bdf6807f2b3e7b67b5e3d31c 616a8bf48d5f2332ff20dd9b51c5987cb6de241f GabrielBolduc <bolducGabriel@outlook.com> 1772570107 -0500	commit: fix ssf style
+616a8bf48d5f2332ff20dd9b51c5987cb6de241f c19e40c3789aac0d250a1cffe55eaf96810a4c0e GabrielBolduc <bolducGabriel@outlook.com> 1772570115 -0500	checkout: moving from GabrielB to main
+c19e40c3789aac0d250a1cffe55eaf96810a4c0e 0806f9dbcfaedaf818707436917324538e21dd72 GabrielBolduc <bolducGabriel@outlook.com> 1772570144 -0500	merge GabrielB: Merge made by the 'ort' strategy.
+0806f9dbcfaedaf818707436917324538e21dd72 b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 GabrielBolduc <bolducGabriel@outlook.com> 1772571385 -0500	commit: fix bug ssf public performances
+b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 616a8bf48d5f2332ff20dd9b51c5987cb6de241f GabrielBolduc <bolducGabriel@outlook.com> 1772571398 -0500	checkout: moving from main to GabrielB
+616a8bf48d5f2332ff20dd9b51c5987cb6de241f b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 GabrielBolduc <bolducGabriel@outlook.com> 1772571401 -0500	merge main: Fast-forward
+b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 GabrielBolduc <bolducGabriel@outlook.com> 1772591136 -0500	checkout: moving from GabrielB to main
+b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 7c1a8650eb24e4cd4fa34aa66ba64fe8a0b45856 GabrielBolduc <bolducGabriel@outlook.com> 1772591145 -0500	pull origin: Fast-forward
+7c1a8650eb24e4cd4fa34aa66ba64fe8a0b45856 43208509d2f0fa9351f9eefb20fcc6a2dc1c4abb GabrielBolduc <bolducGabriel@outlook.com> 1772592876 -0500	commit: fix bug controller units pour la prod
+43208509d2f0fa9351f9eefb20fcc6a2dc1c4abb b54f2e664121e43c7f424499d98af27a9dd55797 GabrielBolduc <bolducGabriel@outlook.com> 1772650974 -0500	commit: fix ssf queryParams
+b54f2e664121e43c7f424499d98af27a9dd55797 5d651f249bcfacefe3e435f5e727cf7eea76e77b GabrielBolduc <bolducGabriel@outlook.com> 1772650983 -0500	pull: Merge made by the 'ort' strategy.
+5d651f249bcfacefe3e435f5e727cf7eea76e77b d7dcf7df3b2a6410afa19cdd360c94d1ff9663e8 GabrielBolduc <bolducGabriel@outlook.com> 1772651440 -0500	commit: marge GabrielB
+d7dcf7df3b2a6410afa19cdd360c94d1ff9663e8 b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 GabrielBolduc <bolducGabriel@outlook.com> 1772651455 -0500	checkout: moving from main to GabrielB
+b77eda8924f9a6c922bab2f3dad053e5ae2c20a6 d7dcf7df3b2a6410afa19cdd360c94d1ff9663e8 GabrielBolduc <bolducGabriel@outlook.com> 1772651465 -0500	merge main: Fast-forward
+d7dcf7df3b2a6410afa19cdd360c94d1ff9663e8 5801637f04cffa760cc6770c9ac6f443ea994235 GabrielBolduc <bolducGabriel@outlook.com> 1772655871 -0500	commit: trad artist et public + snackbar et validations
+5801637f04cffa760cc6770c9ac6f443ea994235 ea84f8c544636544519cf58f89c04a5ad12e3199 GabrielBolduc <bolducGabriel@outlook.com> 1772657097 -0500	commit: lien vers map sur les card et datepicker performances empeche passer
+                                                                                                                                                                                                             

@@ -1,0 +1,148 @@
+<div class="detail-page" *ngIf="affectation() as a">
+
+  <mat-card class="detail-card">
+
+    <h2 class="page-title">
+        {{ 'AFFECTATIONS.TITLE' | translate }}    
+    </h2>
+
+  
+    <mat-divider></mat-divider>
+
+    <section>
+      <h3>
+        <mat-icon>assignment</mat-icon>
+        {{ 'AFFECTATIONS.TASK' | translate }}
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>{{ 'AFFECTATIONS.NAME' | translate }}</label>
+          <p>{{ affectation()?.task?.title }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.DESCRIPTION' | translate }}</label>
+          <p>{{ affectation()?.task?.description }}</p>
+        </div>
+
+      </div>
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <!-- USER SECTION -->
+    <section class="section">
+
+      <h3>
+        <mat-icon>person</mat-icon>
+        {{ 'AFFECTATIONS.USER' | translate }}
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>{{ 'AFFECTATIONS.NAME' | translate }}</label>
+          <p>{{ affectation()?.user?.name }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.EMAIL' | translate }}</label>
+          <p>{{ affectation()?.user?.email }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.PHONE' | translate }}</label>
+          <p>{{ affectation()?.user?.phone_number }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.ABILITY' | translate }}</label>
+          <p>{{ affectation()?.user?.ability }}</p>
+        </div>
+#
+      </div>
+
+    </section>
+
+
+    <mat-divider></mat-divider>
+
+
+
+
+
+    <!-- FESTIVAL SECTION -->
+
+    <section class="section">
+
+      <h3>
+        <mat-icon>festival</mat-icon>
+        {{ 'AFFECTATIONS.FESTIVAL' | translate }}
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>{{ 'AFFECTATIONS.NAME' | translate }}</label>
+          <p>{{ affectation()?.festival?.name }}</p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <mat-divider></mat-divider>
+
+
+    <!-- AFFECTATION SECTION -->
+
+    <section class="section">
+
+      <h3>
+        <mat-icon>schedule</mat-icon>
+        {{ 'AFFECTATIONS.AFFECTATION' | translate }}
+      </h3>
+
+      <div class="info-grid">
+
+        <div>
+          <label>{{ 'AFFECTATIONS.RESPONSABILITY' | translate }}</label>
+          <p>{{ affectation()?.responsability }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.EXPECTED_START' | translate }}</label>
+          <p>{{ affectation()?.expected_start | date:'medium' }}</p>
+        </div>
+
+        <div>
+          <label>{{ 'AFFECTATIONS.EXPECTED_END' | translate }}</label>
+          <p>{{ affectation()?.expected_end | date:'medium' }}</p>
+
+        </div>
+
+        @if(affectation()?.start){
+            <div>
+                <label>{{ 'AFFECTATIONS.START' | translate }}</label>
+                <p>{{ affectation()?.start | date:'medium' }}</p>
+            </div>
+        }
+
+        @if(affectation()?.end){
+            <div>
+                <label>{{ 'AFFECTATIONS.END' | translate }}</label>
+                <p>{{ affectation()?.end | date:'medium' }}</p>
+            </div>
+        }
+
+      </div>
+
+    </section>
+
+
+  </mat-card>
+
+</div>

@@ -1,0 +1,189 @@
+<mat-toolbar color="primary" class="brand-header">
+  
+  <div class="header-left">
+    <a [routerLink]="['/']" class="brand-link">
+      <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
+      <span class="home-text">{{ 'NAV.HOME' | translate }}</span>
+    </a>
+
+     @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {
+      <button mat-button [routerLink]="['/affectations']" class="nav-link hide-on-mobile">
+        {{ 'NAV.AFFECTATIONS' | translate }}
+      </button>
+     }
+
+    @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
+      <button mat-button [matMenuTriggerFor]="adminMenu" class="admin-btn hide-on-mobile">
+        Administration
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #adminMenu="matMenu">
+        <button mat-menu-item [routerLink]="['/admin/festivals']">
+          <mat-icon>dashboard</mat-icon>
+          <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
+        </button>
+        
+        <button mat-menu-item 
+                [routerLink]="ongoingFestivalId() ? ['/admin/festivals', ongoingFestivalId(), 'dashboard'] : ['/admin/festivals']">
+          <mat-icon>event</mat-icon>
+          <span>{{'ADMIN_NAV.PROG' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/admin/artistes']">
+          <mat-icon>person</mat-icon>
+          <span>{{'ADMIN_NAV.ARTIST' | translate}}</span>
+        </button>
+        
+        <button mat-menu-item [routerLink]="['/tasks']">
+          <mat-icon>assignment</mat-icon>
+          <span>{{'ADMIN_NAV.TASK' | translate}}</span>
+        </button>
+        
+        <button mat-menu-item [routerLink]="['/admin/ticketing']">
+          <mat-icon>local_activity</mat-icon>
+          <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/accommodations']">
+          <mat-icon>hotel</mat-icon>
+          <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
+        </button>
+      </mat-menu>
+    }
+  </div>
+
+  <span class="spacer"></span>
+
+  <div class="header-actions hide-on-mobile">
+    @if (ongoingFestivalId() || (auth.isLoggedIn() && auth.currentUser()?.isAdmin)) {
+      <a [routerLink]="['/programmation']" class="nav-link">
+        <span>{{ 'NAV.SCHEDULE' | translate }}</span>
+      </a>
+
+      @if (auth.isAdmin()) {
+        <a [routerLink]="['/reservations-admin']" class="nav-link">
+          <span>{{ 'NAV.RESERVATION' | translate }}</span>
+        </a>
+      } @else {
+        <a [routerLink]="['/reservations']" class="nav-link">
+          <span>{{ 'NAV.RESERVATION' | translate }}</span>
+        </a>
+      }
+      <a [routerLink]="['/ticketing']" class="nav-link">
+        <span>{{ 'NAV.TICKETING' | translate }}</span>
+      </a>
+    }
+    
+    <button mat-stroked-button (click)="toggleLanguage()" class="lang-btn">
+      <mat-icon>language</mat-icon>
+      {{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}
+    </button>
+    
+    @if (auth.isLoggedIn()) {
+      <button mat-flat-button color="accent" (click)="auth.logout()">
+        <mat-icon>logout</mat-icon> {{'AUTH.DISCONNECT' | translate}}
+      </button>
+    } @else {
+      <button mat-flat-button color="accent" routerLink="/login">
+        <mat-icon>login</mat-icon> {{'AUTH.CONNECT' | translate}}
+      </button>
+    }
+  </div>
+
+  <div class="mobile-menu-container show-on-mobile">
+    <a (click)="toggleLanguage()" class="nav-link lang-btn" style="margin-right: 10px;">
+      <span>{{ translate.getCurrentLang() === 'en' ? 'FR' : 'EN' }}</span>
+    </a>
+
+    <button mat-icon-button [matMenuTriggerFor]="mobileMenu">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <mat-menu #mobileMenu="matMenu">
+      @if (ongoingFestivalId() || (auth.isLoggedIn() && auth.currentUser()?.isAdmin)) {
+        <button mat-menu-item [routerLink]="['/programmation']">
+          <mat-icon>event</mat-icon>
+          <span>{{ 'NAV.SCHEDULE' | translate }}</span>
+        </button>
+
+        @if (auth.isAdmin()) {
+          <button mat-menu-item [routerLink]="['/reservations-admin']">
+            <mat-icon>book_online</mat-icon>
+            <span>{{ 'NAV.RESERVATION' | translate }}</span>
+          </button>
+        } @else {
+          <button mat-menu-item [routerLink]="['/reservations']">
+            <mat-icon>book_online</mat-icon>
+            <span>{{ 'NAV.RESERVATION' | translate }}</span>
+          </button>
+        }
+        
+        <button mat-menu-item [routerLink]="['/ticketing']">
+          <mat-icon>confirmation_number</mat-icon>
+          <span>{{ 'NAV.TICKETING' | translate }}</span>
+        </button>
+      }
+
+      @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item [routerLink]="['/affectations']">
+          <mat-icon>assignment</mat-icon>
+          <span>{{'ADMIN_NAV.AFFECTATIONS' | translate}}</span>
+        </button>
+        
+      }
+
+      @if (auth.isLoggedIn() && auth.currentUser()?.isAdmin) {
+        <mat-divider></mat-divider>
+        <div mat-subheader style="color: var(--mat-sys-primary); font-weight: bold; padding: 0 16px;">Administration</div>
+        
+        <button mat-menu-item [routerLink]="['/admin/festivals']">
+          <mat-icon>dashboard</mat-icon>
+          <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
+        </button>
+        
+        <button mat-menu-item 
+                [routerLink]="ongoingFestivalId() ? ['/admin/festivals', ongoingFestivalId(), 'dashboard'] : ['/admin/festivals']">
+          <mat-icon>event</mat-icon>
+          <span>{{'ADMIN_NAV.PROG' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/admin/artistes']">
+          <mat-icon>person</mat-icon>
+          <span>{{'ADMIN_NAV.ARTIST' | translate}}</span>
+        </button>
+        
+        <button mat-menu-item [routerLink]="['/tasks']">
+          <mat-icon>assignment</mat-icon>
+          <span>{{'ADMIN_NAV.TASK' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/admin/ticketing']">
+          <mat-icon>local_activity</mat-icon>
+          <span>{{'ADMIN_NAV.TICKET' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['/accommodations']">
+          <mat-icon>hotel</mat-icon>
+          <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
+        </button>
+      }
+
+      <mat-divider></mat-divider>
+
+      @if (auth.isLoggedIn()) {
+        <button mat-menu-item (click)="auth.logout()">
+          <mat-icon>logout</mat-icon>
+          <span>{{'AUTH.DISCONNECT' | translate}}</span>
+        </button>
+      } @else {
+        <button mat-menu-item routerLink="/login">
+          <mat-icon>login</mat-icon>
+          <span>{{'AUTH.CONNECT' | translate}}</span>
+        </button>
+      }
+    </mat-menu>
+  </div>
+</mat-toolbar>

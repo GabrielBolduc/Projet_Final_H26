@@ -1,0 +1,119 @@
+<div class="admin-orders-page">
+  <div class="header">
+    <h1 class="page-title">{{ 'TICKETING_ADMIN.ORDERS_TITLE' | translate }}</h1>
+    <a mat-stroked-button routerLink="/admin/ticketing">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'TICKETING_ADMIN.BACK_TO_PACKAGES' | translate }}
+    </a>
+  </div>
+
+  <mat-card class="filters-card">
+    <div class="filters-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'TICKETING_ADMIN.SEARCH_CLIENT' | translate }}</mat-label>
+        <input
+          matInput
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          placeholder="Ex: Jean Dupont"
+        >
+        <mat-icon matPrefix>search</mat-icon>
+        @if (searchQuery()) {
+          <button mat-icon-button matSuffix (click)="searchQuery.set('')" [attr.aria-label]="'Clear'">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'TICKETING_ADMIN.FILTER_FESTIVAL' | translate }}</mat-label>
+        <mat-select [ngModel]="selectedFestivalId()" (ngModelChange)="selectedFestivalId.set($event)">
+          <mat-option [value]="null">{{ 'TICKETING_ADMIN.ALL_FESTIVALS' | translate }}</mat-option>
+          @for (fest of festivals(); track fest.id) {
+            <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'TICKETING_ADMIN.SORT_DATE' | translate }}</mat-label>
+        <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
+          <mat-option value="desc">{{ 'TICKETING_ADMIN.NEWEST_FIRST' | translate }}</mat-option>
+          <mat-option value="asc">{{ 'TICKETING_ADMIN.OLDEST_FIRST' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  @if (isLoading()) {
+    <mat-progress-bar mode="indeterminate" class="loading-bar"></mat-progress-bar>
+  }
+
+  <div class="orders-list">
+    @for (order of orders(); track order.id) {
+      <mat-expansion-panel class="order-panel" (opened)="loadOrderDetail(order.id)">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="panel-title">
+            {{ order.client_name }}
+          </mat-panel-title>
+          <mat-panel-description class="panel-description">
+            {{ order.purchased_at | date:'yyyy-MM-dd HH:mm' }} | 
+            {{ order.ticket_count }} {{ 'TICKETING_PUBLIC.TICKETS' | translate }} | 
+            {{ order.total_price | currency:'CAD':'symbol-narrow' }}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <div class="order-content">
+          <div class="client-info">
+            <p><strong>{{ 'TICKETING_PUBLIC.EMAIL' | translate }}:</strong> {{ order.client_email }}</p>
+            <p><strong>{{ 'NAV.TICKETING' | translate }}s:</strong> {{ order.packages.join(', ') }}</p>
+          </div>
+
+          <div class="tickets-table-container">
+            <table class="tickets-table">
+              <thead>
+                <tr>
+                  <th>{{ 'TICKETING_PUBLIC.HOLDER' | translate }}</th>
+                  <th>{{ 'NAV.TICKETING' | translate }}</th>
+                  <th>{{ 'FORM_ADD_PERFORMANCES.PRICE' | translate }}</th>
+                  <th>{{ 'FESTIVAL.STATUS' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (detailedTicketsMap().get(order.id); as tickets) {
+                  @for (ticket of tickets; track ticket.id) {
+                    <tr>
+                      <td>
+                        <strong>{{ ticket.holder_name }}</strong><br>
+                        <small>{{ ticket.holder_email }}</small>
+                      </td>
+                      <td>{{ ticket.package.title }}</td>
+                      <td>{{ ticket.price | currency:'CAD':'symbol-narrow' }}</td>
+                      <td>
+                        @if (isRefunded(ticket)) {
+                          <span class="status-badge refunded">{{ 'TICKETING_PUBLIC.REFUNDED' | translate }}</span>
+                        } @else if (isExpired(ticket)) {
+                          <span class="status-badge expired">{{ 'TICKETING_PUBLIC.EXPIRED' | translate }}</span>
+                        } @else {
+                          <span class="status-badge active">{{ 'TICKETING_PUBLIC.ACTIVE' | translate }}</span>
+                        }
+                      </td>
+                    </tr>
+                  }
+                } @else {
+                  <tr>
+                    <td colspan="4" class="loading-cell">{{ 'TICKETING_ADMIN.LOADING_TICKETS' | translate }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    } @empty {
+      @if (!isLoading()) {
+        <p class="empty-state">{{ 'TICKETING_ADMIN.NO_ORDERS' | translate }}</p>
+      }
+    }
+  </div>
+</div>

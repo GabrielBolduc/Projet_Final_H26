@@ -1,0 +1,13 @@
+.error-container {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background-color: var(--mat-sys-surface-container);
+}
+
+mat-card-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--mat-sys-primary);
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,75 @@
+<mat-card class="form-card" *ngIf="affectation() as a">
+
+  <mat-card-header>
+    <mat-card-title>
+      {{ affectation()?.task?.title }}
+    </mat-card-title>
+
+    <mat-card-subtitle>
+      {{ affectation()?.responsability }}
+    </mat-card-subtitle>
+
+  </mat-card-header>
+
+    <mat-card-content>
+
+      <div class="task-description">
+        {{ affectation()?.task?.description }}
+      </div>
+
+      <div class="action-container">
+
+        @if(!affectation()?.end) {
+
+           <button
+          mat-raised-button
+          class="big-action-button"
+          color="primary"
+          (click)="updateStartAffectation()">
+
+         @if(!affectation()?.start) {
+          <span >
+            Démarrer la tâche
+          </span>
+         }
+
+          @if(affectation()?.start && !affectation()?.end)
+          {
+            <span >
+              Terminer la tâche
+            </span>
+          }
+           </button>
+        }
+
+       
+
+        <div class="time-info">
+
+          @if(affectation()?.start) {
+            <div>
+              Début prévu :
+              {{ affectation()?.expected_start | date:'shortTime' }}
+            </div>
+          }
+          @if(affectation()?.end) {
+            <div>
+              Fin prévue :
+              {{ affectation()?.expected_end | date:'shortTime' }}
+            </div>
+          }
+
+           @if(affectation()?.start) {
+            <div>
+              Début réel :
+              {{ affectation()?.start | date:'shortTime' }}
+            </div>
+          }
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+</mat-card>

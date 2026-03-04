@@ -1,0 +1,21 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://github.com/GabrielBolduc/Projet_Final_H26.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[pull]
+	rebase = false
+[branch "GabrielR"]
+	remote = origin
+	merge = refs/heads/GabrielR
+	vscode-merge-base = origin/GabrielR
+[branch "GabrielB"]
+	vscode-merge-base = origin/main
+	remote = origin
+	merge = refs/heads/GabrielB

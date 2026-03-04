@@ -1,0 +1,43 @@
+import { Injectable, inject } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+
+@Injectable({ providedIn: 'root' })
+export class ErrorHandlerService {
+  private translate = inject(TranslateService);
+
+  parseRailsErrors(response: any): string[] {
+    if (response && response.status === "error") {
+      const translatedErrorsList: string[] = [];
+
+      // traitement erreur de champs (validation)
+      if (response.errors && typeof response.errors === 'object') {
+        Object.keys(response.errors).forEach(field => {
+          const fieldName = field !== 'base' ? `${field.toUpperCase()} : ` : '';
+          const errorCodes = Array.isArray(response.errors[field]) ? response.errors[field] : [response.errors[field]];
+
+          // traduction dynamique
+          errorCodes.forEach((errorCode: string) => {
+            const translationKey = `SERVER_ERRORS.${errorCode}`;
+            const translatedMessage = this.translate.instant(translationKey);
+            const finalMessage = translatedMessage === translationKey ? errorCode : translatedMessage;
+            translatedErrorsList.push(`${fieldName}${finalMessage}`);
+          });
+        });
+      }
+
+      if (translatedErrorsList.length === 0 && response.message) {
+        translatedErrorsList.push(response.message);
+      }
+      return translatedErrorsList.length > 0 ? translatedErrorsList : [this.translate.instant('SERVER_ERRORS.UNKNOWN')];
+    }
+
+    // si erreur reseau (500)
+    if (response instanceof Error || response?.name === 'HttpErrorResponse' || (typeof response?.status === 'number' && response.status >= 400)) {
+       return [this.translate.instant('SERVER_ERRORS.INTERNAL_SERVER_ERROR')];
+    }
+    
+    // si rien trouver
+    const fallbackCode = response?.status || 'N/A';
+    return [this.translate.instant('SERVER_ERRORS.GENERIC_ERROR', { code: fallbackCode })];
+  }
+}

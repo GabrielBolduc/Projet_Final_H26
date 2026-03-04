@@ -3,25 +3,32 @@ class Api::ReservationsController < ApiController
   before_action :require_permission!, only: [ :show, :update, :destroy ]
 
   def index
-    # If no user is logged in, return empty data immediately
     if current_user.nil?
       return render json: { status: "success", data: [], message: "Not logged in" }
     end
 
-    # Only run this if current_user exists
-    base_query = admin_user? ? Reservation.all : current_user.reservations
-    
-    if params[:history] == 'true'
-      @reservations = base_query.where(unit_id: nil)
+    @reservations = if admin_user?
+      Reservation.all
+    elsif params[:history] == 'true'
+      current_user.reservations.where(unit_id: nil)
     else
-      @reservations = base_query.where.not(unit_id: nil)
+      current_user.reservations.where.not(unit_id: nil)
+    end.includes(:festival, unit: :accommodation).order(created_at: :desc)
+
+    data = @reservations.map do |res|
+      json = res.as_json(include: :festival)
+      
+      if res.unit
+        json[:unit] = res.unit.formatted_json(request.base_url).merge({
+          accommodation: res.unit.accommodation.as_json
+        })
+      end
+      json
     end
 
-    render json: {
-      status: "success",
-      data: @reservations.order(created_at: :desc).map(&:as_json)
-    }
+    render json: { status: "success", data: data }
   end
+
 
   def show
     render_validation_success(@reservation)

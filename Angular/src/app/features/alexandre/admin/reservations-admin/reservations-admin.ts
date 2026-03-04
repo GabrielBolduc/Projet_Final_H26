@@ -24,9 +24,8 @@ import { Reservation } from '@core/models/reservation';
 export class ReservationsAdmin implements OnInit {
   private reservationsService = inject(ReservationsService);
 
-  // Table Data Source
   dataSource = new MatTableDataSource<Reservation>([]);
-displayedColumns: string[] = ['id', 'reservation_name', 'arrival_at', 'departure_at', 'nb_of_people', 'phone_number', 'status'];
+  displayedColumns: string[] = ['id', 'reservation_name', 'arrival_at', 'departure_at', 'nb_of_people', 'phone_number', 'status'];
   
   isLoading = signal<boolean>(true);
 
@@ -39,7 +38,6 @@ displayedColumns: string[] = ['id', 'reservation_name', 'arrival_at', 'departure
 
   loadAllReservations(): void {
     this.isLoading.set(true);
-    // Fetching all reservations (no history filter to see active ones)
     this.reservationsService.list().subscribe({
       next: (res) => {
         this.dataSource.data = res.data;
@@ -58,5 +56,13 @@ displayedColumns: string[] = ['id', 'reservation_name', 'arrival_at', 'departure
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  getReservationStatus(row: any): 'Active' | 'Cancelled' | 'Archived' {
+    if (!row.unit_id) return 'Cancelled';
+    if (row.festival?.status === 'completed') {
+      return 'Archived';
+    }
+    return 'Active';
   }
 }

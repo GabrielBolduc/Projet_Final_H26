@@ -1,7 +1,7 @@
 # app/models/reservation.rb
 class Reservation < ApplicationRecord
   belongs_to :user
-  belongs_to :unit
+  belongs_to :unit, optional: true
   belongs_to :festival
 
   validates :arrival_at, :departure_at, :reservation_name, presence: true
@@ -18,7 +18,6 @@ class Reservation < ApplicationRecord
   before_save :normalize_phone
 
   def as_json(options = {})
-    # Use ActiveSupport helper to format: 5551234567 -> (555) 123-4567
     formatted_phone = ActionController::Base.helpers.number_to_phone(
       self.phone_number, 
       area_code: true
@@ -27,7 +26,7 @@ class Reservation < ApplicationRecord
     super(options.merge({
       only: [:id, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at]
     })).merge({
-      phone_number: formatted_phone # Override with formatted version
+      phone_number: formatted_phone
     })
   end
 

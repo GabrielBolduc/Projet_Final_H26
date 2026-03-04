@@ -712,7 +712,7 @@ res2 = Reservation.create!(
   reservation_name: "Alice Wonderland",
   phone_number: "+1 (819) 555-4444",
   user: c2,
-  unit: unit_hotel_high,
+  unit: nil,
   festival: f
 )
 

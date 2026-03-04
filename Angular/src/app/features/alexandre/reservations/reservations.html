@@ -33,53 +33,110 @@
         </a>
       </ng-template>
 
-      <mat-divider></mat-divider>
+      <ng-container *ngIf="authService.isLoggedIn()">
 
-      <a (click)="toggleHistoryView()" class="card-link clickable-item">
-        <div class="fest-card" [class.active-history]="showHistory()">
-          <mat-icon class="nav-icon">{{ showHistory() ? 'update' : 'history' }}</mat-icon>
-          <div class="nav-label">
-            <span class="title">{{ (showHistory() ? 'RESERVATIONS.SIDEBAR.BACK' : 'RESERVATIONS.SIDEBAR.HISTORY') | translate }}</span>
+        <a (click)="toggleHistoryView()" class="card-link clickable-item">
+          <div class="fest-card" [class.active-history]="showHistory()">
+            <mat-icon class="nav-icon">{{ showHistory() ? 'update' : 'history' }}</mat-icon>
+            <div class="nav-label">
+              <span class="title">
+                {{ (showHistory() ? 'RESERVATIONS.SIDEBAR.BACK' : 'RESERVATIONS.SIDEBAR.HISTORY') | translate }}
+              </span>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
+      </ng-container>
     </mat-nav-list>
   </mat-sidenav>
 
   <mat-sidenav-content class="main-display">
     <div *ngIf="isLoading()" class="loader"><mat-spinner diameter="60"></mat-spinner></div>
 
+    <!-- ACTIVE RESERVATION VIEW WITH SPLIT LAYOUT -->
     <div *ngIf="!isLoading() && activeReservation() && !showHistory()" class="hero-container">
-      <h1 class="hero-name">{{ activeReservation()?.reservation_name }}</h1>
-      <div class="hero-id">#{{ activeReservation()?.id }}</div>
+      <div class="hero-split-layout">
+        
+        <!-- LEFT COLUMN: DATA -->
+        <div class="hero-details">
+          <h1 class="hero-name">{{ activeReservation()?.reservation_name }}</h1>
+          <div class="hero-id">#{{ activeReservation()?.id }}</div>
 
-      <div class="hero-data-grid">
-        <div class="hero-item">
-          <mat-icon>calendar_today</mat-icon>
-          <div class="hero-text">
-            <label>{{ 'RESERVATIONS.FIELDS.DATES' | translate }}</label>
-            <p>{{ activeReservation()?.arrival_at | date:'longDate' }} — {{ activeReservation()?.departure_at | date:'longDate' }}</p>
+          <div class="hero-data-grid">
+            <!-- UNIT & ACCOMMODATION ITEM -->
+            <div class="hero-item" *ngIf="activeReservation()?.unit">
+              <mat-icon>home</mat-icon>
+              <div class="hero-text">
+                <label>{{ 'RESERVATIONS.FIELDS.STAY' | translate }}</label>
+                <p>{{ activeReservation()?.unit?.accommodation?.name }}</p>
+                <span class="unit-badge">
+                  {{ 'UNITS.TYPES.' + getUnitTypeName(activeReservation()?.unit?.type) | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="hero-item" *ngIf="activeReservation()?.unit">
+              <mat-icon>payments</mat-icon>
+              <div class="hero-text">
+                <label>{{ 'RESERVATIONS.FIELDS.COST' | translate }}</label>
+                <p>
+                  <span class="per-night-label">{{ 'UNITS.COST' | translate }}</span>
+                  {{ activeReservation()?.unit?.cost_person_per_night | currency }}
+                </p>
+              </div>
+            </div>
+
+            <div class="hero-item">
+              <mat-icon>calendar_today</mat-icon>
+              <div class="hero-text">
+                <label>{{ 'RESERVATIONS.FIELDS.DATES' | translate }}</label>
+                <p>{{ activeReservation()?.arrival_at | date:'longDate' }} — {{ activeReservation()?.departure_at | date:'longDate' }}</p>
+              </div>
+            </div>
+
+            <div class="hero-item">
+              <mat-icon>people</mat-icon>
+              <div class="hero-text">
+                <label>{{ 'RESERVATIONS.FIELDS.GUESTS' | translate }}</label>
+                <p>{{ activeReservation()?.nb_of_people }} {{ 'RESERVATIONS.FIELDS.PEOPLE' | translate }}</p>
+              </div>
+            </div>
+
+            <div class="hero-item">
+              <mat-icon>phone</mat-icon>
+              <div class="hero-text">
+                <label>{{ 'RESERVATIONS.FIELDS.PHONE' | translate }}</label>
+                <p>{{ activeReservation()?.phone_number }}</p>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="hero-item">
-          <mat-icon>people</mat-icon>
-          <div class="hero-text">
-            <label>{{ 'RESERVATIONS.FIELDS.GUESTS' | translate }}</label>
-            <p>{{ activeReservation()?.nb_of_people }} {{ 'RESERVATIONS.FIELDS.PEOPLE' | translate }}</p>
+        <!-- RIGHT COLUMN: VISUAL -->
+        <div class="hero-visual">
+          <!-- Unit Image -->
+          <div class="unit-image-wrapper" *ngIf="activeReservation()?.unit?.image_url">
+            <img [src]="activeReservation()?.unit?.image_url" alt="Unit" class="unit-hero-img">
+          </div>
+
+          <!-- Map Widget (Matches your public schedule style) -->
+          <div class="map-card" *ngIf="mapUrl()">
+            <iframe 
+              width="100%" 
+              height="300" 
+              frameborder="0" 
+              scrolling="no" 
+              marginheight="0" 
+              marginwidth="0" 
+              [src]="mapUrl()" 
+              style="border: 1px solid black">
+            </iframe>
           </div>
         </div>
 
-        <div class="hero-item">
-          <mat-icon>phone</mat-icon>
-          <div class="hero-text">
-            <label>{{ 'RESERVATIONS.FIELDS.PHONE' | translate }}</label>
-            <p>{{ activeReservation()?.phone_number }}</p>
-          </div>
-        </div>
       </div>
     </div>
 
+    <!-- HISTORY VIEW -->
     <div *ngIf="!isLoading() && showHistory()" class="history-view">
       <h2 class="history-title">{{ 'RESERVATIONS.SIDEBAR.HISTORY' | translate }}</h2>
       
@@ -93,6 +150,9 @@
             <span class="h-name">{{ res.reservation_name }}</span>
             <span class="h-dates">{{ res.arrival_at | date:'mediumDate' }} - {{ res.departure_at | date:'mediumDate' }}</span>
           </div>
+          <span class="h-name" *ngIf="res.unit?.accommodation">
+            • {{ res.unit?.accommodation?.name }}
+          </span>
           <div class="h-status">
             <mat-icon>check_circle</mat-icon>
             <span>{{ 'RESERVATIONS.STATUS.COMPLETED' | translate }}</span>
@@ -100,6 +160,7 @@
         </div>
       </div>
     </div>
+
     <p *ngIf="!isLoading() && !activeReservation() && !showHistory()" class="empty-msg">
       {{ 'RESERVATIONS.EMPTY_STATE' | translate }}
     </p>

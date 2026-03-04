@@ -433,6 +433,12 @@
       }
     }
   },
+  "ADMIN": {
+    "SEARCH": "Search",
+    "RESERVATIONS": {
+      "TITLE": "Reservation Management"
+    }
+  },
   "RESERVATIONS": {
     "SIDEBAR": {
       "RESERVE_CAMPING": "Reserve Camping",
@@ -442,7 +448,26 @@
       "HISTORY": "View History",
       "BACK": "Go Back"
     },
-    "EMPTY_STATE": "No reservations yet..."
+    "FIELDS": {
+      "DATES": "Travel Dates",
+      "GUESTS": "Number of Guests",
+      "PEOPLE": "People",
+      "PHONE": "Phone Number"
+    },
+    "STATUS": {
+      "CONFIRMED": "Confirmed",
+      "COMPLETED": "Completed",
+      "ACTIVE": "Active",
+      "CANCELLED": "Cancelled",
+      "ARCHIVED": "Archived"
+    },
+    "EMPTY_STATE": "No reservations yet...",
+    "HISTORY_EMPTY": "Your history is currently empty.",
+    "NAME": "Name",
+    "ARRIVAL": "Arrival",
+    "DEPARTURE": "Departure",
+    "GUESTS": "Guests",
+    "PHONE": "Phone"
   },
   "UNITS": {
     "CREATE_TITLE": "Add New Unit",

@@ -15,4 +15,16 @@ export interface Reservation {
 
   created_at?: string | Date;
   updated_at?: string | Date;
+  unit?: {
+    type: string;
+    image_url: string;
+    cost_person_per_night: number;
+    accommodation?: {
+      name: string;
+      address: string;
+      category: string;
+      latitude: number | string;
+      longitude: number | string;
+    }
+  };
 }

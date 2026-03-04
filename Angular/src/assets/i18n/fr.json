@@ -435,16 +435,41 @@
       }
     }
   },
+  "ADMIN": {
+    "SEARCH": "Rechercher",
+    "RESERVATIONS": {
+      "TITLE": "Gestion des Réservations"
+    }
+  },
   "RESERVATIONS": {
     "SIDEBAR": {
       "RESERVE_CAMPING": "Réserver Camping",
       "RESERVE_HOTEL": "Réserver Hôtel",
-      "EDIT": "Modifier Réservation",
-      "CANCEL": "Annuler Réservation",
-      "HISTORY": "Historique",
+      "EDIT": "Modifier la Réservation",
+      "CANCEL": "Annuler la Réservation",
+      "HISTORY": "Voir l'Historique",
       "BACK": "Retour"
     },
-    "EMPTY_STATE": "Aucune réservation pour le moment..."
+    "FIELDS": {
+      "DATES": "Dates du Séjour",
+      "GUESTS": "Nombre d'Invités",
+      "PEOPLE": "Personnes",
+      "PHONE": "Numéro de Téléphone"
+    },
+    "STATUS": {
+      "CONFIRMED": "Confirmé",
+      "COMPLETED": "Terminé",
+      "ACTIVE": "Actif",
+      "CANCELLED": "Annulée",
+      "ARCHIVED": "Archivée"
+    },
+    "EMPTY_STATE": "Aucune réservation pour le moment...",
+    "HISTORY_EMPTY": "Votre historique est actuellement vide.",
+    "NAME": "Nom",
+    "ARRIVAL": "Arrivée",
+    "DEPARTURE": "Départ",
+    "GUESTS": "Invités",
+    "PHONE": "Téléphone"
   },
   "UNITS": {
     "CREATE_TITLE": "Ajouter une Unité",

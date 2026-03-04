@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectorRef, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -11,10 +11,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize, take } from 'rxjs/operators';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { ReservationsService } from '@core/services/reservation.service';
 import { Reservation } from '@core/models/reservation';
 import { ApiResponse } from '@core/models/api-response';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-reservations',
@@ -36,12 +38,31 @@ import { ApiResponse } from '@core/models/api-response';
 })
 export class Reservations implements OnInit {
   private reservationsService = inject(ReservationsService);
+  public authService = inject(AuthService);
+  private sanitizer = inject(DomSanitizer);
   private cdr = inject(ChangeDetectorRef);
 
   activeReservation = signal<Reservation | null>(null);
   historyReservations = signal<Reservation[]>([]);
   showHistory = signal<boolean>(false);
   isLoading = signal<boolean>(true);
+
+  mapUrl = computed(() => {
+    const res = this.activeReservation();
+    const acc = res?.unit?.accommodation;
+    
+    if (!acc || !acc.latitude || !acc.longitude) return null;
+
+    const lat = Number(acc.latitude);
+    const lng = Number(acc.longitude);
+    const offset = 0.005; 
+    
+    // OpenStreetMap Embed URL with marker
+    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
+    
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  });
+
 
   ngOnInit(): void {
     this.refreshData();
@@ -112,5 +133,10 @@ export class Reservations implements OnInit {
 
   formatDate(date: string | Date): Date {
     return new Date(date);
+  }
+
+  getUnitTypeName(type: string | undefined): string {
+    if (!type) return '';
+    return type.split('::')[1] || type;
   }
 }

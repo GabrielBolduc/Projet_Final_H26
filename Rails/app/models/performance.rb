@@ -3,16 +3,10 @@ class Performance < ApplicationRecord
   belongs_to :stage
   belongs_to :festival
 
-
   scope :with_details, -> { includes(:artist, :stage, :festival) }
-
   scope :chronological, -> { order(start_at: :asc) }
-
   scope :for_festival, ->(f_id) { where(festival_id: f_id) }
-
   scope :by_stage, ->(stage_id) { where(stage_id: stage_id) }
-
-
   scope :search, ->(query) {
     joins(:artist)
     .where("performances.title LIKE :q OR artists.name LIKE :q", q: "%#{query}%")
@@ -24,7 +18,7 @@ class Performance < ApplicationRecord
   before_destroy :prevent_modification_if_festival_completed
 
   validates :start_at, :end_at, presence: true
-  validates :title, presence: true, length: { maximum: 20 }
+  validates :title, presence: true, length: { maximum: 50 }
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :end_at_after_start_at
   validate :within_festival_dates

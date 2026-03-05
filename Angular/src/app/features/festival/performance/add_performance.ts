@@ -75,7 +75,7 @@ export class AddPerformanceComponent implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(20)]],
+      title: ['', [Validators.required, Validators.maxLength(50)]],
       description: [''],
       price: [0, [Validators.required, Validators.min(0)]],
       date: [new Date(), Validators.required],

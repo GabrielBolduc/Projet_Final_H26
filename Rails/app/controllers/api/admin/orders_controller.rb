@@ -34,26 +34,30 @@ class Api::Admin::OrdersController < Api::AdminController
   private
 
   def format_order_list(order)
-  {
-    id:           order.id,
-    purchased_at: order.purchased_at,
-    client_name:  order.user.name,
-    client_email: order.user.email,
-    ticket_count: order.tickets.size,
-    total_price:  order.tickets.sum(&:price) - order.discount,
-    discount:     order.discount,
-    packages:     order.tickets.map { |t| t.package.title }.uniq
-  }
-  end
-
-  def format_order_detail(order)
+    subtotal = order.tickets.sum(&:price)
     {
       id:           order.id,
       purchased_at: order.purchased_at,
       client_name:  order.user.name,
       client_email: order.user.email,
+      ticket_count: order.tickets.size,
+      subtotal:     subtotal,
       discount:     order.discount,
-      total_price:  order.tickets.sum(&:price) - order.discount,
+      total_price:  subtotal - order.discount,
+      packages:     order.tickets.map { |t| t.package.title }.uniq
+    }
+  end
+
+  def format_order_detail(order)
+    subtotal = order.tickets.sum(&:price)
+    {
+      id:           order.id,
+      purchased_at: order.purchased_at,
+      client_name:  order.user.name,
+      client_email: order.user.email,
+      subtotal:     subtotal,
+      discount:     order.discount,
+      total_price:  subtotal - order.discount,
       tickets:      order.tickets.map { |ticket| format_ticket(ticket) }
     }
   end

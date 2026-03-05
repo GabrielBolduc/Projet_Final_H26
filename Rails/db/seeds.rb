@@ -590,7 +590,7 @@ p_completed = Package.create!(
 # Orders + Tickets (Billetterie)
 order_general_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 9, min: 15))
 order_general_2 = Order.create!(user: c2, purchased_at: f.start_at.to_time.change(hour: 9, min: 45))
-order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30))
+order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30), discount: (60.00 * 3 * 0.10).round(2))
 order_daily_2 = Order.create!(user: c3, purchased_at: f.start_at.to_time.change(hour: 11, min: 15))
 order_daily_sold_out_1 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 5))
 order_daily_sold_out_2 = Order.create!(user: c3, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 20))

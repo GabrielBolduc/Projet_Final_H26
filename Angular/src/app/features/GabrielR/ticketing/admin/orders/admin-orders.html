@@ -71,7 +71,7 @@
 
           @if (order.discount > 0) {
             <div class="order-pricing">
-              <p><span>Subtotal:</span> {{ order.total_price + order.discount | currency:'CAD':'symbol-narrow' }}</p>
+              <p><span>{{ 'TICKETING_PUBLIC.SUBTOTAL' | translate }}:</span> {{ order.subtotal | currency:'CAD':'symbol-narrow' }}</p>
               <p class="discount-row"><span>Discount:</span> -{{ order.discount | currency:'CAD':'symbol-narrow' }}</p>
               <p><strong>Total:</strong> {{ order.total_price | currency:'CAD':'symbol-narrow' }}</p>
             </div>

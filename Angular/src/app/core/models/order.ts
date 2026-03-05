@@ -5,6 +5,7 @@ export interface Order {
   user_id: number;
   purchased_at: string;
   tickets: Ticket[];
+  subtotal: number;
   discount: number;
   total_price: number;
 }

@@ -53,7 +53,7 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
 
         # Contenu du format json
         returned_ids = json_response["data"].map { |u| u["id"] }
-        forbidden_ids = @other_accommodation.units.pluck(:id)
+        forbidden_ids = @other_accommodation.units_ids(:id)
 
         assert (returned_ids & forbidden_ids).empty?, "Index leaked units from another accommodation"
 

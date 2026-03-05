@@ -45,6 +45,18 @@ class Accommodation < ApplicationRecord
 
   before_validation :strip_fields
 
+def as_json(options = {})
+  safe_options = options.is_a?(Hash) ? options : {}
+  json = super(safe_options.except(:base_url))
+
+  # Pass safe_options down to all units in the array
+  if safe_options[:base_url]
+    json[:units] = units.map { |u| u.as_json(safe_options) }
+  end
+
+  json
+end
+
   private
 
   def ensure_no_units_have_reservations

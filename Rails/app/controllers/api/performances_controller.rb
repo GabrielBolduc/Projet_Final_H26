@@ -5,7 +5,7 @@ class Api::PerformancesController < ApiController
 
   def index
     performances = Performance.with_details.chronological
-    
+
     if params[:festival_id].present?
       performances = performances.for_festival(params[:festival_id])
     end

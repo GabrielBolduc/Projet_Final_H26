@@ -13,9 +13,9 @@ class Api::UnitsController < ApiController
     end
 
     def show
-        render json: { 
-            status: "success", 
-            data: @unit.formatted_json(request.base_url) 
+        render json: {
+            status: "success",
+            data: @unit.formatted_json(request.base_url)
         }
     end
 
@@ -34,9 +34,9 @@ class Api::UnitsController < ApiController
 
     def update
         if @unit.update(unit_params)
-            render json: { 
-                status: "success", 
-                data: @unit.formatted_json(request.base_url) 
+            render json: {
+                status: "success",
+                data: @unit.formatted_json(request.base_url)
             }
         else
             render_logic_error(@unit.errors.full_messages)

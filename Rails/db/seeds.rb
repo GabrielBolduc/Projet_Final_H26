@@ -710,7 +710,7 @@ res1 = Reservation.create!(
 res2 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 14),
   departure_at: Date.new(2026, 7, 18),
-  nb_of_people: 6, 
+  nb_of_people: 6,
   reservation_name: "Alice Wonderland",
   phone_number: "+1 (819) 555-4444",
   user: c2,

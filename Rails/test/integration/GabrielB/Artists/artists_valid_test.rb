@@ -138,7 +138,7 @@ class ArtistsValidTest < ActionDispatch::IntegrationTest
 
     # format reponse
     json = JSON.parse(response.body)
-    
+
     # donne reponse
     assert_equal "success", json["status"]
     assert_equal "Céline Dion", json["data"]["name"]

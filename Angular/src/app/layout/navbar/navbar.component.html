@@ -3,7 +3,7 @@
   <div class="header-left">
     <a [routerLink]="['/']" class="brand-link">
       <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
-      <span class="home-text">{{ 'NAV.HOME' | translate }}</span>
+      <span class="home-text">{{ ongoingFestivalName() || 'NAV.HOME' | translate }}</span>
     </a>
 
      @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {

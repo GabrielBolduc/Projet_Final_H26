@@ -18,7 +18,7 @@ class Performance < ApplicationRecord
   before_destroy :prevent_modification_if_festival_completed
 
   validates :start_at, :end_at, presence: true
-  validates :title, presence: true, length: { maximum: 50 }
+  validates :title, presence: true, length: { maximum: 20 }
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validate :end_at_after_start_at
   validate :within_festival_dates
@@ -37,7 +37,7 @@ class Performance < ApplicationRecord
 
   def within_festival_dates
     return unless festival && start_at && end_at
-    if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at
+    if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at.to_date
       errors.add(:base, "OUTSIDE_FESTIVAL_DATES")
     end
   end

@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
   public auth = inject(AuthService);
   public translate = inject(TranslateService);
   private festivalService = inject(FestivalService); 
-
+  ongoingFestivalName = signal<string | null>(null)
   ongoingFestivalId = signal<number | null>(null);
 
   async ngOnInit() {
@@ -38,8 +38,10 @@ export class NavbarComponent implements OnInit {
       
       if (ongoing) {
         this.ongoingFestivalId.set(ongoing.id);
+        this.ongoingFestivalName.set(ongoing.name);
       } else {
         this.ongoingFestivalId.set(null);
+        this.ongoingFestivalName.set(null)
       }
     } catch (error) {
       console.error("Impossible de charger le festival en cours pour la navbar", error);

@@ -12,8 +12,8 @@ import { UnitsForm } from '@features/alexandre/admin/units-form/units-form';
 import { Units } from '@features/alexandre/admin/units/units';
 import { DashboardComponent } from './features/festival/performance/dashboard';
 import { AdministrationComponent } from './features/festival/festival/administration';
-import { FestivalFormComponent } from './features/festival/festival/festival-form';
-import { AddPerformanceComponent } from './features/festival/performance/add_performance';
+import { FestivalFormComponent } from './features/festival/festival/form/festival';
+import { AddPerformanceComponent } from './features/festival/performance/form/performance';
 import { TaskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
@@ -34,8 +34,8 @@ import { FormAffectationComponent } from '@features/laurent/affectation/form/for
 import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
 import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
 import { ArtistsListComponent } from './features/festival/artist/artists_list';
-import { ArtistFormComponent } from './features/festival/artist/artist_form';
-import { ArtistDetailComponent } from './features/festival/public_programation/artist_detail'; 
+import { ArtistFormComponent } from './features/festival/artist/form/artist';
+import { ArtistDetailComponent } from './features/festival/public_programation/detail/artist'; 
 
 export const routes: Routes = [
     {

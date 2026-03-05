@@ -98,13 +98,6 @@ class Api::FestivalsController < ApiController
     end
   end
 
-  def not_found_response
-    render json: {
-      status: "error",
-      message: "Resource not found"
-    }, status: :ok
-  end
-
   def festival_params
     params.require(:festival).permit(
       :name, :start_at, :end_at, :status, :address,

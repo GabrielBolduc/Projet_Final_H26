@@ -5,16 +5,16 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 
-import { PerformanceService } from '../../../core/services/performance.service';
-import { ArtistService } from '../../../core/services/artist.service';
-import { StageService } from '../../../core/services/stage.service';
-import { FestivalService } from '../../../core/services/festival.service';
-import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { PerformanceService } from '../../../../core/services/performance.service';
+import { ArtistService } from '../../../../core/services/artist.service';
+import { StageService } from '../../../../core/services/stage.service';
+import { FestivalService } from '../../../../core/services/festival.service';
+import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 
-import { Artist } from '../../../core/models/artist';
-import { Stage } from '../../../core/models/stage';
-import { Festival } from '../../../core/models/festival';
-import { DateUtils } from '../../../core/utils/date.utils'; 
+import { Artist } from '../../../../core/models/artist';
+import { Stage } from '../../../../core/models/stage';
+import { Festival } from '../../../../core/models/festival';
+import { DateUtils } from '../../../../core/utils/date.utils'; 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -44,8 +44,8 @@ const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,
     TranslateModule,MatProgressSpinnerModule
   ],
-  templateUrl: './add_performance.html',
-  styleUrls: ['./add_performance.css']
+  templateUrl: './performance.html',
+  styleUrls: ['./performance.css']
 })
 export class AddPerformanceComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -75,7 +75,7 @@ export class AddPerformanceComponent implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(50)]],
+      title: ['', [Validators.required, Validators.maxLength(20)]],
       description: [''],
       price: [0, [Validators.required, Validators.min(0)]],
       date: [new Date(), Validators.required],

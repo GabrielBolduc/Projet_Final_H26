@@ -17,3 +17,9 @@ three:
   genre: "Pop"
   bio: "bio"
   popularity: 3
+
+four:
+  name: ArtistD
+  genre: "Pop"
+  bio: "bio"
+  popularity: 3

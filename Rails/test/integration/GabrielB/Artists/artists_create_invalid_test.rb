@@ -116,7 +116,7 @@ class ArtistsCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_not_nil json["errors"]["genre"]
   end
 
-  test "should fail to create with bio longer than 2000 chars" do
+  test "should fail to create with bio longer than 1600 chars" do
     sign_in @admin
 
     # modif ou non
@@ -133,7 +133,7 @@ class ArtistsCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_not_nil json["errors"]["bio"]
   end
 
-  test "should fail to create with popularity out of bounds (greater than 5)" do
+  test "should fail to create with popularity whith more than 5" do
     sign_in @admin
 
     # modif ou non

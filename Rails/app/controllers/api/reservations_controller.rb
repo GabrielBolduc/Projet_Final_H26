@@ -8,13 +8,13 @@ class Api::ReservationsController < ApiController
     query = if params[:unit_id].present?
               # Allow seeing all busy dates for a specific unit
               Reservation.where(unit_id: params[:unit_id]).active
-            elsif admin_user?
+    elsif admin_user?
               Reservation.all
-            elsif params[:history] == "true"
+    elsif params[:history] == "true"
               current_user.reservations.where(status: [ :completed, :cancelled ])
-            else
+    else
               current_user.reservations.active
-            end
+    end
 
     @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
 
@@ -38,9 +38,9 @@ class Api::ReservationsController < ApiController
 
   def create
     @reservation = Reservation.new(reservation_params)
-    
+
     @reservation.festival = Festival.ongoing.first
-    
+
     @reservation.user = current_user
 
     if @reservation.save

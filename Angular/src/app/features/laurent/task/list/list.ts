@@ -39,6 +39,8 @@ export class TaskListComponent implements OnInit {
 
   search = signal('');
   order = signal('desc');
+  orderBy = signal('');
+
   status = signal('');
 
   constructor(
@@ -47,10 +49,10 @@ export class TaskListComponent implements OnInit {
 ) {}
 
   ngOnInit() {
-    this.taskService.listTasks().subscribe(data => { 
-      console.log('Tâches reçues : ', data);
-      this.tasks.set(data);
-    });
+
+    this.loadTasks()
+
+    
   }
 
 
@@ -77,10 +79,8 @@ export class TaskListComponent implements OnInit {
         try {
           await firstValueFrom(this.taskService.deleteTask(id));
           this.snackBar.open('tâche supprimé avec succès.', 'Fermer', { duration: 3000 });
-          await this.taskService.listTasks().subscribe(data => { 
-              console.log('Tâches reçues : ', data);
-              this.tasks.set(data);
-            });
+          await  this.loadTasks()
+          
           
         } catch (err) {
           this.showErrorsAsSnackBar(err);
@@ -107,20 +107,24 @@ export class TaskListComponent implements OnInit {
 
   loadTasks() {
 
-    const formData = new FormData();
+     this.route.queryParamMap.subscribe(params => {
 
-        formData.append('[title]',this.search());
-        formData.append('[description]',this.order());
-        formData.append('[difficulty]', this.status());
-      
+    this.search.set(params.get('search') ?? '');
+    this.order.set(params.get('order') ?? 'desc');
+    this.status.set(params.get('status') ?? '');
+    this.orderBy.set(params.get('orderBy') ?? '');
 
+    this.taskService.listTasks(this.search(),this.order(),this.status(),this.orderBy()).subscribe(data => {
 
-    this.taskService.listTasks(this.search(),this.order(),this.status()).subscribe(data => {
+      this.tasks.set(data);
 
-    this.tasks.set(data);
+    });
 
   });
 
-}
+
+     
+
+  }
 
 }

@@ -404,7 +404,21 @@
     "TITLE_CREATE": "Nouvelle Tâche",
     "TITLE_UPDATE": "Modifier Tâche",
     "REUSABLE_TASKS": "Tâches Réutilisables",
-    "SELECT_REUSABLE": "Sélectionner des tâches réutilisables"
+    "SELECT_REUSABLE": "Sélectionner des tâches réutilisables",
+    "NOTFOUND": "aucune tâche trouver",
+    "SSF": {
+
+      "DIFFICULTY": "Difficulté",
+      "PRIORITY":"Priorité",
+      "AFFECTATION": "nombre d'affectation",
+      "ORDERBY": "Ordonné par",
+      "RECHERCHE": "Rechercher par titre",
+      "STATUS": "Statut",
+      "ALL": "TOUT",
+      "COMPLETER": "Completer",
+      "ORDER": "Ordonné"
+    }
+
   },
   "AFFECTATIONS": {
     "ADD": "Ajouter Affectation",

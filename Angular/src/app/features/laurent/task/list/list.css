@@ -103,3 +103,22 @@
   display: grid;
   gap: 10px;
 }
+
+.filters-card {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface-container-low);
+}
+
+.filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-field {
+  flex: 1;
+  min-width: 200px;
+}

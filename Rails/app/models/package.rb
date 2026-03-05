@@ -263,5 +263,4 @@ class Package < ApplicationRecord
       errors.add(:base, "Discount rate and minimum quantity must both be set or both be empty")
     end
   end
-
 end

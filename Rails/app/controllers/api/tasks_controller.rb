@@ -4,30 +4,43 @@ class Api::TasksController < ApiController
     before_action :require_admin!, only: [ :create, :update, :destroy ]
 
 
-    def index
-
-
-        @tasks = Task.all.order(updated_at: :desc)
+   def index
+        @tasks = Task.all
 
         if params[:search].present?
-            tasks = tasks.where("title ILIKE ?", "%#{params[:search]}%")
-
+            @tasks = @tasks.where("title LIKE ?", "%#{params[:search]}%")
         end
-        
 
         if params[:status] == "completed"
-            @tasks = @tasks.where.not( id: Affectation.where(end: nil).select(:task_id))
-        elsif params[:status] == "ongoing"
-            @tasks = @tasks.where.not( id: Affectation.where.not(start: nil).select(:task_id))
+            @tasks = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id))
         end
 
-        order = params[:order] == "asc" ? "ASC" : "DESC"
-       
-        tasks = tasks.order("tasks.created_at #{order}")
+
+        case params[:orderBy]
+
+        when "affectation"
+            @tasks = @tasks.left_joins(:affectations)
+                        .group("tasks.id")
+                        .order("COUNT(affectations.id)")
+
+        when "priority"
+            @tasks = @tasks.order(:priority)
+
+        when "difficulty"
+            @tasks = @tasks.order(:difficulty)
+
+        else
+            @tasks = @tasks.order(:updated_at)
+
+        end
+
+        if params[:order] == "desc"
+            @tasks = @tasks.reverse_order
+        end
 
         render json: {
-        status: "success",
-        data: @tasks.as_json(task_json)
+            status: "success",
+            data: @tasks.as_json(task_json)
         }, status: :ok
     end
     def show
@@ -83,7 +96,7 @@ class Api::TasksController < ApiController
         {
             success: true,
             only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
-             methods: [ :file_url ]
+             methods: [ :file_url, :affectations_count, :completed ]
         }
     end
 

@@ -10,53 +10,64 @@
 
   <main>
 
-    <div class="filters">
+    <mat-card class="filters-card">
+      <div class="filters">
 
-      <!-- Search -->
-      <mat-form-field appearance="outline">
-        <mat-label>Search</mat-label>
-        <input
-          matInput
-          [value]="search()"
-          (input)="updateQuery({ search: $any($event.target).value })">
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'TACHES.SSF.RECHERCHE' | translate }}</mat-label>
+          <input
+            matInput
+            [value]="search()"
+            (input)="updateQuery({ search: $any($event.target).value })">
+        </mat-form-field>
 
-      <!-- Order -->
-      <mat-form-field appearance="outline">
-        <mat-label>Order</mat-label>
-        <mat-select
-          [value]="order()"
-          (selectionChange)="updateQuery({ order: $event.value })">
+        <mat-form-field appearance="outline" class="filter-field">
+           <mat-label>{{ 'TACHES.SSF.ORDERBY' | translate }}</mat-label>
+          <mat-select
+            [value]="orderBy()"
+            (selectionChange)="updateQuery({ orderBy: $event.value })">
+           
+            <mat-option value="priority">{{ 'TACHES.SSF.PRIORITY' | translate }}</mat-option>
+            <mat-option value="difficulty">{{ 'TACHES.SSF.DIFFICULTY' | translate }}</mat-option>
+            <mat-option value="affectation">{{ 'TACHES.SSF.AFFECTATION' | translate }}</mat-option>
 
-          <mat-option value="asc">ASC</mat-option>
-          <mat-option value="desc">DESC</mat-option>
+          </mat-select>
+        </mat-form-field>
 
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'TACHES.SSF.STATUS' | translate }}</mat-label>
 
-      <!-- Status -->
-      <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
+          <mat-select
+            [value]="status()"
+            (selectionChange)="updateQuery({ status: $event.value })">
 
-        <mat-select
-          [value]="status()"
-          (selectionChange)="updateQuery({ status: $event.value })">
+            <mat-option value="">{{ 'TACHES.SSF.ALL' | translate }}</mat-option>
+            <mat-option value="completed">{{ 'TACHES.SSF.COMPLETER' | translate }}</mat-option>
 
-          <mat-option value="">All</mat-option>
-          <mat-option value="completed">Completed</mat-option>
-          <mat-option value="ongoing">Ongoing</mat-option>
+          </mat-select>
 
-        </mat-select>
+        </mat-form-field>
 
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'TACHES.SSF.ORDER' | translate }}</mat-label>
+          <mat-select
+            [value]="order()"
+            (selectionChange)="updateQuery({ order: $event.value })">
 
-    </div>
+            <mat-option value="asc">ASC</mat-option>
+            <mat-option value="desc">DESC</mat-option>
+
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </mat-card>
     <section class="admin-section">
       
       <div class="task-list">
 
         @if(tasks().length === 0) {
-          <p class="state-message">aucune tâche trouver</p>
+          <p class="state-message">{{ 'TACHES.NOTFOUND' | translate }}</p>
         } 
         @for (task of tasks(); track task.id) {
           
@@ -65,7 +76,18 @@
               
               <div class="main-info">
                 <h3>{{ task.title }}</h3>
-                
+
+                <p> nombre de'affectation: {{ task.affectations_count }}</p>
+                @if(task.completed)
+                {
+                  <p>la tache est completé</p>
+
+                }
+                @else
+                {
+                  <p>la tache st en attente</p> 
+                }
+               
                 <button mat-stroked-button class="btn-dash" [routerLink]="['/tasks', task.id]">
                   {{ 'TACHES.SHOW' | translate }}
                 </button>

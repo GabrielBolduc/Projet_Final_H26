@@ -3,11 +3,17 @@ class Api::ArtistsController < ApiController
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_artist, only: [ :show, :update, :destroy ]
 
+  def genres
+    render json: {
+      status: "success",
+      data: Artist.used_genres
+    }, status: :ok
+  end
+
   def index
-    artists = Artist.with_attached_image.alphabetical
+    artists = Artist.default_order
     artists = artists.search(params[:search]) if params[:search].present?
     artists = artists.by_genre(params[:genre]) if params[:genre].present?
-    artists = artists.headliners if params[:headliners] == "true"
 
     render json: {
       status: "success",

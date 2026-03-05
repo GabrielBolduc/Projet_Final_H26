@@ -149,12 +149,24 @@
   transition: transform 0.2s; 
 }
 
+.icon-btn.finish {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn.finish .action-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
 .icon-btn:hover { 
   transform: scale(1.1); 
 }
 
 .icon-btn.edit:hover { color: var(--mat-sys-primary); }
 .icon-btn.trash:hover { color: var(--mat-sys-error); }
+.icon-btn.finish:hover { color: var(--mat-sys-primary); }
 
 .card-actions-side {
   display: flex;

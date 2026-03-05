@@ -107,7 +107,8 @@
     "UPDATE_SUCCESS": "Festival modifié avec succès",
     "CREATE_SUCCESS": "Festival créé avec succès",
     "SAVE_ERROR": "Erreur lors de la sauvegarde. Vérifiez les champs.",
-    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce festival ? Cette action est irréversible."
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce festival ? Cette action est irréversible.",
+    "FINISH": "Terminer le festival"
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "Ajouter",
@@ -162,13 +163,16 @@
   "ARTIST_LIST": {
     "TITLE": "Catalogue des artistes",
     "ADD": "Ajouter",
-    "COL_PHOTO": "Photo",
-    "COL_NAME": "Nom",
-    "COL_GENRE": "Genre",
-    "COL_POPULARITY": "Popularité",
-    "COL_BIO": "Bio",
+    "PHOTO": "Photo",
+    "NAME": "Nom",
+    "GENRE": "Genre musical",
+    "POPULARITY": "Popularité",
+    "BIO": "Bio",
     "VIEW_BIO": "Voir la bio",
-    "COL_ACTIONS": "Action"
+    "ACTIONS": "Action",
+    "ALL_GENRES": "Tous les genres musical",
+    "SEARCH": "Rechercher artiste...",
+    "LOAD_ERROR_GENRE": "Erreur chargement genres"
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",
@@ -586,5 +590,10 @@
   },
   "HOME":{
     "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"
+  },
+  "404":{
+    "NOT_FOUND": "Page introuvable",
+    "MESSAGE": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "BTN": "Retour à la page d'accueil"
   }
 }

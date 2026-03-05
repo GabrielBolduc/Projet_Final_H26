@@ -26,6 +26,28 @@
   justify-content: flex-end; 
 }
 
+.ssf-toolbar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background-color: var(--mat-sys-surface-container-low);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  flex-wrap: wrap;
+}
+
+.ssf-toolbar mat-form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+
+ssf-input {
+  width: 70px;
+}
+
 .header-title { 
   font-size: 2.2rem; 
   margin: 0; 

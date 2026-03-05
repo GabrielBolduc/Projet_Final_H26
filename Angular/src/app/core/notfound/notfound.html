@@ -2,16 +2,16 @@
   <mat-card class="auth-card">
     <mat-card-header>
       <mat-card-title>404</mat-card-title>
-      <mat-card-subtitle>Page Not Found</mat-card-subtitle>
+      <mat-card-subtitle>{{'404.NOT_FOUND' | translate}}</mat-card-subtitle>
     </mat-card-header>
     
     <mat-card-content>
-      <p>The page you're looking for doesn't exist or has been moved.</p>
+      <p>{{'404.MESSAGE' | translate}}</p>
     </mat-card-content>
 
     <mat-card-actions align="end">
       <a mat-flat-button color="tertiary" routerLink="/">
-        Go Home
+        {{'404.BTN' | translate}}
       </a>
     </mat-card-actions>
   </mat-card>

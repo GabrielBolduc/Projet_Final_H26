@@ -3,6 +3,7 @@
   place-items: center;
   min-height: 100vh;
   background-color: var(--mat-sys-surface-container);
+  justify-content: center;
 }
 
 mat-card-title {

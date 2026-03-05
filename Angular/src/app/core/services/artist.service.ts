@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map, catchError, of, throwError } from 'rxjs';
 import { Artist } from '../models/artist';
 import { ApiResponse } from '../models/api-response';
@@ -9,8 +9,25 @@ export class ArtistService {
   private http = inject(HttpClient);
   private readonly API_URL = '/api/artists';
 
-  getArtists(): Observable<Artist[]>{
-    return this.http.get<ApiResponse<Artist[]>>(this.API_URL).pipe(
+  getGenres(): Observable<string[]>{
+    return this.http.get<ApiResponse<string[]>>(`${this.API_URL}/genres`).pipe(
+      map(response =>{
+        if (response.status === 'success') return response.data || []
+        throw response
+      }),
+      catchError(error => throwError(() => error))
+    )
+  }
+
+  getArtists(paramsObj?: { search?: string; genre?: string; headliners?: boolean; scheduled?: boolean }): Observable<Artist[]> {
+    let params = new HttpParams();
+
+    if (paramsObj) {
+      if (paramsObj.search) params = params.set('search', paramsObj.search);
+      if (paramsObj.genre) params = params.set('genre', paramsObj.genre);
+    }
+
+    return this.http.get<ApiResponse<Artist[]>>(this.API_URL, { params }).pipe(
       map(response => {
         if (response.status === 'success') return response.data || []
         throw response;
@@ -62,7 +79,6 @@ export class ArtistService {
       catchError(error => throwError(() => error))
     )
   }
-
 
   private buildFormData(artist: Partial<Artist>, imageFile?: File): FormData {
     const formData = new FormData()

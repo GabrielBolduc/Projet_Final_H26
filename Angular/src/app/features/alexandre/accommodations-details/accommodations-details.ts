@@ -9,12 +9,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 import { switchMap, map } from 'rxjs';
 import { AccommodationsService } from '@core/services/accommodations.service';
-import { Accommodation, AccommodationCategory } from '@core/models/accommodation';
+import { AccommodationCategory } from '@core/models/accommodation';
 import { AuthService } from '@core/services/auth.service';
 import { UnitsService } from '@core/services/units.service';
-import { Unit, UnitType } from '@core/models/unit';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { signal, effect } from '@angular/core';
+import { Unit } from '@core/models/unit';
+import { DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-accommodations-details',
@@ -143,7 +142,6 @@ export class AccommodationsDetails {
   }
 
   mapUrl = computed(() => {
-    // Use the accommodation signal from your details page
     const acc = this.accommodation();
     if (!acc || !acc.latitude || !acc.longitude) return null;
 
@@ -151,7 +149,6 @@ export class AccommodationsDetails {
     const lng = Number(acc.longitude);
     const offset = 0.005; 
 
-    // Fixed: used ${} for the math to execute and corrected the bbox/marker syntax
     const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
     
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);

@@ -106,7 +106,7 @@
   border-radius: 10px;
 }
 
-.stat-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; color: #666; }
+.stat-label { font-size: .65rem; font-weight: 700; text-transform: uppercase; color: #666; padding-right: 5px; }
 .stat-value { font-weight: 900; }
 
 /* Travel Widget */

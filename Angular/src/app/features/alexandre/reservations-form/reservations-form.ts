@@ -1,8 +1,6 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-
-// Material
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,14 +12,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-
-// Services & Models
 import { AuthService } from '@core/services/auth.service';
 import { ReservationsService } from '@core/services/reservation.service';
-import { UnitsService } from '@core/services/units.service'; // Added
+import { UnitsService } from '@core/services/units.service';
 import { FestivalService } from '@core/services/festival.service';
 import { Unit, UnitCapacity, UnitType } from '@core/models/unit';
-import { Reservation } from '@core/models/reservation';
 import { ApiResponse } from '@core/models/api-response';
 
 @Component({
@@ -41,7 +36,7 @@ export class ReservationsForm implements OnInit {
   private route = inject(ActivatedRoute); 
   private router = inject(Router);        
   private service: ReservationsService = inject(ReservationsService);
-  private unitsService: UnitsService = inject(UnitsService); // Inject UnitsService
+  private unitsService: UnitsService = inject(UnitsService);
   private festivalService: FestivalService = inject(FestivalService);
   private authService = inject(AuthService);
 
@@ -102,7 +97,6 @@ export class ReservationsForm implements OnInit {
 
     this.form.get('unit_id')?.valueChanges.subscribe((unitId: number) => {
       if (unitId) {
-        // ONLY clear dates if the user actually clicked/changed the unit manually
         if (this.form.get('unit_id')?.dirty) {
           this.form.patchValue({
             arrival_at: null,
@@ -123,12 +117,10 @@ private loadReservedDates(unitId: number) {
       res.data.forEach(booking => {
         if (booking.id === this.reservationId()) return;
 
-        // Force local midnight to ensure consistency
         let current = new Date(booking.arrival_at + 'T00:00:00');
         const end = new Date(booking.departure_at + 'T00:00:00');
         
         while (current < end) { 
-          // .setHours(0,0,0,0) is key to stripping milliseconds/seconds
           dates.add(new Date(current).setHours(0, 0, 0, 0));
           current.setDate(current.getDate() + 1);
         }
@@ -141,15 +133,12 @@ private loadReservedDates(unitId: number) {
 
 dateFilter = (date: Date | null): boolean => {
   if (!date) return false;
-  
-  // Strip time from the calendar's date object before checking the Set
+
   const time = new Date(date).setHours(0, 0, 0, 0);
 
-  // 1. Festival window check
   if (this.minDate() && time < this.minDate()!.getTime()) return false;
   if (this.maxDate() && time > this.maxDate()!.getTime()) return false;
 
-  // 2. Unit check - If time is in the set, it's occupied (return false)
   const isReserved = this.reservedDates().has(time);
   return !isReserved;
 };
@@ -190,8 +179,6 @@ private loadReservation(id: number) {
   this.isLoading.set(true);
   this.service.get(id).subscribe({
     next: (res: any) => { 
-      // 1. Patch the form EXACTLY as you had it, but add { emitEvent: false }
-      // This is the ONLY way to stop ngOnInit from clearing your dates to null.
       this.form.patchValue({
         reservation_name: res.reservation_name,
         phone_number: res.phone_number,
@@ -201,10 +188,8 @@ private loadReservation(id: number) {
         departure_at: new Date(res.departure_at + 'T00:00:00')
       }, { emitEvent: false });
 
-      // 2. Log the entire 'res' object to see EXACTLY where the ID is hiding
       console.log('Full Response Object:', res);
 
-      // 3. Try to find the ID. If unit is missing, check unit_id directly
       const accId = res.unit?.accommodation_id || 
                     res.unit?.accommodation?.id || 
                     res.accommodation_id;
@@ -212,7 +197,7 @@ private loadReservation(id: number) {
       console.log('Final AccID Check:', accId);
 
       if (accId) {
-        this.loadUnits(accId); // This fills the dropdown so 'unit_id' can match
+        this.loadUnits(accId);
       }
 
       if (res.unit_id) {
@@ -232,18 +217,15 @@ private loadReservation(id: number) {
           const start = new Date(festival.start_at);
           const end = new Date(festival.end_at);
 
-          // Calculate offset (e.g., -3 days before, +3 days after)
           const min = new Date(start);
           min.setDate(min.getDate() - 3);
           
           const max = new Date(end);
           max.setDate(max.getDate() + 3);
 
-          // Update signals
           this.minDate.set(min);
           this.maxDate.set(max);
-          
-          // Ensure picker opens at the start date
+
           this.startAtDate.set(min);
         }
       }

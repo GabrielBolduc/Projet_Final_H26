@@ -518,7 +518,7 @@
     },
     "FIELDS": {
       "STAY": "Hébergement et Unité",
-      "COST": "Détails du prix",
+      "COST": "Détails des coûts",
       "DATES": "Dates du Séjour",
       "GUESTS": "Nombre d'Invités",
       "PEOPLE": "Personnes",

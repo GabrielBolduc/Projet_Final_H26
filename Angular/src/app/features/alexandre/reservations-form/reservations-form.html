@@ -11,7 +11,6 @@
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
     
-    <!-- Error Handling -->
     @if (serverErrors().length > 0) {
       <div class="form-error">
         @for (error of serverErrors(); track error) {
@@ -20,7 +19,6 @@
       </div>
     }
 
-    <!-- Row 1: Contact Info -->
     <div class="grid-row-2">
       <mat-form-field appearance="outline">
         <mat-label>{{ 'RESERVATIONS.NAME' | translate }}</mat-label>
@@ -39,7 +37,6 @@
       </mat-form-field>
     </div>
 
-    <!-- Row 3: Unit Selection (Scoped to Accommodation) & Capacity -->
     <div class="grid-row-2">
       <mat-form-field appearance="outline">
         <mat-label>{{ 'RESERVATIONS.SELECT_UNIT' | translate }}</mat-label>
@@ -65,14 +62,11 @@
               [max]="maxPeopleForSelectedUnit">
         <mat-icon matSuffix>groups</mat-icon>
 
-        <!-- Informative hint about the unit's limit -->
         @if (form.get('unit_id')?.value) {
           <mat-hint>
             {{ 'RESERVATIONS.MAX_ALLOWED' | translate }}: {{ maxPeopleForSelectedUnit }}
           </mat-hint>
         }
-
-        <!-- Error message if they type a number too high -->
         @if (form.get('nb_of_people')?.hasError('max')) {
           <mat-error>
             {{ 'RESERVATIONS.ERRORS.TOO_MANY_PEOPLE' | translate }} (Max: {{ maxPeopleForSelectedUnit }})
@@ -81,7 +75,6 @@
       </mat-form-field>
     </div>
 
-    <!-- Arrival Picker -->
     <mat-form-field appearance="outline">
       <mat-label>{{ 'RESERVATIONS.ARRIVAL' | translate }}</mat-label>
       <input matInput 
@@ -89,11 +82,9 @@
             [matDatepickerFilter]="dateFilter"
             formControlName="arrival_at">
       <mat-datepicker-toggle matSuffix [for]="arrPicker"></mat-datepicker-toggle>
-      <!-- Bind startAt to your minDate signal -->
       <mat-datepicker #arrPicker [startAt]="minDate()"></mat-datepicker>
     </mat-form-field>
 
-    <!-- Departure Picker -->
     <mat-form-field appearance="outline">
       <mat-label>{{ 'RESERVATIONS.DEPARTURE' | translate }}</mat-label>
       <input matInput 
@@ -104,14 +95,12 @@
       <mat-datepicker #depPicker [startAt]="minDate()"></mat-datepicker>
     </mat-form-field>
 
-    <!-- Date Validation Message -->
     @if (form.errors?.['dateRangeInvalid'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
       <p class="form-error" style="text-align: left; margin-top: -10px;">
         {{ 'RESERVATIONS.ERRORS.INVALID_RANGE' | translate }}
       </p>
     }
 
-    <!-- Form Actions -->
     <div class="form-actions">
       <button mat-button class="action-btn" type="button" routerLink="/reservations">
         {{ 'COMMON.CANCEL' | translate }}

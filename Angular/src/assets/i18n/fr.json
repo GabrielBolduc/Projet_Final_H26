@@ -335,7 +335,9 @@
     "DISCOUNT_HINT": "Achetez {{min}} billets ou plus et économisez {{rate}} !",
     "SUBTOTAL": "Sous-total",
     "DISCOUNT": "Rabais",
-    "TOTAL": "Total"
+    "TOTAL": "Total",
+    "SEARCH_PACKAGE": "Rechercher des forfaits (Titre ou Description)",
+    "SEARCH_PLACEHOLDER": "Billet journalier"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Modifier le Forfait",

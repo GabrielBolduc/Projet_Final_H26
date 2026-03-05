@@ -333,7 +333,9 @@
     "DISCOUNT_HINT": "Buy {{min}} or more tickets and save {{rate}}!",
     "SUBTOTAL": "Subtotal",
     "DISCOUNT": "Discount",
-    "TOTAL": "Total"
+    "TOTAL": "Total",
+    "SEARCH_PACKAGE": "Search packages (Title or Description)",
+    "SEARCH_PLACEHOLDER": "Daily ticket"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Edit Package",

@@ -522,6 +522,10 @@
     }
   },
   "RESERVATIONS": {
+    "ERRORS": {
+      "TOO_MANY_PEOPLE": "Dépasse la capacité de l'unité",
+      "INVALID_RANGE": "Le départ doit être après l'arrivée"
+    },
     "SIDEBAR": {
       "RESERVE_CAMPING": "Réserver Camping",
       "RESERVE_HOTEL": "Réserver Hôtel",
@@ -531,6 +535,8 @@
       "BACK": "Retour"
     },
     "FIELDS": {
+      "STAY": "Hébergement et Unité",
+      "COST": "Détails des coûts",
       "DATES": "Dates du Séjour",
       "GUESTS": "Nombre d'Invités",
       "PEOPLE": "Personnes",
@@ -549,7 +555,14 @@
     "ARRIVAL": "Arrivée",
     "DEPARTURE": "Départ",
     "GUESTS": "Invités",
-    "PHONE": "Téléphone"
+    "PHONE": "Téléphone",
+    "SELECT_UNIT": "Choisir une unité",
+    "PEOPLE": "Nombre de personnes",
+    "MAX_ALLOWED": "Capacité max pour cette unité",
+    "NO_UNITS_AVAILABLE": "Aucune unité disponible pour cet hébergement",
+    "FILL_MY_INFO": "Remplir avec mes infos",
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir annuler cette réservation ? Cette action est irréversible.",
+    "DELETE": "Annuler"
   },
   "UNITS": {
     "CREATE_TITLE": "Ajouter une Unité",
@@ -609,7 +622,9 @@
     "CLOSE": "Fermer",
     "BACK": "Retour",
     "EDIT": "Modifier",
-    "UNDERSTOOD": "Compris"
+    "UNDERSTOOD": "Compris",
+    "REQUIRED": "Ce champ est obligatoire",
+    "CREATE": "Créer la réservation"
   },
   "HOME":{
     "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"

@@ -26,7 +26,8 @@ export class ReservationsAdmin implements OnInit {
 
   dataSource = new MatTableDataSource<Reservation>([]);
   displayedColumns: string[] = [
-    'reservation_name', 
+    'reservation_name',
+    'phone_number',
     'accommodation',
     'unit_type',
     'arrival_at', 
@@ -50,6 +51,15 @@ export class ReservationsAdmin implements OnInit {
         this.dataSource.data = res.data;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        this.dataSource.sortingDataAccessor = (item: any, property: string) => {
+          switch (property) {
+            case 'status': return this.getReservationStatus(item);
+            case 'accommodation': return item.unit?.accommodation?.name || '';
+            case 'unit_type': return item.unit?.type || '';
+            default: return item[property as keyof any];
+          }
+        };
 
         this.dataSource.filterPredicate = (data: Reservation, filter: string) => {
           const accommodationName = data.unit?.accommodation?.name?.toLowerCase() || '';

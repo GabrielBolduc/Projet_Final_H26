@@ -148,7 +148,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_04_191903) do
     t.string "phone_number", limit: 20, null: false
     t.string "reservation_name", limit: 100, null: false
     t.integer "status", default: 0, null: false
-    t.bigint "unit_id"
+    t.bigint "unit_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["festival_id"], name: "index_reservations_on_festival_id"

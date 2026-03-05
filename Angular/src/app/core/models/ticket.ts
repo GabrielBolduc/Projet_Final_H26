@@ -4,7 +4,6 @@ export interface Ticket {
   id: number;
   order_id: number;
   unique_code: string;
-  qr_code_url?: string | null;
   refunded_at: string | null;
   price: number;
   purchased_at?: string;

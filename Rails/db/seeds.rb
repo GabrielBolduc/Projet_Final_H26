@@ -505,6 +505,8 @@ p_daily = Package.create!(
   category: "daily",
   valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
   expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
+  discount_min_quantity: 3,
+  discount_rate: 0.10,
   festival: f
 )
 
@@ -588,7 +590,7 @@ p_completed = Package.create!(
 # Orders + Tickets (Billetterie)
 order_general_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 9, min: 15))
 order_general_2 = Order.create!(user: c2, purchased_at: f.start_at.to_time.change(hour: 9, min: 45))
-order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30))
+order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30), discount: (60.00 * 3 * 0.10).round(2))
 order_daily_2 = Order.create!(user: c3, purchased_at: f.start_at.to_time.change(hour: 11, min: 15))
 order_daily_sold_out_1 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 5))
 order_daily_sold_out_2 = Order.create!(user: c3, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 20))

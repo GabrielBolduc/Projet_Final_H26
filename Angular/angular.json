@@ -34,6 +34,9 @@
               "src/material-theme.scss",
               "src/styles.css"
             ],
+            "allowedCommonJsDependencies": [
+              "qrcode"
+            ],
             "scripts": [],
             "prerender": false,
             "ssr": false

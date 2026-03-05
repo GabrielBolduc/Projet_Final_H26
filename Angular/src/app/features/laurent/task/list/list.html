@@ -9,6 +9,48 @@
   </header>
 
   <main>
+
+    <div class="filters">
+
+      <!-- Search -->
+      <mat-form-field appearance="outline">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          [value]="search()"
+          (input)="updateQuery({ search: $any($event.target).value })">
+      </mat-form-field>
+
+      <!-- Order -->
+      <mat-form-field appearance="outline">
+        <mat-label>Order</mat-label>
+        <mat-select
+          [value]="order()"
+          (selectionChange)="updateQuery({ order: $event.value })">
+
+          <mat-option value="asc">ASC</mat-option>
+          <mat-option value="desc">DESC</mat-option>
+
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Status -->
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+
+        <mat-select
+          [value]="status()"
+          (selectionChange)="updateQuery({ status: $event.value })">
+
+          <mat-option value="">All</mat-option>
+          <mat-option value="completed">Completed</mat-option>
+          <mat-option value="ongoing">Ongoing</mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+    </div>
     <section class="admin-section">
       
       <div class="task-list">

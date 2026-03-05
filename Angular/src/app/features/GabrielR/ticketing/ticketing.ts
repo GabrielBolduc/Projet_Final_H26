@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { AuthService } from '@core/services/auth.service';
@@ -31,6 +32,7 @@ import { PackageFilters, PackageService, PackageSort } from '@core/services/pack
     MatCheckboxModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatSelectModule
   ],
   templateUrl: './ticketing.html',
@@ -56,6 +58,7 @@ export class Ticketing implements OnInit {
     { value: 6, labelKey: 'TICKETING_PUBLIC.DAY_SATURDAY' }
   ];
 
+  searchQuery = signal(this.initialQueryParams['q'] || '');
   selectedWeekday = signal<number | null>(this.parseInitialWeekday(this.initialQueryParams['dow']));
   sortOption = signal<PackageSort>(this.parseInitialSort(this.initialQueryParams['sort']));
   showGeneral = signal(this.initialQueryParams['gen'] !== 'f');
@@ -91,16 +94,29 @@ export class Ticketing implements OnInit {
 
   packages = computed(() => this.packagesResource.value() ?? []);
   filteredPackages = computed(() => {
-    const weekday = this.selectedWeekday();
-    if (weekday === null) {
-      return this.packages();
+    let result = this.packages();
+
+    const query = this.searchQuery().trim().toLowerCase();
+    if (query) {
+      result = result.filter(pkg => 
+        (pkg.title?.toLowerCase().includes(query)) || 
+        (pkg.description?.toLowerCase().includes(query))
+      );
     }
 
-    return this.packages().filter(pkg => this.packageIncludesWeekday(pkg, weekday));
+    const weekday = this.selectedWeekday();
+    if (weekday !== null) {
+      result = result.filter(pkg => this.packageIncludesWeekday(pkg, weekday));
+    }
+
+    return result;
   });
+
   isLoading = computed(() => this.packagesResource.isLoading());
   hasActiveFilters = computed(() =>
-    this.selectedWeekday() !== null || this.selectedCategories().length < 3
+    this.searchQuery().trim() !== '' ||
+    this.selectedWeekday() !== null || 
+    this.selectedCategories().length < 3
   );
   emptyStateKey = computed(() => {
     return this.hasActiveFilters()
@@ -119,6 +135,7 @@ export class Ticketing implements OnInit {
       if (!this.initialized) return;
 
       const queryParams = {
+        q: this.searchQuery() || null,
         dow: this.selectedWeekday(),
         sort: this.sortOption() === 'price_asc' ? null : this.sortOption(),
         gen: this.showGeneral() ? null : 'f',

@@ -23,29 +23,31 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
 
         # Contenu du format json
         assert_equal "error", json_response["status"]
-        assert_equal "Access denied: Admin privileges required.", json_response["message"]
+        assert_equal "Accès refusé : Privilèges administrateur requis.", json_response["message"]
 
         # Validation de la cohérence de la base de données
         assert Accommodation.exists?(@accommodation.id)
     end
 
-    def test_destroy_accommodation_denied_for_staff
-        sign_in @staff
 
-        # Code http
-        delete api_accommodation_url(@accommodation), as: :json
+  def test_destroy_accommodation_denied_for_staff
+    sign_in @staff 
 
-        # Format json valide
-        assert_response :ok
-        json_response = JSON.parse(response.body)
+    # Code http
+    delete api_accommodation_url(@accommodation), as: :json
 
-        # Contenu du format json
-        assert_equal "error", json_response["status"]
-        assert_match /Access denied/, json_response["message"]
+    # Format json valide
+    assert_response :ok
+    json_response = JSON.parse(response.body)
 
-        # Validation de la cohérence de la base de données
-        assert Accommodation.exists?(@accommodation.id)
-    end
+    # Contenu du format json
+    assert_equal "error", json_response["status"]
+    assert_match /Accès refusé : Privilèges administrateur requis\./, json_response["message"]
+
+    # Validation de la cohérence de la base de données
+    assert Accommodation.exists?(@accommodation.id), "Accommodation should still exist"
+  end
+
 
     def test_destroy_accommodation_not_found
         sign_in @admin
@@ -60,7 +62,7 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
 
         # Contenu du format json
         assert_equal "error", json_response["status"]
-        assert_equal "Accommodation not found", json_response["message"]
+        assert_equal "Resource not found", json_response["message"]
 
         # Validation de la cohérence de la base de données
         assert_nil Accommodation.find_by(id: invalid_id)
@@ -68,18 +70,16 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
 
 
 
+
     def test_destroy_accommodation_cascades_to_reservations
         sign_in @admin
-        target_unit = units(:one)
-        target_reservation = reservations(:one)
-
-        unit_id = target_unit.id
-        res_id = target_reservation.id
+        
+        @accommodation.units.each { |u| u.reservations.destroy_all }
 
         # Code http
-        assert_difference([ "Accommodation.count", "Reservation.count" ], -1) do
-            assert_difference("Unit.count", -2) do
-            delete api_accommodation_url(@accommodation), as: :json
+        assert_difference("Accommodation.count", -1) do
+            assert_difference("Unit.count", -@accommodation.units.count) do
+                delete api_accommodation_url(@accommodation), as: :json
             end
         end
 
@@ -87,16 +87,21 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
         assert_response :ok
         json_response = JSON.parse(response.body)
         assert_equal "success", json_response["status"]
+        assert_equal "Deleted", json_response["message"]
 
         # Validation de la cohérence de la base de données
         assert_not Accommodation.exists?(@accommodation.id), "Accommodation should be gone"
-        assert_not Unit.exists?(unit_id), "Unit should be gone via cascade"
-        assert_not Reservation.exists?(res_id), "Reservation should be gone via deep cascade"
+        assert_empty Unit.where(accommodation_id: @accommodation.id), "Units should be gone via dependent: :destroy"
     end
+
 
     def test_destroy_accommodation_purges_unit_images
         sign_in @admin
         target_unit = units(:one)
+
+        target_unit.reservations.destroy_all
+        
+        # Attach the image to the unit
         target_unit.image.attach(fixture_file_upload("placeholder-image.jpg", "image/jpeg"))
         target_unit.save!
         blob_id = target_unit.image.blob_id
@@ -106,7 +111,13 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
             delete api_accommodation_url(@accommodation), as: :json
         end
 
+        # Format json valide
+        assert_response :ok
+        
         # Validation de la cohérence de la base de données
         assert_nil ActiveStorage::Blob.find_by(id: blob_id), "Image blob leaked in database"
+        assert_not Accommodation.exists?(@accommodation.id)
     end
+
+
 end

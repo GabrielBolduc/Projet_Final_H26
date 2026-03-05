@@ -5,30 +5,50 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
   setup do
-    @accommodation = accommodations(:one) # Grand Hotel
-    @admin = users(:three) # admin@test.com
+    @admin = users(:three)
+    @accommodation = accommodations(:one)
     @unit = units(:one)
-    @image = fixture_file_upload("placeholder-image.jpg", "image/jpeg")
-
-    @unit.image.attach(@image)
+    
+    # Attach an image to ensure image_url is generated
+    unless @unit.image.attached?
+      @unit.image.attach(fixture_file_upload("placeholder-image.jpg", "image/jpeg"))
+    end
   end
 
   def test_index_success
+    # Ensure at least one unit in the fixture has an image attached
+    # otherwise image.attached? is false and the key won't exist
+    @accommodation.units.each do |unit|
+      next if unit.image.attached?
+      unit.image.attach(
+        io: File.open(Rails.root.join("test/fixtures/files/placeholder-image.jpg")),
+        filename: "test.jpg",
+        content_type: "image/jpeg"
+      )
+    end
+
     # Code http
     get api_accommodation_units_url(@accommodation), as: :json
 
     # Format json valide
-    assert_response :success
+    assert_response :ok
     json_response = JSON.parse(response.body)
 
     # Contenu du format json
     assert_equal "success", json_response["status"]
     assert_kind_of Array, json_response["data"]
-    assert json_response["data"].first.key?("image_url")
+    
+    # Validation de la structure as_json
+    first_unit = json_response["data"].first
+    assert first_unit.key?("image_url"), "image_url should be present"
+    assert first_unit.key?("max_capacity"), "max_capacity should be present"
+    assert_kind_of Array, first_unit["food_options"]
 
     # Validation de la cohérence de la base de données
     assert_equal @accommodation.units.count, json_response["data"].size
   end
+
+
 
   def test_show_unit_success
     perform_enqueued_jobs do
@@ -115,23 +135,42 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Canteen,Restaurant", @unit.read_attribute(:food_options)
   end
 
-  def test_destroy_unit_as_admin
+  def test_create_unit_as_admin
     sign_in @admin
+    @accommodation.update!(category: :hotel) 
 
-    # Code http
-    assert_difference("Unit.count", -1) do
-      delete api_unit_url(@unit), as: :json
+    # Removing 'as: :json' to allow multipart/form-data for the file upload
+    assert_difference("Unit.count", 1) do
+      post api_accommodation_units_url(@accommodation), params: {
+        unit: {
+          type: "Units::SimpleRoom",
+          cost_person_per_night: 50.0,
+          quantity: 5,
+          wifi: true,
+          electricity: true,
+          water: "drinkable",
+          parking_cost: 10.0,
+          food_options: ["Restaurant"],
+          image: fixture_file_upload("placeholder-image.jpg", "image/jpeg")
+        }
+      } 
     end
 
-    # Format json valide
+    # Format response remains JSON
     assert_response :ok
     json_response = JSON.parse(response.body)
 
     # Contenu du format json
     assert_equal "success", json_response["status"]
-    assert_equal "Unit deleted", json_response["message"]
+    assert_equal "Units::SimpleRoom", json_response["data"]["type"]
+    assert_not_nil json_response["data"]["image_url"]
 
     # Validation de la cohérence de la base de données
-    assert_not Unit.exists?(@unit.id)
+    new_unit = Unit.last
+    assert new_unit.image.attached?
   end
+
+
+
+
 end

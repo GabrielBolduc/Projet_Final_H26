@@ -11,3 +11,9 @@ two:
   genre: "Rock"
   bio: "bio"
   popularity: 1
+
+three:
+  name: ArtistC
+  genre: "Pop"
+  bio: "bio"
+  popularity: 3

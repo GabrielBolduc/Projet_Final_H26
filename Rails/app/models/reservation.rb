@@ -3,8 +3,8 @@ class Reservation < ApplicationRecord
   belongs_to :user
   belongs_to :unit
   belongs_to :festival
-  
-  attribute :status, :integer 
+
+  attribute :status, :integer
   enum :status, { active: 0, cancelled: 1, completed: 2 }
 
   validates :arrival_at, :departure_at, :reservation_name, presence: true
@@ -27,7 +27,7 @@ class Reservation < ApplicationRecord
     )
 
     super(options.merge({
-      only: [:id, :status, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at, ]
+      only: [ :id, :status, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at ]
     })).merge({
       phone_number: formatted_phone
     })
@@ -82,7 +82,7 @@ class Reservation < ApplicationRecord
     if phone_number.present?
       parsed = Phonelib.parse(phone_number)
       if parsed.valid?
-        self.phone_number = parsed.national.gsub(/\D/, '') 
+        self.phone_number = parsed.national.gsub(/\D/, "")
         # On force l'extraction des chiffres sans le '+'
         self.phone_number = parsed.national.gsub(/\D/, "")
       end

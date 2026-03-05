@@ -7,11 +7,11 @@ class Api::ReservationsController < ApiController
 
     query = if admin_user?
               Reservation.all
-            elsif params[:history] == 'true'
-              current_user.reservations.where(status: [:completed, :cancelled])
-            else
+    elsif params[:history] == "true"
+              current_user.reservations.where(status: [ :completed, :cancelled ])
+    else
               current_user.reservations.active
-            end
+    end
 
     @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
 

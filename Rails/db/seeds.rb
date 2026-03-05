@@ -701,7 +701,7 @@ res1 = Reservation.create!(
   departure_at: Date.new(2026, 7, 17),
   nb_of_people: 1,
   reservation_name: "Jean Daniel",
-  phone_number: "18195553333",
+  phone_number: "+1 (819) 555-3333",
   user: c,
   unit: unit1,
   festival: f
@@ -724,7 +724,7 @@ res3 = Reservation.create!(
   departure_at: Date.new(2026, 7, 19),
   nb_of_people: 4,
   reservation_name: "Bob Builder",
-  phone_number: "+1 819-555-5555",
+  phone_number: "+1 (819) 555-5555",
   user: c3,
   unit: unit_camp_high,
   festival: f
@@ -735,7 +735,7 @@ res4 = Reservation.create!(
   departure_at: f2.end_at,
   nb_of_people: 2,
   reservation_name: "Charlie Day",
-  phone_number: "+18195556666",
+  phone_number: "+1 (819) 555-6666",
   user: c,
   unit: unit_hotel_double,
   festival: f2,
@@ -747,7 +747,7 @@ res5 = Reservation.create!(
   departure_at: Date.new(2026, 7, 17),
   nb_of_people: 2,
   reservation_name: "Dana Scully",
-  phone_number: "+18195557777",
+  phone_number: "+1 (819) 555-7777",
   user: c4,
   unit: unit_camp_standard,
   festival: f

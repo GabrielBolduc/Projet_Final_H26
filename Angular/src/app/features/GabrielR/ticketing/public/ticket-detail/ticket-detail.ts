@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import * as QRCode from 'qrcode';
+//import * as QRCode from 'qrcode';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -135,7 +135,7 @@ export class TicketingTicketDetailComponent implements OnInit {
         return;
       }
 
-      void this.generateQrCode(ticket.unique_code);
+      //void this.generateQrCode(ticket.unique_code);
     });
   }
 
@@ -330,7 +330,7 @@ export class TicketingTicketDetailComponent implements OnInit {
     await this.router.navigate(['/ticketing/orders']);
   }
 
-  private async generateQrCode(value: string): Promise<void> {
+  /*private async generateQrCode(value: string): Promise<void> {
     try {
       const dataUrl = await QRCode.toDataURL(value, {
         width: 220,
@@ -340,5 +340,5 @@ export class TicketingTicketDetailComponent implements OnInit {
     } catch {
       this.qrCodeDataUrl.set(null);
     }
-  }
+  }*/
 }

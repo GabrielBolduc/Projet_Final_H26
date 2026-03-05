@@ -9,7 +9,7 @@ class Reservation < ApplicationRecord
 
   validates :arrival_at, :departure_at, :reservation_name, presence: true
   validates :nb_of_people, numericality: { only_integer: true, greater_than: 0 }
-  validates :phone_number, phone: true
+  validates :phone_number, presence: true
 
   validate :departure_must_be_after_arrival
   validate :capacity_within_limits
@@ -50,9 +50,11 @@ class Reservation < ApplicationRecord
     overlaps = Reservation.active
                           .where(unit_id: unit_id)
                           .where.not(id: id)
-                          .where("arrival_at < ? AND departure_at > ?", departure_at, arrival_at)
+                          .where("DATE(arrival_at) < ? AND DATE(departure_at) > ?", departure_at.to_date, arrival_at.to_date)
 
     if overlaps.exists?
+      # DEBUG: See what record is actually causing the hit
+      Rails.logger.debug "CONFLICT FOUND: #{overlaps.first.inspect}"
       errors.add(:base, "This unit is already booked for the selected dates.")
     end
   end

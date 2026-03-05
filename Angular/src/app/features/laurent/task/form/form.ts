@@ -80,13 +80,14 @@ export class TaskFormComponent {
           });
 
           this.form.patchValue({
-          title: this.task()?.title,
-          description: this.task()?.description,
-          difficulty: this.task()?.difficulty,
-          priority: this.task()?.priority,
-          reusable: this.task()?.reusable
+            title: this.task()?.title,
+            description: this.task()?.description,
+            difficulty: this.task()?.difficulty,
+            priority: this.task()?.priority,
+            reusable: this.task()?.reusable
         });
-    }
+    }else
+    {
 
      this.taskService.listTasks().subscribe(data => { 
       
@@ -107,8 +108,10 @@ export class TaskFormComponent {
         difficulty: selectedTask.difficulty,
         priority: selectedTask.priority,
         reusable: selectedTask.reusable
-        });
-    });
+          });
+      });
+
+    }
 
     
   }

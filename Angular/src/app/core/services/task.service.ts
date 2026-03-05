@@ -30,7 +30,8 @@ export class TaskService {
   listTasks(
       search?: string,
       order?: string,
-      status?: string
+      status?: string,
+      orderBy?: string
       ) {
 
         let params: any = {};
@@ -38,6 +39,7 @@ export class TaskService {
           if(search) params.search = search;
           if(order) params.order = order;
           if(status) params.status = status;
+          if(orderBy) params.orderBy = orderBy
     
         return this.http.get<ApiResponse<Task[]>>(`api/tasks/`, { params } ).pipe(
              map(response => {

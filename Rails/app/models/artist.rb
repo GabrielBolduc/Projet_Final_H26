@@ -6,13 +6,12 @@ class Artist < ApplicationRecord
   scope :search, ->(query) { where("name LIKE ?", "%#{query}%") }
   scope :by_genre, ->(genre) { where("genre LIKE ?", "%#{genre}%") }
   scope :headliners, -> { where(popularity: [ 4, 5 ]).order(popularity: :desc) }
-  scope :with_performances, -> { joins(:performances).distinct }
 
   before_validation :strip_whitespace
 
   validates :name, presence: true, length: { maximum: 100 }, uniqueness: true
   validates :genre, presence: true, length: { maximum: 50 }
-  validates :bio, length: { maximum: 2000 }
+  validates :bio, length: { maximum: 1600 }
   validates :popularity, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
 
   validate :validate_image_format

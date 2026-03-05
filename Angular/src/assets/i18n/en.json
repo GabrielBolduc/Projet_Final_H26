@@ -147,7 +147,7 @@
     "UPLOAD_IMAGE": "Choose a photo",
     "IMAGE_PREVIEW_ALT": "Artist photo preview",
     "BIO_LABEL": "Biography",
-    "BIO_MAX": "Biography is too long (max 2000 characters)",
+    "BIO_MAX": "Biography is too long (max 1600 characters)",
     "CANCEL": "Cancel",
     "SAVING": "Saving...",
     "EDIT_BTN": "Update",

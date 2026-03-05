@@ -49,7 +49,7 @@ export class ArtistFormComponent implements OnInit {
     this.artistForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       genre: ['', [Validators.required, Validators.maxLength(50)]],
-      bio: ['', [Validators.maxLength(2000)]],
+      bio: ['', [Validators.maxLength(1600)]],
       popularity: [3, [Validators.required, Validators.min(0), Validators.max(5)]]
     });
   }
@@ -75,7 +75,7 @@ export class ArtistFormComponent implements OnInit {
     } catch (error) {
       this.serverErrors.set(this.errorHandler.parseRailsErrors(error));
       this.snackBar.open(
-        this.translate.instant('ARTIST.LOAD_ERROR') || 'Erreur de chargement', 
+        this.translate.instant('ARTIST.LOAD_ERROR'), 
         this.translate.instant('COMMON.CLOSE'), 
         { duration: 4000 }
       );

@@ -1,27 +1,12 @@
 class Api::PackagesController < Api::AdminController
   rescue_from ActiveRecord::RecordNotFound, with: :not_found_response
+  skip_before_action :require_admin!, only: [ :index, :show ]
   before_action :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_package, only: [ :show, :update, :destroy ]
 
   # GET /api/packages
   def index
-    packages = if admin_user?
-      Package.admin_scope(
-        festival_id: params[:festival_id],
-        status: params[:status],
-        query: params[:q],
-        sort: params[:sort],
-        categories: params[:categories],
-        sold_out: params[:sold_out]
-      )
-    else
-      Package.admin_scope(
-        status: Festival.statuses[:ongoing],
-        query: params[:q],
-        sort: params[:sort],
-        categories: params[:categories]
-      )
-    end
+    packages = Package.admin_scope(**index_scope_options)
 
     render json: {
       status: "success",
@@ -89,16 +74,34 @@ class Api::PackagesController < Api::AdminController
   private
 
   def set_package
-    scope = Package.includes(:festival, :tickets)
+    scope = Package.includes(:festival)
     scope = scope.joins(:festival).where(festivals: { status: Festival.statuses[:ongoing] }) unless admin_user?
     @package = scope.find(params[:id])
+  end
+
+  def index_scope_options
+    options = {
+      query:      params[:q],
+      sort:       params[:sort],
+      categories: params[:categories]
+    }
+
+    if admin_user?
+      options.merge(
+        festival_id: params[:festival_id],
+        status:      params[:status],
+        sold_out:    params[:sold_out]
+      )
+    else
+      options.merge(status: Festival.statuses[:ongoing])
+    end
   end
 
   def package_params
     params.require(:package).permit(
       :title, :description, :price, :quota,
       :category, :valid_at, :expired_at,
-      :festival_id, :image
+      :festival_id, :image, :discount_min_quantity, :discount_rate
     )
   end
 

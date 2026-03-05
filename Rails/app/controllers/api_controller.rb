@@ -24,6 +24,13 @@ class ApiController < ApplicationController
     }, status: :ok
   end
 
+  def render_validation_success(record)
+    render json: {
+      status: "success",
+      data: record
+    }, status: :ok
+  end
+
   def render_error(message)
     render json: {
       status: "error",

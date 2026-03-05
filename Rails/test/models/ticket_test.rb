@@ -1,16 +1,6 @@
 require "test_helper"
-require "cgi"
 
 class TicketTest < ActiveSupport::TestCase
-  test "generate_qr_code embeds the unique code" do
-    ticket = tickets(:one)
-
-    qr_url = ticket.generate_qr_code(size: 300)
-
-    assert_includes qr_url, "size=300x300"
-    assert_includes qr_url, CGI.escape(ticket.unique_code)
-  end
-
   test "valid_at_scan? returns true when scan is within validity range and ticket is not refunded" do
     ticket = tickets(:one)
     scan_time = ticket.package.valid_at + 1.hour

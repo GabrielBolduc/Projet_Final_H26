@@ -4,40 +4,43 @@ class Api::TasksController < ApiController
     before_action :require_admin!, only: [ :create, :update, :destroy ]
 
 
-    def index
-        # order = params[:order] == 'desc' ? :asc : :desc
+   def index
+        @tasks = Task.all
 
-        @tasks = Task.all.order(updated_at: :desc)
-
-
-
-        if params[:completed].present?
-        @tasks = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id))
+        if params[:search].present?
+            @tasks = @tasks.where("title LIKE ?", "%#{params[:search]}%")
         end
 
-        if params[:user_name].present?
-          user_name = params[:user_name]
-          @tasks = @tasks.joins(affectations: :user).where("users.name ILIKE ?", "%#{user_name}%").order(updated_at: order)
+        if params[:status] == "completed"
+            @tasks = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id))
         end
 
-        if params[:title].present?
-          title = params[:title]
-          @tasks = @tasks.where("tasks.title ILIKE ?", "%#{title}%").order(updated_at: order)
+
+        case params[:orderBy]
+
+        when "affectation"
+            @tasks = @tasks.left_joins(:affectations)
+                        .group("tasks.id")
+                        .order("COUNT(affectations.id)")
+
+        when "priority"
+            @tasks = @tasks.order(:priority)
+
+        when "difficulty"
+            @tasks = @tasks.order(:difficulty)
+
+        else
+            @tasks = @tasks.order(:updated_at)
+
         end
 
-        if params[:difficulty].present?
-            difficulty = params[:difficulty]
-            @tasks = @tasks.where(difficulty: difficulty).order(updated_at: order)
-        end
-
-        if params[:priority].present?
-            priority = params[:priority]
-            @tasks = @tasks.where(priority: priority).order(updated_at: order)
+        if params[:order] == "desc"
+            @tasks = @tasks.reverse_order
         end
 
         render json: {
-        status: "success",
-        data: @tasks.as_json(task_json)
+            status: "success",
+            data: @tasks.as_json(task_json)
         }, status: :ok
     end
     def show
@@ -93,7 +96,7 @@ class Api::TasksController < ApiController
         {
             success: true,
             only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
-             methods: [ :file_url ]
+             methods: [ :file_url, :affectations_count, :completed ]
         }
     end
 

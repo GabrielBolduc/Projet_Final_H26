@@ -1,147 +1,120 @@
 <mat-card class="perf-card">
-  <h2>{{ 'RESERVATIONS.FORM.TITLE' | translate }}</h2>
+  <button mat-stroked-button 
+          type="button" 
+          class="fill-info-btn" 
+          (click)="fillWithMyInfo()">
+    <mat-icon>person</mat-icon>
+    Fill with my info
+  </button>
 
-  <!-- Header Summary: Accommodation Details -->
-  @if (accommodation(); as acc) {
-  <div class="summary-header">
-    <mat-icon color="primary">event</mat-icon>
-    <div class="header-text">
-      <strong>{{ acc.name }}</strong>
-      <p>{{ acc.address }}</p>
-      @if (acc.start_at && acc.end_at) {
-      <small class="fest-hint">
-        {{ 'FESTIVAL' | translate }}: {{ acc.start_at | date:'mediumDate' }} - {{ acc.end_at | date:'mediumDate' }}
-      </small>
-      }
-    </div>
-  </div>
-  }
+  <h2>{{ isEditMode() ? 'Edit' : 'New' }} Reservation</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="perf-form">
-
-    <!-- Error Display (Matches AccommodationsForm logic) -->
+    
+    <!-- Error Handling -->
     @if (serverErrors().length > 0) {
-    <div class="form-error">
-      @for (error of serverErrors(); track $index) {
-      <div>{{ error }}</div>
-      }
-    </div>
+      <div class="form-error">
+        @for (error of serverErrors(); track error) {
+          <p>{{ error }}</p>
+        }
+      </div>
     }
 
-    
+    <!-- Row 1: Contact Info -->
     <div class="grid-row-2">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'RESERVATIONS.FORM.NAME' | translate }}</mat-label>
-        <input matInput formControlName="reservation_name" placeholder="John Doe" maxlength="100" #nameInput>
-        <mat-icon matSuffix>person</mat-icon>
-        <mat-hint align="end">{{ nameInput.value.length }} / 100</mat-hint>
-        @if (form.get('reservation_name')?.hasError('required')) {
-        <mat-error>{{ 'COMMON.ERRORS.REQUIRED' | translate }}</mat-error>
-        }
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'RESERVATION.NAME' | translate }}</mat-label>
+        <input matInput formControlName="reservation_name" placeholder="John Doe">
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'RESERVATIONS.FORM.PHONE' | translate }}</mat-label>
-        <input matInput type="tel" formControlName="phone_number" placeholder="+1 819 555-0123">
-        <mat-icon matSuffix>phone</mat-icon>
-        @if (form.get('phone_number')?.hasError('pattern')) {
-        <mat-error>{{ 'RESERVATIONS.FORM.INVALID_PHONE' | translate }}</mat-error>
-        }
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'RESERVATION.PHONE' | translate }}</mat-label>
+        <input matInput formControlName="phone_number" placeholder="+1 ...">
       </mat-form-field>
     </div>
 
-    <!-- Row 2: Unit Choice & Occupancy -->
+    <!-- Row 3: Unit Selection (Scoped to Accommodation) & Capacity -->
     <div class="grid-row-2">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'RESERVATIONS.FORM.SELECT_UNIT' | translate }}</mat-label>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'RESERVATION.SELECT_UNIT' | translate }}</mat-label>
         <mat-select formControlName="unit_id">
           @for (unit of units(); track unit.id) {
-          <mat-option [value]="unit.id">
-            {{ unit.type }} ({{ unit.cost_person_per_night | currency }}/pp)
-          </mat-option>
+            <mat-option [value]="unit.id">
+              {{ 'UNITS.TYPES.' + formatUnitType(unit.type) | translate }} — 
+              {{ unit.cost_person_per_night | currency }}
+            </mat-option>
           }
         </mat-select>
-        @if (form.get('unit_id')?.hasError('required')) {
-        <mat-error>{{ 'COMMON.ERRORS.REQUIRED' | translate }}</mat-error>
+        @if (units().length === 0) {
+          <mat-hint>{{ 'RESERVATION.NO_UNITS_AVAILABLE' | translate }}</mat-hint>
         }
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'RESERVATIONS.FORM.GUESTS' | translate }}</mat-label>
-        <input matInput type="number" formControlName="nb_of_people" [min]="1">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'RESERVATION.PEOPLE' | translate }}</mat-label>
+        <input matInput 
+              type="number" 
+              formControlName="nb_of_people" 
+              min="1" 
+              [max]="maxPeopleForSelectedUnit">
         <mat-icon matSuffix>groups</mat-icon>
 
-        @if (selectedUnit(); as unit) {
-        <mat-hint>Max capacity for {{ unit.type }}: {{ unit.max_capacity }}</mat-hint>
+        <!-- Informative hint about the unit's limit -->
+        @if (form.get('unit_id')?.value) {
+          <mat-hint>
+            {{ 'RESERVATION.MAX_ALLOWED' | translate }}: {{ maxPeopleForSelectedUnit }}
+          </mat-hint>
         }
 
+        <!-- Error message if they type a number too high -->
         @if (form.get('nb_of_people')?.hasError('max')) {
-        <mat-error>Max {{ selectedUnit()?.max_capacity }} allowed</mat-error>
-        }
-        @if (form.get('nb_of_people')?.hasError('min')) {
-        <mat-error>Minimum 1 guest required</mat-error>
-        }
-      </mat-form-field>
-    </div>
-
-    <!-- Row 3: Date Range (Constraints handled by [min], [max], [dateFilter]) -->
-    <div class="grid-row-1">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>{{ 'RESERVATIONS.FORM.DATES' | translate }}</mat-label>
-
-        <mat-date-range-input [rangePicker]="picker" [min]="minFestDate()" [max]="maxFestDate()" [dateFilter]="dateFilter">
-          <mat-date-range-picker #picker [startAt]="startAtDate()"></mat-date-range-picker>
-          <input matEndDate formControlName="departure_at" [placeholder]="'RESERVATIONS.FORM.DEPARTURE' | translate">
-        </mat-date-range-input>
-
-        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-date-range-picker #picker></mat-date-range-picker>
-
-        <!-- Native Material Validation Errors -->
-        @if (form.get('arrival_at')?.hasError('matDatepickerMin')) {
-        <mat-error>Arrival must be within 3 days of festival start.</mat-error>
-        }
-        @if (form.get('departure_at')?.hasError('matDatepickerMax')) {
-        <mat-error>Departure must be within 3 days of festival end.</mat-error>
-        }
-        @if (form.get('arrival_at')?.hasError('required') || form.get('departure_at')?.hasError('required')) {
-        <mat-error>{{ 'COMMON.ERRORS.REQUIRED' | translate }}</mat-error>
+          <mat-error>
+            {{ 'RESERVATION.ERRORS.TOO_MANY_PEOPLE' | translate }} (Max: {{ maxPeopleForSelectedUnit }})
+          </mat-error>
         }
       </mat-form-field>
     </div>
 
-    <!-- Pricing Highlight Box -->
-    @if (totalPrice() > 0) {
-    <div class="price-box">
-      <div class="price-info">
-        <span class="price-label">{{ 'RESERVATIONS.FORM.TOTAL' | translate }}</span>
-        <span class="price-value">{{ totalPrice() | currency }}</span>
-      </div>
-    </div>
+    <!-- Arrival Picker -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'RESERVATION.ARRIVAL' | translate }}</mat-label>
+      <input matInput 
+            [matDatepicker]="arrPicker" 
+            [matDatepickerFilter]="dateFilter"
+            formControlName="arrival_at">
+      <mat-datepicker-toggle matSuffix [for]="arrPicker"></mat-datepicker-toggle>
+      <!-- Bind startAt to your minDate signal -->
+      <mat-datepicker #arrPicker [startAt]="minDate()"></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Departure Picker -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'RESERVATION.DEPARTURE' | translate }}</mat-label>
+      <input matInput 
+            [matDatepicker]="depPicker" 
+            [matDatepickerFilter]="dateFilter"
+            formControlName="departure_at">
+      <mat-datepicker-toggle matSuffix [for]="depPicker"></mat-datepicker-toggle>
+      <mat-datepicker #depPicker [startAt]="minDate()"></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Date Validation Message -->
+    @if (form.errors?.['dateRangeInvalid'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
+      <p class="form-error" style="text-align: left; margin-top: -10px;">
+        {{ 'RESERVATION.ERRORS.INVALID_RANGE' | translate }}
+      </p>
     }
 
     <!-- Form Actions -->
     <div class="form-actions">
-      <button mat-stroked-button type="button" routerLink="/accommodations" class="action-btn cancel-btn">
+      <button mat-button class="action-btn" type="button" routerLink="/reservations">
         {{ 'COMMON.CANCEL' | translate }}
       </button>
-      <button mat-flat-button color="primary" type="submit" class="action-btn submit-btn" [disabled]="form.invalid || isLoading()">
-        {{ (isLoading() ? 'COMMON.PROCESSING' : 'RESERVATIONS.FORM.CONFIRM') | translate }}
+      <button mat-raised-button color="primary" class="action-btn" type="submit" 
+              [disabled]="form.invalid || isLoading() || units().length === 0">
+        {{ (isEditMode() ? 'COMMON.SAVE' : 'COMMON.CREATE') | translate }}
       </button>
     </div>
+
   </form>
 </mat-card>
-
-<!-- Reusable Dialog Template -->
-<ng-template #confirmDialogTemplate>
-  <h2 mat-dialog-title>{{ 'COMMON.CONFIRMATION' | translate }}</h2>
-  <mat-dialog-content>
-    <p>{{ 'RESERVATIONS.FORM.BOOK_CONFIRM' | translate }}</p>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
-    <button mat-flat-button color="primary" [mat-dialog-close]="true">
-      {{ 'COMMON.OK' | translate }}
-    </button>
-  </mat-dialog-actions>
-</ng-template>

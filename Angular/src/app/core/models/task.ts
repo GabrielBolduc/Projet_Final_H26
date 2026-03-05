@@ -6,6 +6,8 @@ export class Task {
     priority: number
     reusable: boolean
     file_url: string
+    affectations_count:number
+    completed: boolean
     
     constructor(
         title: string,
@@ -14,7 +16,11 @@ export class Task {
         priority: number,
         reusable: boolean,
         id: number,
-        file_url: string
+        file_url: string,
+        affectations_count: number,
+        completed: boolean
+
+
     ) {
         this.title = title;
         this.description = description;
@@ -23,6 +29,8 @@ export class Task {
         this.reusable = reusable;
         this.id = id;
         this.file_url = file_url;
+        this.affectations_count=affectations_count;
+        this.completed=completed
         
     }
 }

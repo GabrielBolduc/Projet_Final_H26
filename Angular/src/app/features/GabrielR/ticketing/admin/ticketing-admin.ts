@@ -41,12 +41,14 @@ export class AdminTicketingComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private translate = inject(TranslateService);
+  private initialQueryParams = this.route.snapshot.queryParams;
+  private readonly allowedSortOptions: PackageSort[] = [ 'date_asc', 'date_desc', 'price_asc', 'price_desc' ];
 
   private initialized = false;
 
-  searchQuery = signal('');
-  sortOption = signal<PackageSort>('date_asc');
-  soldOutOnly = signal(false);
+  searchQuery = signal(this.initialQueryParams['q'] ?? '');
+  sortOption = signal<PackageSort>(this.parseInitialSort(this.initialQueryParams['sort']));
+  soldOutOnly = signal(this.initialQueryParams['sold_out'] === 'true');
 
   ongoingFestivalResource = resource({
     loader: () => firstValueFrom(this.festivalService.getFestivals('ongoing'))
@@ -54,8 +56,12 @@ export class AdminTicketingComponent implements OnInit {
 
   currentFestivalId = computed<number | undefined>(() => this.ongoingFestivalResource.value()?.[0]?.id);
 
-  activePackagesResource = resource<Package[], PackageFilters>({
+  activePackagesResource = resource<Package[], PackageFilters | undefined>({
     params: () => {
+      if (this.ongoingFestivalResource.isLoading()) {
+        return undefined;
+      }
+
       const festivalId = this.currentFestivalId();
 
       return {
@@ -66,7 +72,13 @@ export class AdminTicketingComponent implements OnInit {
         sold_out: this.soldOutOnly() ? 'true' : undefined
       };
     },
-    loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
+    loader: ({ params }) => {
+      if (!params) {
+        return Promise.resolve([]);
+      }
+
+      return firstValueFrom(this.packageService.getPackages(params));
+    }
   });
 
   archivedPackagesResource = resource<Package[], PackageFilters>({
@@ -107,18 +119,6 @@ export class AdminTicketingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-
-    if (params['q']) {
-      this.searchQuery.set(params['q']);
-    }
-
-    if (params['sort']) {
-      this.sortOption.set(params['sort'] as PackageSort);
-    }
-
-    this.soldOutOnly.set(params['sold_out'] === 'true');
-
     this.initialized = true;
   }
 
@@ -165,5 +165,14 @@ export class AdminTicketingComponent implements OnInit {
       closeLabel,
       { duration }
     );
+  }
+
+  private parseInitialSort(value: unknown): PackageSort {
+    const sort = String(value ?? '').trim();
+    if (this.allowedSortOptions.includes(sort as PackageSort)) {
+      return sort as PackageSort;
+    }
+
+    return 'date_asc';
   }
 }

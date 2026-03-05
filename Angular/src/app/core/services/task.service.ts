@@ -27,9 +27,21 @@ export class TaskService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  listTasks(): Observable<Task[]> {
+  listTasks(
+      search?: string,
+      order?: string,
+      status?: string,
+      orderBy?: string
+      ) {
+
+        let params: any = {};
+
+          if(search) params.search = search;
+          if(order) params.order = order;
+          if(status) params.status = status;
+          if(orderBy) params.orderBy = orderBy
     
-        return this.http.get<ApiResponse<Task[]>>('api/tasks/' ).pipe(
+        return this.http.get<ApiResponse<Task[]>>(`api/tasks/`, { params } ).pipe(
              map(response => {
               console.log(response)
               if (response.status === 'success') {

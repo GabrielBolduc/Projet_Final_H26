@@ -27,17 +27,29 @@
         </div>
       }
 
-      <p class="price">
-        {{ totalPrice() | currency:'CAD':'symbol-narrow' }}
-        @if (quantity() > 1) {
-          <span class="price-breakdown">
-            ({{ quantity() }} × {{ pkg.price | currency:'CAD':'symbol-narrow' }})
-          </span>
+      <div class="pricing-summary" [class.has-discount-rule]="discountHint()">
+        @if (discount() > 0) {
+          <div class="pricing-row total-row" [class.has-discount]="discount() > 0">
+            <span>{{ 'TICKETING_PUBLIC.SUBTOTAL' | translate }} :</span>
+            <span>
+              {{ subtotal() | currency:'CAD':'symbol-narrow' }}
+              <span class="price-breakdown">({{ quantity() }} × {{ (selectedPackage()?.price ?? 0) | currency:'CAD':'symbol-narrow' }})</span>
+            </span>
+          </div>
+          <div class="pricing-row discount-row">
+            <span>{{ 'TICKETING_PUBLIC.DISCOUNT' | translate }} ({{ discountHint()?.rate | percent }}) :</span>
+            <span>-{{ discount() | currency:'CAD':'symbol-narrow' }}</span>
+          </div>
         }
-      </p>
-      @if (packageAvailability().remaining <= 0) {
-        <p class="sold-out">{{ 'TICKETING_PUBLIC.SOLD_OUT' | translate }}</p>
-      }
+        <div class="pricing-row total-row">
+          <span class="price">{{ totalPrice() | currency:'CAD':'symbol-narrow' }}</span>
+          @if (quantity() > 1 && discount() === 0) {
+            <span class="price-breakdown">
+              ({{ quantity() }} × {{ (selectedPackage()?.price ?? 0) | currency:'CAD':'symbol-narrow' }})
+            </span>
+          }
+        </div>
+      </div>
 
       @if (!currentUser()) {
         <p class="notice">{{ 'TICKETING_PUBLIC.LOGIN_REQUIRED' | translate }}</p>
@@ -65,6 +77,12 @@
               </button>
             </div>
           </div>
+
+          @if (discountHint(); as hint) {
+            <p class="discount-hint">
+              {{ 'TICKETING_PUBLIC.DISCOUNT_HINT' | translate: { min: hint.minQty, rate: hint.rate | percent } }}
+            </p>
+          }
 
           @if (quantityControl?.hasError('min') && quantityControl?.touched) {
             <p class="error">{{ 'TICKETING_PUBLIC.INVALID_QUANTITY' | translate }}</p>

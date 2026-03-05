@@ -28,7 +28,7 @@
 
       <mat-form-field appearance="outline" class="sort-field">
         <mat-label>{{ 'TICKETING_PUBLIC.SORT_BY' | translate }}</mat-label>
-        <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)">
+        <mat-select [ngModel]="sortOption()" (ngModelChange)="sortOption.set($event)" [placeholder]="'TICKETING_PUBLIC.SORT_BY' | translate">
           <mat-option value="price_asc">{{ 'TICKETING_PUBLIC.PRICE_ASC' | translate }}</mat-option>
           <mat-option value="price_desc">{{ 'TICKETING_PUBLIC.PRICE_DESC' | translate }}</mat-option>
           <mat-option value="date_asc">{{ 'TICKETING_PUBLIC.DATE_ASC' | translate }}</mat-option>

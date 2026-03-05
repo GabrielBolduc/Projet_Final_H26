@@ -15,7 +15,6 @@
 
         t.check_constraint "arrival_at < departure_at", name: "chk_dates"
         t.check_constraint "nb_of_people > 0", name: "chk_guests"
-        t.check_constraint "phone_number REGEXP '^[0-9\\+\\-\\s\\(\\)]+$'", name: "chk_phone_valid"
         t.check_constraint "TRIM(reservation_name) <> ''", name: "chk_name_not_empty"
       end
     end

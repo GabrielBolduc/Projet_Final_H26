@@ -55,6 +55,28 @@ export class TicketingOrderDetailComponent {
     return this.errorHandler.parseRailsErrors(err).join(' | ');
   });
 
-  protected isRefunded = isRefunded;
-  protected isExpired = isExpired;
+  protected ticketStatusClass(ticket: Order['tickets'][number]): 'refunded' | 'expired' | 'active' {
+    if (isRefunded(ticket)) {
+      return 'refunded';
+    }
+
+    if (isExpired(ticket)) {
+      return 'expired';
+    }
+
+    return 'active';
+  }
+
+  protected ticketStatusLabel(ticket: Order['tickets'][number]): string {
+    const statusClass = this.ticketStatusClass(ticket);
+    if (statusClass === 'refunded') {
+      return 'TICKETING_PUBLIC.REFUNDED';
+    }
+
+    if (statusClass === 'expired') {
+      return 'TICKETING_PUBLIC.EXPIRED';
+    }
+
+    return 'TICKETING_PUBLIC.ACTIVE';
+  }
 }

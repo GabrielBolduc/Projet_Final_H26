@@ -1,12 +1,13 @@
 <h2 mat-dialog-title>
   {{ isEditMode ? 'Modifier Affectation' : 'Nouvelle Affectation' }}
+
+ 
 </h2>
 
 <mat-dialog-content>
 
   <form [formGroup]="form">
 
-    <!-- Start -->
     <mat-form-field appearance="outline" class="full-width">
 
       <mat-label>Début prévu</mat-label>
@@ -21,7 +22,6 @@
     </mat-form-field>
 
 
-    <!-- End -->
     <mat-form-field appearance="outline" class="full-width">
 
       <mat-label>Fin prévue</mat-label>
@@ -34,7 +34,6 @@
     </mat-form-field>
 
 
-    <!-- Responsability -->
     <mat-form-field appearance="outline" class="full-width">
 
       <mat-label>Responsabilité</mat-label>

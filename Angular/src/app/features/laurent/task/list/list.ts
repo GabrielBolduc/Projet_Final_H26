@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Task } from '@core/models/task';
 import { TaskService } from '@core/services/task.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,11 +11,17 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 @Component({
   selector: 'app-list',
-  imports: [TranslateModule,CommonModule, MatDialogModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [MatFormFieldModule,
+MatInputModule,
+MatSelectModule,TranslateModule,CommonModule, MatDialogModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './list.html',
   styleUrl: './list.css',
 })
@@ -31,13 +37,22 @@ export class TaskListComponent implements OnInit {
 
   tasks = signal<Task[]>([]);
 
-  constructor(private router: Router) {}
+  search = signal('');
+  order = signal('desc');
+  orderBy = signal('');
+
+  status = signal('');
+
+  constructor(
+ private router: Router,
+ private route: ActivatedRoute
+) {}
 
   ngOnInit() {
-    this.taskService.listTasks().subscribe(data => { 
-      console.log('Tâches reçues : ', data);
-      this.tasks.set(data);
-    });
+
+    this.loadTasks()
+
+    
   }
 
 
@@ -64,10 +79,8 @@ export class TaskListComponent implements OnInit {
         try {
           await firstValueFrom(this.taskService.deleteTask(id));
           this.snackBar.open('tâche supprimé avec succès.', 'Fermer', { duration: 3000 });
-          await this.taskService.listTasks().subscribe(data => { 
-              console.log('Tâches reçues : ', data);
-              this.tasks.set(data);
-            });
+          await  this.loadTasks()
+          
           
         } catch (err) {
           this.showErrorsAsSnackBar(err);
@@ -80,6 +93,38 @@ export class TaskListComponent implements OnInit {
     if (errors.length > 0) {
       this.snackBar.open(errors.join(' | '), 'Fermer', { duration: 5000 });
     }
+  }
+
+  updateQuery(params: any) {
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: params,
+      queryParamsHandling: 'merge'
+    });
+
+  }
+
+  loadTasks() {
+
+     this.route.queryParamMap.subscribe(params => {
+
+    this.search.set(params.get('search') ?? '');
+    this.order.set(params.get('order') ?? 'desc');
+    this.status.set(params.get('status') ?? '');
+    this.orderBy.set(params.get('orderBy') ?? '');
+
+    this.taskService.listTasks(this.search(),this.order(),this.status(),this.orderBy()).subscribe(data => {
+
+      this.tasks.set(data);
+
+    });
+
+  });
+
+
+     
+
   }
 
 }

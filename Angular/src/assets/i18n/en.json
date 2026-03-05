@@ -329,7 +329,11 @@
     "EMAIL": "Email",
     "PHONE": "Phone",
     "CANCEL": "Cancel",
-    "DATE": "Date"
+    "DATE": "Date",
+    "DISCOUNT_HINT": "Buy {{min}} or more tickets and save {{rate}}!",
+    "SUBTOTAL": "Subtotal",
+    "DISCOUNT": "Discount",
+    "TOTAL": "Total"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Edit Package",
@@ -372,7 +376,12 @@
     "UPDATE": "Update",
     "SAVE": "Save",
     "PROCESSING": "Processing...",
-    "GENERIC_ERROR": "An error occurred."
+    "GENERIC_ERROR": "An error occurred.",
+    "DISCOUNT_MIN_QUANTITY": "Minimum quantity for discount",
+    "DISCOUNT_MIN_QUANTITY_INVALID": "Minimum quantity must be at least 2",
+    "DISCOUNT_RATE": "Discount rate",
+    "DISCOUNT_RATE_INVALID": "Rate must be between 1 and 100",
+    "DISCOUNT_INCOMPLETE": "Both discount rate and minimum quantity must be set together"
   },
   "TACHES": {
     "TITLE": "Tasks",
@@ -397,7 +406,21 @@
     "TITLE_CREATE": "New Task",
     "TITLE_UPDATE": "Edit Task",
     "REUSABLE_TASKS": "Reusable Tasks",
-    "SELECT_REUSABLE": "Select reusable tasks"
+    "SELECT_REUSABLE": "Select reusable tasks",
+     "NOTFOUND": "No task found",
+    "SSF": {
+
+      "DIFFICULTY": "Difficulty",
+      "PRIORITY":"Priority",
+      "AFFECTATION": "number of affectation",
+      "ORDERBY": "Order by",
+      "RECHERCHE": "Search",
+      "STATUS": "Status",
+      "ALL": "All",
+      "COMPLETER": "Completed",
+      "ORDER": "Order"
+    }
+
   },
   "AFFECTATIONS": {
     "ADD": "Add Affectation",

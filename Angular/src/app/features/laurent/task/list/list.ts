@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Task } from '@core/models/task';
 import { TaskService } from '@core/services/task.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -11,11 +11,17 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ErrorHandlerService } from '@core/services/error-handler.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom } from 'rxjs';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+
 
 
 @Component({
   selector: 'app-list',
-  imports: [TranslateModule,CommonModule, MatDialogModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [MatFormFieldModule,
+MatInputModule,
+MatSelectModule,TranslateModule,CommonModule, MatDialogModule, MatCardModule, MatButtonModule, MatIconModule, RouterLink],
   templateUrl: './list.html',
   styleUrl: './list.css',
 })
@@ -31,7 +37,14 @@ export class TaskListComponent implements OnInit {
 
   tasks = signal<Task[]>([]);
 
-  constructor(private router: Router) {}
+  search = signal('');
+  order = signal('desc');
+  status = signal('');
+
+  constructor(
+ private router: Router,
+ private route: ActivatedRoute
+) {}
 
   ngOnInit() {
     this.taskService.listTasks().subscribe(data => { 
@@ -81,5 +94,33 @@ export class TaskListComponent implements OnInit {
       this.snackBar.open(errors.join(' | '), 'Fermer', { duration: 5000 });
     }
   }
+
+  updateQuery(params: any) {
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: params,
+      queryParamsHandling: 'merge'
+    });
+
+  }
+
+  loadTasks() {
+
+    const formData = new FormData();
+
+        formData.append('[title]',this.search());
+        formData.append('[description]',this.order());
+        formData.append('[difficulty]', this.status());
+      
+
+
+    this.taskService.listTasks(this.search(),this.order(),this.status()).subscribe(data => {
+
+    this.tasks.set(data);
+
+  });
+
+}
 
 }

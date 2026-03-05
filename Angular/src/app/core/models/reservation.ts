@@ -17,10 +17,13 @@ export interface Reservation {
   created_at?: string | Date;
   updated_at?: string | Date;
   unit?: {
+    id: number;    
+    accommodation_id: number;
     type: string;
     image_url: string;
     cost_person_per_night: number;
     accommodation?: {
+      id: number; 
       name: string;
       address: string;
       category: string;

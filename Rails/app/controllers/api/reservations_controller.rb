@@ -5,13 +5,16 @@ class Api::ReservationsController < ApiController
   def index
     return render json: { status: "success", data: [] } if current_user.nil?
 
-    query = if admin_user?
+    query = if params[:unit_id].present?
+              # Allow seeing all busy dates for a specific unit
+              Reservation.where(unit_id: params[:unit_id]).active
+            elsif admin_user?
               Reservation.all
-    elsif params[:history] == "true"
+            elsif params[:history] == "true"
               current_user.reservations.where(status: [ :completed, :cancelled ])
-    else
+            else
               current_user.reservations.active
-    end
+            end
 
     @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
 
@@ -30,7 +33,7 @@ class Api::ReservationsController < ApiController
 
 
   def show
-    render_validation_success(@reservation)
+    render json: { status: "success", data: format_reservation_json(@reservation) }
   end
 
   def create
@@ -81,5 +84,15 @@ class Api::ReservationsController < ApiController
       :arrival_at, :departure_at, :nb_of_people,
       :reservation_name, :phone_number
     )
+  end
+
+  def format_reservation_json(res)
+    json = res.as_json(include: :festival)
+    if res.unit
+      json[:unit] = res.unit.formatted_json(request.base_url).merge({
+        accommodation: res.unit.accommodation.as_json
+      })
+    end
+    json
   end
 end

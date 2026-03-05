@@ -33,36 +33,6 @@
       </mat-form-field>
     </div>
 
-    <!-- Arrival Picker -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'RESERVATION.ARRIVAL' | translate }}</mat-label>
-      <input matInput 
-            [matDatepicker]="arrPicker" 
-            [matDatepickerFilter]="dateFilter"
-            formControlName="arrival_at">
-      <mat-datepicker-toggle matSuffix [for]="arrPicker"></mat-datepicker-toggle>
-      <!-- Bind startAt to your minDate signal -->
-      <mat-datepicker #arrPicker [startAt]="minDate()"></mat-datepicker>
-    </mat-form-field>
-
-    <!-- Departure Picker -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ 'RESERVATION.DEPARTURE' | translate }}</mat-label>
-      <input matInput 
-            [matDatepicker]="depPicker" 
-            [matDatepickerFilter]="dateFilter"
-            formControlName="departure_at">
-      <mat-datepicker-toggle matSuffix [for]="depPicker"></mat-datepicker-toggle>
-      <mat-datepicker #depPicker [startAt]="minDate()"></mat-datepicker>
-    </mat-form-field>
-
-    <!-- Date Validation Message -->
-    @if (form.errors?.['dateRangeInvalid'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
-      <p class="form-error" style="text-align: left; margin-top: -10px;">
-        {{ 'RESERVATION.ERRORS.INVALID_RANGE' | translate }}
-      </p>
-    }
-
     <!-- Row 3: Unit Selection (Scoped to Accommodation) & Capacity -->
     <div class="grid-row-2">
       <mat-form-field appearance="outline">
@@ -104,6 +74,36 @@
         }
       </mat-form-field>
     </div>
+
+    <!-- Arrival Picker -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'RESERVATION.ARRIVAL' | translate }}</mat-label>
+      <input matInput 
+            [matDatepicker]="arrPicker" 
+            [matDatepickerFilter]="dateFilter"
+            formControlName="arrival_at">
+      <mat-datepicker-toggle matSuffix [for]="arrPicker"></mat-datepicker-toggle>
+      <!-- Bind startAt to your minDate signal -->
+      <mat-datepicker #arrPicker [startAt]="minDate()"></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Departure Picker -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'RESERVATION.DEPARTURE' | translate }}</mat-label>
+      <input matInput 
+            [matDatepicker]="depPicker" 
+            [matDatepickerFilter]="dateFilter"
+            formControlName="departure_at">
+      <mat-datepicker-toggle matSuffix [for]="depPicker"></mat-datepicker-toggle>
+      <mat-datepicker #depPicker [startAt]="minDate()"></mat-datepicker>
+    </mat-form-field>
+
+    <!-- Date Validation Message -->
+    @if (form.errors?.['dateRangeInvalid'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
+      <p class="form-error" style="text-align: left; margin-top: -10px;">
+        {{ 'RESERVATION.ERRORS.INVALID_RANGE' | translate }}
+      </p>
+    }
 
     <!-- Form Actions -->
     <div class="form-actions">

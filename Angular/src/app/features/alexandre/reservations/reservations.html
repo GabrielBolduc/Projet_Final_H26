@@ -3,7 +3,7 @@
     <mat-nav-list class="mat-nav-list">
       
       <ng-container *ngIf="activeReservation(); else noReservation">
-        <a [routerLink]="['/reservations', activeReservation()?.id, 'edit']" class="card-link">
+        <a [routerLink]="['/reservations-form', activeReservation()?.id]" class="card-link">
           <div class="fest-card">
             <div class="nav-icon-container"><mat-icon class="nav-icon">edit</mat-icon></div>
             <div class="nav-label"><span class="title">{{ 'RESERVATIONS.SIDEBAR.EDIT' | translate }}</span></div>

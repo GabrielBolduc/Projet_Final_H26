@@ -1,5 +1,3 @@
-require "cgi"
-
 class Ticket < ApplicationRecord
   belongs_to :order
   belongs_to :package
@@ -14,13 +12,6 @@ class Ticket < ApplicationRecord
 
   before_validation :set_defaults, on: :create
   validate :check_package_quota, on: :create
-
-  def generate_qr_code(size: 240)
-    return nil if unique_code.blank?
-
-    encoded_code = CGI.escape(unique_code)
-    "https://api.qrserver.com/v1/create-qr-code/?size=#{size}x#{size}&data=#{encoded_code}"
-  end
 
   def valid_at_scan?(scan_time)
     return false if refunded?

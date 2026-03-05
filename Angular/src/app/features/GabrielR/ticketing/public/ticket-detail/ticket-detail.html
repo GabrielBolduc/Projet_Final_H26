@@ -17,11 +17,11 @@
       <h1 class="ticket-title">{{ 'TICKETING_PUBLIC.TICKET_DETAILS' | translate }}</h1>
       <h2 class="ticket-subtitle">{{ currentTicket.package.title }}</h2>
 
-      @if (currentTicket.qr_code_url) {
+      @if (qrCodeDataUrl(); as qrCodeSrc) {
         <div class="qr-code-container" [class.invalid]="qrIsInvalid()">
           <img
             class="qr-code-image"
-            [src]="currentTicket.qr_code_url"
+            [src]="qrCodeSrc"
             [alt]="'QR code ' + currentTicket.unique_code"
           />
           @if (qrIsInvalid()) {

@@ -72,7 +72,7 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     ticket = json["data"].first
-    %w[id order_id unique_code qr_code_url refunded_at price
+    %w[id order_id unique_code refunded_at price
        purchased_at holder_name holder_email holder_phone package].each do |field|
       assert ticket.key?(field), "Expected field '#{field}' to be present"
     end
@@ -102,14 +102,6 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     assert json.dig("data", "package").present?
     assert_equal @ticket.package.id, json.dig("data", "package", "id")
     assert_equal @ticket.package.title, json.dig("data", "package", "title")
-  end
-
-  test "show includes qr_code_url field" do
-    get api_ticket_url(@ticket)
-    assert_response :ok
-
-    json = parsed_body
-    assert json.dig("data").key?("qr_code_url")
   end
 
   test "show returns refunded ticket with refunded_at set" do

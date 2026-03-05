@@ -505,6 +505,8 @@ p_daily = Package.create!(
   category: "daily",
   valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
   expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
+  discount_min_quantity: 3,
+  discount_rate: 0.10,
   festival: f
 )
 

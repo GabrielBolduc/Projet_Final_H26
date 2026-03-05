@@ -325,7 +325,11 @@
     "EMAIL": "Email",
     "PHONE": "Phone",
     "CANCEL": "Cancel",
-    "DATE": "Date"
+    "DATE": "Date",
+    "DISCOUNT_HINT": "Buy {{min}} or more tickets and save {{rate}}!",
+    "SUBTOTAL": "Subtotal",
+    "DISCOUNT": "Discount",
+    "TOTAL": "Total"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Edit Package",
@@ -368,7 +372,12 @@
     "UPDATE": "Update",
     "SAVE": "Save",
     "PROCESSING": "Processing...",
-    "GENERIC_ERROR": "An error occurred."
+    "GENERIC_ERROR": "An error occurred.",
+    "DISCOUNT_MIN_QUANTITY": "Minimum quantity for discount",
+    "DISCOUNT_MIN_QUANTITY_INVALID": "Minimum quantity must be at least 2",
+    "DISCOUNT_RATE": "Discount rate",
+    "DISCOUNT_RATE_INVALID": "Rate must be between 1 and 100",
+    "DISCOUNT_INCOMPLETE": "Both discount rate and minimum quantity must be set together"
   },
   "TACHES": {
     "TITLE": "Tasks",

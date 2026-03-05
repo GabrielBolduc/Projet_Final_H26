@@ -13,6 +13,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
@@ -53,7 +54,7 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     CommonModule, ReactiveFormsModule, RouterLink,
     MatCardModule, MatFormFieldModule, MatInputModule, MatSelectModule, 
     MatDatepickerModule, MatNativeDateModule, MatButtonModule, 
-    MatIconModule, MatProgressBarModule, TranslateModule
+    MatIconModule, MatProgressBarModule, MatDividerModule, TranslateModule
   ],
   templateUrl: './package-form.html',
   styleUrl: './package-form.css'
@@ -85,9 +86,11 @@ export class PackageFormComponent implements OnInit {
     valid_time: ['', Validators.required],
     expired_date: [null, Validators.required],
     expired_time: ['', Validators.required],
-    festival_id: [null, Validators.required]
+    festival_id: [null, Validators.required],
+    discount_min_quantity: [null],
+    discount_rate: [null]
   }, { 
-    validators: [dateRangeValidator, this.festivalBoundsValidator(), this.categoryDateValidator()] 
+    validators: [dateRangeValidator, this.festivalBoundsValidator(), this.categoryDateValidator(), this.discountValidator()] 
   });
 
   formValidDate = toSignal(this.form.get('valid_date')!.valueChanges, { initialValue: this.form.get('valid_date')!.value });
@@ -215,7 +218,9 @@ export class PackageFormComponent implements OnInit {
         valid_date: validAt,
         valid_time: DateUtils.formatTime(validAt),
         expired_date: expiredAt,
-        expired_time: DateUtils.formatTime(expiredAt)
+        expired_time: DateUtils.formatTime(expiredAt),
+        discount_min_quantity: data.discount_min_quantity ?? null,
+        discount_rate: data.discount_rate ? Number(data.discount_rate) * 100 : null
       });
 
       await this.loadFestivalData(data.festival_id);
@@ -402,6 +407,19 @@ export class PackageFormComponent implements OnInit {
     };
   }
 
+  private discountValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const minQty = control.get('discount_min_quantity')?.value;
+      const rate = control.get('discount_rate')?.value;
+      const bothSet = minQty !== null && minQty !== '' && rate !== null && rate !== '';
+      const neitherSet = (minQty === null || minQty === '') && (rate === null || rate === '');
+      if (!bothSet && !neitherSet) {
+        return { discountIncomplete: true };
+      }
+      return null;
+    };
+  }
+
   private parseDateWithoutTimezone(dateInput: string | Date): Date {
     if (dateInput instanceof Date) {
       return new Date(dateInput.getFullYear(), dateInput.getMonth(), dateInput.getDate());
@@ -459,7 +477,9 @@ export class PackageFormComponent implements OnInit {
         category: val.category.toUpperCase(),
         festival_id: val.festival_id,
         valid_at: DateUtils.combineDateTime(val.valid_date, val.valid_time),
-        expired_at: DateUtils.combineDateTime(val.expired_date, val.expired_time)
+        expired_at: DateUtils.combineDateTime(val.expired_date, val.expired_time),
+        discount_min_quantity: val.discount_min_quantity || null,
+        discount_rate: val.discount_rate ? val.discount_rate / 100 : null
       };
 
       if (this.isEditMode() && this.packageId) {

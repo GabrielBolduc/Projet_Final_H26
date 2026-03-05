@@ -101,7 +101,7 @@ class Api::PackagesController < Api::AdminController
     params.require(:package).permit(
       :title, :description, :price, :quota,
       :category, :valid_at, :expired_at,
-      :festival_id, :image
+      :festival_id, :image, :discount_min_quantity, :discount_rate
     )
   end
 

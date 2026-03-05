@@ -27,9 +27,17 @@ class Api::OrdersController < Api::ClientController
     quantity = order_params[:quantity].to_i
 
     return render_error("Quantity must be greater than 0") if quantity <= 0
+
+    subtotal = package.price * quantity
+    discount = if package.discount_min_quantity && quantity >= package.discount_min_quantity
+      (subtotal * package.discount_rate).round(2)
+    else
+      0
+    end
+
     order = nil
     ActiveRecord::Base.transaction do
-      order = current_user.orders.create!
+      order = current_user.orders.create!(discount: discount)
 
       if order_params[:tickets].present? && order_params[:tickets].is_a?(Array)
         # Détenteurs multiples fournis depuis le frontend

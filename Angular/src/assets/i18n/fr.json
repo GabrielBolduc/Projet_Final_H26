@@ -327,7 +327,11 @@
     "EMAIL": "Email",
     "PHONE": "Téléphone",
     "CANCEL": "Annuler",
-    "DATE": "Date"
+    "DATE": "Date",
+    "DISCOUNT_HINT": "Achetez {{min}} billets ou plus et économisez {{rate}} !",
+    "SUBTOTAL": "Sous-total",
+    "DISCOUNT": "Rabais",
+    "TOTAL": "Total"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Modifier le Forfait",
@@ -370,7 +374,12 @@
     "UPDATE": "Mettre à jour",
     "SAVE": "Enregistrer",
     "PROCESSING": "Traitement...",
-    "GENERIC_ERROR": "Une erreur est survenue."
+    "GENERIC_ERROR": "Une erreur est survenue.",
+    "DISCOUNT_MIN_QUANTITY": "Quantité minimale pour bénéficier de la remise",
+    "DISCOUNT_MIN_QUANTITY_INVALID": "La quantité minimale doit être d'au moins 2",
+    "DISCOUNT_RATE": "Taux de remise",
+    "DISCOUNT_RATE_INVALID": "Le taux doit être compris entre 1 et 100",
+    "DISCOUNT_INCOMPLETE": "Le taux de remise et la quantité minimale doivent être définis simultanément"
   },
   "TACHES": {
     "TITLE": "Tâches",

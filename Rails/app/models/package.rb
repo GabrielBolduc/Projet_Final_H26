@@ -44,6 +44,16 @@ class Package < ApplicationRecord
   validate :quota_not_less_than_sold
   validate :quota_cross_validation
 
+  validates :discount_rate,
+    numericality: { greater_than: 0, less_than_or_equal_to: 1 },
+    allow_nil: true
+
+  validates :discount_min_quantity,
+    numericality: { only_integer: true, greater_than: 1 },
+    allow_nil: true
+
+  validate :discount_fields_both_or_neither
+
   def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil, sold_out: nil)
     relation = includes(:festival)
 
@@ -247,4 +257,11 @@ class Package < ApplicationRecord
       []
     end
   end
+
+  def discount_fields_both_or_neither
+    if discount_rate.present? ^ discount_min_quantity.present?
+      errors.add(:base, "Discount rate and minimum quantity must both be set or both be empty")
+    end
+  end
+
 end

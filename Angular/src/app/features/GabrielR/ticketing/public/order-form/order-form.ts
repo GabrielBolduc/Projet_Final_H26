@@ -91,11 +91,30 @@ export class TicketingOrderFormComponent implements OnInit {
     return { sold, quota, remaining, percent };
   });
 
-  totalPrice = computed(() => {
+  subtotal = computed(() => {
     const pkg = this.selectedPackage();
     if (!pkg?.price) return 0;
     return pkg.price * this.quantity();
   });
+
+  discount = computed(() => {
+    const pkg = this.selectedPackage();
+    const qty = this.quantity();
+    if (!pkg?.discount_min_quantity || !pkg?.discount_rate) return 0;
+    if (qty < pkg.discount_min_quantity) return 0;
+    return Math.round(this.subtotal() * pkg.discount_rate * 100) / 100;
+  });
+
+  discountHint = computed(() => {
+    const pkg = this.selectedPackage();
+    if (!pkg?.discount_min_quantity || !pkg?.discount_rate) return null;
+    return {
+      minQty: pkg.discount_min_quantity,
+      rate: pkg.discount_rate
+    };
+  });
+
+  totalPrice = computed(() => this.subtotal() - this.discount());
 
   get ticketsFormArray(): FormArray {
     return this.orderForm.get('tickets') as FormArray;

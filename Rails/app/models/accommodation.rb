@@ -2,6 +2,8 @@ class Accommodation < ApplicationRecord
   belongs_to :festival
   has_many :units, dependent: :destroy
 
+  before_destroy :ensure_no_units_have_reservations, prepend: true
+
   enum :category, { camping: 0, hotel: 1 }
 
   validates :name, presence: true, length: { maximum: 100 }
@@ -44,6 +46,13 @@ class Accommodation < ApplicationRecord
   before_validation :strip_fields
 
   private
+
+  def ensure_no_units_have_reservations
+    if units.joins(:reservations).exists?
+      errors.add(:base, "Cannot delete accommodation because some units have active reservations.")
+      throw(:abort)
+    end
+  end
 
   def strip_fields
     self.name = name&.strip

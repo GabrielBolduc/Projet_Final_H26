@@ -102,10 +102,10 @@
     }
 
     <div class="form-actions">
-      <button mat-button class="action-btn" type="button" routerLink="/reservations">
+      <button mat-stroked-button class="action-btn" type="button" routerLink="/reservations">
         {{ 'COMMON.CANCEL' | translate }}
       </button>
-      <button mat-raised-button color="primary" class="action-btn" type="submit" 
+      <button mat-flat-button color="primary" class="action-btn" type="submit" 
               [disabled]="form.invalid || isLoading() || units().length === 0">
         {{ (isEditMode() ? 'COMMON.SAVE' : 'COMMON.CREATE') | translate }}
       </button>

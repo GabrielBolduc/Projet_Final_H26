@@ -10,7 +10,7 @@
           </div>
         </a>
 
-        <a (click)="onCancel()" class="card-link clickable-item">
+        <a (click)="openCancelDialog(confirmDialogTemplate)" class="card-link clickable-item">
           <div class="fest-card">
             <div class="nav-icon-container"><mat-icon class="nav-icon color-warn">delete_forever</mat-icon></div>
             <div class="nav-label"><span class="title">{{ 'RESERVATIONS.SIDEBAR.CANCEL' | translate }}</span></div>
@@ -170,3 +170,16 @@
     }
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<ng-template #confirmDialogTemplate>
+  <h2 mat-dialog-title>{{ 'RESERVATIONS.DELETE' | translate }}?</h2>
+  <mat-dialog-content>
+    <p>{{ 'RESERVATIONS.DELETE_CONFIRM' | translate }}</p> 
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'ACCOMMODATIONS.DETAILS.NO' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">
+      {{ 'ACCOMMODATIONS.DETAILS.YES' | translate }}
+    </button>
+  </mat-dialog-actions>
+</ng-template>

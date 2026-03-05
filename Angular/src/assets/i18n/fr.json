@@ -542,7 +542,9 @@
     "PEOPLE": "Nombre de personnes",
     "MAX_ALLOWED": "Capacité max pour cette unité",
     "NO_UNITS_AVAILABLE": "Aucune unité disponible pour cet hébergement",
-    "FILL_MY_INFO": "Remplir avec mes infos"
+    "FILL_MY_INFO": "Remplir avec mes infos",
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir annuler cette réservation ? Cette action est irréversible.",
+    "DELETE": "Annuler"
   },
   "UNITS": {
     "CREATE_TITLE": "Ajouter une Unité",

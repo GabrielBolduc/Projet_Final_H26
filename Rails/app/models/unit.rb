@@ -1,8 +1,10 @@
 
 class Unit < ApplicationRecord
   belongs_to :accommodation
-  has_many :reservations, dependent: :nullify
+  has_many :reservations
   has_one_attached :image
+
+  before_destroy :ensure_no_active_reservations, prepend: true
 
   CAPACITIES = {
     "Units::SimpleRoom"      => 1,
@@ -125,6 +127,13 @@ class Unit < ApplicationRecord
 
     if options.include?("None") && options.size > 1
       errors.add(:food_options, "cannot include 'None' alongside other options")
+    end
+  end
+
+  def ensure_no_active_reservations
+    if reservations.any?
+      errors.add(:base, "Cannot delete unit because it has existing reservations.")
+      throw(:abort)
     end
   end
 end

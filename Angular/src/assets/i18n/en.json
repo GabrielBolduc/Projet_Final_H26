@@ -540,7 +540,9 @@
     "PEOPLE": "Number of People",
     "MAX_ALLOWED": "Max capacity for this unit",
     "NO_UNITS_AVAILABLE": "No units available for this accommodation",
-    "FILL_MY_INFO": "Fill with my info"
+    "FILL_MY_INFO": "Fill with my info",
+    "DELETE_CONFIRM": "Are you sure you want to cancel your reservation? This action is irreversible.",
+    "DELETE": "Cancel"
   },
   "UNITS": {
     "CREATE_TITLE": "Add New Unit",

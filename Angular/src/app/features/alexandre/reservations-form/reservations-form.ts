@@ -57,8 +57,14 @@ export class ReservationsForm implements OnInit {
   startAtDate = signal<Date>(new Date());
   
   form: FormGroup = this.fb.group({
-    reservation_name: ['', [Validators.required]],
-    phone_number: ['', [Validators.required]],
+    reservation_name: ['', [
+      Validators.required, 
+      Validators.maxLength(100)
+    ]],
+    phone_number: ['', [
+      Validators.required, 
+      Validators.maxLength(20)
+    ]],
     nb_of_people: [1, [Validators.required, Validators.min(1)]],
     arrival_at: [null, [Validators.required]],
     departure_at: [null, [Validators.required]],

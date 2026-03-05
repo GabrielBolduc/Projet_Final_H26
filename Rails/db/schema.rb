@@ -159,7 +159,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_05_072338) do
     t.index ["user_id"], name: "index_reservations_on_user_id"
     t.check_constraint "`arrival_at` < `departure_at`", name: "chk_dates"
     t.check_constraint "`nb_of_people` > 0", name: "chk_guests"
-    t.check_constraint "`phone_number` regexp '^[0-9+-s()]+$'", name: "chk_phone_valid"
     t.check_constraint "trim(`reservation_name`) <> ''", name: "chk_name_not_empty"
   end
 

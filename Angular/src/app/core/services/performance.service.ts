@@ -11,8 +11,9 @@ export class PerformanceService {
   
   private readonly API_URL = '/api/performances';
 
-  getPerformances(): Observable<Performance[]> {
-    return this.http.get<ApiResponse<Performance[]>>(this.API_URL).pipe(
+  getPerformances(filters?: any): Observable<Performance[]> {
+    const options = filters ? {params: filters} : {}
+    return this.http.get<ApiResponse<Performance[]>>(this.API_URL, options).pipe(
       map(response => {
         if (response.status === 'success') return response.data!;
         throw response; 

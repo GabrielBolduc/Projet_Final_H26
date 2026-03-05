@@ -36,13 +36,23 @@ class Package < ApplicationRecord
 
   validates :valid_at, :expired_at, presence: true
 
-  # L'ordre des validations est important : les dates doivent être valides avant de vérifier les quotas.
+  # L'ordre des validations est important
   validate :expired_date_after_valid_date
   validate :image_format_validation
   validate :validity_must_be_within_festival_dates
   validate :validate_category_dates
   validate :quota_not_less_than_sold
   validate :quota_cross_validation
+
+  validates :discount_rate,
+    numericality: { greater_than: 0, less_than_or_equal_to: 1 },
+    allow_nil: true
+
+  validates :discount_min_quantity,
+    numericality: { only_integer: true, greater_than: 1 },
+    allow_nil: true
+
+  validate :discount_fields_both_or_neither
 
   def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil, sold_out: nil)
     relation = includes(:festival)
@@ -85,6 +95,7 @@ class Package < ApplicationRecord
     valid_keys = values.select { |value| categories.key?(value) }
     valid_keys.map { |key| categories[key] }
   end
+  private_class_method :sanitize_category_filters
 
   def sold_count
     tickets.where(refunded_at: nil).count
@@ -154,11 +165,7 @@ class Package < ApplicationRecord
         errors.add(:valid_at, "doit commencer à 18:00 ou après pour un forfait soirée.")
       end
 
-      if day_span == 0
-        if valid_at.strftime("%H:%M") == "00:00" && expired_at.strftime("%H:%M") == "23:59"
-          errors.add(:base, "Le forfait soirée ne peut pas couvrir 00:00 à 23:59 sur une même journée.")
-        end
-      elsif seconds_since_midnight(expired_at) > 6.hours
+      if day_span == 1 && seconds_since_midnight(expired_at) > 6.hours
         errors.add(:expired_at, "doit se terminer à 06:00 maximum le lendemain.")
       end
     end
@@ -176,7 +183,7 @@ class Package < ApplicationRecord
   end
 
   def validate_general_quota
-    duration = (festival.end_at - festival.start_at).to_i + 1
+    duration = (festival.end_at.to_date - festival.start_at.to_date).to_i + 1
     general_capacity = festival.daily_capacity * duration
 
     existing_general_quota = festival.packages
@@ -250,4 +257,11 @@ class Package < ApplicationRecord
       []
     end
   end
+
+  def discount_fields_both_or_neither
+    if discount_rate.present? ^ discount_min_quantity.present?
+      errors.add(:base, "Discount rate and minimum quantity must both be set or both be empty")
+    end
+  end
+
 end

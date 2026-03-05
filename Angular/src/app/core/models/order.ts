@@ -5,16 +5,17 @@ export interface Order {
   user_id: number;
   purchased_at: string;
   tickets: Ticket[];
+  subtotal: number;
+  discount: number;
+  total_price: number;
 }
 
 export interface CreateOrderPayload {
   package_id: number;
   quantity: number;
-  // Single holder
   holder_name?: string;
   holder_email?: string;
   holder_phone?: string;
-  // Multiple holders
   tickets?: {
     holder_name: string;
     holder_email: string;

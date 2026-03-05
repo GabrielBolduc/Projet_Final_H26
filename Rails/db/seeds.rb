@@ -55,6 +55,14 @@ c3 = Client.create!(
     phone_number: "555-555-3333"
 )
 
+c4 = Client.create!(
+    email: "client4@test.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    name: "Client #4",
+    phone_number: "555-555-4444"
+)
+
 Admin.create!(
     email: "admin@test.com",
     password: "qwerty",
@@ -96,8 +104,8 @@ f = Festival.create!(
   end_at: Date.new(2026, 7, 20),
   daily_capacity: 5000,
   address: "123 Rue rue, Shawinigan, QC",
-  latitude: 46.52673340326582,
-  longitude: -72.73930869816652,
+  latitude: 46.577793,
+  longitude: -72.710997,
   status: "ongoing",
   satisfaction: 4,
   other_income: 15000.00,
@@ -350,6 +358,32 @@ acc2 = Accommodation.create!(
   festival: f
 )
 
+acc3 = Accommodation.create!(
+  name: "Starlight Hostel",
+  category: :hotel,
+  address: "45 Economy St, Downtown",
+  latitude: 46.5400,
+  longitude: -72.7400,
+  shuttle: false,
+  time_car: Time.parse("00:10:00"),
+  time_walk: Time.parse("00:45:00"),
+  commission: 25.00,
+  festival: f2
+)
+
+acc4 = Accommodation.create!(
+  name: "The Front Row Fields",
+  category: :camping,
+  address: "Zero Mile Marker, Glastonbury",
+  latitude: 46.5250,
+  longitude: -72.3300,
+  shuttle: false,
+  time_car: Time.parse("00:02:00"),
+  time_walk: Time.parse("00:05:00"),
+  commission: 2.50,
+  festival: f
+)
+
 unit1 = Units::SimpleRoom.new(
   accommodation: acc1,
   cost_person_per_night: 55.00,
@@ -405,6 +439,50 @@ unit_camp_high = Units::DeluxeTerrain.new(
   food_options: "Canteen"
 )
 
+unit_hotel_basic = Units::SimpleRoom.new(
+  accommodation: acc3,
+  cost_person_per_night: 35.00,
+  quantity: 20,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 5.00,
+  food_options: "Canteen"
+)
+
+unit_hotel_double = Units::DoubleRoom.new(
+  accommodation: acc3,
+  cost_person_per_night: 60.00,
+  quantity: 8,
+  wifi: false,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 5.00,
+  food_options: "Canteen"
+)
+
+unit_camp_standard = Units::StandardTerrain.new(
+  accommodation: acc4,
+  cost_person_per_night: 40.00,
+  quantity: 25,
+  wifi: false,
+  water: :undrinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "None"
+)
+
+unit_camp_premium = Units::DeluxeTerrain.new(
+  accommodation: acc4,
+  cost_person_per_night: 110.00,
+  quantity: 4,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
 
 # Racine
 
@@ -427,6 +505,8 @@ p_daily = Package.create!(
   category: "daily",
   valid_at: f.start_at.in_time_zone('America/New_York').change(hour: 10, min: 0),
   expired_at: f.start_at.in_time_zone('America/New_York').change(hour: 17, min: 0),
+  discount_min_quantity: 3,
+  discount_rate: 0.10,
   festival: f
 )
 
@@ -510,7 +590,7 @@ p_completed = Package.create!(
 # Orders + Tickets (Billetterie)
 order_general_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 9, min: 15))
 order_general_2 = Order.create!(user: c2, purchased_at: f.start_at.to_time.change(hour: 9, min: 45))
-order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30))
+order_daily_1 = Order.create!(user: c, purchased_at: f.start_at.to_time.change(hour: 10, min: 30), discount: (60.00 * 3 * 0.10).round(2))
 order_daily_2 = Order.create!(user: c3, purchased_at: f.start_at.to_time.change(hour: 11, min: 15))
 order_daily_sold_out_1 = Order.create!(user: c2, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 5))
 order_daily_sold_out_2 = Order.create!(user: c3, purchased_at: (f.start_at + 1.day).to_time.change(hour: 10, min: 20))
@@ -584,7 +664,11 @@ images = {
   unit_hotel_mid => 'hotel-mid.jpg',
   unit_hotel_high => 'hotel-high.jpg',
   unit_camp_low => 'camping-cheap.jpg',
-  unit_camp_high => 'oubliette.jpg'
+  unit_camp_high => 'oubliette.jpg',
+  unit_hotel_basic   => 'hotel-water.jpg',
+  unit_hotel_double  => 'hotel-water-2.jpg',
+  unit_camp_standard => 'lava-camping.jpg',
+  unit_camp_premium  => 'lava-camping-2.jpg'
 }
 
 images.each do |package, filename|
@@ -607,14 +691,10 @@ unit_camp_high.save!
 unit_camp_low.save!
 unit_hotel_high.save!
 unit_hotel_mid.save!
-
-[ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots, p_daily_day2, p_evening_overnight, p_general_flex ].each do |pkg|
-  sold = pkg.tickets.where(refunded_at: nil).count
-  refunded = pkg.tickets.where.not(refunded_at: nil).count
-end
-
-
-# Laurent
+unit_hotel_basic.save!
+unit_hotel_double.save!
+unit_camp_standard.save!
+unit_camp_premium.save!
 
 res1 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),
@@ -626,6 +706,61 @@ res1 = Reservation.create!(
   unit: unit1,
   festival: f
 )
+
+res2 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 14),
+  departure_at: Date.new(2026, 7, 18),
+  nb_of_people: 6,
+  reservation_name: "Alice Wonderland",
+  phone_number: "+1 (819) 555-4444",
+  user: c2,
+  unit: unit_camp_high,
+  festival: f,
+  status: :cancelled
+)
+
+res3 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 15),
+  departure_at: Date.new(2026, 7, 19),
+  nb_of_people: 4,
+  reservation_name: "Bob Builder",
+  phone_number: "+1 819-555-5555",
+  user: c3,
+  unit: unit_camp_high,
+  festival: f
+)
+
+res4 = Reservation.create!(
+  arrival_at: f2.start_at,
+  departure_at: f2.end_at,
+  nb_of_people: 2,
+  reservation_name: "Charlie Day",
+  phone_number: "+18195556666",
+  user: c,
+  unit: unit_hotel_double,
+  festival: f2,
+  status: :completed
+)
+
+res5 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 16),
+  departure_at: Date.new(2026, 7, 17),
+  nb_of_people: 2,
+  reservation_name: "Dana Scully",
+  phone_number: "+18195557777",
+  user: c4,
+  unit: unit_camp_standard,
+  festival: f
+)
+
+[ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots, p_daily_day2, p_evening_overnight, p_general_flex ].each do |pkg|
+  sold = pkg.tickets.where(refunded_at: nil).count
+  refunded = pkg.tickets.where.not(refunded_at: nil).count
+end
+
+
+# Laurent
+
 task_one = Task.create!(
     title: "Task #1",
     description: "Description of Task #1",
@@ -691,7 +826,7 @@ Affectation.create!(
     responsability: "Receptionné la commande de projecteur de projecteur & co",
     expected_start: f.start_at.to_time.change(hour: 9, min: 0),
     expected_end: f.start_at.to_time.change(hour: 10, min: 0)
-) 
+)
 
 Affectation.create!(
     user: Staff.last,

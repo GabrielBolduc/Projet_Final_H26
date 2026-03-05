@@ -15,7 +15,19 @@
     "NO_PERFORMANCES": "Aucune performance n'est actuellement prévue pour ce festival.",
     "LEARN_MORE": "En savoir plus",
     "ARTIST": "Artiste à l'affiche",
-    "SCHEDULE": "Horaire détaillé "
+    "SCHEDULE": "Horaire détaillé",
+    "SEARCH": "Rechercher artiste, show ...",
+    "FILTER": "Filtrer par Scène",
+    "ALL_STAGE": "Toutes les scènes",
+    "CROISS": "Heure Croissante",
+    "DECROISS": "Heure Décroissante",
+    "NOTHING": "Aucun résultat pour votre recherche.",
+    "SHOW_ALL": "Afficher tout",
+    "INFORMATION": "Informations",
+    "DATES": "Dates du festival",
+    "TO": "au",
+    "ADRESS": "Adresse :",
+    "NO_MAP": "Coordonnées GPS non disponibles"
   },
   "AUTH": {
     "LOGOUT": "Déconnexion",
@@ -122,6 +134,41 @@
     "DELETE_CONFIRM_BODY": "Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.",
     "FESTIVALS_LOAD_ERROR": "Erreur lors du chargement des festivals",
     "DELETE_SUCCESS": "Performance supprimée avec succès"
+  },
+  "ARTIST": {
+    "EDIT_TITLE": "Modifier l'artiste",
+    "ADD_TITLE": "Ajouter un artiste",
+    "NAME_LABEL": "Nom de l'artiste",
+    "NAME_REQUIRED": "Le nom est requis",
+    "NAME_MAX": "Maximum 100 caractères",
+    "GENRE_LABEL": "Genre musical",
+    "GENRE_REQUIRED": "Le genre est requis",
+    "GENRE_MAX": "Maximum 50 caractères",
+    "POPULARITY": "Popularité :",
+    "POPULARITY_REQUIRED": "La popularité est requise",
+    "UPLOAD_IMAGE": "Choisir une photo",
+    "IMAGE_PREVIEW_ALT": "Aperçu de la photo de l'artiste",
+    "BIO_LABEL": "Biographie",
+    "BIO_MAX": "La biographie est trop longue (max 2000 caractères)",
+    "CANCEL": "Annuler",
+    "SAVING": "Enregistrement...",
+    "EDIT_BTN": "Modifier",
+    "ADD_BTN": "Ajouter",
+    "ADD_SUCCESS": "Artiste ajouté avec succès !",
+    "EDIT_SUCCESS": "Artiste mis à jour avec succès !",
+    "ERROR_SAVE": "Une erreur est survenue lors de l'enregistrement.",
+    "DELETE_SUCCESS": "Artiste supprimé avec succès"
+  },
+  "ARTIST_LIST": {
+    "TITLE": "Catalogue des artistes",
+    "ADD": "Ajouter",
+    "COL_PHOTO": "Photo",
+    "COL_NAME": "Nom",
+    "COL_GENRE": "Genre",
+    "COL_POPULARITY": "Popularité",
+    "COL_BIO": "Bio",
+    "VIEW_BIO": "Voir la bio",
+    "COL_ACTIONS": "Action"
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",
@@ -280,7 +327,11 @@
     "EMAIL": "Email",
     "PHONE": "Téléphone",
     "CANCEL": "Annuler",
-    "DATE": "Date"
+    "DATE": "Date",
+    "DISCOUNT_HINT": "Achetez {{min}} billets ou plus et économisez {{rate}} !",
+    "SUBTOTAL": "Sous-total",
+    "DISCOUNT": "Rabais",
+    "TOTAL": "Total"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Modifier le Forfait",
@@ -323,7 +374,12 @@
     "UPDATE": "Mettre à jour",
     "SAVE": "Enregistrer",
     "PROCESSING": "Traitement...",
-    "GENERIC_ERROR": "Une erreur est survenue."
+    "GENERIC_ERROR": "Une erreur est survenue.",
+    "DISCOUNT_MIN_QUANTITY": "Quantité minimale pour bénéficier de la remise",
+    "DISCOUNT_MIN_QUANTITY_INVALID": "La quantité minimale doit être d'au moins 2",
+    "DISCOUNT_RATE": "Taux de remise",
+    "DISCOUNT_RATE_INVALID": "Le taux doit être compris entre 1 et 100",
+    "DISCOUNT_INCOMPLETE": "Le taux de remise et la quantité minimale doivent être définis simultanément"
   },
   "TACHES": {
     "TITLE": "Tâches",
@@ -439,12 +495,43 @@
       }
     }
   },
+  "ADMIN": {
+    "SEARCH": "Rechercher",
+    "ACCOMMODATION": "Hébergement",
+    "UNIT_TYPE": "Type d'unité",
+    "RESERVATIONS": {
+      "TITLE": "Gestion des Réservations"
+    }
+  },
   "RESERVATIONS": {
     "SIDEBAR": {
       "RESERVE_CAMPING": "Réserver Camping",
-      "RESERVE_HOTEL": "Réserver Hôtel"
+      "RESERVE_HOTEL": "Réserver Hôtel",
+      "EDIT": "Modifier la Réservation",
+      "CANCEL": "Annuler la Réservation",
+      "HISTORY": "Voir l'Historique",
+      "BACK": "Retour"
     },
-    "EMPTY_STATE": "Aucune réservation pour le moment..."
+    "FIELDS": {
+      "DATES": "Dates du Séjour",
+      "GUESTS": "Nombre d'Invités",
+      "PEOPLE": "Personnes",
+      "PHONE": "Numéro de Téléphone"
+    },
+    "STATUS": {
+      "CONFIRMED": "Confirmé",
+      "COMPLETED": "Terminé",
+      "ACTIVE": "Actif",
+      "CANCELLED": "Annulée",
+      "ARCHIVED": "Archivée"
+    },
+    "EMPTY_STATE": "Aucune réservation pour le moment...",
+    "HISTORY_EMPTY": "Votre historique est actuellement vide.",
+    "NAME": "Nom",
+    "ARRIVAL": "Arrivée",
+    "DEPARTURE": "Départ",
+    "GUESTS": "Invités",
+    "PHONE": "Téléphone"
   },
   "UNITS": {
     "CREATE_TITLE": "Ajouter une Unité",
@@ -459,6 +546,11 @@
     "FOOD": "Options de restauration",
     "UPLOAD_IMAGE": "Télécharger une image",
     "NO_UNITS_AVAILABLE": "Aucune unité disponible pour la réservation",
+    "TITLE": "Gestion des Unités",
+    "NEW_UNIT": "Ajouter une Unité",
+    "FEATURES": "Caractéristiques",
+    "AVAILABLE_QTY": "Quantité disponible",
+    "UNITS": "Unités",
     "TYPES": {
       "ROOMS_HEADER": "Chambres d'hôtel",
       "TERRAINS_HEADER": "Terrains de camping",

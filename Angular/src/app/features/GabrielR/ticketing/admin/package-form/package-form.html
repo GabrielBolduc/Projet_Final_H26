@@ -170,6 +170,29 @@
         </div>
       </div>
 
+      <div class="grid-row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'PACKAGE_FORM.DISCOUNT_MIN_QUANTITY' | translate }}</mat-label>
+          <input matInput type="number" formControlName="discount_min_quantity" min="2">
+          @if (form.get('discount_min_quantity')?.hasError('min')) {
+            <mat-error>{{ 'PACKAGE_FORM.DISCOUNT_MIN_QUANTITY_INVALID' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'PACKAGE_FORM.DISCOUNT_RATE' | translate }}</mat-label>
+          <input matInput type="number" formControlName="discount_rate" min="1" max="100">
+          <span matSuffix>%</span>
+          @if (form.get('discount_rate')?.hasError('min') || form.get('discount_rate')?.hasError('max')) {
+            <mat-error>{{ 'PACKAGE_FORM.DISCOUNT_RATE_INVALID' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+
+      @if (form.hasError('discountIncomplete')) {
+        <div class="time-error">{{ 'PACKAGE_FORM.DISCOUNT_INCOMPLETE' | translate }}</div>
+      }
+
       <div class="form-actions">
         <button mat-stroked-button type="button" routerLink="/admin/ticketing" class="action-btn cancel-btn">
           {{ 'PACKAGE_FORM.CANCEL' | translate }}

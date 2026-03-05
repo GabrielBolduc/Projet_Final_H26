@@ -4,11 +4,11 @@
     <header class="admin-top-bar">
       <div class="top-bar-side">
         <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
-          <mat-icon>add</mat-icon> Ajouter
+          <mat-icon>add</mat-icon> {{ 'ARTIST_LIST.ADD' | translate }}
         </button>
       </div>
       
-      <h1 class="header-title">Catalogue des artistes</h1>
+      <h1 class="header-title">{{ 'ARTIST_LIST.TITLE' | translate }}</h1>
       
       <div class="top-bar-side right-align"></div>
     </header>
@@ -21,8 +21,10 @@
 
     @if (!isLoading() && artists().length === 0) {
       <div class="empty-state">
-        <p>{{'DASHBOARD.NOTHING' | translate}}</p>
-        <button mat-button color="primary" (click)="navigateToAdd()">{{'DASHBOARD.ADD' | translate}}</button>
+        <p>{{ 'DASHBOARD.NOTHING' | translate }}</p>
+        <button mat-button color="primary" (click)="navigateToAdd()">
+          {{ 'DASHBOARD.ADD' | translate }}
+        </button>
       </div>
     }
 
@@ -31,10 +33,10 @@
         <table mat-table [dataSource]="artists()" class="festify-grid-table">
 
           <ng-container matColumnDef="photo">
-            <th mat-header-cell *matHeaderCellDef> Photo </th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'ARTIST_LIST.COL_PHOTO' | translate }} </th>
             <td mat-cell *matCellDef="let artist">
               @if (artist.image_url) {
-                <img [src]="artist.image_url" class="artist-avatar" alt="Photo">
+                <img [src]="artist.image_url" class="artist-avatar" [alt]="artist.name">
               } @else {
                 <div class="artist-avatar placeholder"><mat-icon>person</mat-icon></div>
               }
@@ -42,44 +44,42 @@
           </ng-container>
 
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nom </th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'ARTIST_LIST.COL_NAME' | translate }} </th>
             <td mat-cell *matCellDef="let artist" class="bold-text"> {{ artist.name }} </td>
           </ng-container>
 
           <ng-container matColumnDef="genre">
-            <th mat-header-cell *matHeaderCellDef> Genre </th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'ARTIST_LIST.COL_GENRE' | translate }} </th>
             <td mat-cell *matCellDef="let artist"> {{ artist.genre }} </td>
           </ng-container>
 
           <ng-container matColumnDef="popularity">
-            <th mat-header-cell *matHeaderCellDef> Popularité </th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'ARTIST_LIST.COL_POPULARITY' | translate }} </th>
             <td mat-cell *matCellDef="let artist"> 
               <div class="stars-container">
                 @for (star of getStarsArray(); track star) {
-                  <mat-icon class="star-icon" [class.active]="artist.popularity >= star">
-                    star
-                  </mat-icon>
+                  <mat-icon class="star-icon" [class.active]="artist.popularity >= star">star</mat-icon>
                 }
               </div>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="bio">
-            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Bio </th>
+            <th mat-header-cell *matHeaderCellDef style="text-align: center;"> {{ 'ARTIST_LIST.COL_BIO' | translate }} </th>
             <td mat-cell *matCellDef="let artist" style="text-align: center;"> 
-              <button class="icon-btn info" (click)="openBio(artist.bio)" title="Voir la bio">
+              <button mat-icon-button class="icon-btn info" (click)="openBio(artist.bio)" [title]="'ARTIST_LIST.VIEW_BIO' | translate">
                 <mat-icon>info</mat-icon>
               </button>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> Action </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'ARTIST_LIST.COL_ACTIONS' | translate }} </th>
             <td mat-cell *matCellDef="let artist" class="action-cell" style="text-align: center;">
-              <button class="icon-btn edit" (click)="navigateToEdit(artist.id!)" [title]="'COMMON.EDIT' | translate">
+              <button mat-icon-button class="icon-btn edit" (click)="navigateToEdit(artist.id!)" [title]="'COMMON.EDIT' | translate">
                 <mat-icon>edit_square</mat-icon>
               </button>
-              <button class="icon-btn trash" (click)="deleteArtist(artist.id!)" [title]="'COMMON.DELETE' | translate">
+              <button mat-icon-button class="icon-btn trash" (click)="deleteArtist(artist.id!)" [title]="'COMMON.DELETE' | translate">
                 <mat-icon>delete_outline</mat-icon>
               </button>
             </td>
@@ -92,3 +92,25 @@
     }
   </main>
 </div>
+
+<ng-template #bioDialogTemplate let-bioData>
+  <h2 mat-dialog-title>{{ 'ARTIST_LIST.COL_BIO' | translate }}</h2>
+  <mat-dialog-content>
+    <p style="white-space: pre-wrap; line-height: 1.6; color: #333; margin: 0;">
+      {{ bioData || ('PUBLIC.NOTHING' | translate) }}
+    </p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-flat-button color="primary" mat-dialog-close>{{ 'COMMON.CLOSE' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>
+
+<ng-template #confirmDeleteTemplate>
+  <h2 mat-dialog-title>{{ 'COMMON.DELETE' | translate }} ?</h2>
+  <mat-dialog-content>
+    <p>{{ 'FESTIVAL.DELETE_CONFIRM' | translate }}</p> </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>{{ 'COMMON.CANCEL' | translate }}</button>
+    <button mat-flat-button color="warn" [mat-dialog-close]="true">{{ 'COMMON.DELETE' | translate }}</button>
+  </mat-dialog-actions>
+</ng-template>

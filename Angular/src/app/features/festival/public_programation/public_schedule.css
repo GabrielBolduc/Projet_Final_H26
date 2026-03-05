@@ -308,15 +308,17 @@
 
 .empty-state-search {
   text-align: center;
-  padding: 40px;
   color: var(--mat-sys-on-surface-variant);
-  background: var(--mat-sys-surface-container-lowest);
-  border-radius: 15px;
-  border: 2px dashed var(--mat-sys-outline-variant);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
 }
 
 .empty-state-search mat-icon {

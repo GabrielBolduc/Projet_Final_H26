@@ -3,7 +3,7 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -45,7 +45,6 @@ export class TicketingOrderFormComponent implements OnInit {
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private translate = inject(TranslateService);
   private packageService = inject(PackageService);
   private orderService = inject(OrderService);
   private errorHandler = inject(ErrorHandlerService);
@@ -92,11 +91,30 @@ export class TicketingOrderFormComponent implements OnInit {
     return { sold, quota, remaining, percent };
   });
 
-  totalPrice = computed(() => {
+  subtotal = computed(() => {
     const pkg = this.selectedPackage();
     if (!pkg?.price) return 0;
     return pkg.price * this.quantity();
   });
+
+  discount = computed(() => {
+    const pkg = this.selectedPackage();
+    const qty = this.quantity();
+    if (!pkg?.discount_min_quantity || !pkg?.discount_rate) return 0;
+    if (qty < pkg.discount_min_quantity) return 0;
+    return Math.round(this.subtotal() * pkg.discount_rate * 100) / 100;
+  });
+
+  discountHint = computed(() => {
+    const pkg = this.selectedPackage();
+    if (!pkg?.discount_min_quantity || !pkg?.discount_rate) return null;
+    return {
+      minQty: pkg.discount_min_quantity,
+      rate: pkg.discount_rate
+    };
+  });
+
+  totalPrice = computed(() => this.subtotal() - this.discount());
 
   get ticketsFormArray(): FormArray {
     return this.orderForm.get('tickets') as FormArray;

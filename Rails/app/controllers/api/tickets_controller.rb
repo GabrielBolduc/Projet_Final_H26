@@ -1,14 +1,11 @@
 class Api::TicketsController < Api::ClientController
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+  include TicketPayloadFormatting
 
   before_action :set_ticket, only: [ :show, :update, :destroy ]
 
   # GET /api/tickets
   def index
-    tickets = Ticket.joins(:order)
-                    .where(orders: { user_id: current_user.id })
-                    .includes(package: :festival, order: :user)
-                    .order(created_at: :desc)
+    tickets = user_tickets_scope.order(created_at: :desc)
 
     render json: {
       status: "success",
@@ -60,48 +57,20 @@ class Api::TicketsController < Api::ClientController
   private
 
   def set_ticket
-    @ticket = Ticket.joins(:order)
-                    .where(orders: { user_id: current_user.id })
-                    .includes(package: :festival, order: :user)
-                    .find(params[:id])
-  end
-
-  def handle_not_found
-    render_error("Resource not found")
+    @ticket = user_tickets_scope.find(params[:id])
   end
 
   def ticket_params
     params.require(:ticket).permit(:holder_name, :holder_email, :holder_phone)
   end
 
-  def format_ticket(ticket)
-    package = ticket.package
-    {
-      id:           ticket.id,
-      order_id:     ticket.order_id,
-      unique_code:  ticket.unique_code,
-      qr_code_url:  ticket.generate_qr_code,
-      refunded_at:  ticket.refunded_at,
-      price:        ticket.price,
-      purchased_at: ticket.purchased_at,
-      holder_name:  ticket.holder_name,
-      holder_email: ticket.holder_email,
-      holder_phone: ticket.holder_phone,
-      package: {
-        id:          package.id,
-        title:       package.title,
-        description: package.description,
-        category:    package.category,
-        valid_at:    package.valid_at,
-        expired_at:  package.expired_at,
-        festival_id: package.festival_id,
-        image_url:   package_image_url(package)
-      }
-    }
+  def user_tickets_scope
+    Ticket.joins(:order)
+          .where(orders: { user_id: current_user.id })
+          .includes(package: :festival, order: :user)
   end
 
-  def package_image_url(package)
-    return nil unless package.image.attached?
-    rails_blob_url(package.image, host: request.base_url)
+  def format_ticket(ticket)
+    format_ticket_payload(ticket)
   end
 end

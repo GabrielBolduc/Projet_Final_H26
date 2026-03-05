@@ -4,9 +4,12 @@ class Reservation < ApplicationRecord
   belongs_to :unit
   belongs_to :festival
 
+  attribute :status, :integer
+  enum :status, { active: 0, cancelled: 1, completed: 2 }
+
   validates :arrival_at, :departure_at, :reservation_name, presence: true
   validates :nb_of_people, numericality: { only_integer: true, greater_than: 0 }
-  validates :phone_number, phone: true 
+  validates :phone_number, phone: true
 
   validate :departure_must_be_after_arrival
   validate :capacity_within_limits
@@ -18,21 +21,20 @@ class Reservation < ApplicationRecord
   before_save :normalize_phone
 
   def as_json(options = {})
-    # Use ActiveSupport helper to format: 5551234567 -> (555) 123-4567
     formatted_phone = ActionController::Base.helpers.number_to_phone(
-      self.phone_number, 
+      self.phone_number,
       area_code: true
     )
 
     super(options.merge({
-      only: [:id, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at]
+      only: [ :id, :status, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at ]
     })).merge({
-      phone_number: formatted_phone # Override with formatted version
+      phone_number: formatted_phone
     })
   end
 
   private
-  
+
 
   def capacity_within_limits
     return unless unit && nb_of_people
@@ -45,7 +47,8 @@ class Reservation < ApplicationRecord
   def no_overlapping_bookings
     return unless unit && arrival_at && departure_at
 
-    overlaps = Reservation.where(unit_id: unit_id)
+    overlaps = Reservation.active
+                          .where(unit_id: unit_id)
                           .where.not(id: id)
                           .where("arrival_at < ? AND departure_at > ?", departure_at, arrival_at)
 
@@ -77,11 +80,11 @@ class Reservation < ApplicationRecord
 
   def normalize_phone
     if phone_number.present?
-      # On parse le numéro pour valider, puis on extrait uniquement les chiffres
       parsed = Phonelib.parse(phone_number)
       if parsed.valid?
+        self.phone_number = parsed.national.gsub(/\D/, "")
         # On force l'extraction des chiffres sans le '+'
-        self.phone_number = parsed.national.gsub(/\D/, '') 
+        self.phone_number = parsed.national.gsub(/\D/, "")
       end
     end
   end

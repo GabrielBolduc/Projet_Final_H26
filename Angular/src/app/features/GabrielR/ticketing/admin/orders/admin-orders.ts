@@ -45,36 +45,56 @@ export class AdminOrdersComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private initialQueryParams = this.route.snapshot.queryParams;
 
   private initialized = false;
+  private readonly allowedSortOptions = new Set([ 'asc', 'desc' ]);
 
-  searchQuery = signal('');
-  sortOption = signal('desc');
-  selectedFestivalId = signal<number | null>(null);
-
-  ongoingFestivalResource = resource({
-    loader: () => firstValueFrom(this.festivalService.getFestivals('ongoing'))
-  });
+  searchQuery = signal(this.initialQueryParams['q'] || '');
+  sortOption = signal(this.parseInitialSort(this.initialQueryParams['sort']));
+  selectedFestivalId = signal<number | null>(
+    this.initialQueryParams['festival_id'] ? Number(this.initialQueryParams['festival_id']) : null
+  );
 
   festivalsResource = resource({
     loader: () => firstValueFrom(this.festivalService.getFestivals())
   });
 
+  ongoingFestivals = computed(() =>
+    (this.festivalsResource.value() ?? []).filter(festival => festival.status === 'ongoing')
+  );
+
   ordersResource = resource({
-    params: () => ({
-      festival_id: this.selectedFestivalId() ?? undefined,
-      q: this.searchQuery(),
-      sort: this.sortOption()
-    }),
-    loader: ({ params }) => firstValueFrom(this.orderService.getAllOrders(params))
+    params: () => {
+      const routeFestivalId = Number(this.initialQueryParams['festival_id']);
+      const hasRouteFestivalId = Number.isInteger(routeFestivalId) && routeFestivalId > 0;
+
+      if (!hasRouteFestivalId && this.festivalsResource.isLoading()) {
+        return undefined;
+      }
+
+      const derivedFestivalId = this.selectedFestivalId() ?? (hasRouteFestivalId ? routeFestivalId : this.ongoingFestivals()[0]?.id);
+
+      return {
+        festival_id: derivedFestivalId ?? undefined,
+        q: this.searchQuery(),
+        sort: this.sortOption()
+      };
+    },
+    loader: ({ params }) => {
+      if (!params) {
+        return Promise.resolve([]);
+      }
+
+      return firstValueFrom(this.orderService.getAllOrders(params));
+    }
   });
 
   orders = computed(() => this.ordersResource.value() ?? []);
   festivals = computed(() => this.festivalsResource.value() ?? []);
   isLoading = computed(() => 
     this.ordersResource.isLoading() || 
-    this.festivalsResource.isLoading() ||
-    this.ongoingFestivalResource.isLoading()
+    this.festivalsResource.isLoading()
   );
 
   constructor() {
@@ -95,35 +115,11 @@ export class AdminOrdersComponent implements OnInit {
       });
     });
 
-    // Sélectionner par défaut le festival en cours s'il n'est pas déjà défini dans l'URL
-    effect(() => {
-      const ongoing = this.ongoingFestivalResource.value();
-      if (ongoing && ongoing.length > 0 && !this.selectedFestivalId() && !this.route.snapshot.queryParams['festival_id']) {
-        this.selectedFestivalId.set(ongoing[0].id);
-      }
-    });
   }
 
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-
-    if (params['q']) {
-      this.searchQuery.set(params['q']);
-    }
-
-    if (params['sort']) {
-      this.sortOption.set(params['sort']);
-    }
-
-    if (params['festival_id']) {
-      this.selectedFestivalId.set(Number(params['festival_id']));
-    }
-
     this.initialized = true;
   }
-
-  protected isRefunded = isRefunded;
-  protected isExpired = isExpired;
 
   detailedTicketsMap = signal<Map<number, any[]>>(new Map());
 
@@ -140,5 +136,35 @@ export class AdminOrdersComponent implements OnInit {
     } catch (err) {
       console.error('Error loading order details', err);
     }
+  }
+
+  protected ticketStatusClass(ticket: any): 'refunded' | 'expired' | 'active' {
+    if (isRefunded(ticket)) {
+      return 'refunded';
+    }
+
+    if (isExpired(ticket)) {
+      return 'expired';
+    }
+
+    return 'active';
+  }
+
+  protected ticketStatusLabel(ticket: any): string {
+    const statusClass = this.ticketStatusClass(ticket);
+    if (statusClass === 'refunded') {
+      return 'TICKETING_PUBLIC.REFUNDED';
+    }
+
+    if (statusClass === 'expired') {
+      return 'TICKETING_PUBLIC.EXPIRED';
+    }
+
+    return 'TICKETING_PUBLIC.ACTIVE';
+  }
+
+  private parseInitialSort(value: unknown): string {
+    const sort = String(value ?? '').trim();
+    return this.allowedSortOptions.has(sort) ? sort : 'desc';
   }
 }

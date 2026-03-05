@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import * as QRCode from 'qrcode';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -67,6 +68,30 @@ export class TicketingTicketDetailComponent implements OnInit {
   });
 
   qrIsInvalid = computed(() => this.ticketIsRefunded() || this.ticketIsExpired());
+  qrCodeDataUrl = signal<string | null>(null);
+  ticketStatusClass = computed<'refunded' | 'expired' | 'active'>(() => {
+    if (this.ticketIsRefunded()) {
+      return 'refunded';
+    }
+
+    if (this.ticketIsExpired()) {
+      return 'expired';
+    }
+
+    return 'active';
+  });
+  ticketStatusLabel = computed(() => {
+    const statusClass = this.ticketStatusClass();
+    if (statusClass === 'refunded') {
+      return 'TICKETING_PUBLIC.REFUNDED';
+    }
+
+    if (statusClass === 'expired') {
+      return 'TICKETING_PUBLIC.EXPIRED';
+    }
+
+    return 'TICKETING_PUBLIC.ACTIVE';
+  });
 
   isLoading = signal(true);
   isSaving = signal(false);
@@ -101,6 +126,16 @@ export class TicketingTicketDetailComponent implements OnInit {
       } else {
         this.ticketForm.enable();
       }
+    });
+
+    effect(() => {
+      const ticket = this.ticket();
+      if (!ticket?.unique_code) {
+        this.qrCodeDataUrl.set(null);
+        return;
+      }
+
+      void this.generateQrCode(ticket.unique_code);
     });
   }
 
@@ -293,5 +328,17 @@ export class TicketingTicketDetailComponent implements OnInit {
     }
 
     await this.router.navigate(['/ticketing/orders']);
+  }
+
+  private async generateQrCode(value: string): Promise<void> {
+    try {
+      const dataUrl = await QRCode.toDataURL(value, {
+        width: 220,
+        margin: 1
+      });
+      this.qrCodeDataUrl.set(dataUrl);
+    } catch {
+      this.qrCodeDataUrl.set(null);
+    }
   }
 }

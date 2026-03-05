@@ -1,5 +1,5 @@
-import { Component, OnInit, inject, signal, computed, ViewChild, TemplateRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject, signal, computed, ViewChild, TemplateRef, effect, OnDestroy } from '@angular/core';
+import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,15 +11,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { firstValueFrom, Subject, Subscription } from 'rxjs';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
-import { firstValueFrom } from 'rxjs';
-
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PerformanceService } from '../../../core/services/performance.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
 import { DateUtils } from '../../../core/utils/date.utils'; 
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Performance } from '../../../core/models/performance';
 import { Festival } from '../../../core/models/festival';
 
@@ -34,12 +34,13 @@ interface DayGroup {
   imports: [
     CommonModule, MatButtonModule, MatIconModule, MatTableModule, MatDialogModule,
     MatSnackBarModule, MatSelectModule, MatFormFieldModule, MatInputModule,
-    FormsModule, TranslateModule, MatProgressSpinnerModule, RouterModule
+    FormsModule, TranslateModule, MatProgressSpinnerModule, RouterModule,
+    MatProgressBarModule, DatePipe, CurrencyPipe
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
 
   private performanceService = inject(PerformanceService);
@@ -51,15 +52,27 @@ export class DashboardComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
-  festival = signal<Festival | null>(null);
-  allFestivals = signal<Festival[]>([]);
-  rawPerformances = signal<Performance[]>([]);
-  isLoading = signal(true);
+  private initialized = false;
+  private searchSubject = new Subject<string>();
+  private searchSubscription?: Subscription;
 
+  currentFestivalId = signal<number | null>(null);
   searchQuery = signal<string>('');
   filterStageId = signal<number | null>(null);
   sortDirection = signal<'asc' | 'desc'>('asc');
 
+  allFestivals = signal<Festival[]>([]);
+  festival = signal<Festival | null>(null);
+  
+  rawPerformances = signal<Performance[]>([]); 
+  performances = signal<Performance[]>([]); 
+  
+  isInitialLoading = signal(true);
+  isPerformancesLoading = signal(false);
+
+  displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'price', 'actions'];
+
+  isLoading = computed(() => this.isInitialLoading());
   isReadOnly = computed(() => this.festival()?.status === 'completed');
 
   availableStages = computed(() => {
@@ -70,74 +83,136 @@ export class DashboardComponent implements OnInit {
     return Array.from(stages, ([id, name]) => ({ id, name }));
   });
 
-  filteredPerformances = computed(() => {
-    let data = [...this.rawPerformances()];
-    const query = this.searchQuery().toLowerCase().trim();
-    const stageId = this.filterStageId();
+  performanceGroups = computed(() => {
+    const data = [...this.performances()];
     const dir = this.sortDirection();
-
-    // filter par scene
-    if (stageId) data = data.filter(p => p.stage?.id === stageId);
-
-    // search par artist ou nom perf
-    if (query) {
-      data = data.filter(p => 
-        p.title?.toLowerCase().includes(query) || 
-        p.artist?.name.toLowerCase().includes(query)
-      );
-    }
-
-    // sort par date
-    return data.sort((a, b) => {
+    data.sort((a, b) => {
       const dateA = new Date(a.start_at).getTime();
       const dateB = new Date(b.start_at).getTime();
       return dir === 'asc' ? dateA - dateB : dateB - dateA;
     });
+    return this.groupByDay(data);
   });
 
-  performanceGroups = computed(() => this.groupByDay(this.filteredPerformances()));
-
   currentLang = toSignal(
-    this.translate.onLangChange.pipe(map(event => this.formatLang(event.lang))),
-    { initialValue: this.formatLang(this.translate.getCurrentLang()) }
+    this.translate.onLangChange.pipe(map(event => event.lang?.split('-')[0] || 'fr')),
+    { initialValue: this.translate.currentLang?.split('-')[0] || 'fr' }
   );
 
-  displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description', 'price', 'actions'];
+  constructor() {
+    effect(() => {
+      if (!this.initialized) return;
+      const queryParams = {
+        search: this.searchQuery() || null,
+        stage: this.filterStageId() || null,
+        sort: this.sortDirection() === 'asc' ? null : this.sortDirection()
+      };
+      this.router.navigate([], { relativeTo: this.route, queryParams, queryParamsHandling: 'merge', replaceUrl: true });
+    });
 
-  ngOnInit(): void {
-    this.loadAllFestivals();
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) this.loadDashboardData(Number(id));
+    effect(async () => {
+      const festivalId = this.currentFestivalId();
+      if (!festivalId) return;
+
+      this.isPerformancesLoading.set(true);
+      try {
+        const params: any = { festival_id: festivalId };
+        if (this.searchQuery()) params.search = this.searchQuery();
+        if (this.filterStageId()) params.stage_id = this.filterStageId();
+
+        const data = await firstValueFrom(this.performanceService.getPerformances(params));
+        this.performances.set(data);
+      } catch (err) {
+        this.showErrorsAsSnackBar(err);
+      } finally {
+        this.isPerformancesLoading.set(false);
+      }
     });
   }
 
-  updateSearch(val: string) { this.searchQuery.set(val); }
+  ngOnInit(): void {
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(val => this.searchQuery.set(val));
+
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        const numId = Number(id);
+        this.currentFestivalId.set(numId);
+        this.loadInitialContext(numId);
+      }
+    });
+
+    const params = this.route.snapshot.queryParams;
+    if (params['search']) this.searchQuery.set(params['search']);
+    if (params['stage']) this.filterStageId.set(Number(params['stage']));
+    if (params['sort']) this.sortDirection.set(params['sort'] as 'asc' | 'desc');
+
+    this.initialized = true;
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+  }
+
+  async loadInitialContext(festivalId: number) {
+    this.isInitialLoading.set(true);
+    try {
+      const [fests, current, allPerfs] = await Promise.all([
+        firstValueFrom(this.festivalService.getFestivals()),
+        firstValueFrom(this.festivalService.getFestival(festivalId)),
+        firstValueFrom(this.performanceService.getPerformances({ festival_id: festivalId }))
+      ]);
+      
+      this.allFestivals.set(fests);
+      this.festival.set(current);
+      
+      this.rawPerformances.set(allPerfs); 
+    } catch (err) {
+      this.showErrorsAsSnackBar(err);
+    } finally {
+      this.isInitialLoading.set(false);
+    }
+  }
+
+  updateSearch(val: string) { this.searchSubject.next(val); }
   updateFilter(id: number | null) { this.filterStageId.set(id); }
-  toggleSort() { this.sortDirection.update(d => d === 'asc' ? 'desc' : 'asc'); }
-
-  async loadAllFestivals() {
-    try {
-      const data = await firstValueFrom(this.festivalService.getFestivals());
-      this.allFestivals.set(data);
-    } catch (err) { console.error(err); }
-  }
-
-  async loadDashboardData(id: number) {
-    this.isLoading.set(true);
-    try {
-      const fest = await firstValueFrom(this.festivalService.getFestival(id));
-      this.festival.set(fest);
-      const perfs = await firstValueFrom(this.performanceService.getPerformances());
-      const filtered = perfs.filter(p => Number(p.festival_id) === id || (p.festival && Number(p.festival.id) === id));
-      this.rawPerformances.set(filtered);
-    } catch (err) { this.showErrorsAsSnackBar(err); }
-    finally { this.isLoading.set(false); }
-  }
-
+  toggleSort() { this.sortDirection.update((d: 'asc' | 'desc') => d === 'asc' ? 'desc' : 'asc'); }
   onFestivalChange(id: number) { this.router.navigate(['/admin/festivals', id, 'dashboard']); }
-  navigateToAdd() { this.router.navigate(['/admin/festivals', this.festival()?.id, 'performances', 'new']); }
-  navigateToEdit(id: number) { this.router.navigate(['/admin/festivals', this.festival()?.id, 'performances', id, 'edit']); }
+
+  navigateToAdd() {
+    if (this.festival() && !this.isReadOnly()) {
+      this.router.navigate(['/admin/festivals', this.festival()!.id, 'performances', 'new']);
+    }
+  }
+
+  navigateToEdit(performanceId: number) {
+    if (this.festival() && !this.isReadOnly()) {
+      this.router.navigate(['/admin/festivals', this.festival()!.id, 'performances', performanceId, 'edit']);
+    }
+  }
+
+  async deletePerformance(id: number) {
+    if (this.isReadOnly()) return;
+
+    const dialogRef = this.dialog.open(this.confirmDialogTemplate, { width: '400px' });
+    const confirmed = await firstValueFrom(dialogRef.afterClosed());
+
+    if (confirmed) {
+      try {
+        await firstValueFrom(this.performanceService.deletePerformance(id));
+        this.snackBar.open(this.translate.instant('DASHBOARD.DELETE_SUCCESS'), 'OK', { duration: 3000 });
+        
+        const currentId = this.currentFestivalId();
+        this.currentFestivalId.set(null);
+        this.currentFestivalId.set(currentId);
+      } catch (err) {
+        this.showErrorsAsSnackBar(err);
+      }
+    }
+  }
 
   private groupByDay(performances: Performance[]): DayGroup[] {
     const groups: { [key: string]: Performance[] } = {};
@@ -152,21 +227,8 @@ export class DashboardComponent implements OnInit {
     }));
   }
 
-  async deletePerformance(id: number) {
-    const dialogRef = this.dialog.open(this.confirmDialogTemplate, { width: '400px' });
-    if (await firstValueFrom(dialogRef.afterClosed())) {
-      try {
-        await firstValueFrom(this.performanceService.deletePerformance(id));
-        this.snackBar.open(this.translate.instant('DASHBOARD.DELETE_SUCCESS'), 'OK', { duration: 3000 });
-        this.loadDashboardData(this.festival()!.id);
-      } catch (err) { this.showErrorsAsSnackBar(err); }
-    }
-  }
-
   private showErrorsAsSnackBar(err: any) {
     const errors = this.errorHandler.parseRailsErrors(err);
-    this.snackBar.open(errors.join(' | '), 'OK', { duration: 5000 });
+    if (errors.length > 0) this.snackBar.open(errors.join(' | '), 'OK', { duration: 5000 });
   }
-
-  private formatLang(lang: string | undefined): string { return lang ? lang.split('-')[0] : 'en'; }
 }

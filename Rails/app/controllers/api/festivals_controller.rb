@@ -1,7 +1,7 @@
 class Api::FestivalsController < ApiController
-  before_action :authenticate_user!, only: [:create, :update, :destroy]
-  before_action :require_admin!, only: [:create, :update, :destroy]
-  before_action :set_festival, only: [:show, :update, :destroy]
+  before_action :authenticate_user!, only: [ :create, :update, :destroy ]
+  before_action :require_admin!, only: [ :create, :update, :destroy ]
+  before_action :set_festival, only: [ :show, :update, :destroy ]
 
   def index
     festivals = Festival.recent
@@ -19,7 +19,7 @@ class Api::FestivalsController < ApiController
   end
 
   def show
-    if params[:id] == 'current' && @festival.nil?
+    if params[:id] == "current" && @festival.nil?
       return render json: {
         status: "success",
         data: nil,
@@ -91,7 +91,7 @@ class Api::FestivalsController < ApiController
   private
 
   def set_festival
-    if params[:id] == 'current'
+    if params[:id] == "current"
       @festival = Festival.ongoing.first
     else
       @festival = Festival.find(params[:id])

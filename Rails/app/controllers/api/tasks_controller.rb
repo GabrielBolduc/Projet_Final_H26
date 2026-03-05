@@ -6,12 +6,12 @@ class Api::TasksController < ApiController
 
     def index
 
-       
 
         @tasks = Task.all.order(updated_at: :desc)
 
         if params[:search].present?
             tasks = tasks.where("title ILIKE ?", "%#{params[:search]}%")
+
         end
         
 

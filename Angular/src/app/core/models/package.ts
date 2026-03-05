@@ -10,4 +10,6 @@ export interface Package {
   expired_at: string | Date;
   festival_id: number;
   image_url?: string;
+  discount_min_quantity?: number | null;
+  discount_rate?: number | null;
 }

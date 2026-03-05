@@ -43,7 +43,8 @@ mat-form-field {
 }
 
 .file-category-row {
-  align-items: center;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
 .image-upload-wrapper {

@@ -41,6 +41,8 @@ export class Ticketing implements OnInit {
   private packageService = inject(PackageService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private initialQueryParams = this.route.snapshot.queryParams;
+  private readonly allowedSortOptions: PackageSort[] = [ 'price_asc', 'price_desc', 'date_asc', 'date_desc' ];
 
   private initialized = false;
   readonly weekdayOptions = [
@@ -54,11 +56,11 @@ export class Ticketing implements OnInit {
     { value: 6, labelKey: 'TICKETING_PUBLIC.DAY_SATURDAY' }
   ];
 
-  selectedWeekday = signal<number | null>(null);
-  sortOption = signal<PackageSort>('price_asc');
-  showGeneral = signal(true);
-  showDaily = signal(true);
-  showEvening = signal(true);
+  selectedWeekday = signal<number | null>(this.parseInitialWeekday(this.initialQueryParams['dow']));
+  sortOption = signal<PackageSort>(this.parseInitialSort(this.initialQueryParams['sort']));
+  showGeneral = signal(this.initialQueryParams['gen'] !== 'f');
+  showDaily = signal(this.initialQueryParams['day'] !== 'f');
+  showEvening = signal(this.initialQueryParams['eve'] !== 'f');
 
   isLoggedIn = computed(() => this.auth.isLoggedIn());
   isClient = computed(() => this.auth.currentUser()?.isClient ?? false);
@@ -134,31 +136,6 @@ export class Ticketing implements OnInit {
   }
 
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-
-    if (params['dow'] !== undefined && params['dow'] !== null && params['dow'] !== '') {
-      const parsedDow = Number(params['dow']);
-      if (Number.isInteger(parsedDow) && parsedDow >= 0 && parsedDow <= 6) {
-        this.selectedWeekday.set(parsedDow);
-      }
-    }
-
-    if (params['sort']) {
-      this.sortOption.set(params['sort'] as PackageSort);
-    }
-    
-    if (params['gen'] === 'f') {
-      this.showGeneral.set(false);
-    }
-    
-    if (params['day'] === 'f') {
-      this.showDaily.set(false);
-    }
-    
-    if (params['eve'] === 'f') {
-      this.showEvening.set(false);
-    }
-
     this.initialized = true;
   }
 
@@ -202,5 +179,23 @@ export class Ticketing implements OnInit {
 
     const parsed = value instanceof Date ? value : new Date(value);
     return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  private parseInitialWeekday(value: unknown): number | null {
+    if (value === undefined || value === null || value === '') {
+      return null;
+    }
+
+    const parsed = Number(value);
+    return Number.isInteger(parsed) && parsed >= 0 && parsed <= 6 ? parsed : null;
+  }
+
+  private parseInitialSort(value: unknown): PackageSort {
+    const sort = String(value ?? '').trim();
+    if (this.allowedSortOptions.includes(sort as PackageSort)) {
+      return sort as PackageSort;
+    }
+
+    return 'price_asc';
   }
 }

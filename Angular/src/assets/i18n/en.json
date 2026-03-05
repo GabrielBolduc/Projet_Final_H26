@@ -15,7 +15,19 @@
     "NO_PERFORMANCES": "No performances are currently scheduled for this festival.",
     "LEARN_MORE": "Learn more",
     "ARTIST": "Featured Artist",
-    "SCHEDULE": "Detailed Schedule"
+    "SCHEDULE": "Detailed Schedule",
+    "SEARCH": "Search artist, show ...",
+    "FILTER": "Filter by Stage",
+    "ALL_STAGE": "All Stages",
+    "CROISS": "Time Ascending",
+    "DECROISS": "Time Descending",
+    "NOTHING": "No results found for your search.",
+    "SHOW_ALL": "Show all",
+    "INFORMATION": "Information",
+    "DATES": "Festival dates",
+    "TO": "to",
+    "ADRESS": "Address:",
+    "NO_MAP": "GPS coordinates not available"
   },
   "AUTH": {
     "LOGOUT": "Disconnect",
@@ -120,6 +132,41 @@
     "DELETE_ONGOING_ERROR": "Cannot delete an ongoing festival.",
     "DELETE_SUCCESS": "Festival deleted successfully.",
     "FESTIVALS_LOAD_ERROR": "Error loading festivals"
+  },
+  "ARTIST": {
+    "EDIT_TITLE": "Edit Artist",
+    "ADD_TITLE": "Add Artist",
+    "NAME_LABEL": "Artist Name",
+    "NAME_REQUIRED": "Name is required",
+    "NAME_MAX": "Maximum 100 characters",
+    "GENRE_LABEL": "Musical Genre",
+    "GENRE_REQUIRED": "Genre is required",
+    "GENRE_MAX": "Maximum 50 characters",
+    "POPULARITY": "Popularity:",
+    "POPULARITY_REQUIRED": "Popularity is required",
+    "UPLOAD_IMAGE": "Choose a photo",
+    "IMAGE_PREVIEW_ALT": "Artist photo preview",
+    "BIO_LABEL": "Biography",
+    "BIO_MAX": "Biography is too long (max 2000 characters)",
+    "CANCEL": "Cancel",
+    "SAVING": "Saving...",
+    "EDIT_BTN": "Update",
+    "ADD_BTN": "Add",
+    "ADD_SUCCESS": "Artist added successfully!",
+    "EDIT_SUCCESS": "Artist updated successfully!",
+    "ERROR_SAVE": "An error occurred while saving.",
+    "DELETE_SUCCESS": "Artist deleted successfully."
+  },
+  "ARTIST_LIST": {
+    "TITLE": "Artist Catalog",
+    "ADD": "Add",
+    "COL_PHOTO": "Photo",
+    "COL_NAME": "Name",
+    "COL_GENRE": "Genre",
+    "COL_POPULARITY": "Popularity",
+    "COL_BIO": "Bio",
+    "VIEW_BIO": "View bio",
+    "COL_ACTIONS": "Action"
   },
   "FORM_ADD_PERFORMANCES": {
     "EDIT_PERFORMANCE": "Edit performance",
@@ -278,7 +325,11 @@
     "EMAIL": "Email",
     "PHONE": "Phone",
     "CANCEL": "Cancel",
-    "DATE": "Date"
+    "DATE": "Date",
+    "DISCOUNT_HINT": "Buy {{min}} or more tickets and save {{rate}}!",
+    "SUBTOTAL": "Subtotal",
+    "DISCOUNT": "Discount",
+    "TOTAL": "Total"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Edit Package",
@@ -321,7 +372,12 @@
     "UPDATE": "Update",
     "SAVE": "Save",
     "PROCESSING": "Processing...",
-    "GENERIC_ERROR": "An error occurred."
+    "GENERIC_ERROR": "An error occurred.",
+    "DISCOUNT_MIN_QUANTITY": "Minimum quantity for discount",
+    "DISCOUNT_MIN_QUANTITY_INVALID": "Minimum quantity must be at least 2",
+    "DISCOUNT_RATE": "Discount rate",
+    "DISCOUNT_RATE_INVALID": "Rate must be between 1 and 100",
+    "DISCOUNT_INCOMPLETE": "Both discount rate and minimum quantity must be set together"
   },
   "TACHES": {
     "TITLE": "Tasks",
@@ -437,12 +493,43 @@
       }
     }
   },
+  "ADMIN": {
+    "SEARCH": "Search",
+    "ACCOMMODATION": "Accommodation",
+    "UNIT_TYPE": "Unit Type",
+    "RESERVATIONS": {
+      "TITLE": "Reservation Management"
+    }
+  },
   "RESERVATIONS": {
     "SIDEBAR": {
       "RESERVE_CAMPING": "Reserve Camping",
-      "RESERVE_HOTEL": "Reserve Hotel"
+      "RESERVE_HOTEL": "Reserve Hotel",
+      "EDIT": "Edit Reservation",
+      "CANCEL": "Cancel Reservation",
+      "HISTORY": "View History",
+      "BACK": "Go Back"
     },
-    "EMPTY_STATE": "No reservations yet..."
+    "FIELDS": {
+      "DATES": "Travel Dates",
+      "GUESTS": "Number of Guests",
+      "PEOPLE": "People",
+      "PHONE": "Phone Number"
+    },
+    "STATUS": {
+      "CONFIRMED": "Confirmed",
+      "COMPLETED": "Completed",
+      "ACTIVE": "Active",
+      "CANCELLED": "Cancelled",
+      "ARCHIVED": "Archived"
+    },
+    "EMPTY_STATE": "No reservations yet...",
+    "HISTORY_EMPTY": "Your history is currently empty.",
+    "NAME": "Name",
+    "ARRIVAL": "Arrival",
+    "DEPARTURE": "Departure",
+    "GUESTS": "Guests",
+    "PHONE": "Phone"
   },
   "UNITS": {
     "CREATE_TITLE": "Add New Unit",

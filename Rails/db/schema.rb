@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_05_072338) do
   create_table "accommodations", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "address", null: false
     t.integer "category", limit: 1, null: false
@@ -103,6 +103,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
 
   create_table "orders", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.decimal "discount", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "purchased_at", default: -> { "current_timestamp(6)" }, null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
@@ -113,6 +114,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
     t.string "category", default: "GENERAL", null: false
     t.datetime "created_at", null: false
     t.text "description", size: :tiny
+    t.integer "discount_min_quantity"
+    t.decimal "discount_rate", precision: 5, scale: 4
     t.datetime "expired_at", null: false
     t.bigint "festival_id", null: false
     t.decimal "price", precision: 10, scale: 2, null: false
@@ -147,7 +150,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
     t.integer "nb_of_people", limit: 1, null: false, unsigned: true
     t.string "phone_number", limit: 20, null: false
     t.string "reservation_name", limit: 100, null: false
-    t.bigint "unit_id"
+    t.integer "status", default: 0, null: false
+    t.bigint "unit_id", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["festival_id"], name: "index_reservations_on_festival_id"
@@ -202,7 +206,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_014644) do
     t.column "food_options", "set('None','Canteen','Room service','Restaurant')", default: "None"
     t.decimal "parking_cost", precision: 4, scale: 2, default: "0.0", null: false, unsigned: true
     t.integer "quantity", limit: 1, null: false, unsigned: true
-    t.string "type", null: false
+    t.column "type", "enum('Units::SimpleRoom','Units::DoubleRoom','Units::FamilyRoom','Units::SmallTerrain','Units::StandardTerrain','Units::DeluxeTerrain')", null: false
     t.datetime "updated_at", null: false
     t.integer "water", limit: 1, default: 0
     t.boolean "wifi", default: false, null: false

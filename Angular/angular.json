@@ -34,6 +34,9 @@
               "src/material-theme.scss",
               "src/styles.css"
             ],
+            "allowedCommonJsDependencies": [
+              "qrcode"
+            ],
             "scripts": [],
             "prerender": false,
             "ssr": false
@@ -48,7 +51,7 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
+                  "maximumWarning": "5kB",
                   "maximumError": "8kB"
                 }
               ],

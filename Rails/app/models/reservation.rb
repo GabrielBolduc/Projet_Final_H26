@@ -79,12 +79,8 @@ class Reservation < ApplicationRecord
     if phone_number.present?
       parsed = Phonelib.parse(phone_number)
       if parsed.valid?
-<<<<<<< HEAD
-        self.phone_number = parsed.national.gsub(/\D/, '') 
-=======
         # On force l'extraction des chiffres sans le '+'
         self.phone_number = parsed.national.gsub(/\D/, "")
->>>>>>> d56bb63bb98ccfe2851d591ad90c39594c29b069
       end
     end
   end

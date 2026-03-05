@@ -1,13 +1,11 @@
 class Api::OrdersController < Api::ClientController
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+  include TicketPayloadFormatting
 
-  before_action :set_order, only: [ :show ]
+  before_action :set_order, only: :show
 
   # GET /api/orders
   def index
-    orders = current_user.orders
-                         .includes(tickets: [ package: :festival ])
-                         .order(purchased_at: :desc)
+    orders = user_orders_scope.order(purchased_at: :desc)
 
     render json: {
       status: "success",
@@ -84,9 +82,7 @@ class Api::OrdersController < Api::ClientController
   private
 
   def set_order
-    @order = current_user.orders
-                         .includes(tickets: [ package: :festival ])
-                         .find(params[:id])
+    @order = user_orders_scope.find(params[:id])
   end
 
   def order_params
@@ -97,48 +93,17 @@ class Api::OrdersController < Api::ClientController
     )
   end
 
-  def handle_not_found
-    render_error("Resource not found")
-  end
-
   def format_order(order)
     {
       id:           order.id,
       user_id:      order.user_id,
       purchased_at: order.purchased_at,
-      tickets:      order.tickets.map { |ticket| format_ticket(ticket) }
+      tickets:      order.tickets.map { |ticket| format_ticket_payload(ticket) }
     }
   end
 
-  def format_ticket(ticket)
-    package = ticket.package
-    {
-      id:           ticket.id,
-      order_id:     ticket.order_id,
-      unique_code:  ticket.unique_code,
-      qr_code_url:  ticket.generate_qr_code,
-      refunded_at:  ticket.refunded_at,
-      price:        ticket.price,
-      purchased_at: ticket.purchased_at,
-      holder_name:  ticket.holder_name,
-      holder_email: ticket.holder_email,
-      holder_phone: ticket.holder_phone,
-      package: {
-        id:          package.id,
-        title:       package.title,
-        description: package.description,
-        category:    package.category,
-        valid_at:    package.valid_at,
-        expired_at:  package.expired_at,
-        festival_id: package.festival_id,
-        image_url:   package_image_url(package)
-      }
-    }
-  end
-
-  def package_image_url(package)
-    return nil unless package.image.attached?
-    rails_blob_url(package.image, host: request.base_url)
+  def user_orders_scope
+    current_user.orders.includes(tickets: [ package: :festival ])
   end
 
   def sanitized_or_default(value, default_value)

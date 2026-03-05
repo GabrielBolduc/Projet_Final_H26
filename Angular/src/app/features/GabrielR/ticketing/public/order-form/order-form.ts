@@ -3,7 +3,7 @@ import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -45,7 +45,6 @@ export class TicketingOrderFormComponent implements OnInit {
   private auth = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private translate = inject(TranslateService);
   private packageService = inject(PackageService);
   private orderService = inject(OrderService);
   private errorHandler = inject(ErrorHandlerService);

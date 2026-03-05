@@ -3,7 +3,6 @@ require "cgi"
 class Ticket < ApplicationRecord
   belongs_to :order
   belongs_to :package
-  has_one :festival, through: :package
 
   delegate :purchased_at, to: :order, allow_nil: true
   delegate :valid_at, :expired_at, to: :package, allow_nil: true

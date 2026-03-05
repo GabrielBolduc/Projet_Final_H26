@@ -40,16 +40,10 @@
       <p class="ticket-date">{{ 'TICKETING_PUBLIC.DATE' | translate }}: {{ currentTicket.package.valid_at | date:'yyyy-MM-dd HH:mm' }}</p>
       
       <p class="status"
-         [class.refunded]="ticketIsRefunded()"
-         [class.expired]="ticketIsExpired() && !ticketIsRefunded()"
-         [class.active]="!ticketIsRefunded() && !ticketIsExpired()">
-        @if (ticketIsRefunded()) {
-          {{ 'TICKETING_PUBLIC.REFUNDED' | translate }}
-        } @else if (ticketIsExpired()) {
-          {{ 'TICKETING_PUBLIC.EXPIRED' | translate }}
-        } @else {
-          {{ 'TICKETING_PUBLIC.ACTIVE' | translate }}
-        }
+         [class.refunded]="ticketStatusClass() === 'refunded'"
+         [class.expired]="ticketStatusClass() === 'expired'"
+         [class.active]="ticketStatusClass() === 'active'">
+        {{ ticketStatusLabel() | translate }}
       </p>
 
       <form [formGroup]="ticketForm" (ngSubmit)="updateTicketDetails()" class="ticket-form">

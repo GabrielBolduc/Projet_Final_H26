@@ -67,6 +67,29 @@ export class TicketingTicketDetailComponent implements OnInit {
   });
 
   qrIsInvalid = computed(() => this.ticketIsRefunded() || this.ticketIsExpired());
+  ticketStatusClass = computed<'refunded' | 'expired' | 'active'>(() => {
+    if (this.ticketIsRefunded()) {
+      return 'refunded';
+    }
+
+    if (this.ticketIsExpired()) {
+      return 'expired';
+    }
+
+    return 'active';
+  });
+  ticketStatusLabel = computed(() => {
+    const statusClass = this.ticketStatusClass();
+    if (statusClass === 'refunded') {
+      return 'TICKETING_PUBLIC.REFUNDED';
+    }
+
+    if (statusClass === 'expired') {
+      return 'TICKETING_PUBLIC.EXPIRED';
+    }
+
+    return 'TICKETING_PUBLIC.ACTIVE';
+  });
 
   isLoading = signal(true);
   isSaving = signal(false);

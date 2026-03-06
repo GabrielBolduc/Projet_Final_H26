@@ -106,6 +106,9 @@ class Api::OrdersController < Api::ClientController
       id:           order.id,
       user_id:      order.user_id,
       purchased_at: order.purchased_at,
+      subtotal:     order.subtotal,
+      discount:     order.discount,
+      total_price:  order.total_price,
       tickets:      order.tickets.map { |ticket| format_ticket_payload(ticket) }
     }
   end

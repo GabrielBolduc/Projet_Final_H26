@@ -35,6 +35,23 @@
           </div>
         }
       </div>
+
+      <div class="order-summary">
+        <div class="summary-row">
+          <span>{{ 'TICKETING_PUBLIC.SUBTOTAL' | translate }}</span>
+          <span>{{ subtotal() | currency:'CAD':'symbol-narrow' }}</span>
+        </div>
+        @if (discount() > 0) {
+          <div class="summary-row discount">
+            <span>{{ 'TICKETING_PUBLIC.DISCOUNT' | translate }}</span>
+            <span>-{{ discount() | currency:'CAD':'symbol-narrow' }}</span>
+          </div>
+        }
+        <div class="summary-row total">
+          <span>{{ 'TICKETING_PUBLIC.TOTAL' | translate }}</span>
+          <span>{{ totalPrice() | currency:'CAD':'symbol-narrow' }}</span>
+        </div>
+      </div>
     </mat-card>
   } @else {
     <p class="empty-state">{{ 'TICKETING_PUBLIC.ORDER_NOT_FOUND' | translate }}</p>

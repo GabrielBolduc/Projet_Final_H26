@@ -22,10 +22,10 @@ class Reservation < ApplicationRecord
 
   def as_json(options = {})
     safe_options = options.is_a?(Hash) ? options : {}
-    
+
     current_options = safe_options.except(:base_url)
     current_options[:include] ||= :festival
-    
+
     json = super(current_options)
 
     if unit

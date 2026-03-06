@@ -110,7 +110,7 @@ class Api::ReservationsControllerTest < ActionDispatch::IntegrationTest
     # Format json valide
     assert_response :ok
     json_response = JSON.parse(response.body)
-    
+
     # DEBUG: Uncomment this to see the exact validation error in your console
     puts json_response["errors"] if json_response["status"] == "error"
 

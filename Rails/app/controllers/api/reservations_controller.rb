@@ -7,13 +7,13 @@ class Api::ReservationsController < ApiController
 
     query = if params[:unit_id].present?
               Reservation.where(unit_id: params[:unit_id]).active
-            elsif admin_user?
+    elsif admin_user?
               Reservation.all
-            elsif params[:history] == "true"
+    elsif params[:history] == "true"
               current_user.reservations.where(status: [ :completed, :cancelled ])
-            else
+    else
               current_user.reservations.active
-            end
+    end
 
     @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
     data = @reservations.map { |res| res.as_json(base_url: request.base_url) }

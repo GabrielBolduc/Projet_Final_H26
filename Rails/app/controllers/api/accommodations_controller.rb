@@ -8,7 +8,7 @@ class Api::AccommodationsController < ApiController
     return render_validation_success([]) if @festival.nil?
 
     @accommodations = @festival.accommodations.includes(units: { image_attachment: :blob })
-    
+
     @accommodations = @accommodations.search_by_name(params[:name]) if params[:name].present?
     @accommodations = @accommodations.where(category: params[:category]) if params[:category].present? && params[:category] != "all"
     @accommodations = @accommodations.within_radius(@festival.latitude, @festival.longitude, params[:max_distance]) if params[:max_distance].present?

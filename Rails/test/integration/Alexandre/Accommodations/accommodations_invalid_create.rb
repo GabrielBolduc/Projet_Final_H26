@@ -74,13 +74,13 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
     }, as: :json
 
     # Format json valide
-    assert_response :ok 
+    assert_response :ok
     json_response = JSON.parse(response.body)
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     commission_errors = json_response["errors"]["commission"]
     assert_includes commission_errors, "must be less than 30"
 
@@ -122,7 +122,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["latitude"], "can't be blank"
     assert_includes json_response["errors"]["longitude"], "can't be blank"
@@ -153,7 +153,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     assert_includes json_response["errors"]["time_car"], "can't be blank"
     assert_includes json_response["errors"]["time_walk"], "can't be blank"
 
@@ -207,7 +207,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["commission"], "must be greater than or equal to 0"
 
@@ -235,7 +235,7 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["name"], "is too long (maximum is 100 characters)"
 

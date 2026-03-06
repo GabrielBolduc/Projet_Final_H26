@@ -8,7 +8,7 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
     @admin = users(:three)
     @accommodation = accommodations(:one)
     @unit = units(:one)
-    
+
     # Attach an image to ensure image_url is generated
     unless @unit.image.attached?
       @unit.image.attach(fixture_file_upload("placeholder-image.jpg", "image/jpeg"))
@@ -37,7 +37,7 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "success", json_response["status"]
     assert_kind_of Array, json_response["data"]
-    
+
     # Validation de la structure as_json
     first_unit = json_response["data"].first
     assert first_unit.key?("image_url"), "image_url should be present"
@@ -137,7 +137,7 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
 
   def test_create_unit_as_admin
     sign_in @admin
-    @accommodation.update!(category: :hotel) 
+    @accommodation.update!(category: :hotel)
 
     # Removing 'as: :json' to allow multipart/form-data for the file upload
     assert_difference("Unit.count", 1) do
@@ -150,10 +150,10 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
           electricity: true,
           water: "drinkable",
           parking_cost: 10.0,
-          food_options: ["Restaurant"],
+          food_options: [ "Restaurant" ],
           image: fixture_file_upload("placeholder-image.jpg", "image/jpeg")
         }
-      } 
+      }
     end
 
     # Format response remains JSON
@@ -169,8 +169,4 @@ class Api::UnitsControllerTest < ActionDispatch::IntegrationTest
     new_unit = Unit.last
     assert new_unit.image.attached?
   end
-
-
-
-
 end

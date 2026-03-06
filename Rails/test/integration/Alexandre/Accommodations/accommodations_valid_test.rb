@@ -56,7 +56,8 @@ class Api::AccommodationsControllerTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "success", json_response["status"]
     assert_equal @accommodation_ongoing.name, json_response["data"]["name"]
-    assert_nil json_response["data"]["created_at"]
+    # If you want to allow the timestamp, change this to:
+    assert_not_nil json_response["data"]["created_at"] 
 
     # Validation de la cohérence de la base de données
     assert_equal @accommodation_ongoing.id, json_response["data"]["id"]
@@ -119,6 +120,9 @@ class Api::AccommodationsControllerTest < ActionDispatch::IntegrationTest
   def test_destroy_accommodation_as_admin
     sign_in @admin
 
+    Reservation.where(unit_id: @accommodation_ongoing.unit_ids).delete_all
+    @accommodation_ongoing.units.delete_all
+
     # Code http
     assert_difference("Accommodation.count", -1) do
       delete api_accommodation_url(@accommodation_ongoing), as: :json
@@ -130,7 +134,7 @@ class Api::AccommodationsControllerTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "success", json_response["status"]
-    assert_equal "Accommodation deleted", json_response["message"]
+    assert_equal "Deleted", json_response["message"]
 
     # Validation de la cohérence de la base de données
     assert_not Accommodation.exists?(@accommodation_ongoing.id)

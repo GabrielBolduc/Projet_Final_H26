@@ -68,6 +68,25 @@
   min-width: 0;
 }
 
+.price-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: var(--mat-sys-on-surface-variant);
+  opacity: 0.7;
+  font-size: 0.9em;
+  margin-right: 4px;
+}
+
+.final-price.has-discount {
+  color: var(--mat-sys-error);
+  font-weight: 600;
+}
+
 .order-panel strong {
   color: var(--mat-sys-primary);
 }

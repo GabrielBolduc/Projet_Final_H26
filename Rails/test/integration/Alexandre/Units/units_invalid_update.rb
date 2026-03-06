@@ -30,12 +30,14 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_match /Access denied/, json_response["message"]
+    # Updated to match the French string in your ApiController
+    assert_equal "Accès refusé : Privilèges administrateur requis.", json_response["message"]
 
     # Validation de la cohérence de la base de données
     @unit.reload
     assert_not_equal 50, @unit.quantity
   end
+
 
   def test_update_fails_with_invalid_data_as_admin
     sign_in @admin
@@ -51,9 +53,11 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    error_msg = Array(json_response["message"]).join(" ")
-    assert_includes error_msg, "must be less than or equal to 100"
-    assert_includes error_msg, "must be greater than or equal to 0"
+    assert_equal "Validation failed", json_response["message"]
+    
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["quantity"], "must be less than or equal to 100"
+    assert_includes json_response["errors"]["cost_person_per_night"], "must be greater than or equal to 0"
 
     # Validation de la cohérence de la base de données
     @unit.reload
@@ -61,8 +65,11 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     assert_not_equal -10.0, @unit.cost_person_per_night.to_f
   end
 
-  def test_update_fails_changing_type_to_invalid_category
+
+   def test_update_fails_changing_type_to_invalid_category
     sign_in @admin
+    # Ensure @unit's accommodation is indeed a hotel for the validation to trigger
+    @unit.accommodation.update!(category: :hotel)
 
     # Code http
     patch api_unit_url(@unit), params: {
@@ -75,12 +82,16 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "cannot be a terrain for a hotel"
+    assert_equal "Validation failed", json_response["message"]
+    
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["type"], "cannot be a terrain for a hotel"
 
     # Validation de la cohérence de la base de données
     @unit.reload
     assert_equal "Units::SimpleRoom", @unit.type
   end
+
 
   def test_update_ignores_accommodation_id_change
     sign_in @admin
@@ -113,12 +124,16 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "must be greater than 0"
+    assert_equal "Validation failed", json_response["message"]
+    
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["quantity"], "must be greater than 0"
 
     # Validation de la cohérence de la base de données
     @unit.reload
     assert_not_equal 0, @unit.quantity
   end
+
 
   def test_update_fails_with_excessive_quantity
     sign_in @admin
@@ -134,12 +149,16 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "must be less than or equal to 100"
+    assert_equal "Validation failed", json_response["message"]
+    
+    # Access the specific error nested in the 'errors' key
+    assert_includes json_response["errors"]["quantity"], "must be less than or equal to 100"
 
     # Validation de la cohérence de la base de données
     @unit.reload
     assert_not_equal 500, @unit.quantity
   end
+
 
   def test_update_fails_with_negative_parking_cost
     sign_in @admin
@@ -155,7 +174,10 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "must be greater than or equal to 0"
+    assert_equal "Validation failed", json_response["message"]
+    
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["parking_cost"], "must be greater than or equal to 0"
 
     # Validation de la cohérence de la base de données
     @unit.reload
@@ -176,7 +198,10 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "contains invalid values"
+    assert_equal "Validation failed", json_response["message"]
+    
+    # Validation des détails dans la clé 'errors' (custom validation)
+    assert_includes json_response["errors"]["food_options"].join, "contains invalid values"
 
     # Validation de la cohérence de la base de données
     @unit.reload
@@ -193,11 +218,12 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     }, as: :json
 
     # Format json valide
-    assert_response :success
+    assert_response :ok # API returns 200 even if no permitted changes were saved
 
     # Validation de la cohérence de la base de données
     @unit.reload
     assert_equal original_created_at.to_i, @unit.created_at.to_i
     assert_not_equal 9999, @unit.id
   end
+
 end

@@ -21,16 +21,20 @@ class Reservation < ApplicationRecord
   before_save :normalize_phone
 
   def as_json(options = {})
-    formatted_phone = ActionController::Base.helpers.number_to_phone(
-      self.phone_number,
-      area_code: true
-    )
+    safe_options = options.is_a?(Hash) ? options : {}
+    
+    current_options = safe_options.except(:base_url)
+    current_options[:include] ||= :festival
+    
+    json = super(current_options)
 
-    super(options.merge({
-      only: [ :id, :status, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :user_id, :unit_id, :festival_id, :created_at, :updated_at ]
-    })).merge({
-      phone_number: formatted_phone
-    })
+    if unit
+      json[:unit] = unit.as_json(safe_options).merge({
+        accommodation: unit.accommodation.as_json
+      })
+    end
+
+    json
   end
 
   private
@@ -53,7 +57,6 @@ class Reservation < ApplicationRecord
                           .where("DATE(arrival_at) < ? AND DATE(departure_at) > ?", departure_at.to_date, arrival_at.to_date)
 
     if overlaps.exists?
-      # DEBUG: See what record is actually causing the hit
       Rails.logger.debug "CONFLICT FOUND: #{overlaps.first.inspect}"
       errors.add(:base, "This unit is already booked for the selected dates.")
     end
@@ -84,8 +87,6 @@ class Reservation < ApplicationRecord
     if phone_number.present?
       parsed = Phonelib.parse(phone_number)
       if parsed.valid?
-        self.phone_number = parsed.national.gsub(/\D/, "")
-        # On force l'extraction des chiffres sans le '+'
         self.phone_number = parsed.national.gsub(/\D/, "")
       end
     end

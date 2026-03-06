@@ -33,7 +33,7 @@ class Unit < ApplicationRecord
   end
 
   def food_options_as_array
-    read_attribute(:food_options)&.split(",") || []
+    self[:food_options]&.split(",") || []
   end
 
   def food_options=(values)
@@ -45,23 +45,18 @@ class Unit < ApplicationRecord
     end
   end
 
-  def formatted_json(base_url = nil)
-    image_path = if image.attached?
-      Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
-    end
+  def as_json(options = {})
+    safe_options = options.is_a?(Hash) ? options : {}
+    json = super(safe_options.except(:base_url))
+    json[:max_capacity] = max_capacity
+    json[:food_options] = food_options_as_array
+    json[:type] = self.type 
 
-    full_image_url = if image_path && base_url
-      "#{base_url}#{image_path}"
-    else
-      image_path
+    if safe_options[:base_url] && image.attached?
+      path = Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+      json[:image_url] = "#{safe_options[:base_url]}#{path}"
     end
-
-    as_json.merge({
-      type: self.type,
-      image_url: full_image_url,
-      max_capacity: max_capacity,
-      food_options: food_options_as_array
-    })
+    json
   end
 
   def simple_room?

@@ -58,8 +58,15 @@
           </mat-panel-title>
           <mat-panel-description class="panel-description">
             {{ order.purchased_at | date:'yyyy-MM-dd HH:mm' }} | 
-            {{ order.ticket_count }} {{ 'TICKETING_PUBLIC.TICKETS' | translate }} | 
-            {{ order.total_price | currency:'CAD':'symbol-narrow' }}
+            {{ order.ticket_count }} {{ 'TICKETING_PUBLIC.TICKETS' | translate }} |
+            <span class="price-container">
+              @if (order.discount > 0) { 
+                <span class="original-price">{{ order.subtotal | currency:'CAD':'symbol-narrow' }}</span>
+              }
+              <span class="final-price" [class.has-discount]="order.discount > 0">
+                {{ order.total_price | currency:'CAD':'symbol-narrow' }}
+              </span>
+            </span>
           </mat-panel-description>
         </mat-expansion-panel-header>
 

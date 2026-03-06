@@ -1,79 +1,47 @@
 class Api::UnitsController < ApiController
-    before_action :set_unit, only: [ :show, :update, :destroy ]
-    before_action :require_admin!, except: [ :index, :show ]
+  before_action :set_unit, only: [ :show, :update, :destroy ]
+  before_action :require_admin!, except: [ :index, :show ]
 
-    def index
-        @accommodation = Accommodation.find(params[:accommodation_id])
-        @units = @accommodation.units.with_attached_image
+  def index
+    @accommodation = Accommodation.find(params[:accommodation_id])
+    @units = @accommodation.units.with_attached_image
+    render_validation_success(@units.map { |u| u.as_json(base_url: request.base_url) })
+  end
 
-        render json: {
-            status: "success",
-            data: @units.map { |u| u.formatted_json(request.base_url) }
-        }
+  def show
+    render_validation_success(@unit.as_json(base_url: request.base_url))
+  end
+
+  def create
+    @accommodation = Accommodation.find(params[:accommodation_id])
+    @unit = @accommodation.units.new(unit_params)
+    if @unit.save
+      render_validation_success(@unit.as_json(base_url: request.base_url))
+    else
+      render_validation_error(@unit)
     end
+  end
 
-    def show
-        render json: {
-            status: "success",
-            data: @unit.formatted_json(request.base_url)
-        }
+  def update
+    if @unit.update(unit_params)
+      render_validation_success(@unit.as_json(base_url: request.base_url))
+    else
+      render_validation_error(@unit)
     end
+  end
 
-    def create
-        @accommodation = Accommodation.find_by(id: params[:accommodation_id])
-        return render_logic_error("Accommodation not found") unless @accommodation
+  def destroy
+    @unit.destroy
+    render json: { status: "success" }, status: :ok
+  end
 
-        @unit = @accommodation.units.new(unit_params)
+  private
 
-        if @unit.save
-            render json: { status: "success", data: @unit }, status: :ok
-        else
-            render_logic_error(@unit.errors.full_messages)
-        end
-    end
+  def set_unit
+    @unit = Unit.find(params[:id])
+  end
 
-    def update
-        if @unit.update(unit_params)
-            render json: {
-                status: "success",
-                data: @unit.formatted_json(request.base_url)
-            }
-        else
-            render_logic_error(@unit.errors.full_messages)
-        end
-    end
-
-    def destroy
-        @unit.destroy
-        render json: { status: "success", message: "Unit deleted" }, status: :ok
-    end
-
-    private
-
-    def set_unit
-        @unit = Unit.find_by(id: params[:id])
-        render_logic_error("Unit not found") unless @unit
-    end
-
-    def unit_params
-        params.require(:unit).permit(
-            :type, :cost_person_per_night, :quantity, :wifi,
-            :water, :electricity, :parking_cost, :image,
-            food_options: []
-        )
-    end
-
-    def require_admin!
-        unless current_user&.is_a?(Admin)
-        render_logic_error("Access denied: Admin privileges required.")
-        end
-    end
-
-    def render_logic_error(message)
-        render json: { status: "error", message: message }, status: :ok
-    end
-
-    def format_unit(unit)
-        unit.formatted_json(request.base_url)
-    end
+  def unit_params
+    params.require(:unit).permit(:type, :cost_person_per_night, :quantity, :wifi, :water, :electricity, :parking_cost, :image, food_options: [])
+  end
 end

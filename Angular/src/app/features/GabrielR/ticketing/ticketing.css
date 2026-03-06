@@ -63,10 +63,11 @@
 
 .toolbar-top {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: 12px;
 }
 
+.search-field,
 .day-field,
 .sort-field {
   width: 100%;

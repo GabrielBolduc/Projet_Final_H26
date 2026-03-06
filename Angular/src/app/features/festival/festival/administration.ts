@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RouterModule, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-
+import { AuthService } from '../../../core/services/auth.service';
 import { FestivalService } from '../../../core/services/festival.service';
 import { Festival } from '../../../core/models/festival';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
@@ -49,7 +49,7 @@ export class AdministrationComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private translate = inject(TranslateService); 
-
+  public auth = inject(AuthService)
   festivals = signal<Festival[]>([]);
 
   currentFestival = computed(() => 

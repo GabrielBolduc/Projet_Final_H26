@@ -11,7 +11,7 @@
     <h1 class="header-title">{{'FESTIVAL.ADMINISTRATION' | translate}}</h1>
 
     <div class="top-bar-side right-align">
-      <span class="greeting">{{'FESTIVAL.HELLO' | translate}}</span>
+      <span class="greeting">{{'FESTIVAL.HELLO' | translate}} {{ auth.currentUser()?.name || auth.currentUser()?.email }}</span>
     </div>
   </header>
 

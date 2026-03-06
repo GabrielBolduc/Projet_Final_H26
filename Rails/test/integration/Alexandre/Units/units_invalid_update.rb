@@ -54,7 +54,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["quantity"], "must be less than or equal to 100"
     assert_includes json_response["errors"]["cost_person_per_night"], "must be greater than or equal to 0"
@@ -83,7 +83,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["type"], "cannot be a terrain for a hotel"
 
@@ -125,7 +125,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["quantity"], "must be greater than 0"
 
@@ -150,7 +150,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Access the specific error nested in the 'errors' key
     assert_includes json_response["errors"]["quantity"], "must be less than or equal to 100"
 
@@ -175,7 +175,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["parking_cost"], "must be greater than or equal to 0"
 
@@ -199,7 +199,7 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors' (custom validation)
     assert_includes json_response["errors"]["food_options"].join, "contains invalid values"
 
@@ -225,5 +225,4 @@ class Api::UnitsControllerInvalidUpdateTest < ActionDispatch::IntegrationTest
     assert_equal original_created_at.to_i, @unit.created_at.to_i
     assert_not_equal 9999, @unit.id
   end
-
 end

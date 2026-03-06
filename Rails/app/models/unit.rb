@@ -50,7 +50,7 @@ class Unit < ApplicationRecord
     json = super(safe_options.except(:base_url))
     json[:max_capacity] = max_capacity
     json[:food_options] = food_options_as_array
-    json[:type] = self.type 
+    json[:type] = self.type
 
     if safe_options[:base_url] && image.attached?
       path = Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)

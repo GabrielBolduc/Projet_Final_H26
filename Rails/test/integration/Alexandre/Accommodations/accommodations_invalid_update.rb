@@ -47,7 +47,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["commission"], "must be less than 30"
 
@@ -72,7 +72,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["name"], "can't be blank"
 
@@ -97,7 +97,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["latitude"], "can't be blank"
     assert_includes json_response["errors"]["longitude"], "can't be blank"
@@ -143,7 +143,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["commission"], "must be greater than or equal to 0"
 
@@ -169,7 +169,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["name"], "is too long (maximum is 100 characters)"
 
@@ -194,7 +194,7 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Validation des détails dans la clé 'errors'
     assert_includes json_response["errors"]["time_car"], "can't be blank"
     assert_includes json_response["errors"]["time_walk"], "can't be blank"

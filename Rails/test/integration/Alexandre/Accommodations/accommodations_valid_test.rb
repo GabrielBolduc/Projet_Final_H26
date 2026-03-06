@@ -57,7 +57,7 @@ class Api::AccommodationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "success", json_response["status"]
     assert_equal @accommodation_ongoing.name, json_response["data"]["name"]
     # If you want to allow the timestamp, change this to:
-    assert_not_nil json_response["data"]["created_at"] 
+    assert_not_nil json_response["data"]["created_at"]
 
     # Validation de la cohérence de la base de données
     assert_equal @accommodation_ongoing.id, json_response["data"]["id"]

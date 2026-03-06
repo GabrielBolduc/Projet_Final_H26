@@ -52,10 +52,10 @@ class Api::UnitsControllerInvalidDestroyTest < ActionDispatch::IntegrationTest
 
   def test_destroy_unit_removes_image_attachment
     sign_in @admin
-    
+
     # Satisfy before_destroy by removing reservations
     @unit.reservations.destroy_all
-    
+
     @unit.image.attach(
       io: File.open(Rails.root.join("test/fixtures/files/placeholder-image.jpg")),
       filename: "test.jpg", content_type: "image/jpeg"
@@ -73,12 +73,12 @@ class Api::UnitsControllerInvalidDestroyTest < ActionDispatch::IntegrationTest
 
   def test_destroy_unit_cascades_to_reservations
     sign_in @admin
-    
+
     # NOTE: Your model currently BLOCKS destroy if reservations exist.
     # To test a CASCADE, you must ensure the model doesn't throw(:abort).
-    # If your business logic requires reservations to be deleted, the test below 
+    # If your business logic requires reservations to be deleted, the test below
     # will fail unless you call @unit.reservations.destroy_all first.
-    
+
     @unit.reservations.destroy_all # Satisfies before_destroy logic
 
     assert_difference("Unit.count", -1) do

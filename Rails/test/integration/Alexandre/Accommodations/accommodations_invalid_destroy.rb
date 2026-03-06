@@ -31,7 +31,7 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
 
 
   def test_destroy_accommodation_denied_for_staff
-    sign_in @staff 
+    sign_in @staff
 
     # Code http
     delete api_accommodation_url(@accommodation), as: :json
@@ -73,7 +73,7 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
 
     def test_destroy_accommodation_cascades_to_reservations
         sign_in @admin
-        
+
         @accommodation.units.each { |u| u.reservations.destroy_all }
 
         # Code http
@@ -100,7 +100,7 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
         target_unit = units(:one)
 
         target_unit.reservations.destroy_all
-        
+
         # Attach the image to the unit
         target_unit.image.attach(fixture_file_upload("placeholder-image.jpg", "image/jpeg"))
         target_unit.save!
@@ -113,11 +113,9 @@ class Api::AccommodationsControllerInvalidDestroyTest < ActionDispatch::Integrat
 
         # Format json valide
         assert_response :ok
-        
+
         # Validation de la cohérence de la base de données
         assert_nil ActiveStorage::Blob.find_by(id: blob_id), "Image blob leaked in database"
         assert_not Accommodation.exists?(@accommodation.id)
     end
-
-
 end

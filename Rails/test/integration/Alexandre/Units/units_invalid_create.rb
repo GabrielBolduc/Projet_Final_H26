@@ -77,7 +77,7 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
         # Contenu du format json
         assert_equal "error", json_response["status"]
         assert_equal "Validation failed", json_response["message"]
-        
+
         # Access the specific error nested in the 'errors' key
         assert_includes json_response["errors"]["image"], "must be uploaded"
 
@@ -92,11 +92,11 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
 
     # Removing 'as: :json' to allow multipart/form-data for the mandatory image upload
     post api_accommodation_units_url(@accommodation), params: {
-      unit: { 
-        type: "Units::SimpleRoom", 
+      unit: {
+        type: "Units::SimpleRoom",
         quantity: 0, # Invalid: must be > 0
         cost_person_per_night: 50,
-        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg") 
+        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg")
       }
     }
 
@@ -106,7 +106,7 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Check the specific attribute error in the 'errors' hash
     # Note: Rails default message is "must be greater than 0"
     assert_includes json_response["errors"]["quantity"], "must be greater than 0"
@@ -133,10 +133,10 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
     json_response = JSON.parse(response.body)
-    
+
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Check the specific numericality errors in the errors hash
     assert_includes json_response["errors"]["cost_person_per_night"], "must be greater than or equal to 0"
     assert_includes json_response["errors"]["parking_cost"], "must be greater than or equal to 0"
@@ -149,21 +149,21 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
 
     # Use multipart (no as: :json) for the image attachment
     post api_accommodation_units_url(@accommodation), params: {
-      unit: { 
-        type: "Units::SimpleRoom", 
-        quantity: 1, 
-        cost_person_per_night: 20, 
+      unit: {
+        type: "Units::SimpleRoom",
+        quantity: 1,
+        cost_person_per_night: 20,
         parking_cost: 0,
-        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg") 
+        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg")
       }
     }
 
     assert_response :ok
     json_response = JSON.parse(response.body)
-    
+
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Check the specific STI validation error in the errors hash
     assert_includes json_response["errors"]["type"], "cannot be a room for a camping site"
   end
@@ -176,21 +176,21 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
 
     # Use multipart (no as: :json) for the image attachment
     post api_accommodation_units_url(@accommodation), params: {
-      unit: { 
-        type: "Units::StandardTerrain", 
-        quantity: 1, 
-        cost_person_per_night: 100, 
+      unit: {
+        type: "Units::StandardTerrain",
+        quantity: 1,
+        cost_person_per_night: 100,
         parking_cost: 0,
-        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg") 
+        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg")
       }
     }
 
     assert_response :ok
     json_response = JSON.parse(response.body)
-    
+
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Check the specific STI validation error in the errors hash
     assert_includes json_response["errors"]["type"], "cannot be a terrain for a hotel"
   end
@@ -211,11 +211,11 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
     # Code http
     # Using a direct path to bypass URL helper validation for non-existent IDs
     post "/api/accommodations/999999/units", params: {
-      unit: { 
-        type: "Units::SimpleRoom", 
-        quantity: 1, 
-        cost_person_per_night: 50, 
-        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg") 
+      unit: {
+        type: "Units::SimpleRoom",
+        quantity: 1,
+        cost_person_per_night: 50,
+        image: fixture_file_upload("placeholder-image.jpg", "image/jpeg")
       }
     }
 
@@ -305,12 +305,11 @@ class Api::UnitsControllerInvalidCreateTest < ActionDispatch::IntegrationTest
     # Contenu du format json
     assert_equal "error", json_response["status"]
     assert_equal "Validation failed", json_response["message"]
-    
+
     # Check the specific attribute error in the 'errors' hash
     assert_includes json_response["errors"]["quantity"], "must be less than or equal to 100"
 
     # Validation de la cohérence de la base de données
     assert_nil Unit.find_by(quantity: 150)
   end
-
 end

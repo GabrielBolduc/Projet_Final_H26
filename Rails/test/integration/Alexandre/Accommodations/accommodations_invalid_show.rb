@@ -35,5 +35,4 @@ class Api::AccommodationsControllerInvalidShowTest < ActionDispatch::Integration
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(id: 0)
   end
-
 end

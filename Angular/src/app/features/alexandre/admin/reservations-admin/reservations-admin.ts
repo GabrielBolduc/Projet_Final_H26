@@ -1,12 +1,14 @@
-import { Component, OnInit, inject, ViewChild, signal } from '@angular/core';
+import { Component, AfterViewInit, inject, ViewChild, signal, computed, effect, untracked } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatSelectModule } from '@angular/material/select'; 
 
 import { ReservationsService } from '@core/services/reservation.service';
 import { Reservation } from '@core/models/reservation';
@@ -16,77 +18,98 @@ import { Reservation } from '@core/models/reservation';
   standalone: true,
   imports: [
     CommonModule, MatTableModule, MatPaginatorModule, MatSortModule,
-    MatInputModule, MatFormFieldModule, MatIconModule, TranslateModule
+    MatInputModule, MatFormFieldModule, MatIconModule, TranslateModule,
+    MatAutocompleteModule, MatSelectModule
   ],
   templateUrl: './reservations-admin.html',
   styleUrl: './reservations-admin.css',
 })
-export class ReservationsAdmin implements OnInit {
+export class ReservationsAdmin implements AfterViewInit {
   private reservationsService = inject(ReservationsService);
 
-  dataSource = new MatTableDataSource<Reservation>([]);
-  displayedColumns: string[] = [
-    'reservation_name',
-    'phone_number',
-    'accommodation',
-    'unit_type',
-    'arrival_at', 
-    'departure_at', 
-    'nb_of_people', 
-    'status'
-  ];  
+  // --- Signals ---
+  reservations = signal<Reservation[]>([]);
+  totalRecords = signal<number>(0);
   isLoading = signal<boolean>(true);
+  searchTerm = signal<string>('');
+  statusFilter = signal<string>('all'); 
+
+  // --- Computed (Type-ahead logic) ---
+  // Unique accommodation names from the CURRENTly loaded page
+  private accommodationNames = computed(() => {
+    const names = this.reservations()
+      .map(r => r.unit?.accommodation?.name)
+      .filter((n): n is string => !!n);
+    return [...new Set(names)];
+  });
+
+  filteredOptions = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    return this.accommodationNames().filter(name => 
+      name.toLowerCase().includes(term)
+    );
+  });
+
+  displayedColumns: string[] = [
+    'reservation_name', 'phone_number', 'accommodation', 
+    'unit_type', 'arrival_at', 'departure_at', 'nb_of_people', 'status'
+  ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  ngOnInit(): void {
-    this.loadAllReservations();
-  }
-
-  loadAllReservations(): void {
-    this.isLoading.set(true);
-    this.reservationsService.list().subscribe({
-      next: (res) => {
-        this.dataSource.data = res.data;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        this.dataSource.sortingDataAccessor = (item: any, property: string) => {
-          switch (property) {
-            case 'status': return this.getReservationStatus(item);
-            case 'accommodation': return item.unit?.accommodation?.name || '';
-            case 'unit_type': return item.unit?.type || '';
-            default: return item[property as keyof any];
-          }
-        };
-
-        this.dataSource.filterPredicate = (data: Reservation, filter: string) => {
-          const accommodationName = data.unit?.accommodation?.name?.toLowerCase() || '';
-          return accommodationName.includes(filter);
-        };
-        this.isLoading.set(false);
-      },
-      error: () => this.isLoading.set(false)
+  constructor() {
+    effect(() => {
+      this.searchTerm();
+      this.statusFilter();
+      untracked(() => this.loadData());
     });
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  ngAfterViewInit(): void {
+    this.sort.sortChange.subscribe(() => {
+      this.paginator.pageIndex = 0;
+      this.loadData();
+    });
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    this.paginator.page.subscribe(() => {
+      this.loadData();
+    });
+
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.isLoading.set(true);
+    const params = {
+      admin_view: true,
+      page: (this.paginator?.pageIndex ?? 0) + 1,
+      per_page: this.paginator?.pageSize ?? 10,
+      sort_by: this.sort?.active || 'created_at',
+      order: this.sort?.direction || 'desc',
+      search: this.searchTerm(),
+      status_filter: this.statusFilter()
+    };
+
+    this.reservationsService.list(params).subscribe({
+      next: (res: any) => {
+        this.reservations.set(res.data);
+        this.totalRecords.set(res.total);
+        this.isLoading.set(false);
+      }
+    });
+  }
+
+  updateSearch(value: string): void {
+    this.searchTerm.set(value);
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
     }
   }
 
-  getReservationStatus(row: Reservation): 'Active' | 'Cancelled' | 'Archived' {
+  getReservationStatus(row: Reservation): string {
     if (row.status === 'cancelled') return 'Cancelled';
-    
-    const festivalStatus = (row as any).festival?.status;
-    if (festivalStatus === 'completed') return 'Archived';
-    
-    return 'Active';
+    return (row as any).festival?.status === 'completed' ? 'Archived' : 'Active';
   }
 
   getUnitTypeName(type: string | undefined): string {

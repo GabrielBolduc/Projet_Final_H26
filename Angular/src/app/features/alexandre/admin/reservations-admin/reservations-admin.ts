@@ -27,15 +27,12 @@ import { Reservation } from '@core/models/reservation';
 export class ReservationsAdmin implements AfterViewInit {
   private reservationsService = inject(ReservationsService);
 
-  // --- Signals ---
   reservations = signal<Reservation[]>([]);
   totalRecords = signal<number>(0);
   isLoading = signal<boolean>(true);
   searchTerm = signal<string>('');
   statusFilter = signal<string>('all'); 
 
-  // --- Computed (Type-ahead logic) ---
-  // Unique accommodation names from the CURRENTly loaded page
   private accommodationNames = computed(() => {
     const names = this.reservations()
       .map(r => r.unit?.accommodation?.name)
@@ -45,9 +42,11 @@ export class ReservationsAdmin implements AfterViewInit {
 
   filteredOptions = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    return this.accommodationNames().filter(name => 
-      name.toLowerCase().includes(term)
-    );
+    
+    return this.accommodationNames()
+      .filter(name => name.toLowerCase().includes(term))
+      .sort((a, b) => a.localeCompare(b)) 
+      .slice(0, 5);                
   });
 
   displayedColumns: string[] = [

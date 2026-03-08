@@ -50,9 +50,28 @@
         <div class="filter-section">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>{{ 'ACCOMMODATIONS.SEARCH' | translate }}</mat-label>
-            <input matInput [placeholder]="'ACCOMMODATIONS.BY_NAME' | translate"
-                   [value]="searchValue()" (input)="updateFilter('name', $any($event.target).value)">
-            <mat-icon matSuffix>search</mat-icon>
+            <input type="text"
+                  matInput
+                  [placeholder]="'ACCOMMODATIONS.BY_NAME' | translate"
+                  [formControl]="searchControl"
+                  [matAutocomplete]="auto"> 
+
+            @if (searchControl.value) {
+              <button mat-icon-button matSuffix (click)="searchControl.setValue(''); applySearch('')" type="button" class="clear-btn">
+                <mat-icon>close</mat-icon>
+              </button>
+            } @else {
+              <mat-icon matSuffix>search</mat-icon>
+            }
+            
+            <mat-autocomplete #auto="matAutocomplete" 
+                              (optionSelected)="updateFilter('name', $event.option.value)">
+              @for (acc of filteredOptions(); track acc.id) {
+                <mat-option [value]="acc.name">
+                  {{ acc.name }}
+                </mat-option>
+              }
+            </mat-autocomplete>
           </mat-form-field>
           
           <div class="slider-group centered-slider">

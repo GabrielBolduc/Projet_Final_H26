@@ -55,4 +55,43 @@ class Festival < ApplicationRecord
       errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive)")
     end
   end
+
+  def self.statistics_report
+    festivals = includes(performances: [:artist, :stage])
+
+    festivals.map do |festival|
+      perfs = festival.performances
+
+      perf_count = perfs.size
+      artist_count = perfs.map(&:artist_id).uniq.size
+
+      stage_counts = perfs.group_by(&:stage).transform_values(&:size)
+      
+      top_stage, top_count = stage_counts.max_by { |_stage, count| count }
+
+      avg_pop = 0.0
+      env = "N/A"
+
+      if top_stage
+        artists_on_stage = perfs.select { |p| p.stage_id == top_stage.id }.map(&:artist)
+        
+        if artists_on_stage.any?
+          avg_pop = (artists_on_stage.sum(&:popularity).to_f / artists_on_stage.size).round(1)
+        end
+        env = top_stage.respond_to?(:environment) ? top_stage.environment : "Standard"
+      end
+      
+      {
+        id: festival.id,
+        name: festival.name,
+        year: festival.start_at&.year || Time.current.year,
+        artist_count: artist_count,
+        performance_count: perf_count,
+        top_stage_name: top_stage&.name || "Aucune",
+        top_stage_perf_count: top_count || 0,
+        top_stage_avg_pop: avg_pop,
+        top_stage_env: env
+      }
+    end
+  end
 end

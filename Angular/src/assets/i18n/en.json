@@ -542,6 +542,8 @@
     "STATUS": {
       "CONFIRMED": "Confirmed",
       "COMPLETED": "Completed",
+      "STATUS_LABEL": "Status",
+      "ALL": "All",
       "ACTIVE": "Active",
       "CANCELLED": "Cancelled",
       "ARCHIVED": "Archived"

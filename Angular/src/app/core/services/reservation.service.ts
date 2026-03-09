@@ -4,24 +4,32 @@ import { Observable, map } from 'rxjs';
 import { Reservation } from '@core/models/reservation';
 import { ApiResponse } from '../models/api-response';
 
+export interface ReservationListParams {
+  admin_view?: boolean;
+  history?: boolean;
+  page?: number;
+  per_page?: number;
+  sort_by?: string;
+  order?: 'asc' | 'desc' | '';
+  search?: string;
+  unit_id?: number;
+  festival_id?: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ReservationsService {
   private http = inject(HttpClient);
   private readonly BASE_URL = '/api';
 
-  list(filters?: { unit_id?: number; festival_id?: number; history?: boolean }): Observable<ApiResponse<Reservation[]>> {
+  list(filters?: ReservationListParams): Observable<ApiResponse<Reservation[]>> {
     let params = new HttpParams();
     
-    if (filters?.unit_id) {
-      params = params.set('unit_id', filters.unit_id.toString());
-    }
-    
-    if (filters?.festival_id) {
-      params = params.set('festival_id', filters.festival_id.toString());
-    }
-    
-    if (filters?.history !== undefined) {
-      params = params.set('history', filters.history.toString());
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          params = params.set(key, value.toString());
+        }
+      });
     }
 
     return this.http.get<ApiResponse<Reservation[]>>(`${this.BASE_URL}/reservations`, { params });

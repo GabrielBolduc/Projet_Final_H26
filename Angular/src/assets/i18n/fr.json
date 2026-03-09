@@ -548,6 +548,8 @@
     "STATUS": {
       "CONFIRMED": "Confirmé",
       "COMPLETED": "Terminé",
+      "STATUS_LABEL": "Statut",
+      "ALL": "Tous",
       "ACTIVE": "Actif",
       "CANCELLED": "Annulée",
       "ARCHIVED": "Archivée"

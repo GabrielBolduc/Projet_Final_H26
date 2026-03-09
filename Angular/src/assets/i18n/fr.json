@@ -201,7 +201,8 @@
     "TASK": "Tâches",
     "TICKET": "Billetterie",
     "ARTIST": "Artistes",
-    "AFFECTATIONS": "Affectations"
+    "AFFECTATIONS": "Affectations",
+    "STATS": "Statistiques"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "Nouveau Forfait",

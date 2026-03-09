@@ -20,7 +20,7 @@
 
       <mat-menu #adminMenu="matMenu">
         <button mat-menu-item [routerLink]="['/admin/festivals']">
-          <mat-icon>dashboard</mat-icon>
+          <mat-icon>festival</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
         
@@ -52,7 +52,7 @@
 
         <button mat-menu-item [routerLink]="['admin/statistiques']">
           <mat-icon>bar_chart</mat-icon>
-          <span>Stats</span>
+          <span>{{'ADMIN_NAV.STATS' | translate}}</span>
         </button>
       </mat-menu>
     }
@@ -145,7 +145,7 @@
         <div mat-subheader style="color: var(--mat-sys-primary); font-weight: bold; padding: 0 16px;">Administration</div>
         
         <button mat-menu-item [routerLink]="['/admin/festivals']">
-          <mat-icon>dashboard</mat-icon>
+          <mat-icon>festival</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
         

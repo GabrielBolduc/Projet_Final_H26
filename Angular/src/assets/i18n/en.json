@@ -199,7 +199,8 @@
     "TASK": "Tasks",
     "TICKET": "Ticketing",
     "ARTIST": "Artits",
-    "AFFECTATIONS": "Affectations"
+    "AFFECTATIONS": "Affectations",
+    "STATS": "Statistics"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "New Package",

@@ -248,6 +248,16 @@
     "AVAILABLE_SPOTS": "Places disponibles",
     "SOLD_OUT_FILTER": "Complet (Sold Out)"
   },
+  "TICKETING_STATS": {
+    "TITLE": "Billetterie",
+    "FESTIVAL": "Festival",
+    "TOTAL_TICKETS": "Total billets vendus",
+    "EXPENSES": "Dépenses",
+    "REVENUES": "Revenus",
+    "PROFIT": "Profit",
+    "AVG_TICKETS": "Moy. billets par commande",
+    "REFUNDS": "Montant remboursé"
+  },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",
     "SUBTITLE": "Parcourez les forfaits et achetez vos billets du festival en cours.",

@@ -49,6 +49,11 @@
           <mat-icon>hotel</mat-icon>
           <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
         </button>
+
+        <button mat-menu-item [routerLink]="['admin/statistiques']">
+          <mat-icon>bar_chart</mat-icon>
+          <span>Stats</span>
+        </button>
       </mat-menu>
     }
   </div>
@@ -169,6 +174,12 @@
           <mat-icon>hotel</mat-icon>
           <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
         </button>
+
+        <button mat-menu-item [routerLink]="['admin/statistiques']">
+          <mat-icon>bar_chart</mat-icon>
+          <span>Stats</span>
+        </button>
+
       }
 
       <mat-divider></mat-divider>

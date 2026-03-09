@@ -1,0 +1,37 @@
+<div class="dashboard-layout">
+  <main class="admin-page">
+    
+    <header class="admin-top-bar">
+      <div class="top-bar-side left-align"></div>
+  
+      <div class="header-center">
+        <h1 class="header-title">
+          <mat-icon style="font-size: 28px; width: 28px; height: 28px; margin-right: 5px;">bar_chart</mat-icon>
+          Statistiques
+        </h1>
+      </div>
+  
+      <div class="top-bar-side right-align"></div>
+    </header>
+
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel">
+      @for (link of navLinks; track link.path) {
+        <a mat-tab-link
+           [routerLink]="link.path"
+           routerLinkActive #rla="routerLinkActive"
+           [active]="rla.isActive">
+           
+           <mat-icon style="margin-right: 8px;">{{ link.icon }}</mat-icon>
+           {{ link.label }}
+        </a>
+      }
+    </nav>
+
+    <mat-tab-nav-panel #tabPanel>
+      <div class="stats-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-tab-nav-panel>
+
+  </main>
+</div>

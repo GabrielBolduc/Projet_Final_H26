@@ -528,7 +528,8 @@
   "RESERVATIONS": {
     "ERRORS": {
       "TOO_MANY_PEOPLE": "Dépasse la capacité de l'unité",
-      "INVALID_RANGE": "Le départ doit être après l'arrivée"
+      "INVALID_RANGE": "Le départ doit être après l'arrivée",
+      "CONTAINS_RESERVED_DATES": "La période sélectionnée contient des dates déjà réservées."
     },
     "SIDEBAR": {
       "ADD_STAY": "Ajouter une réservation",

@@ -105,6 +105,11 @@
         {{ 'RESERVATIONS.ERRORS.INVALID_RANGE' | translate }}
       </p>
     }
+    @if (form.errors?.['rangeContainsReserved'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
+      <p class="form-error" style="text-align: left; margin-top: -10px;">
+        {{ 'RESERVATIONS.ERRORS.CONTAINS_RESERVED_DATES' | translate }}
+      </p>
+    }
 
     <div class="form-actions">
       <button mat-stroked-button class="action-btn" type="button" routerLink="/reservations">

@@ -553,7 +553,8 @@
     },
     "ERRORS": {
       "TOO_MANY_PEOPLE": "Exceeds unit capacity",
-      "INVALID_RANGE": "Departure must be after arrival"
+      "INVALID_RANGE": "Departure must be after arrival",
+      "CONTAINS_RESERVED_DATES": "Selected range includes dates that are already booked."
     },
     "EMPTY_STATE": "No reservations yet...",
     "HISTORY_EMPTY": "Your history is currently empty.",

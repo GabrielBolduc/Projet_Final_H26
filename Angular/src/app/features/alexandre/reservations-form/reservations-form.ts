@@ -53,6 +53,29 @@ export class ReservationsForm implements OnInit {
   maxDate = signal<Date | null>(null);
   reservedDates = signal<Set<number>>(new Set());
   startAtDate = signal<Date>(new Date());
+
+  private dateRangeValidator = (group: AbstractControl): ValidationErrors | null => {
+    const start = group.get('arrival_at')?.value;
+    const end = group.get('departure_at')?.value;
+
+    if (!start || !end) return null;
+
+    const startDate = new Date(start).setHours(0, 0, 0, 0);
+    const endDate = new Date(end).setHours(0, 0, 0, 0);
+
+    if (startDate >= endDate) return { dateRangeInvalid: true };
+
+    const current = new Date(startDate);
+    const reserved = this.reservedDates();
+
+    while (current < new Date(endDate)) {
+      if (reserved.has(current.getTime())) {
+        return { rangeContainsReserved: true };
+      }
+      current.setDate(current.getDate() + 1);
+    }
+    return null;
+  };
   
   form: FormGroup = this.fb.group({
     reservation_name: ['', [
@@ -202,12 +225,6 @@ dateFilter = (date: Date | null): boolean => {
       },
       error: () => this.isLoading.set(false)
     });
-  }
-
-  private dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const start = group.get('arrival_at')?.value;
-    const end = group.get('departure_at')?.value;
-    return start && end && new Date(start) >= new Date(end) ? { dateRangeInvalid: true } : null;
   }
 
 private loadReservation(id: number) {

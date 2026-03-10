@@ -59,7 +59,7 @@
                   [matAutocomplete]="auto"> 
 
             @if (searchControl.value) {
-              <button mat-icon-button matSuffix (click)="searchControl.setValue(''); applySearch('')" type="button" class="clear-btn">
+              <button mat-icon-button matSuffix (click)="clearSearch()" type="button" class="clear-btn">
                 <mat-icon>close</mat-icon>
               </button>
             } @else {
@@ -67,7 +67,7 @@
             }
             
             <mat-autocomplete #auto="matAutocomplete" 
-                              (optionSelected)="updateFilter('name', $event.option.value)">
+                              (optionSelected)="searchControl.setValue($event.option.value)">
               @for (acc of filteredOptions(); track acc.id) {
                 <mat-option [value]="acc.name">
                   {{ acc.name }}
@@ -119,12 +119,12 @@
 
           <div class="amenities-flex">
             <mat-chip-listbox multiple class="large-brutalist-chips">
-              <mat-chip-option [selected]="wifiValue()">
+              <mat-chip-option [selected]="wifiValue()" (selectionChange)="updateFilter('wifi', $event.selected)">
                 <mat-icon matChipAvatar>wifi</mat-icon> 
                 <span>WiFi</span>
               </mat-chip-option>
               
-              <mat-chip-option [selected]="electricityValue()">
+              <mat-chip-option [selected]="electricityValue()" (selectionChange)="updateFilter('electricity', $event.selected)">
                 <mat-icon matChipAvatar>bolt</mat-icon> 
                 <span>{{ 'ACCOMMODATIONS.ELECTRICITY' | translate }}</span>
               </mat-chip-option>

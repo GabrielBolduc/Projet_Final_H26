@@ -8,7 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatSelectModule } from '@angular/material/select'; 
+import { MatSelectModule } from '@angular/material/select';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { ReservationsService } from '@core/services/reservation.service';
 import { Reservation } from '@core/models/reservation';
@@ -31,7 +32,9 @@ export class ReservationsAdmin implements AfterViewInit {
   totalRecords = signal<number>(0);
   isLoading = signal<boolean>(true);
   searchTerm = signal<string>('');
-  statusFilter = signal<string>('all'); 
+  statusFilter = signal<string>('all');
+  
+  private searchSubject = new Subject<string>();
 
   private accommodationNames = computed(() => {
     const names = this.reservations()
@@ -42,7 +45,6 @@ export class ReservationsAdmin implements AfterViewInit {
 
   filteredOptions = computed(() => {
     const term = this.searchTerm().toLowerCase();
-    
     return this.accommodationNames()
       .filter(name => name.toLowerCase().includes(term))
       .sort((a, b) => a.localeCompare(b)) 
@@ -58,6 +60,16 @@ export class ReservationsAdmin implements AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor() {
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(value => {
+      this.searchTerm.set(value);
+      if (this.paginator) {
+        this.paginator.pageIndex = 0;
+      }
+    });
+
     effect(() => {
       this.searchTerm();
       this.statusFilter();
@@ -67,7 +79,7 @@ export class ReservationsAdmin implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.sort.sortChange.subscribe(() => {
-      this.paginator.pageIndex = 0;
+      if (this.paginator) this.paginator.pageIndex = 0;
       this.loadData();
     });
 
@@ -95,15 +107,13 @@ export class ReservationsAdmin implements AfterViewInit {
         this.reservations.set(res.data);
         this.totalRecords.set(res.total);
         this.isLoading.set(false);
-      }
+      },
+      error: () => this.isLoading.set(false)
     });
   }
 
   updateSearch(value: string): void {
-    this.searchTerm.set(value);
-    if (this.paginator) {
-      this.paginator.pageIndex = 0;
-    }
+    this.searchSubject.next(value);
   }
 
   getReservationStatus(row: Reservation): string {

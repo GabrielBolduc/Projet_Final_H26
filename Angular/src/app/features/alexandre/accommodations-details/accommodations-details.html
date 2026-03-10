@@ -86,7 +86,7 @@
             @if (!isAdmin && priceRange(); as range) {
               <div class="stat-box">
                   <mat-icon>sell</mat-icon>
-                  <div class="stat-label">{{ 'ACCOMMODATIONS.DETAILS.PRICE_FROM' | translate }}</div>
+                  <div class="stat-label">{{ 'UNITS.COST' | translate }}</div>
                   <div class="stat-value">
                       {{ range.min | currency:'USD':'symbol':'1.0-0' }}
                       @if (range.max > range.min) {
@@ -210,6 +210,22 @@
                 {{ group.minPrice | currency:'USD':'symbol':'1.0-0' }}
                 </span>
               </div>
+
+              @if (!isAdmin) {
+                <div style="width: 100%; margin-top: auto; padding-top: 15px;">
+                  <button mat-flat-button 
+                          color="primary" 
+                          class="reserve-unit-btn"
+                          [routerLink]="['/reservations-form']"
+                          [queryParams]="{ 
+                            accommodationId: acc.id, 
+                            unit_id: group.id 
+                          }">
+                    <mat-icon>calendar_add_on</mat-icon>
+                    {{ 'ACCOMMODATIONS.DETAILS.BOOK_UNIT' | translate }}
+                  </button>
+                </div>
+              }
 
               @if (groups.length === 0) {
                 <div class="empty-units-message" style="text-align: center; padding: 40px; border: 2px dashed #ccc; border-radius: 15px; margin-top: 40px;">

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectorRef, computed, TemplateRef } from '@angular/core'
+import { Component, OnInit, inject, signal, ChangeDetectorRef, computed, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip'; 
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize, take } from 'rxjs/operators';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import { ReservationsService } from '@core/services/reservation.service';
 import { Reservation } from '@core/models/reservation';
@@ -33,7 +34,8 @@ import { AuthService } from '@core/services/auth.service';
     MatCardModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    TranslateModule
+    TranslateModule,
+    MatTooltipModule
   ],
   templateUrl: './reservations.html',
   styleUrl: './reservations.css',
@@ -45,7 +47,8 @@ export class Reservations implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private dialog = inject(MatDialog);
 
-  activeReservation = signal<Reservation | null>(null);
+  activeReservationsList = signal<Reservation[]>([]); 
+  selectedReservation = signal<Reservation | null>(null);
   historyReservations = signal<Reservation[]>([]);
 
   showHistory = signal<boolean>(false);
@@ -56,7 +59,7 @@ export class Reservations implements OnInit {
   });
 
   mapUrl = computed(() => {
-    const res = this.activeReservation();
+    const res = this.selectedReservation();
     const acc = res?.unit?.accommodation;
     
     if (!acc || !acc.latitude || !acc.longitude) return null;
@@ -65,8 +68,7 @@ export class Reservations implements OnInit {
     const lng = Number(acc.longitude);
     const offset = 0.005; 
     
-    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;
-    
+    const url = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - offset},${lat - offset},${lng + offset},${lat + offset}&layer=mapnik&marker=${lat},${lng}`;    
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   });
 
@@ -103,7 +105,16 @@ export class Reservations implements OnInit {
       .subscribe({
         next: (results: any) => {
           const activeList = results.active?.data || [];
-          this.activeReservation.set(activeList.length > 0 ? activeList[0] : null);
+          this.activeReservationsList.set(activeList);
+      
+          const currentId = this.selectedReservation()?.id;
+          const stillExists = activeList.find((r: Reservation) => r.id === currentId);
+          
+          if (stillExists) {
+            this.selectedReservation.set(stillExists);
+          } else {
+            this.selectedReservation.set(activeList.length > 0 ? activeList[0] : null);
+          }
           
           this.historyReservations.set(results.history?.data || []);
         },
@@ -112,6 +123,12 @@ export class Reservations implements OnInit {
           this.isLoading.set(false);
         }
       });
+  }
+
+  selectReservation(res: Reservation): void {
+    this.showHistory.set(false);
+    this.selectedReservation.set(res);
+    this.cdr.detectChanges();
   }
 
   toggleHistoryView(): void {
@@ -132,7 +149,7 @@ export class Reservations implements OnInit {
   openCancelDialog(templateRef: TemplateRef<any>): void {
     const dialogRef = this.dialog.open(templateRef, {
       width: '400px',
-      panelClass: 'brutalist-dialog' // Optional: for your custom CSS
+      panelClass: 'brutalist-dialog'
     });
 
     dialogRef.afterClosed().subscribe(confirmed => {
@@ -143,7 +160,7 @@ export class Reservations implements OnInit {
   }
 
   private executeCancel(): void {
-    const current = this.activeReservation();
+    const current = this.selectedReservation();
     if (!current?.id) return;
 
     this.isLoading.set(true);
@@ -151,10 +168,19 @@ export class Reservations implements OnInit {
       finalize(() => this.isLoading.set(false))
     ).subscribe({
       next: () => {
-        this.activeReservation.set(null); 
+
+        this.selectedReservation.set(null); 
         this.refreshData(); 
       },
       error: (err) => alert(err.message || 'Error cancelling reservation')
     });
+  }
+
+  calculateNights(arrival: string | Date, departure: string | Date): number {
+    const start = new Date(arrival);
+    const end = new Date(departure);
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays > 0 ? diffDays : 1;
   }
 }

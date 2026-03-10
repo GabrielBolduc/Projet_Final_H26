@@ -497,6 +497,7 @@
       "NO": "NON",
       "EDIT": "MODIFIER L'HÉBERGEMENT",
       "BOOK": "RÉSERVER CET HÉBERGEMENT",
+      "BOOK_UNIT": "RÉSERVER CETTE UNITÉ",
       "LOADING": "Chargement des détails...",
       "MANAGE_UNITS": "Gérer les Unités"
     },
@@ -537,14 +538,16 @@
   "RESERVATIONS": {
     "ERRORS": {
       "TOO_MANY_PEOPLE": "Dépasse la capacité de l'unité",
-      "INVALID_RANGE": "Le départ doit être après l'arrivée"
+      "INVALID_RANGE": "Le départ doit être après l'arrivée",
+      "CONTAINS_RESERVED_DATES": "La période sélectionnée contient des dates déjà réservées."
     },
     "SIDEBAR": {
+      "ADD_STAY": "Ajouter une réservation",
       "RESERVE_CAMPING": "Réserver Camping",
       "RESERVE_HOTEL": "Réserver Hôtel",
       "EDIT": "Modifier la Réservation",
       "CANCEL": "Annuler la Réservation",
-      "HISTORY": "Voir l'Historique",
+      "HISTORY": "Historique",
       "BACK": "Retour"
     },
     "FIELDS": {
@@ -553,7 +556,8 @@
       "DATES": "Dates du Séjour",
       "GUESTS": "Nombre d'Invités",
       "PEOPLE": "Personnes",
-      "PHONE": "Numéro de Téléphone"
+      "PHONE": "Numéro de Téléphone",
+      "NIGHTS": "Nuits"
     },
     "STATUS": {
       "CONFIRMED": "Confirmé",

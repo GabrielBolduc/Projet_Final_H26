@@ -3,7 +3,6 @@
     <h1>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }}</h1>
 
     <div class="filter-row">
-      <!-- Search Field -->
       <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
         <mat-label>Rechercher</mat-label>
         <input matInput 
@@ -29,7 +28,6 @@
         </div>
       </mat-form-field>
 
-      <!-- Status Field -->
       <mat-form-field appearance="outline" class="status-combo" subscriptSizing="dynamic">
         <mat-label>{{ 'RESERVATIONS.STATUS.STATUS_LABEL' | translate }}</mat-label>
         <mat-select [value]="statusFilter()" (selectionChange)="statusFilter.set($any($event).value)">

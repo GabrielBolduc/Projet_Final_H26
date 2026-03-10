@@ -70,7 +70,11 @@ export class UnitsService {
     if (response.status === 'success') {
       return response.data;
     } else {
-      throw new Error(response.message || 'An unknown error occurred');
+      if (response.errors) {
+        throw response;
+      }
+      const errorMessage = response.message || 'Server Error';
+      throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
     }
   }
 }

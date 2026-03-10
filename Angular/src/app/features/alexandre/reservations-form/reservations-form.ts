@@ -288,14 +288,17 @@ private loadReservation(id: number) {
 
   private handleError(err: any) {
     this.isLoading.set(false);
-    
-    if (err.error?.message) {
-      const messages = Array.isArray(err.error.message) 
-        ? err.error.message 
-        : [err.error.message];
+
+    const apiError = err.error || err; 
+
+    if (apiError.errors) {
+      const messages = Object.entries(apiError.errors)
+        .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`);
       this.serverErrors.set(messages);
+    } else if (apiError.message) {
+      this.serverErrors.set([apiError.message]);
     } else {
-      this.serverErrors.set([err.message || 'An unexpected error occurred']);
+      this.serverErrors.set(['An unexpected error occurred']);
     }
   }
 

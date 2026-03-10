@@ -1,11 +1,11 @@
-import { Component, inject, computed, signal } from '@angular/core'; 
+import { Component, inject, computed, signal, OnInit } from '@angular/core'; 
 import { CommonModule } from '@angular/common'; 
 import { ActivatedRoute, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { startWith, switchMap, map, of, tap } from 'rxjs';
+import { startWith, switchMap, map, of, tap, debounceTime, distinctUntilChanged } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatCardModule } from '@angular/material/card'; 
+import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -37,7 +37,7 @@ import { AuthService } from '@core/services/auth.service';
   templateUrl: './accommodations.html',
   styleUrls: ['./accommodations.css']
 })  
-export class Accommodations {
+export class Accommodations implements OnInit {
   private route = inject(ActivatedRoute);
   private service = inject(AccommodationsService);
   private authService = inject(AuthService);
@@ -55,6 +55,7 @@ export class Accommodations {
   waterValue = computed(() => this.queryParams()?.get('water') || '');
   unitTypeValue = computed(() => this.queryParams()?.get('type') || '');
   isCamping = computed(() => this.currentCategory() === 'camping');
+
   searchControl = new FormControl<string>(this.searchValue(), { nonNullable: true });
   
   availableUnitTypes = computed(() => {
@@ -83,8 +84,13 @@ export class Accommodations {
       .slice(0, 5);
   });
 
-  applySearch(value: string) {
-    this.updateFilter('name', value || null);
+  ngOnInit(): void {
+    this.searchControl.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(value => {
+      this.updateFilter('name', value || null);
+    });
   }
 
   private accommodations$ = this.route.queryParamMap.pipe(
@@ -126,6 +132,7 @@ export class Accommodations {
     if (key === 'category') {
       extras['type'] = null;
       extras['name'] = null;
+      this.searchControl.setValue('', { emitEvent: false });
     }
 
     this.router.navigate([], {
@@ -135,7 +142,13 @@ export class Accommodations {
     });
   }
 
+  clearSearch() {
+    this.searchControl.setValue('', { emitEvent: false });
+    this.updateFilter('name', null);
+  }
+
   resetFilters() {
+    this.searchControl.setValue('', { emitEvent: false });
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { category: this.currentCategory() }

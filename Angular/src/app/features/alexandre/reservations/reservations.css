@@ -127,7 +127,7 @@
 
 .nav-label .title { 
   font: 900 0.65rem sans-serif; 
-  line-height: 1.1; /* Reduces space between wrapped lines */
+  line-height: 1.1; 
   text-transform: uppercase; 
   color: #000; 
 }

@@ -173,13 +173,12 @@ private loadUnit(id: number) {
         : this.service.createUnit(this.accommodationId()!, payload, file!);
 
       request.subscribe({
-        next: () => {
+        next: (unit) => {
           this.isLoading.set(false);
           this.router.navigate(['/units', this.accommodationId()]);
         },
         error: (err) => {
-          this.serverErrors.set([err.message]);
-          this.isLoading.set(false);
+          this.handleError(err);
         }
       });
     }
@@ -194,10 +193,26 @@ private loadUnit(id: number) {
           this.router.navigate(['/units', this.accommodationId()]);
         },
         error: (err) => {
-          this.serverErrors.set([err.message]);
-          this.isLoading.set(false);
+          this.handleError(err);
         }
       });
+    }
+  }
+
+  private handleError(err: any) {
+    this.isLoading.set(false);
+    
+    const errorBody = err.error || err;
+
+    if (errorBody.errors) {
+      const messages = Object.entries(errorBody.errors).map(
+        ([field, msgs]) => `${field.replace('_', ' ')}: ${(msgs as string[]).join(', ')}`
+      );
+      this.serverErrors.set(messages);
+    } else if (errorBody.message) {
+      this.serverErrors.set([errorBody.message]);
+    } else {
+      this.serverErrors.set(['An unexpected error occurred.']);
     }
   }
 }

@@ -56,6 +56,8 @@ import { BilletterieComponent } from './features/stats/GabrielR/billetterie';
 import { HebergementComponent } from './features/stats/Alexandre/hebergement';
 import { TacheComponent } from './features/stats/Laurent/tache';
 
+import { staffGuard } from '@core/guards/staff-guard';
+
 export const routes: Routes = [
     // === PUBLIC ===
     {
@@ -275,17 +277,17 @@ export const routes: Routes = [
     {
         path: 'affectations',
         component: UserListAffectationComponent,
-        canActivate: [AuthGuard, adminGuard]
+        canActivate: [AuthGuard, staffGuard]
     },
     {
         path: 'affectations/:affectationId',
         component: ShowAffectationComponent,
-        canActivate: [AuthGuard, adminGuard]
+        canActivate: [AuthGuard, staffGuard]
     },
     {
         path: 'affectations/edit/:id',
         component: UserUpdateAffectationComponent,
-        canActivate: [AuthGuard, adminGuard]
+        canActivate: [AuthGuard, staffGuard]
     },
     {
         path: '**',

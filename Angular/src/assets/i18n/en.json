@@ -246,6 +246,16 @@
     "AVAILABLE_SPOTS": "Available spots",
     "SOLD_OUT_FILTER": "Sold Out"
   },
+  "TICKETING_STATS": {
+    "TITLE": "Ticketing",
+    "FESTIVAL": "Festival",
+    "TOTAL_TICKETS": "Total tickets sold",
+    "EXPENSES": "Expenses",
+    "REVENUES": "Revenues",
+    "PROFIT": "Profit",
+    "AVG_TICKETS": "Avg. tickets sold per order",
+    "REFUNDS": "Refunds amount"
+  },
   "TICKETING_PUBLIC": {
     "TITLE": "Ticketing",
     "SUBTITLE": "Browse packages and buy tickets for the ongoing festival.",
@@ -542,6 +552,8 @@
     "STATUS": {
       "CONFIRMED": "Confirmed",
       "COMPLETED": "Completed",
+      "STATUS_LABEL": "Status",
+      "ALL": "All",
       "ACTIVE": "Active",
       "CANCELLED": "Cancelled",
       "ARCHIVED": "Archived"

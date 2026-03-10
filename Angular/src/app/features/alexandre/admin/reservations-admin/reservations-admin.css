@@ -10,14 +10,6 @@
   animation: slideUp 0.4s ease-out;
 }
 
-.header-section {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
 .header-section h1 {
   margin: 0;
   font-size: 3rem; 
@@ -27,26 +19,77 @@
 }
 
 /* ==========================================================================
-   2. SEARCH FIELD (MATERIAL OVERRIDES)
+   HEADER & FILTER LAYOUT
    ========================================================================== */
-.search-field {
-  width: 100%;
-  max-width: 500px;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: var(--mat-sys-surface-container-low);
-  border: 2px solid var(--mat-sys-on-surface);
-  border-radius: 15px;
+.header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  text-align: center;
 }
 
-/* Remove Material default borders/subscripts */
+.filter-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 900px; 
+}
+
+/* ==========================================================================
+   COMPONENT SCALING
+   ========================================================================== */
 .search-field {
-  .mat-mdc-form-field-flex { height: 48px; display: flex; align-items: center; }
-  .mat-mdc-form-field-subscript-wrapper { display: none; }
-  .mat-mdc-text-field-wrapper { background-color: transparent; }
-  .mdc-notched-outline__leading,
-  .mdc-notched-outline__notch,
-  .mdc-notched-outline__trailing { border: none; }
+  flex: 3;
+}
+
+.status-combo {
+  flex: 1;
+  min-width: 160px;
+}
+
+.suffix-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  transition: opacity 0.2s ease;
+  color: var(--mat-sys-primary) 
+}
+
+.clear-btn:hover {
+  opacity: 0.7;
+}
+
+.clear-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 16px;
+  }
 }
 
 /* ==========================================================================
@@ -89,7 +132,6 @@ table {
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
-/* Zebra Striping & Hover */
 .mat-mdc-row:nth-child(odd)  { background-color: var(--mat-sys-surface); }
 .mat-mdc-row:nth-child(even) { background-color: var(--mat-sys-surface-container-lowest); }
 .mat-mdc-row:hover           { background-color: var(--mat-sys-state-hover-state-layer); }

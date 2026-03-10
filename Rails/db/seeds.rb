@@ -379,9 +379,14 @@ Performance.create!(
 )
 
 f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20))
+f2.reload
 
 f3.update!(status: "completed", start_at: Date.new(2025, 12, 20), end_at: Date.new(2025, 12, 31))
+f3.reload
+
 # Alexandre
+## Alexandre 1
+# Accommodations festival actuel.
 acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",
   category: :hotel,
@@ -418,7 +423,7 @@ acc3 = Accommodation.create!(
   time_car: Time.parse("00:10:00"),
   time_walk: Time.parse("00:45:00"),
   commission: 25.00,
-  festival: f2
+  festival: f
 )
 
 acc4 = Accommodation.create!(
@@ -434,6 +439,63 @@ acc4 = Accommodation.create!(
   festival: f
 )
 
+
+# Accommodation festival passe
+
+acc1old = Accommodation.create!(
+  name: "Grand Royal Hotel - old",
+  category: :hotel,
+  address: "123 Festival Lane, Palm Springs, CA",
+  latitude: 46.56571486688975,
+  longitude: -72.72712896089062,
+  shuttle: true,
+  time_car: Time.parse("00:15:00"),
+  time_walk: Time.parse("01:00:00"),
+  commission: 12.50,
+  festival: f2
+)
+
+acc2old = Accommodation.create!(
+  name: "Wildwood Luxury Camping - old",
+  category: :camping,
+  address: "North Gate, Sector B, Glastonbury",
+  latitude: 46.52391224860748,
+  longitude: -72.32665159829943,
+  shuttle: false,
+  time_car: Time.parse("00:05:00"),
+  time_walk: Time.parse("00:10:00"),
+  commission: 5.00,
+  festival: f2
+)
+
+acc3old = Accommodation.create!(
+  name: "Starlight Hostel - old",
+  category: :hotel,
+  address: "45 Economy St, Downtown",
+  latitude: 46.5400,
+  longitude: -72.7400,
+  shuttle: false,
+  time_car: Time.parse("00:10:00"),
+  time_walk: Time.parse("00:45:00"),
+  commission: 25.00,
+  festival: f2
+)
+
+acc4old = Accommodation.create!(
+  name: "The Front Row Fields - old",
+  category: :camping,
+  address: "Zero Mile Marker, Glastonbury",
+  latitude: 46.5250,
+  longitude: -72.3300,
+  shuttle: false,
+  time_car: Time.parse("00:02:00"),
+  time_walk: Time.parse("00:05:00"),
+  commission: 2.50,
+  festival: f2
+)
+
+
+# Unite festival actuel
 unit1 = Units::SimpleRoom.new(
   accommodation: acc1,
   cost_person_per_night: 55.00,
@@ -524,6 +586,107 @@ unit_camp_standard = Units::StandardTerrain.new(
 
 unit_camp_premium = Units::DeluxeTerrain.new(
   accommodation: acc4,
+  cost_person_per_night: 110.00,
+  quantity: 4,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+# Unite festival passe
+
+unit1old = Units::SimpleRoom.new(
+  accommodation: acc1old,
+  cost_person_per_night: 55.00,
+  quantity: 10,
+  wifi: true,
+  water: 2,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_hotel_mid_old = Units::DoubleRoom.new(
+  accommodation: acc1old,
+  cost_person_per_night: 85.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+unit_hotel_high_old = Units::FamilyRoom.new(
+  accommodation: acc1old,
+  cost_person_per_night: 150.00,
+  quantity: 5,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_camp_low_old = Units::SmallTerrain.new(
+  accommodation: acc2old,
+  cost_person_per_night: 25.00,
+  quantity: 30,
+  wifi: false,
+  water: :no_water,
+  electricity: false,
+  parking_cost: 5.00,
+  food_options: "None"
+)
+
+unit_camp_high_old = Units::DeluxeTerrain.new(
+  accommodation: acc2old,
+  cost_person_per_night: 75.00,
+  quantity: 10,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Canteen"
+)
+
+unit_hotel_basic_old = Units::SimpleRoom.new(
+  accommodation: acc3old,
+  cost_person_per_night: 35.00,
+  quantity: 20,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 5.00,
+  food_options: "Canteen"
+)
+
+unit_hotel_double_old = Units::DoubleRoom.new(
+  accommodation: acc3old,
+  cost_person_per_night: 60.00,
+  quantity: 8,
+  wifi: false,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 5.00,
+  food_options: "Canteen"
+)
+
+unit_camp_standard_old = Units::StandardTerrain.new(
+  accommodation: acc4old,
+  cost_person_per_night: 40.00,
+  quantity: 25,
+  wifi: false,
+  water: :undrinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "None"
+)
+
+unit_camp_premium_old = Units::DeluxeTerrain.new(
+  accommodation: acc4old,
   cost_person_per_night: 110.00,
   quantity: 4,
   wifi: true,
@@ -710,6 +873,7 @@ images = {
   p_evening_overnight => 'evening-ticket.jpg',
   p_general_flex => 'general-ticket.webp',
   p_completed => 'general-ticket.webp',
+  # unite actuel
   unit1 => 'hotel-image.jpg',
   unit_hotel_mid => 'hotel-mid.jpg',
   unit_hotel_high => 'hotel-high.jpg',
@@ -718,7 +882,17 @@ images = {
   unit_hotel_basic   => 'hotel-water.jpg',
   unit_hotel_double  => 'hotel-water-2.jpg',
   unit_camp_standard => 'lava-camping.jpg',
-  unit_camp_premium  => 'lava-camping-2.jpg'
+  unit_camp_premium  => 'lava-camping-2.jpg',
+  # unite passe
+  unit1old => 'hotel-image.jpg',
+  unit_hotel_mid_old => 'hotel-mid.jpg',
+  unit_hotel_high_old => 'hotel-high.jpg',
+  unit_camp_low_old => 'camping-cheap.jpg',
+  unit_camp_high_old => 'oubliette.jpg',
+  unit_hotel_basic_old   => 'hotel-water.jpg',
+  unit_hotel_double_old  => 'hotel-water-2.jpg',
+  unit_camp_standard_old => 'lava-camping.jpg',
+  unit_camp_premium_old  => 'lava-camping-2.jpg'
 }
 
 images.each do |package, filename|
@@ -736,6 +910,9 @@ images.each do |package, filename|
   end
 end
 
+## Alexandre 2
+
+#actuel
 unit1.save!
 unit_camp_high.save!
 unit_camp_low.save!
@@ -746,23 +923,37 @@ unit_hotel_double.save!
 unit_camp_standard.save!
 unit_camp_premium.save!
 
+#passe
+
+unit1old.save!
+unit_camp_high_old.save!
+unit_camp_low_old.save!
+unit_hotel_high_old.save!
+unit_hotel_mid_old.save!
+unit_hotel_basic_old.save!
+unit_hotel_double_old.save!
+unit_camp_standard_old.save!
+unit_camp_premium_old.save!
+
+# Reservations festival actuel
+
 res1 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 17),
   nb_of_people: 1,
   reservation_name: "Jean Daniel",
-  phone_number: "+1 (819) 555-3333",
+  phone_number: "8195553333",
   user: c,
   unit: unit1,
   festival: f
 )
 
 res2 = Reservation.create!(
-  arrival_at: Date.new(2026, 7, 14),
+  arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 18),
-  nb_of_people: 6,
+  nb_of_people: 6, 
   reservation_name: "Alice Wonderland",
-  phone_number: "+1 (819) 555-4444",
+  phone_number: "8195554444",
   user: c2,
   unit: unit_camp_high,
   festival: f,
@@ -774,33 +965,155 @@ res3 = Reservation.create!(
   departure_at: Date.new(2026, 7, 19),
   nb_of_people: 4,
   reservation_name: "Bob Builder",
-  phone_number: "+1 (819) 555-5555",
+  phone_number: "8195555555",
   user: c3,
   unit: unit_camp_high,
   festival: f
 )
 
 res4 = Reservation.create!(
+  arrival_at: f.start_at,
+  departure_at: f.end_at,
+  nb_of_people: 2, 
+  reservation_name: "Charlie Day",
+  phone_number: "8195556666",
+  user: c,
+  unit: unit_hotel_double,
+  festival: f,
+  status: :cancelled
+)
+
+res5 = Reservation.create!(
+  arrival_at: Date.new(2026, 7, 15), 
+  departure_at: Date.new(2026, 7, 17),
+  nb_of_people: 2, 
+  reservation_name: "Dana Scully",
+  phone_number: "8195557777",
+  user: c4,
+  unit: unit_camp_standard,
+  festival: f
+)
+
+# Reservations festival passe
+
+res1old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 15),
+  departure_at: Date.new(2025, 7, 17),
+  nb_of_people: 1,
+  reservation_name: "Jean Daniel",
+  phone_number: "+1 (819) 555-3333",
+  user: c,
+  unit: unit1old,
+  festival: f2,
+  status: :completed
+)
+
+res2old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 15),
+  departure_at: Date.new(2025, 7, 16),
+  nb_of_people: 6,
+  reservation_name: "Alice Wonderland",
+  phone_number: "+1 (819) 555-4444",
+  user: c2,
+  unit: unit_camp_high_old,
+  festival: f2,
+  status: :completed
+)
+
+res3old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 17),
+  departure_at: Date.new(2025, 7, 18),
+  nb_of_people: 4,
+  reservation_name: "Bob Builder",
+  phone_number: "+1 (819) 555-5555",
+  user: c3,
+  unit: unit_camp_high_old,
+  festival: f2,
+  status: :completed
+)
+
+res4old = Reservation.create!(
   arrival_at: f2.start_at,
   departure_at: f2.end_at,
   nb_of_people: 2,
   reservation_name: "Charlie Day",
   phone_number: "+1 (819) 555-6666",
   user: c,
-  unit: unit_hotel_double,
+  unit: unit_hotel_double_old,
   festival: f2,
   status: :completed
 )
 
-res5 = Reservation.create!(
-  arrival_at: Date.new(2026, 7, 16),
-  departure_at: Date.new(2026, 7, 17),
+res5old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 15),
+  departure_at: Date.new(2025, 7, 17),
   nb_of_people: 2,
-  reservation_name: "Dana Scully",
+  reservation_name: "Dana Scullier",
   phone_number: "+1 (819) 555-7777",
   user: c4,
-  unit: unit_camp_standard,
-  festival: f
+  unit: unit_camp_standard_old,
+  festival: f2,
+  status: :completed
+)
+
+res6old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 18),
+  departure_at: Date.new(2025, 7, 20),
+  nb_of_people: 1,
+  reservation_name: "Jean Danielier",
+  phone_number: "+1 (819) 555-3333",
+  user: c,
+  unit: unit1old,
+  festival: f2,
+  status: :completed
+)
+
+res7old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 18),
+  departure_at: Date.new(2025, 7, 20),
+  nb_of_people: 6,
+  reservation_name: "Alice Wonderlander",
+  phone_number: "+1 (819) 555-4444",
+  user: c2,
+  unit: unit_camp_high_old,
+  festival: f2,
+  status: :completed
+)
+
+res8old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 18),
+  departure_at: Date.new(2025, 7, 19),
+  nb_of_people: 4,
+  reservation_name: "Bob Builderer",
+  phone_number: "+1 (819) 555-5555",
+  user: c3,
+  unit: unit_camp_high_old,
+  festival: f2,
+  status: :completed
+)
+
+res9old = Reservation.create!(
+  arrival_at: f2.start_at,
+  departure_at: f2.end_at,
+  nb_of_people: 1,
+  reservation_name: "Charlie Gayer",
+  phone_number: "+1 (819) 555-6666",
+  user: c,
+  unit: unit_hotel_basic_old,
+  festival: f2,
+  status: :completed
+)
+
+res10old = Reservation.create!(
+  arrival_at: Date.new(2025, 7, 19),
+  departure_at: Date.new(2025, 7, 20),
+  nb_of_people: 2,
+  reservation_name: "Dana Scullier",
+  phone_number: "+1 (819) 555-7777",
+  user: c4,
+  unit: unit_camp_standard_old,
+  festival: f2,
+  status: :completed
 )
 
 [ p_general, p_daily, p_evening, p_daily_sold_out, p_evening_last_spots, p_daily_day2, p_evening_overnight, p_general_flex ].each do |pkg|

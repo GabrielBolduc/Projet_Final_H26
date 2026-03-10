@@ -4,20 +4,40 @@ class Api::ReservationsController < ApiController
 
   def index
     return render_validation_success([]) if current_user.nil?
-
-    query = if params[:unit_id].present?
-              Reservation.where(unit_id: params[:unit_id]).active
-    elsif admin_user?
+    
+    query = if admin_user? && params[:admin_view] == "true"
               Reservation.all
-    elsif params[:history] == "true"
-              current_user.reservations.where(status: [ :completed, :cancelled ])
-    else
-              current_user.reservations.active
+            elsif params[:history] == "true"
+              current_user.reservations.where(status: [:completed, :cancelled])
+            else
+              current_user.reservations.active.joins(:festival).where(festivals: { status: :ongoing })
+            end
+
+    if params[:status_filter].present? && params[:status_filter] != 'all'
+      case params[:status_filter]
+      when 'active'    then query = query.active
+      when 'cancelled' then query = query.cancelled
+      when 'archived'  
+        query = query.left_joins(:festival).where("reservations.status = 2")
+      end
     end
 
-    @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
-    data = @reservations.map { |res| res.as_json(base_url: request.base_url) }
-    render_validation_success(data)
+    if params[:search].present?
+      term = "%#{params[:search].downcase}%"
+      query = query.joins(unit: :accommodation).where("LOWER(accommodations.name) LIKE ?", term)
+    end
+
+    sort_column = params[:sort_by] == "status" ? 
+      "CASE WHEN reservations.status = 1 THEN 2 WHEN reservations.status = 2 THEN 1 ELSE 0 END" : 
+      "reservations.#{params[:sort_by] || 'created_at'}"
+
+    total_count = query.count
+    @reservations = query.includes(:festival, unit: :accommodation)
+                        .order(Arel.sql("#{sort_column} #{params[:order] || 'desc'}"))
+                        .limit(params[:per_page] || 10)
+                        .offset(((params[:page] || 1).to_i - 1) * (params[:per_page] || 10).to_i)
+
+    render json: { status: "success", data: @reservations.map { |r| r.as_json(base_url: request.base_url) }, total: total_count }
   end
 
   def show

@@ -105,6 +105,18 @@ class Package < ApplicationRecord
     sold_count >= quota
   end
 
+  def self.total_tickets_sold_for_festival(festival_id)
+    joins(:tickets).where(festival_id: festival_id, tickets: { refunded_at: nil }).count
+  end
+
+  def self.total_revenue_for_festival(festival_id)
+    joins(:tickets).where(festival_id: festival_id, tickets: { refunded_at: nil }).sum("tickets.price")
+  end
+
+  def self.total_refunds_for_festival(festival_id)
+    joins(:tickets).where(festival_id: festival_id).where.not(tickets: { refunded_at: nil }).sum("tickets.price")
+  end
+
   private
 
   def quota_not_less_than_sold

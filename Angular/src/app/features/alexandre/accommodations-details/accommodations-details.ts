@@ -77,6 +77,7 @@ export class AccommodationsDetails {
 
       if (!acc[typeKey]) {
         acc[typeKey] = {
+          id: unit.id,
           type: typeKey,
           totalQuantity: 0,
           minPrice: Number(unit.cost_person_per_night) || 0,

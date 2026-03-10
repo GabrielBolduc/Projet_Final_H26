@@ -1,4 +1,9 @@
 <mat-card class="perf-card">
+
+  @if (accommodationName()) {
+    <h1 class="accommodation-title">{{ accommodationName() }}</h1>
+  }
+
   <button mat-stroked-button 
           type="button" 
           class="fill-info-btn" 

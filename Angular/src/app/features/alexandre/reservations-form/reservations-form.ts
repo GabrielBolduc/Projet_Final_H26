@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { AuthService } from '@core/services/auth.service';
 import { ReservationsService } from '@core/services/reservation.service';
+import { AccommodationsService } from '@core/services/accommodations.service'; 
 import { UnitsService } from '@core/services/units.service';
 import { FestivalService } from '@core/services/festival.service';
 import { Unit, UnitCapacity, UnitType } from '@core/models/unit';
@@ -36,12 +37,14 @@ export class ReservationsForm implements OnInit {
   private route = inject(ActivatedRoute); 
   private router = inject(Router);        
   private service: ReservationsService = inject(ReservationsService);
+  private accService = inject(AccommodationsService);
   private unitsService: UnitsService = inject(UnitsService);
   private festivalService: FestivalService = inject(FestivalService);
   private authService = inject(AuthService);
 
   reservationId = signal<number | null>(null);
   units = signal<Unit[]>([]);
+  accommodationName = signal<string>('');
   
   isEditMode = signal(false);
   isLoading = signal(false);
@@ -85,25 +88,22 @@ export class ReservationsForm implements OnInit {
     this.loadFestivalData();
 
     const id = this.route.snapshot.paramMap.get('id');
+    const fromResId = this.route.snapshot.queryParamMap.get('from_reservation');
     const accId = this.route.snapshot.queryParamMap.get('accommodationId');
+    const preSelectedUnitId = this.route.snapshot.queryParamMap.get('unit_id');
 
     if (id) {
       this.isEditMode.set(true);
       this.reservationId.set(+id);
       this.loadReservation(+id);
+    } else if (fromResId) {
+      this.loadContextFromExistingReservation(+fromResId);
     } else if (accId) {
-      this.loadUnits(+accId);
+      this.loadUnits(+accId, preSelectedUnitId ? +preSelectedUnitId : undefined);
     }
 
     this.form.get('unit_id')?.valueChanges.subscribe((unitId: number) => {
       if (unitId) {
-        if (this.form.get('unit_id')?.dirty) {
-          this.form.patchValue({
-            arrival_at: null,
-            departure_at: null
-          }, { emitEvent: false });
-        }
-
         this.updateUnitCapacity(unitId);
         this.loadReservedDates(unitId);
       }
@@ -126,10 +126,36 @@ private loadReservedDates(unitId: number) {
         }
       });
       this.reservedDates.set(dates);
-      console.log('Blocked Timestamps:', Array.from(dates));
     }
   });
 }
+
+  private loadContextFromExistingReservation(resId: number) {
+    this.isLoading.set(true);
+    this.service.get(resId).subscribe({
+      next: (response: any) => {
+
+        const res = response.data; 
+
+        if (res) {
+          this.form.patchValue({
+            reservation_name: res.reservation_name,
+            phone_number: res.phone_number
+          });
+
+          const accId = res.unit?.accommodation_id || res.accommodation_id;
+          if (accId) {
+            this.loadUnits(accId);
+          }
+        }
+        this.isLoading.set(false);
+      },
+      error: (err) => {
+        this.handleError(err);
+        this.isLoading.set(false);
+      }
+    });
+  }
 
 dateFilter = (date: Date | null): boolean => {
   if (!date) return false;
@@ -158,14 +184,23 @@ dateFilter = (date: Date | null): boolean => {
     }
   }
 
-  private loadUnits(accId: number) {
+  private loadUnits(accId: number, unitIdToSelect?: number) {
     this.isLoading.set(true);
+    
+    this.accService.getAccommodation(accId).subscribe({
+      next: (acc) => this.accommodationName.set(acc.name)
+    });
+
     this.unitsService.getUnitsByAccommodation(accId).subscribe({
       next: (res: ApiResponse<Unit[]>) => {
         this.units.set(res.data);
+        
+        if (unitIdToSelect) {
+          this.form.get('unit_id')?.setValue(unitIdToSelect);
+        }
         this.isLoading.set(false);
       },
-      error: (err: Error) => this.handleError(err)
+      error: () => this.isLoading.set(false)
     });
   }
 
@@ -178,35 +213,37 @@ dateFilter = (date: Date | null): boolean => {
 private loadReservation(id: number) {
   this.isLoading.set(true);
   this.service.get(id).subscribe({
-    next: (res: any) => { 
+    next: (response: any) => {
+      const res = response.data || response;
+      
+      if (!res || typeof res !== 'object') {
+        console.error('Reservation data missing in response:', response);
+        this.isLoading.set(false);
+        return;
+      }
+
+      console.log('Patching form with:', res);
+
       this.form.patchValue({
-        reservation_name: res.reservation_name,
-        phone_number: res.phone_number,
-        nb_of_people: res.nb_of_people,
-        unit_id: res.unit_id,
-        arrival_at: new Date(res.arrival_at + 'T00:00:00'),
-        departure_at: new Date(res.departure_at + 'T00:00:00')
+        reservation_name: res.reservation_name || '',
+        phone_number: res.phone_number || '',
+        nb_of_people: res.nb_of_people || 1,
+        arrival_at: res.arrival_at ? new Date(res.arrival_at + 'T00:00:00') : null,
+        departure_at: res.departure_at ? new Date(res.departure_at + 'T00:00:00') : null
       }, { emitEvent: false });
 
-      console.log('Full Response Object:', res);
-
-      const accId = res.unit?.accommodation_id || 
-                    res.unit?.accommodation?.id || 
-                    res.accommodation_id;
-
-      console.log('Final AccID Check:', accId);
-
+      const accId = res.unit?.accommodation_id || res.accommodation_id;
       if (accId) {
-        this.loadUnits(accId);
+        this.loadUnits(accId, res.unit_id); 
       }
-
-      if (res.unit_id) {
-        this.loadReservedDates(res.unit_id);
-      }
-
+      
+      if (res.unit_id) this.loadReservedDates(res.unit_id);
       this.isLoading.set(false);
     },
-    error: (err) => this.handleError(err)
+    error: (err) => {
+      console.error('Failed to load reservation:', err);
+      this.handleError(err);
+    }
   });
 }
 

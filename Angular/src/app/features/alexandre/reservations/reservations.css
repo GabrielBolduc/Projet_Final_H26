@@ -1,105 +1,189 @@
 /* ==========================================================================
-   1. GLOBAL LAYOUT & CONTAINERS
+   HORIZONTAL MASTER TABS (FIXED BORDERS)
    ========================================================================== */
-.full-height {
-  height: 100vh;
+.horizontal-master {
+  width: 100%;
+  border-bottom: 3px solid #000;
+  padding: 25px 0; 
+  flex-shrink: 0;
+  overflow: hidden; 
+}
+
+.scroll-wrapper {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 40px; 
+  scrollbar-width: none;
+}
+
+.master-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  min-width: 240px;
+  background: #fff;
+  border: 3px solid #000; 
+  border-radius: 12px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  color: #c2185b;
+  box-sizing: border-box; 
+}
+
+.master-item.active-tab {
+  background: #c2185b;
+  color: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0px 6px 0px #000; 
+  border-color: #000; 
+}
+
+.master-item:hover:not(.active-tab) {
+  background: #fce4ec;
+  transform: translateY(-3px);
+  box-shadow: 0px 3px 0px #000;
+}
+
+.m-icon { font-size: 24px; width: 24px; height: 24px; flex-shrink: 0; }
+.master-text { display: flex; flex-direction: column; pointer-events: none; }
+
+/* ==========================================================================
+   2. CONTENT CONTAINER (SIDENAV UNDER TOP BAR)
+   ========================================================================== */
+.content-container {
+  flex: 1;
   display: flex;
   overflow: hidden;
 }
 
 .custom-sidebar {
-  width: 220px;
+  width: 140px; 
   flex-shrink: 0;
+  overflow-x: hidden; 
 }
 
-.mat-drawer-inner-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
-
-.main-display {
+.main-display-area {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
   overflow-y: auto;
 }
 
 /* ==========================================================================
-   2. SIDEBAR NAVIGATION (FEST-CARDS)
+   3. SIDEBAR NAVIGATION (FEST-CARDS MINI)
    ========================================================================== */
 .mat-nav-list {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 15px;
   padding: 20px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.sidebar-label {
+  box-sizing: border-box; 
+  font: 900 0.65rem sans-serif;
+  text-transform: uppercase;
+  color: #777;
+  letter-spacing: 1px;
+  padding: 8px; 
+  display: block;       
+  word-break: break-word;
+}
+
+.fest-card.mini { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px; 
+  background: var(--mat-sys-surface-container-low); 
+  border: 2px solid #000; 
+  border-radius: 15px; 
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+  
+.fest-card.mini:hover { 
+  transform: translateY(-3px); 
+  box-shadow: 4px 4px 0 var(--mat-sys-primary); 
+}
+
+.nav-icon-container { padding: 10px; display: flex; align-items: center; justify-content: center; }
+.nav-icon { font-size: 24px; width: 24px; height: 24px; color: #000; }
+
+.nav-label { 
+  width: 100%; 
+  min-height: 25px;
+  background: #fff; 
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  white-space: normal;
+}
+
+.nav-label .title { 
+  font: 900 0.65rem sans-serif; 
+  line-height: 1.1; /* Reduces space between wrapped lines */
+  text-transform: uppercase; 
+  color: #000; 
 }
 
 .card-link {
   text-decoration: none;
   color: inherit;
   display: block;
+  width: 100%;
 }
 
-.fest-card { 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 150px; 
-  background: var(--mat-sys-surface-container-low); 
-  border: 2px solid #000; 
-  border-radius: 15px; 
-  overflow: hidden; 
-  transition: transform 0.2s, box-shadow 0.2s;
-  flex-shrink: 0; 
+.active-history { background: var(--mat-sys-primary); color: #fff; }
+.active-history .nav-label { background: var(--mat-sys-primary); color: #fff; }
+.active-history .nav-label .title { color: #fff; }
+
+.fest-card.mini.image-card {
+  height: 110px; 
 }
 
-.fest-card:hover { 
-  transform: translateY(-5px); 
-  box-shadow: 6px 6px 0 var(--mat-sys-primary); 
-}
-
-.active-history { 
-  background: var(--mat-sys-primary); 
-  box-shadow: 2px 2px 0 #000; 
-}
-
-/* Sidebar Internal Elements */
-.nav-image { 
-  width: 100%; 
-  aspect-ratio: 1/1; 
-  object-fit: cover; 
+.nav-image {
+  width: 100%;
+  height: 75px;
+  object-fit: cover;
+  display: block;
   border-bottom: 2px solid #000; 
 }
 
-.nav-icon { 
-  font-size: 32px; 
-  width: 32px; 
-  height: 32px; 
-  padding: 15px; 
-  color: #000; 
+.image-card .nav-label {
+  padding: 4px 5px !important; 
+  flex-grow: 1; 
+  border-top: none; 
 }
 
-.nav-label { 
-  width: 100%; 
-  padding: 12px 8px; 
-  text-align: center; 
-  background: #fff; 
-  border-top: 2px solid #000; 
+.image-card .nav-label .title {
+  font: 900 0.65rem sans-serif;
+  text-transform: uppercase;
+  color: #000;
+  text-align: center;
+  line-height: 1.2;
+  white-space: normal;
 }
 
-.nav-label .title { 
-  font: 900 0.85rem sans-serif; 
-  text-transform: uppercase; 
-  color: #000; 
+.image-card:hover {
+  transform: translate(-2px, -2px);
 }
 
 /* ==========================================================================
-   3. HERO SECTION (ACTIVE RESERVATION)
+   4. HERO SECTION (DETAIL VIEW)
    ========================================================================== */
+.detail-scroll-container {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .hero-container { 
   width: 100%; 
   max-width: 1000px; 
@@ -107,93 +191,84 @@
   animation: fadeIn 0.4s ease-out; 
 }
 
-.hero-split-layout { 
-  display: flex; 
-  gap: 60px; 
-  align-items: flex-start; 
-  width: 100%; 
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 4px solid #000;
+  padding-bottom: 10px;
 }
 
-/* Typography & Info */
 .hero-name { 
-  font-size: 3rem; 
-  font-weight: 900; 
-  text-transform: uppercase; 
-  letter-spacing: -3px; 
-  line-height: 0.85; 
-  margin-bottom: 10px; 
-  word-break: break-word; 
+  font-size: 3rem; font-weight: 900; text-transform: uppercase; 
+  letter-spacing: -3px; line-height: 0.85; margin: 0; 
 }
 
-.hero-data-grid { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 40px; 
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.hero-item { 
-  display: flex; 
-  align-items: center; 
-  gap: 30px; 
+.mat-mdc-icon-button {
+  background-color: transparent;
+  box-shadow: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero-item mat-icon { 
-  font-size: 40px; 
-  width: 40px; 
-  height: 40px; 
-  color: #000; 
+.action-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  transition: transform 0.2s ease;
 }
 
-.hero-text label { 
-  display: block;
-  font: 900 0.9rem sans-serif; 
-  color: #777; 
-  text-transform: uppercase; 
-  margin-bottom: 4px; 
+.action-icon:hover {
+  transform: scale(1.2);
 }
 
-.hero-text p { 
-  font: 800 1.1rem sans-serif; 
-  margin: 0; 
-  line-height: 1.2; 
-  color: #000; 
-}
+.hero-split-layout { display: flex; gap: 60px; align-items: flex-start; }
 
-/* Visuals (Images & Maps) */
+.hero-data-grid { display: flex; flex-direction: column; gap: 40px; }
+.hero-item { display: flex; align-items: center; gap: 30px; }
+.hero-item mat-icon { font-size: 40px; width: 40px; height: 40px; color: #000; }
+
+.hero-text label { display: block; font: 900 0.9rem sans-serif; color: #777; text-transform: uppercase; margin-bottom: 4px; }
+.hero-text p { font: 800 1.1rem sans-serif; margin: 0; line-height: 1.2; color: #000; }
+
 .hero-visual { flex: 0 0 400px; position: relative; }
-
-.unit-hero-img, 
-.map-card { 
-  width: 100%; 
-  border-radius: 20px; 
-  border: 3px solid var(--mat-sys-on-surface); 
-  overflow: hidden; 
-}
+.unit-hero-img, .map-card { width: 100%; border-radius: 20px; border: 3px solid #000; overflow: hidden; margin-bottom: 20px; }
 
 .unit-badge { 
-  display: inline-block; 
-  margin-top: 4px; 
-  padding: 2px 10px; 
-  background: var(--mat-sys-primary-container); 
-  color: var(--mat-sys-on-primary-container); 
-  border-radius: 8px; 
-  font: 800 0.8rem sans-serif; 
+  display: inline-block; margin-top: 4px; padding: 2px 10px; 
+  background: var(--mat-sys-primary-container); color: var(--mat-sys-on-primary-container); 
+  border-radius: 8px; font: 800 0.8rem sans-serif; 
 }
 
 /* ==========================================================================
-   4. HISTORY VIEW
+   5. HISTORY & UTILITIES (BRUTALIST UPGRADE)
    ========================================================================== */
 .history-view { 
   width: 100%; 
-  max-width: 800px; 
-  margin: 0 auto; 
-  animation: fadeIn 0.3s ease-in; 
+  max-width: 900px; 
+  margin: 0 auto;
 }
 
 .history-title { 
-  font: 900 3rem sans-serif; 
+  font: 900 3.5rem sans-serif; 
   text-transform: uppercase; 
-  margin-bottom: 40px; 
+  letter-spacing: -2px;
+  margin-bottom: 50px; 
+  color: #000;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
 }
 
 .history-item-row { 
@@ -201,45 +276,130 @@
   justify-content: space-between; 
   align-items: center;
   background: #fff; 
-  border: 3px solid #000; 
-  border-radius: 2rem; 
-  padding: 20px 30px; 
-  margin-bottom: 20px;
+  border: 4px solid #000;
+  border-radius: 1.5rem; 
+  padding: 25px 40px; 
 }
 
-.h-name { font: 900 1.4rem sans-serif; text-transform: uppercase; }
-.h-dates { font: 600 0.9rem sans-serif; color: #666; }
+.h-main-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.h-name { 
+  font: 900 1.6rem sans-serif; 
+  text-transform: uppercase; 
+  color: #000;
+}
+
+.h-dates { 
+  font: 700 1rem sans-serif; 
+  color: #666; 
+}
 
 .h-status { 
   display: flex; 
+  align-items: center; 
+  gap: 10px;
+  padding: 10px 20px;
+  border: 3px solid #000;
+  border-radius: 50px;
+  font: 900 0.8rem sans-serif; 
+  text-transform: uppercase;
+  background: #eee;
+}
+
+.h-status.active { background-color: var(--mat-sys-surface-container-high); color: var(--mat-sys-on-surface-variant); opacity: 0.8; border: 1px dashed var(--mat-sys-outline); }
+.h-status.cancelled { background-color: #ffcdd2; color: #b71c1c; border-color: #ef9a9a; }
+.h-status.completed { background-color: #c8e6c9; color: #1b5e20; border-color: #81c784; }
+
+.h-status mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.loader { display: flex; justify-content: center; align-items: center; height: 300px; }
+
+.empty-state-container { 
+  display: flex; 
   flex-direction: column; 
   align-items: center; 
-  color: var(--mat-sys-primary); 
-  font: 900 0.7rem sans-serif; 
-  text-transform: uppercase; 
+  justify-content: center; 
+  height: 60vh; 
+  text-align: center; 
+  margin: 20px;
 }
+
+.empty-icon { font-size: 100px; width: 100px; height: 100px; color: #000; margin-bottom: 20px; }
+.empty-msg { font: 900 2rem; text-transform: uppercase; color: #000; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 768px) {
+  .history-view {
+    padding: 0 15px;
+  }
+
+  .history-title {
+    font-size: 2.2rem;
+    letter-spacing: -1px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .history-list {
+    gap: 15px;
+  }
+
+  .history-item-row {
+    flex-direction: column; 
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    border-width: 3px; 
+  }
+
+  .h-name {
+    font-size: 1.3rem;
+  }
+
+  .h-status {
+    width: 100%; 
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .empty-state-container {
+    height: 50vh;
+    margin: 10px;
+    padding: 20px;
+  }
+
+  .empty-icon {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .empty-msg {
+    font-size: 1.4rem;
+  }
+}
+
 
 /* ==========================================================================
-   5. UTILITIES & RESPONSIVE
+   6. RESPONSIVE
    ========================================================================== */
-.loader { display: flex; justify-content: center; align-items: center; height: 100%; }
-.empty-msg { font-size: 2rem; text-transform: uppercase; color: #ccc; text-align: center; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* Tablets */
 @media (max-width: 900px) {
   .hero-split-layout { flex-direction: column; gap: 40px; }
-  .hero-visual { width: 100%; flex: none; order: 2; }
-  .hero-details { order: 1; text-align: center; }
+  .hero-visual { width: 100%; flex: none; }
   .hero-name { font-size: 2.2rem; }
-  .hero-item { justify-content: center; }
 }
 
-/* Mobile */
 @media (max-width: 600px) {
   .custom-sidebar { width: 80px; } 
-  .fest-card { width: 60px; }
+  .fest-card.mini { width: 60px; }
   .nav-label { display: none; }
-  .main-display { padding: 20px 10px; }
 }

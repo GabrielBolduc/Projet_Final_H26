@@ -3,7 +3,7 @@
   <div class="header-left">
     <a [routerLink]="['/']" class="brand-link">
       <img src="assets/icon.ico" alt="Logo" class="toolbar-logo">
-      <span class="home-text">{{ 'NAV.HOME' | translate }}</span>
+      <span class="home-text">{{ ongoingFestivalName() || 'NAV.HOME' | translate }}</span>
     </a>
 
      @if (auth.isLoggedIn() && auth.currentUser()?.isStaff) {
@@ -20,7 +20,7 @@
 
       <mat-menu #adminMenu="matMenu">
         <button mat-menu-item [routerLink]="['/admin/festivals']">
-          <mat-icon>dashboard</mat-icon>
+          <mat-icon>festival</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
         
@@ -48,6 +48,11 @@
         <button mat-menu-item [routerLink]="['/accommodations']">
           <mat-icon>hotel</mat-icon>
           <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
+        </button>
+
+        <button mat-menu-item [routerLink]="['admin/statistiques']">
+          <mat-icon>bar_chart</mat-icon>
+          <span>{{'ADMIN_NAV.STATS' | translate}}</span>
         </button>
       </mat-menu>
     }
@@ -140,7 +145,7 @@
         <div mat-subheader style="color: var(--mat-sys-primary); font-weight: bold; padding: 0 16px;">Administration</div>
         
         <button mat-menu-item [routerLink]="['/admin/festivals']">
-          <mat-icon>dashboard</mat-icon>
+          <mat-icon>festival</mat-icon>
           <span>{{'ADMIN_NAV.FESTIVAL' | translate}}</span>
         </button>
         
@@ -169,6 +174,12 @@
           <mat-icon>hotel</mat-icon>
           <span>{{'NAV.ACCOMMODATIONS' | translate}}</span>
         </button>
+
+        <button mat-menu-item [routerLink]="['admin/statistiques']">
+          <mat-icon>bar_chart</mat-icon>
+          <span>Stats</span>
+        </button>
+
       }
 
       <mat-divider></mat-divider>

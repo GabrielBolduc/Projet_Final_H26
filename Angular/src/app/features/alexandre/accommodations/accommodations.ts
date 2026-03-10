@@ -2,7 +2,7 @@ import { Component, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
 import { ActivatedRoute, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { switchMap, map, of, tap } from 'rxjs'; 
+import { startWith, switchMap, map, of, tap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card'; 
@@ -16,6 +16,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete'; 
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { AccommodationWithImage, SSFFilters } from '@core/models/accommodation';
@@ -29,7 +31,8 @@ import { AuthService } from '@core/services/auth.service';
     CommonModule, RouterLink, RouterLinkActive, TranslateModule,
     MatCardModule, MatIconModule, MatButtonModule, MatMenuModule,
     MatDividerModule, MatProgressSpinnerModule, MatFormFieldModule,
-    MatInputModule, MatSelectModule, MatSliderModule, MatChipsModule
+    MatInputModule, MatSelectModule, MatSliderModule, MatChipsModule,
+    MatAutocompleteModule, ReactiveFormsModule
   ],
   templateUrl: './accommodations.html',
   styleUrls: ['./accommodations.css']
@@ -52,6 +55,7 @@ export class Accommodations {
   waterValue = computed(() => this.queryParams()?.get('water') || '');
   unitTypeValue = computed(() => this.queryParams()?.get('type') || '');
   isCamping = computed(() => this.currentCategory() === 'camping');
+  searchControl = new FormControl<string>(this.searchValue(), { nonNullable: true });
   
   availableUnitTypes = computed(() => {
     const category = this.currentCategory();
@@ -61,6 +65,27 @@ export class Accommodations {
     if (category === 'camping') return allTypes.filter(t => t.includes('Terrain'));
     return allTypes;
   });
+
+  private autocompleteTrigger = toSignal(
+    this.searchControl.valueChanges.pipe(
+      startWith(this.searchValue())
+    ), 
+    { initialValue: this.searchValue() }
+  );
+
+  filteredOptions = computed(() => {
+    const term = String(this.autocompleteTrigger() || '').toLowerCase();
+    const list: AccommodationWithImage[] = this.accommodations() || [];
+    
+    return list
+      .filter(acc => (acc.name || '').toLowerCase().includes(term))
+      .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+      .slice(0, 5);
+  });
+
+  applySearch(value: string) {
+    this.updateFilter('name', value || null);
+  }
 
   private accommodations$ = this.route.queryParamMap.pipe(
     tap(() => this.isLoading.set(true)),

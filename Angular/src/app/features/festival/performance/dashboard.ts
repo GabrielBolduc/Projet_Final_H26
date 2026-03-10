@@ -96,7 +96,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   currentLang = toSignal(
     this.translate.onLangChange.pipe(map(event => event.lang?.split('-')[0] || 'fr')),
-    { initialValue: this.translate.currentLang?.split('-')[0] || 'fr' }
+    { initialValue: this.translate.getCurrentLang().split('-')[0] || 'fr' }
   );
 
   constructor() {

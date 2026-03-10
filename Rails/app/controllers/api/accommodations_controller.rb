@@ -5,7 +5,7 @@ class Api::AccommodationsController < ApiController
 
   def index
     @festival = Festival.ongoing.first
-    return render json: { status: "success", data: [] } if @festival.nil?
+    return render_validation_success([]) if @festival.nil?
 
     @accommodations = @festival.accommodations.includes(units: { image_attachment: :blob })
 
@@ -14,79 +14,50 @@ class Api::AccommodationsController < ApiController
     @accommodations = @accommodations.within_radius(@festival.latitude, @festival.longitude, params[:max_distance]) if params[:max_distance].present?
     @accommodations = @accommodations.with_units_matching(params) if has_unit_filters?
 
-    data = @accommodations.map do |acc|
-      acc.as_json.merge(
-        units: acc.units.map { |u| u.formatted_json(request.base_url) }
-      )
-    end
-
-    render json: { status: "success", data: data }, status: :ok
+    data = @accommodations.map { |acc| acc.as_json(base_url: request.base_url) }
+    render_validation_success(data)
   end
 
   def show
-    render json: {
-      status: "success",
-      data: @accommodation.as_json(except: [ :created_at, :updated_at ])
-    }
+    render_validation_success(@accommodation.as_json(base_url: request.base_url))
   end
 
   def create
-    festival = Festival.ongoing.order(created_at: :desc).first
+    @festival = Festival.ongoing.order(created_at: :desc).first
+    return render_error("No ongoing festival.") if @festival.nil?
 
-    if festival.nil?
-      return render_logic_error([ "No festival is currently ongoing. Accommodations cannot be created." ])
-    end
-
-    @accommodation = Accommodation.new(accommodation_params)
-    @accommodation.festival = festival
-
+    @accommodation = @festival.accommodations.new(accommodation_params)
     if @accommodation.save
-      render json: { status: "success", data: @accommodation }, status: :ok
+      render_validation_success(@accommodation.as_json(base_url: request.base_url))
     else
-      render_logic_error(@accommodation.errors.full_messages)
+      render_validation_error(@accommodation)
     end
   end
 
   def update
     if @accommodation.update(accommodation_params)
-      render json: { status: "success", data: @accommodation }, status: :ok
+      render_validation_success(@accommodation.as_json(base_url: request.base_url))
     else
-      render_logic_error(@accommodation.errors.full_messages)
+      render_validation_error(@accommodation)
     end
   end
 
   def destroy
     @accommodation.destroy
-    render json: { status: "success", message: "Accommodation deleted" }, status: :ok
+    render json: { status: "success", message: "Deleted" }, status: :ok
   end
 
   private
+
   def set_accommodation
-    @accommodation = Accommodation.find_by(id: params[:id])
-    render_logic_error("Accommodation not found") unless @accommodation
+    @accommodation = Accommodation.find(params[:id])
   end
 
   def accommodation_params
-    params.require(:accommodation).permit(
-      :name, :category, :address, :latitude, :longitude,
-      :shuttle, :time_car, :time_walk, :commission
-    )
-  end
-
-  def render_logic_error(message)
-    render json: {
-      status: "error",
-      message: message
-    }, status: :ok
-  end
-
-  def require_admin!
-    unless current_user&.is_a?(Admin)
-      render_logic_error("Access denied: Admin privileges required.")
-    end
+    params.require(:accommodation).permit(:name, :category, :address, :latitude, :longitude, :shuttle, :time_car, :time_walk, :commission)
   end
 
   def has_unit_filters?
-    [ :wifi, :electricity, :water, :min_people, :max_price ].any? { |key| params[key].present? }
+    [ :wifi, :electricity, :water, :min_people, :max_price ].any? { |k| params[k].present? }
   end
 end

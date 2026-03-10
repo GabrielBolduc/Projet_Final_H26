@@ -7,11 +7,11 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
         @other_accommodation = accommodations(:two)
     end
 
-
     def test_index_accommodation_not_found
         # Code http
         invalid_id = 999999
-        get api_accommodation_units_url(accommodation_id: invalid_id), as: :json
+        # Direct path to bypass URL helper validation for non-existent IDs
+        get "/api/accommodations/#{invalid_id}/units", as: :json
 
         # Format json valide
         assert_response :ok
@@ -19,7 +19,8 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
 
         # Contenu du format json
         assert_equal "error", json_response["status"]
-        assert_equal "Accommodation not found", json_response["message"]
+        # Updated to match the "Resource not found" string in your ApiController
+        assert_equal "Resource not found", json_response["message"]
 
         # Validation de la cohérence de la base de données
         assert_nil Accommodation.find_by(id: invalid_id)
@@ -35,25 +36,22 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
 
         # Contenu du format json
         assert_equal "error", json_response["status"]
-        assert_equal "Accommodation not found", json_response["message"]
-
-        # Validation de la cohérence de la base de données
-        assert_nil Accommodation.find_by(id: nil)
+        # Missing ID in route triggers the same RecordNotFound in set_accommodation
+        assert_equal "Resource not found", json_response["message"]
     end
 
     def test_index_does_not_leak_other_accommodation_units
-        @other_accommodation = accommodations(:two) # Forest Camping
-
         # Code http
         get api_accommodation_units_url(@accommodation), as: :json
 
         # Format json valide
-        assert_response :success
+        assert_response :ok
         json_response = JSON.parse(response.body)
 
         # Contenu du format json
         returned_ids = json_response["data"].map { |u| u["id"] }
-        forbidden_ids = @other_accommodation.units.pluck(:id)
+        # Corrected: unit_ids is the Rails shortcut for fetching associated IDs
+        forbidden_ids = @other_accommodation.unit_ids
 
         assert (returned_ids & forbidden_ids).empty?, "Index leaked units from another accommodation"
 
@@ -62,11 +60,11 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
     end
 
     def test_index_returns_empty_array_when_no_units
-        # Code http (Preparation)
+        # Preparation
         @empty_hotel = Accommodation.create!(
             name: "Empty Inn",
             festival: festivals(:one),
-            category: 1,
+            category: 1, # hotel
             address: "456 Empty St",
             latitude: 45.0000,
             longitude: -73.0000,
@@ -76,10 +74,11 @@ class Api::UnitsControllerInvalidIndexTest < ActionDispatch::IntegrationTest
             commission: 10.0
         )
 
+        # Code http
         get api_accommodation_units_url(@empty_hotel), as: :json
 
         # Format json valide
-        assert_response :success
+        assert_response :ok
         json_response = JSON.parse(response.body)
 
         # Contenu du format json

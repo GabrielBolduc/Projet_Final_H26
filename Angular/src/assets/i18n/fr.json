@@ -107,7 +107,8 @@
     "UPDATE_SUCCESS": "Festival modifié avec succès",
     "CREATE_SUCCESS": "Festival créé avec succès",
     "SAVE_ERROR": "Erreur lors de la sauvegarde. Vérifiez les champs.",
-    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce festival ? Cette action est irréversible."
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir supprimer ce festival ? Cette action est irréversible.",
+    "FINISH": "Terminer le festival"
   },
   "DASHBOARD":{
     "NEW_PERFORMANCE": "Ajouter",
@@ -149,7 +150,7 @@
     "UPLOAD_IMAGE": "Choisir une photo",
     "IMAGE_PREVIEW_ALT": "Aperçu de la photo de l'artiste",
     "BIO_LABEL": "Biographie",
-    "BIO_MAX": "La biographie est trop longue (max 2000 caractères)",
+    "BIO_MAX": "La biographie est trop longue (max 1600 caractères)",
     "CANCEL": "Annuler",
     "SAVING": "Enregistrement...",
     "EDIT_BTN": "Modifier",
@@ -162,13 +163,16 @@
   "ARTIST_LIST": {
     "TITLE": "Catalogue des artistes",
     "ADD": "Ajouter",
-    "COL_PHOTO": "Photo",
-    "COL_NAME": "Nom",
-    "COL_GENRE": "Genre",
-    "COL_POPULARITY": "Popularité",
-    "COL_BIO": "Bio",
+    "PHOTO": "Photo",
+    "NAME": "Nom",
+    "GENRE": "Genre musical",
+    "POPULARITY": "Popularité",
+    "BIO": "Bio",
     "VIEW_BIO": "Voir la bio",
-    "COL_ACTIONS": "Action"
+    "ACTIONS": "Action",
+    "ALL_GENRES": "Tous les genres musical",
+    "SEARCH": "Rechercher artiste...",
+    "LOAD_ERROR_GENRE": "Erreur chargement genres"
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",
@@ -197,7 +201,8 @@
     "TASK": "Tâches",
     "TICKET": "Billetterie",
     "ARTIST": "Artistes",
-    "AFFECTATIONS": "Affectations"
+    "AFFECTATIONS": "Affectations",
+    "STATS": "Statistiques"
   },
   "TICKETING_ADMIN": {
     "NEW_PACKAGE": "Nouveau Forfait",
@@ -242,6 +247,16 @@
     "ALL_STATES": "Tous les états",
     "AVAILABLE_SPOTS": "Places disponibles",
     "SOLD_OUT_FILTER": "Complet (Sold Out)"
+  },
+  "TICKETING_STATS": {
+    "TITLE": "Billetterie",
+    "FESTIVAL": "Festival",
+    "TOTAL_TICKETS": "Total billets vendus",
+    "EXPENSES": "Dépenses",
+    "REVENUES": "Revenus",
+    "PROFIT": "Profit",
+    "AVG_TICKETS": "Moy. billets par commande",
+    "REFUNDS": "Montant remboursé"
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",
@@ -331,7 +346,9 @@
     "DISCOUNT_HINT": "Achetez {{min}} billets ou plus et économisez {{rate}} !",
     "SUBTOTAL": "Sous-total",
     "DISCOUNT": "Rabais",
-    "TOTAL": "Total"
+    "TOTAL": "Total",
+    "SEARCH_PACKAGE": "Rechercher des forfaits (Titre ou Description)",
+    "SEARCH_PLACEHOLDER": "Billet journalier"
   },
   "PACKAGE_FORM": {
     "EDIT_TITLE": "Modifier le Forfait",
@@ -518,6 +535,10 @@
     }
   },
   "RESERVATIONS": {
+    "ERRORS": {
+      "TOO_MANY_PEOPLE": "Dépasse la capacité de l'unité",
+      "INVALID_RANGE": "Le départ doit être après l'arrivée"
+    },
     "SIDEBAR": {
       "RESERVE_CAMPING": "Réserver Camping",
       "RESERVE_HOTEL": "Réserver Hôtel",
@@ -527,6 +548,8 @@
       "BACK": "Retour"
     },
     "FIELDS": {
+      "STAY": "Hébergement et Unité",
+      "COST": "Détails des coûts",
       "DATES": "Dates du Séjour",
       "GUESTS": "Nombre d'Invités",
       "PEOPLE": "Personnes",
@@ -535,6 +558,8 @@
     "STATUS": {
       "CONFIRMED": "Confirmé",
       "COMPLETED": "Terminé",
+      "STATUS_LABEL": "Statut",
+      "ALL": "Tous",
       "ACTIVE": "Actif",
       "CANCELLED": "Annulée",
       "ARCHIVED": "Archivée"
@@ -545,7 +570,14 @@
     "ARRIVAL": "Arrivée",
     "DEPARTURE": "Départ",
     "GUESTS": "Invités",
-    "PHONE": "Téléphone"
+    "PHONE": "Téléphone",
+    "SELECT_UNIT": "Choisir une unité",
+    "PEOPLE": "Nombre de personnes",
+    "MAX_ALLOWED": "Capacité max pour cette unité",
+    "NO_UNITS_AVAILABLE": "Aucune unité disponible pour cet hébergement",
+    "FILL_MY_INFO": "Remplir avec mes infos",
+    "DELETE_CONFIRM": "Êtes-vous sûr de vouloir annuler cette réservation ? Cette action est irréversible.",
+    "DELETE": "Annuler"
   },
   "UNITS": {
     "CREATE_TITLE": "Ajouter une Unité",
@@ -605,9 +637,16 @@
     "CLOSE": "Fermer",
     "BACK": "Retour",
     "EDIT": "Modifier",
-    "UNDERSTOOD": "Compris"
+    "UNDERSTOOD": "Compris",
+    "REQUIRED": "Ce champ est obligatoire",
+    "CREATE": "Créer la réservation"
   },
   "HOME":{
     "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"
+  },
+  "404":{
+    "NOT_FOUND": "Page introuvable",
+    "MESSAGE": "La page que vous recherchez n'existe pas ou a été déplacée.",
+    "BTN": "Retour à la page d'accueil"
   }
 }

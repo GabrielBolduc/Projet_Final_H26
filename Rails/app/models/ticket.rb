@@ -31,6 +31,10 @@ class Ticket < ApplicationRecord
     refunded_at.present?
   end
 
+  def revenue
+    refunded? ? 0.0 : price.to_f
+  end
+
   private
 
   def normalize_scan_time(scan_time)

@@ -76,4 +76,106 @@ class ArtistsUpdateInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "error", json["status"]
     assert_not_nil json["errors"]["name"]
   end
+
+  test "should fail to update with name longer than 100 chars" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      put api_artist_url(@artist), params: { artist: { name: "a" * 101 } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["name"]
+  end
+
+  test "should fail to update with genre longer than 50 chars" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      put api_artist_url(@artist), params: { artist: { genre: "a" * 51 } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["genre"]
+  end
+
+  test "should fail to update with bio longer than 1600 chars" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      put api_artist_url(@artist), params: { artist: { bio: "a" * 1601 } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["bio"]
+  end
+
+  test "should fail to update with invalid popularity" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      put api_artist_url(@artist), params: { artist: { popularity: 6 } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["popularity"]
+  end
+
+  test "should fail to update with nil genre" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      put api_artist_url(@artist), params: { artist: { genre: nil } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["genre"]
+  end
+
+  test "should fail to update with nil popularity" do
+    sign_in @admin
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      put api_artist_url(@artist), params: { artist: { popularity: nil } }, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format et donne reponse
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_not_nil json["errors"]["popularity"]
+  end
 end

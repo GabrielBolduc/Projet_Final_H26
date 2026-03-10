@@ -11,7 +11,7 @@
     <h1 class="header-title">{{'FESTIVAL.ADMINISTRATION' | translate}}</h1>
 
     <div class="top-bar-side right-align">
-      <span class="greeting">{{'FESTIVAL.HELLO' | translate}}</span>
+      <span class="greeting">{{'FESTIVAL.HELLO' | translate}} {{ auth.currentUser()?.name || auth.currentUser()?.email }}</span>
     </div>
   </header>
 
@@ -57,8 +57,9 @@
           </div>
 
           <div class="card-actions-side">
-            <button class="icon-btn finish" (click)="openFinishDialog(f)" [title]="'COMMON.SAVE' | translate">
+            <button class="icon-btn finish" (click)="openFinishDialog(f)" [title]="'FESTIVAL.FINISH' | translate">
               <mat-icon>check_circle_outline</mat-icon>
+              <span class="action-text">{{ 'FESTIVAL.FINISH' | translate }}</span>
             </button>
 
             <button class="icon-btn edit" (click)="navigateToEdit(f.id)" [title]="'FESTIVAL.UPDATE' | translate">

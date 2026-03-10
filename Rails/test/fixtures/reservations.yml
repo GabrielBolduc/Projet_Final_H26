@@ -2,6 +2,7 @@ one:
   user: one
   unit: one
   festival: one
+  status: 0
   reservation_name: "Jean Dupont"
   phone_number: "0612345678"
   nb_of_people: 1
@@ -12,6 +13,7 @@ two:
   user: one
   unit: two
   festival: two
+  status: 1
   reservation_name: "Marie Curie"
   phone_number: "0788990011"
   nb_of_people: 2

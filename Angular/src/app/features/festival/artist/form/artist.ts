@@ -8,9 +8,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { firstValueFrom } from 'rxjs';
-import { Artist } from '../../../core/models/artist';
-import { ArtistService } from '../../../core/services/artist.service';
-import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { Artist } from '../../../../core/models/artist';
+import { ArtistService } from '../../../../core/services/artist.service';
+import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule, TranslateService } from '@ngx-translate/core'; 
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'
@@ -24,8 +24,8 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'
     MatIconModule, MatProgressSpinnerModule, MatCardModule, TranslateModule,
     MatSnackBarModule
   ],
-  templateUrl: './artist_form.html',
-  styleUrls: ['./artist_form.css']
+  templateUrl: './artist.html',
+  styleUrls: ['./artist.css']
 })
 export class ArtistFormComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -49,7 +49,7 @@ export class ArtistFormComponent implements OnInit {
     this.artistForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(100)]],
       genre: ['', [Validators.required, Validators.maxLength(50)]],
-      bio: ['', [Validators.maxLength(2000)]],
+      bio: ['', [Validators.maxLength(1600)]],
       popularity: [3, [Validators.required, Validators.min(0), Validators.max(5)]]
     });
   }
@@ -75,7 +75,7 @@ export class ArtistFormComponent implements OnInit {
     } catch (error) {
       this.serverErrors.set(this.errorHandler.parseRailsErrors(error));
       this.snackBar.open(
-        this.translate.instant('ARTIST.LOAD_ERROR') || 'Erreur de chargement', 
+        this.translate.instant('ARTIST.LOAD_ERROR'), 
         this.translate.instant('COMMON.CLOSE'), 
         { duration: 4000 }
       );

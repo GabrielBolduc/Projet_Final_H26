@@ -24,12 +24,13 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_equal "Access denied: Admin privileges required.", json_response["message"]
+    assert_equal "Accès refusé : Privilèges administrateur requis.", json_response["message"]
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_equal "Grand Hotel", @accommodation.name
   end
+
 
   def test_update_fails_with_excessive_commission
     sign_in @admin
@@ -45,12 +46,16 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "must be less than 30"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["commission"], "must be less than 30"
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_not_equal 35.00, @accommodation.commission.to_f
   end
+
 
   def test_update_fails_with_blank_name_after_strip
     sign_in @admin
@@ -66,12 +71,16 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "Name can't be blank"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["name"], "can't be blank"
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_equal "Grand Hotel", @accommodation.name
   end
+
 
   def test_update_fails_with_invalid_coordinates
     sign_in @admin
@@ -87,14 +96,18 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    messages = Array(json_response["message"]).join(", ")
-    assert_includes messages, "Latitude can't be blank"
-    assert_includes messages, "Longitude can't be blank"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["latitude"], "can't be blank"
+    assert_includes json_response["errors"]["longitude"], "can't be blank"
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_not_nil @accommodation.latitude
   end
+
+
 
   def test_update_ignores_unpermitted_params
     sign_in @admin
@@ -129,12 +142,16 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "greater than or equal to 0"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["commission"], "must be greater than or equal to 0"
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_operator @accommodation.commission, :>=, 0
   end
+
 
   def test_update_fails_with_too_long_name
     sign_in @admin
@@ -151,12 +168,16 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "is too long"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["name"], "is too long (maximum is 100 characters)"
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_not_equal long_name, @accommodation.name
   end
+
 
   def test_update_fails_with_invalid_time_format
     sign_in @admin
@@ -172,12 +193,17 @@ class Api::AccommodationsControllerInvalidUpdateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "can't be blank"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["time_car"], "can't be blank"
+    assert_includes json_response["errors"]["time_walk"], "can't be blank"
 
     # Validation de la cohérence de la base de données
     @accommodation.reload
     assert_not_nil @accommodation.time_car
   end
+
 
   def test_update_fails_with_invalid_category_enum
     sign_in @admin

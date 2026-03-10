@@ -23,11 +23,12 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_equal "Access denied: Admin privileges required.", json_response["message"]
+    assert_equal "Accès refusé : Privilèges administrateur requis.", json_response["message"]
 
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(name: "Unauthorized Hotel")
   end
+
 
   def test_create_fails_when_no_festival_is_ongoing
     sign_in @admin
@@ -50,11 +51,12 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "No festival is currently ongoing"
+    assert_equal "No ongoing festival.", json_response["message"]
 
     # Validation de la cohérence de la base de données
-    assert_equal 0, Accommodation.where(name: "No Festival Hotel").count
+    assert_not Accommodation.exists?(name: "No Festival Hotel")
   end
+
 
   def test_create_fails_with_excessive_commission
     sign_in @admin
@@ -77,7 +79,10 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "must be less than 30"
+    assert_equal "Validation failed", json_response["message"]
+
+    commission_errors = json_response["errors"]["commission"]
+    assert_includes commission_errors, "must be less than 30"
 
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(name: "High Fee Hotel")
@@ -116,9 +121,11 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    messages = Array(json_response["message"]).join(", ")
-    assert_includes messages, "Latitude can't be blank"
-    assert_includes messages, "Longitude can't be blank"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["latitude"], "can't be blank"
+    assert_includes json_response["errors"]["longitude"], "can't be blank"
 
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(name: "Floating Hotel")
@@ -145,7 +152,10 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "can't be blank"
+    assert_equal "Validation failed", json_response["message"]
+
+    assert_includes json_response["errors"]["time_car"], "can't be blank"
+    assert_includes json_response["errors"]["time_walk"], "can't be blank"
 
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(name: "Time Warp Inn")
@@ -196,7 +206,10 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "must be greater than or equal to 0"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["commission"], "must be greater than or equal to 0"
 
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(name: "Discount Inn")
@@ -221,11 +234,15 @@ class Api::AccommodationsControllerInvalidCreateTest < ActionDispatch::Integrati
 
     # Contenu du format json
     assert_equal "error", json_response["status"]
-    assert_includes Array(json_response["message"]).join, "is too long"
+    assert_equal "Validation failed", json_response["message"]
+
+    # Validation des détails dans la clé 'errors'
+    assert_includes json_response["errors"]["name"], "is too long (maximum is 100 characters)"
 
     # Validation de la cohérence de la base de données
     assert_nil Accommodation.find_by(name: long_name)
   end
+
 
   def test_create_strips_whitespace_from_address
     sign_in @admin

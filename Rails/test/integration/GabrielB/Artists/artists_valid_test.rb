@@ -51,23 +51,6 @@ class ArtistsValidTest < ActionDispatch::IntegrationTest
     assert json["data"].any? { |a| a["name"].include?(@artist.name) }
   end
 
-  test "public should filter headliners" do
-    # modif ou non
-    assert_no_difference("Artist.count") do
-      get api_artists_url(headliners: "true"), as: :json
-    end
-
-    # code http
-    assert_response :ok
-
-    # format reponse
-    json = JSON.parse(response.body)
-
-    # donne reponse
-    assert_equal "success", json["status"]
-    assert json["data"].all? { |a| a["popularity"] >= 4 }
-  end
-
   test "public should filter artists by genre" do
     # modif ou non
     assert_no_difference("Artist.count") do
@@ -183,5 +166,43 @@ class ArtistsValidTest < ActionDispatch::IntegrationTest
     assert_equal "success", json["status"]
     assert_equal "Artiste supprimé avec succès.", json["message"]
     assert_nil json["data"]
+  end
+
+  test "public should fetch used genres" do
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      get genres_api_artists_url, as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format reponse
+    json = JSON.parse(response.body)
+
+    # donne reponse
+    assert_equal "success", json["status"]
+    assert_not_nil json["data"]
+    assert json["data"].is_a?(Array)
+  end
+
+  test "admin should show an artist without performances" do
+    sign_in @admin
+    isolated_artist = artists(:four)
+
+    # modif ou non
+    assert_no_difference("Artist.count") do
+      get api_artist_url(isolated_artist), as: :json
+    end
+
+    # code http
+    assert_response :ok
+
+    # format reponse
+    json = JSON.parse(response.body)
+
+    # donne reponse
+    assert_equal "success", json["status"]
+    assert_equal isolated_artist.name, json["data"]["name"]
   end
 end

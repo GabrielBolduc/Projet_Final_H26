@@ -12,8 +12,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { TranslateModule, TranslateService } from '@ngx-translate/core'; 
 import { firstValueFrom } from 'rxjs';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar'; 
-import { FestivalService } from '../../../core/services/festival.service';
-import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { FestivalService } from '../../../../core/services/festival.service';
+import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
 
 const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const start = control.get('start_at')?.value;
@@ -42,8 +42,8 @@ const dateRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     TranslateModule,
     MatSnackBarModule
   ],
-  templateUrl: './festival-form.html',
-  styleUrls: ['./festival-form.css']
+  templateUrl: './festival.html',
+  styleUrls: ['./festival.css']
 })
 export class FestivalFormComponent implements OnInit {
   private fb = inject(FormBuilder);

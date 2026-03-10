@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, ChangeDetectorRef, computed } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectorRef, computed, TemplateRef } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -8,6 +8,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { forkJoin, of } from 'rxjs';
 import { catchError, finalize, take } from 'rxjs/operators';
@@ -31,6 +32,7 @@ import { AuthService } from '@core/services/auth.service';
     MatButtonModule,
     MatCardModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     TranslateModule
   ],
   templateUrl: './reservations.html',
@@ -41,6 +43,7 @@ export class Reservations implements OnInit {
   public authService = inject(AuthService);
   private sanitizer = inject(DomSanitizer);
   private cdr = inject(ChangeDetectorRef);
+  private dialog = inject(MatDialog);
 
   activeReservation = signal<Reservation | null>(null);
   historyReservations = signal<Reservation[]>([]);
@@ -116,21 +119,6 @@ export class Reservations implements OnInit {
     this.cdr.detectChanges();
   }
 
-  onCancel(): void {
-    const current = this.activeReservation();
-    if (!current?.id) return;
-
-    if (confirm('Are you sure you want to cancel this reservation?')) {
-      this.reservationsService.delete(current.id).subscribe({
-        next: () => {
-          this.activeReservation.set(null); 
-          this.refreshData(); 
-        },
-        error: (err) => alert(err.message || 'Error cancelling reservation')
-      });
-    }
-  }
-
   formatDate(date: string | Date): Date {
     return new Date(date);
   }
@@ -139,5 +127,34 @@ export class Reservations implements OnInit {
     if (!type) return '';
     const parts = type.split('::');
     return parts[parts.length - 1];
+  }
+
+  openCancelDialog(templateRef: TemplateRef<any>): void {
+    const dialogRef = this.dialog.open(templateRef, {
+      width: '400px',
+      panelClass: 'brutalist-dialog' // Optional: for your custom CSS
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.executeCancel();
+      }
+    });
+  }
+
+  private executeCancel(): void {
+    const current = this.activeReservation();
+    if (!current?.id) return;
+
+    this.isLoading.set(true);
+    this.reservationsService.delete(current.id).pipe(
+      finalize(() => this.isLoading.set(false))
+    ).subscribe({
+      next: () => {
+        this.activeReservation.set(null); 
+        this.refreshData(); 
+      },
+      error: (err) => alert(err.message || 'Error cancelling reservation')
+    });
   }
 }

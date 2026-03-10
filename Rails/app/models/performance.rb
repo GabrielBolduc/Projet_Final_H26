@@ -3,16 +3,10 @@ class Performance < ApplicationRecord
   belongs_to :stage
   belongs_to :festival
 
-
   scope :with_details, -> { includes(:artist, :stage, :festival) }
-
   scope :chronological, -> { order(start_at: :asc) }
-
   scope :for_festival, ->(f_id) { where(festival_id: f_id) }
-
   scope :by_stage, ->(stage_id) { where(stage_id: stage_id) }
-
-
   scope :search, ->(query) {
     joins(:artist)
     .where("performances.title LIKE :q OR artists.name LIKE :q", q: "%#{query}%")
@@ -43,7 +37,7 @@ class Performance < ApplicationRecord
 
   def within_festival_dates
     return unless festival && start_at && end_at
-    if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at
+    if start_at.to_date < festival.start_at || end_at.to_date > festival.end_at.to_date
       errors.add(:base, "OUTSIDE_FESTIVAL_DATES")
     end
   end

@@ -1,13 +1,22 @@
 class Api::ArtistsController < ApiController
-  skip_before_action :authenticate_user!, only: [ :index, :show ], raise: false
-  before_action :require_admin!, only: [ :create, :update, :destroy ]
+  before_action :authenticate_user!, :require_admin!, only: [ :create, :update, :destroy ]
   before_action :set_artist, only: [ :show, :update, :destroy ]
 
+  def genres
+    render json: {
+      status: "success",
+      data: Artist.used_genres
+    }, status: :ok
+  end
+
   def index
-    artists = Artist.with_attached_image.alphabetical
+    artists = Artist.default_order
     artists = artists.search(params[:search]) if params[:search].present?
     artists = artists.by_genre(params[:genre]) if params[:genre].present?
-    artists = artists.headliners if params[:headliners] == "true"
+
+    unless current_user&.is_a?(Admin)
+      artists = artists.with_performances
+    end
 
     render json: {
       status: "success",
@@ -16,6 +25,13 @@ class Api::ArtistsController < ApiController
   end
 
   def show
+    unless current_user&.is_a?(Admin) || @artist.performances.exists?
+      return render json: {
+        status: "error",
+        message: "Cet artiste n'est pas encore programmé."
+      }, status: :ok
+    end
+
     render json: {
       status: "success",
       data: @artist.as_json(methods: [ :image_url ])

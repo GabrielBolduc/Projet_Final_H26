@@ -1,0 +1,27 @@
+<div class="admin-billetterie-stats">
+    <div class="header">
+    <h1 class="page-title">{{ 'TICKETING_STATS.TITLE' | translate }}</h1>
+
+    </div>
+
+    <mat-grid-list cols="7" rowHeight="50px">
+            @for (tile of tiles; track tile.text) {
+                <mat-grid-tile colspan="{{tile.cols}}" style="border: solid 1px #000; font-weight: bold;">{{ tile.text | translate }}</mat-grid-tile>
+            }
+
+            @for (item of stats(); track item.id) {
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.name }}</mat-grid-tile>
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.total_tickets_sold }}</mat-grid-tile>
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.expenses | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.revenues | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.profit | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.avg_tickets_per_order }}</mat-grid-tile>
+                <mat-grid-tile style="border: solid 1px #000;">{{ item.refunds_amount | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
+            }
+
+    </mat-grid-list>
+
+
+
+
+</div>

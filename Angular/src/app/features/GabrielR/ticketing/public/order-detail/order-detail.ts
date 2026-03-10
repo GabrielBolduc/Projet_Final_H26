@@ -55,6 +55,10 @@ export class TicketingOrderDetailComponent {
     return this.errorHandler.parseRailsErrors(err).join(' | ');
   });
 
+  subtotal = computed(() => this.order()?.subtotal ?? 0);
+  discount = computed(() => this.order()?.discount ?? 0);
+  totalPrice = computed(() => this.order()?.total_price ?? 0);
+
   protected ticketStatusClass(ticket: Order['tickets'][number]): 'refunded' | 'expired' | 'active' {
     if (isRefunded(ticket)) {
       return 'refunded';

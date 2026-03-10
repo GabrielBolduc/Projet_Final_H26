@@ -2,6 +2,8 @@ class Accommodation < ApplicationRecord
   belongs_to :festival
   has_many :units, dependent: :destroy
 
+  before_destroy :ensure_no_units_have_reservations, prepend: true
+
   enum :category, { camping: 0, hotel: 1 }
 
   validates :name, presence: true, length: { maximum: 100 }
@@ -43,7 +45,25 @@ class Accommodation < ApplicationRecord
 
   before_validation :strip_fields
 
+def as_json(options = {})
+  safe_options = options.is_a?(Hash) ? options : {}
+  json = super(safe_options.except(:base_url))
+
+  if safe_options[:base_url]
+    json[:units] = units.map { |u| u.as_json(safe_options) }
+  end
+
+  json
+end
+
   private
+
+  def ensure_no_units_have_reservations
+    if units.joins(:reservations).exists?
+      errors.add(:base, "Cannot delete accommodation because some units have active reservations.")
+      throw(:abort)
+    end
+  end
 
   def strip_fields
     self.name = name&.strip

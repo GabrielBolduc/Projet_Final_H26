@@ -3,48 +3,54 @@ class Api::ReservationsController < ApiController
   before_action :require_permission!, only: [ :show, :update, :destroy ]
 
   def index
-    return render json: { status: "success", data: [] } if current_user.nil?
-
-    query = if params[:unit_id].present?
-              # Allow seeing all busy dates for a specific unit
-              Reservation.where(unit_id: params[:unit_id]).active
-            elsif admin_user?
+    return render_validation_success([]) if current_user.nil?
+    
+    query = if admin_user? && params[:admin_view] == "true"
               Reservation.all
             elsif params[:history] == "true"
-              current_user.reservations.where(status: [ :completed, :cancelled ])
+              current_user.reservations.where(status: [:completed, :cancelled])
             else
-              current_user.reservations.active
+              current_user.reservations.active.joins(:festival).where(festivals: { status: :ongoing })
             end
 
-    @reservations = query.includes(:festival, unit: :accommodation).order(created_at: :desc)
-
-    data = @reservations.map do |res|
-      json = res.as_json(include: :festival)
-      if res.unit
-        json[:unit] = res.unit.formatted_json(request.base_url).merge({
-          accommodation: res.unit.accommodation.as_json
-        })
+    if params[:status_filter].present? && params[:status_filter] != 'all'
+      case params[:status_filter]
+      when 'active'    then query = query.active
+      when 'cancelled' then query = query.cancelled
+      when 'archived'  
+        query = query.left_joins(:festival).where("reservations.status = 2")
       end
-      json
     end
 
-    render json: { status: "success", data: data }
+    if params[:search].present?
+      term = "%#{params[:search].downcase}%"
+      query = query.joins(unit: :accommodation).where("LOWER(accommodations.name) LIKE ?", term)
+    end
+
+    sort_column = params[:sort_by] == "status" ? 
+      "CASE WHEN reservations.status = 1 THEN 2 WHEN reservations.status = 2 THEN 1 ELSE 0 END" : 
+      "reservations.#{params[:sort_by] || 'created_at'}"
+
+    total_count = query.count
+    @reservations = query.includes(:festival, unit: :accommodation)
+                        .order(Arel.sql("#{sort_column} #{params[:order] || 'desc'}"))
+                        .limit(params[:per_page] || 10)
+                        .offset(((params[:page] || 1).to_i - 1) * (params[:per_page] || 10).to_i)
+
+    render json: { status: "success", data: @reservations.map { |r| r.as_json(base_url: request.base_url) }, total: total_count }
   end
 
-
   def show
-    render json: { status: "success", data: format_reservation_json(@reservation) }
+    render_validation_success(@reservation.as_json(base_url: request.base_url))
   end
 
   def create
     @reservation = Reservation.new(reservation_params)
-    
     @reservation.festival = Festival.ongoing.first
-    
     @reservation.user = current_user
 
     if @reservation.save
-      render_validation_success(@reservation)
+      render_validation_success(@reservation.as_json(base_url: request.base_url))
     else
       render_validation_error(@reservation)
     end
@@ -52,7 +58,7 @@ class Api::ReservationsController < ApiController
 
   def update
     if @reservation.update(reservation_params)
-      render_validation_success(@reservation)
+      render_validation_success(@reservation.as_json(base_url: request.base_url))
     else
       render_validation_error(@reservation)
     end
@@ -60,7 +66,7 @@ class Api::ReservationsController < ApiController
 
   def destroy
     if @reservation.cancelled!
-      render json: { status: "success", message: "Reservation cancelled" }, status: :ok
+      render json: { status: "success", message: "Cancelled" }, status: :ok
     else
       render_validation_error(@reservation)
     end
@@ -73,26 +79,12 @@ class Api::ReservationsController < ApiController
   end
 
   def require_permission!
-    unless admin_user? || @reservation.user_id == current_user.id
-      render_error("Accès refusé : Propriétaire requis.")
+    unless admin_user? || @reservation.user_id == current_user&.id
+      render_error("Accès refusé.")
     end
   end
 
   def reservation_params
-    params.require(:reservation).permit(
-      :unit_id, :user_id,
-      :arrival_at, :departure_at, :nb_of_people,
-      :reservation_name, :phone_number
-    )
-  end
-
-  def format_reservation_json(res)
-    json = res.as_json(include: :festival)
-    if res.unit
-      json[:unit] = res.unit.formatted_json(request.base_url).merge({
-        accommodation: res.unit.accommodation.as_json
-      })
-    end
-    json
+    params.require(:reservation).permit(:unit_id, :user_id, :arrival_at, :departure_at, :nb_of_people, :reservation_name, :phone_number)
   end
 end

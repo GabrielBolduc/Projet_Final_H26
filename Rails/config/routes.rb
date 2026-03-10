@@ -15,7 +15,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :artists, only: [ :index, :show, :create, :update, :destroy ]
     resources :stages, only: [ :index ]
     resources :performances
     resources :reservations
@@ -26,7 +25,15 @@ Rails.application.routes.draw do
       resources :units, shallow: true
     end
 
+    resources :artists do
+      collection do
+        get :genres
+      end
+    end
+
     resources :packages
+
+    get "ticketing_stats", to: "ticketing_stats#index"
 
     namespace :admin do
       resources :orders, only: [ :index, :show ]

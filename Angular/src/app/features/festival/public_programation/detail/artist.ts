@@ -7,8 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { firstValueFrom } from 'rxjs';
-import { ArtistService } from '../../../../app/core/services/artist.service';
-import { Artist } from '../..../../../../core/models/artist';
+import { ArtistService } from '../../../../core/services/artist.service';
+import { Artist } from '../../../../core/models/artist';
 
 @Component({
   selector: 'app-artist-detail',
@@ -22,8 +22,8 @@ import { Artist } from '../..../../../../core/models/artist';
     MatProgressSpinnerModule,
     MatCardModule
   ],
-  templateUrl: './artist_detail.html',
-  styleUrls: ['./artist_detail.css']
+  templateUrl: './artist.html',
+  styleUrls: ['./artist.css']
 })
 export class ArtistDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);

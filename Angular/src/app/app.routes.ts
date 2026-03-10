@@ -1,7 +1,16 @@
 import { Routes } from '@angular/router';
+
+// --- AUTHENTIFICATION ---
 import { Login } from './features/auth/login/login';
 import { Signup } from './features/auth/signup/signup'; 
+import { AuthGuard } from './core/guards/auth.guard';
+import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
+import { adminGuard } from './core/guards/admin.guard';
+
+// --- CORE ---
 import { Notfound } from './core/notfound/notfound';
+
+// --- ALEXANDRE (Hébergement & Réservations) ---
 import { Reservations } from '@features/alexandre/reservations/reservations';
 import { ReservationsForm } from '@features/alexandre/reservations-form/reservations-form';
 import { ReservationsAdmin } from '@features/alexandre/admin/reservations-admin/reservations-admin';
@@ -10,13 +19,27 @@ import { AccommodationsDetails } from '@features/alexandre/accommodations-detail
 import { AccommodationsForm } from '@features/alexandre/admin/accommodations-form/accommodations-form';
 import { UnitsForm } from '@features/alexandre/admin/units-form/units-form';
 import { Units } from '@features/alexandre/admin/units/units';
+
+// --- GABRIEL B. (Festivals & Programmation) ---
 import { DashboardComponent } from './features/festival/performance/dashboard';
 import { AdministrationComponent } from './features/festival/festival/administration';
-import { FestivalFormComponent } from './features/festival/festival/festival-form';
-import { AddPerformanceComponent } from './features/festival/performance/add_performance';
+import { FestivalFormComponent } from './features/festival/festival/form/festival';
+import { AddPerformanceComponent } from './features/festival/performance/form/performance';
+import { PublicScheduleComponent } from './features/festival/public_programation/public_schedule';
+import { ArtistsListComponent } from './features/festival/artist/artists_list';
+import { ArtistFormComponent } from './features/festival/artist/form/artist';
+import { ArtistDetailComponent } from './features/festival/public_programation/detail/artist'; 
+
+// --- LAURENT (Tâches & Affectations) ---
 import { TaskListComponent } from '@features/laurent/task/list/list';
 import { TaskShowComponent } from '@features/laurent/task/show/show';
 import { TaskFormComponent } from '@features/laurent/task/form/form';
+import { ShowAffectationComponent } from '@features/laurent/affectation/show/show';
+import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
+import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
+import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
+
+// --- GABRIEL R. (Billetterie & Commandes) ---
 import { Ticketing } from '@features/GabrielR/ticketing/ticketing';
 import { AdminTicketingComponent } from '@features/GabrielR/ticketing/admin/ticketing-admin';
 import { AdminOrdersComponent } from './features/GabrielR/ticketing/admin/orders/admin-orders';
@@ -25,6 +48,13 @@ import { TicketingOrderFormComponent } from './features/GabrielR/ticketing/publi
 import { TicketingOrdersComponent } from './features/GabrielR/ticketing/public/orders/orders';
 import { TicketingOrderDetailComponent } from './features/GabrielR/ticketing/public/order-detail/order-detail';
 import { TicketingTicketDetailComponent } from './features/GabrielR/ticketing/public/ticket-detail/ticket-detail';
+
+// --- STATISTIQUES (Nouvelle section) ---
+import { StatsLayoutComponent } from './features/stats/stats-layout';
+import { FestivalComponent } from './features/stats/GabrielB/festival';
+import { BilletterieComponent } from './features/stats/GabrielR/billetterie';
+import { HebergementComponent } from './features/stats/Alexandre/hebergement';
+import { TacheComponent } from './features/stats/Laurent/tache';
 import { PublicScheduleComponent } from './features/festival/public_programation/public_schedule';
 import { AuthGuard } from './core/guards/auth.guard';
 import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
@@ -39,6 +69,7 @@ import { ArtistDetailComponent } from './features/festival/public_programation/a
 import { staffGuard } from '@core/guards/staff-guard';
 
 export const routes: Routes = [
+    // === PUBLIC ===
     {
         path: '',
         component: PublicScheduleComponent
@@ -52,9 +83,37 @@ export const routes: Routes = [
         component: ArtistDetailComponent
     },
     {
+        path: 'login',
+        component: Login,
+        canActivate: [restrictionLoginGuard]
+    },
+    {
+        path: 'signup',
+        component: Signup,
+        canActivate: [restrictionLoginGuard]
+    },
+    {
         path: 'reservations',
         component: Reservations
     },
+    {
+        path: 'accommodations',
+        component: Accommodations
+    },
+    {
+        path: 'accommodations-details/:id',
+        component: AccommodationsDetails
+    },
+    {
+        path: 'ticketing',
+        component: Ticketing
+    },
+    {
+        path: 'ticketing/packages/:id/order',
+        component: TicketingOrderFormComponent
+    },
+
+    // === CLIENT CONNECTÉ ===
     {
         path: 'reservations-form',
         component: ReservationsForm,
@@ -66,53 +125,22 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'reservations-admin',
-        component: ReservationsAdmin,
-        canActivate: [AuthGuard, adminGuard]
+        path: 'ticketing/orders',
+        component: TicketingOrdersComponent,
+        canActivate: [AuthGuard]
     },
     {
-        path: 'accommodations',
-        component: Accommodations
+        path: 'ticketing/orders/:id',
+        component: TicketingOrderDetailComponent,
+        canActivate: [AuthGuard]
     },
     {
-        path: 'accommodations-details/:id',
-        component: AccommodationsDetails
+        path: 'ticketing/tickets/:id',
+        component: TicketingTicketDetailComponent,
+        canActivate: [AuthGuard]
     },
-    {
-        path: 'accommodations-form',
-        component: AccommodationsForm,
-        canActivate: [AuthGuard, adminGuard]
-    },
-    {
-        path: 'accommodations-form/:id',
-        component: AccommodationsForm,
-        canActivate: [AuthGuard, adminGuard]
-    },
-    {
-        path: 'units-form/new/:id',
-        component: UnitsForm,
-        canActivate: [AuthGuard, adminGuard]
-    },
-    {
-        path: 'units-form/:id',
-        component: UnitsForm,
-        canActivate: [AuthGuard, adminGuard]
-    },
-    {
-        path: 'units/:id',
-        component: Units,
-        canActivate: [AuthGuard, adminGuard]
-    },
-    {
-        path: 'login',
-        component: Login,
-        canActivate: [restrictionLoginGuard]
-    },
-    {
-        path: 'signup',
-        component: Signup,
-        canActivate: [restrictionLoginGuard]
-    },
+
+    // === ADMINISTRATION ===
     {
         path: 'admin/festivals',
         component: AdministrationComponent,
@@ -159,6 +187,19 @@ export const routes: Routes = [
         canActivate: [AuthGuard, adminGuard]
     },
     {
+        path: 'admin/statistiques',
+        component: StatsLayoutComponent,
+        canActivate: [AuthGuard, adminGuard],
+        children: [
+            { path: '', redirectTo: 'festival', pathMatch: 'full' },
+            { path: 'festival', component: FestivalComponent },
+            { path: 'hebergement', component: HebergementComponent },
+            { path: 'billetterie', component: BilletterieComponent },
+            { path: 'tache', component: TacheComponent }
+        ]
+    },
+
+    {
         path: 'admin/ticketing',
         component: AdminTicketingComponent,
         canActivate: [AuthGuard, adminGuard]
@@ -179,27 +220,34 @@ export const routes: Routes = [
         canActivate: [AuthGuard, adminGuard]
     },
     {
-        path: 'ticketing',
-        component: Ticketing
+        path: 'reservations-admin',
+        component: ReservationsAdmin,
+        canActivate: [AuthGuard, adminGuard]
     },
     {
-        path: 'ticketing/packages/:id/order',
-        component: TicketingOrderFormComponent
+        path: 'accommodations-form',
+        component: AccommodationsForm,
+        canActivate: [AuthGuard, adminGuard]
     },
     {
-        path: 'ticketing/orders',
-        component: TicketingOrdersComponent,
-        canActivate: [AuthGuard]
+        path: 'accommodations-form/:id',
+        component: AccommodationsForm,
+        canActivate: [AuthGuard, adminGuard]
     },
     {
-        path: 'ticketing/orders/:id',
-        component: TicketingOrderDetailComponent,
-        canActivate: [AuthGuard]
+        path: 'units-form/new/:id',
+        component: UnitsForm,
+        canActivate: [AuthGuard, adminGuard]
     },
     {
-        path: 'ticketing/tickets/:id',
-        component: TicketingTicketDetailComponent,
-        canActivate: [AuthGuard]
+        path: 'units-form/:id',
+        component: UnitsForm,
+        canActivate: [AuthGuard, adminGuard]
+    },
+    {
+        path: 'units/:id',
+        component: Units,
+        canActivate: [AuthGuard, adminGuard]
     },
     {
         path: 'tasks',

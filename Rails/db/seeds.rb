@@ -143,6 +143,21 @@ f2 = Festival.create!(
   comment: "Bon festival"
 )
 
+f3 = Festival.create!(
+  name: "Festify winter",
+  start_at: Date.new(2026, 12, 20),
+  end_at: Date.new(2026, 12, 31),
+  daily_capacity: 6000,
+  address: "123 Rue rue, Shawinigan, QC",
+  latitude: 46.577793,
+  longitude: -72.710997,
+  status: "draft",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival d'hiver"
+)
+
 main_stage = Stage.create!(
     name: "Main stage",
     capacity: 15000,
@@ -329,8 +344,43 @@ Performance.create!(
   artist: artist2
 )
 
+# perf pour f3 (completed)
+Performance.create!(
+  title: "First Winter Show",
+  description: "Un show dehors",
+  price: 1500.00,
+  start_at: f3.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f3.start_at.to_time.change(hour: 22, min: 0),
+  festival: f3,
+  stage: b_stage,
+  artist: artist2
+)
+
+Performance.create!(
+  title: "Winter Show",
+  description: "Un show",
+  price: 14000,
+  start_at: (f3.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f3.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f3,
+  stage: b_stage,
+  artist: artist4
+)
+
+Performance.create!(
+  title: "Last Winter Show",
+  description: "Un dernier show show",
+  price: 14000,
+  start_at: (f3.start_at + 2.day).to_time.change(hour: 19, min: 0),
+  end_at: (f3.start_at + 2.day).to_time.change(hour: 20, min: 30),
+  festival: f3,
+  stage: b_stage,
+  artist: artist1
+)
+
 f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20))
 
+f3.update!(status: "completed", start_at: Date.new(2025, 12, 20), end_at: Date.new(2025, 12, 31))
 # Alexandre
 acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",

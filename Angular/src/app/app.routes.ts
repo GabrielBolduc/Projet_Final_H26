@@ -55,17 +55,7 @@ import { FestivalComponent } from './features/stats/GabrielB/festival';
 import { BilletterieComponent } from './features/stats/GabrielR/billetterie';
 import { HebergementComponent } from './features/stats/Alexandre/hebergement';
 import { TacheComponent } from './features/stats/Laurent/tache';
-import { PublicScheduleComponent } from './features/festival/public_programation/public_schedule';
-import { AuthGuard } from './core/guards/auth.guard';
-import { restrictionLoginGuard } from './core/guards/restriction-login-guard';
-import { adminGuard } from './core/guards/admin.guard';
-import { ShowAffectationComponent } from '@features/laurent/affectation/show/show';
-import { FormAffectationComponent } from '@features/laurent/affectation/form/form';
-import { UserListAffectationComponent } from '@features/laurent/affectation/user-list/user-list';
-import { UserUpdateAffectationComponent } from '@features/laurent/affectation/user-update/user-update';
-import { ArtistsListComponent } from './features/festival/artist/artists_list';
-import { ArtistFormComponent } from './features/festival/artist/artist_form';
-import { ArtistDetailComponent } from './features/festival/public_programation/artist_detail'; 
+
 import { staffGuard } from '@core/guards/staff-guard';
 
 export const routes: Routes = [

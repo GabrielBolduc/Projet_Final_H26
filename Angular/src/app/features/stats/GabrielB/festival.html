@@ -3,9 +3,9 @@
   <div class="ssf-toolbar">
     
     <mat-form-field appearance="outline" class="ssf-input">
-      <mat-label>Filtrer par Année</mat-label>
+      <mat-label>{{ 'FESTIVAL_STATS.YEAR_FILTER' | translate }}</mat-label>
       <mat-select [ngModel]="filterYear()" (ngModelChange)="updateYear($event)">
-        <mat-option [value]="null">Toutes les années</mat-option>
+        <mat-option [value]="null">{{ 'FESTIVAL_STATS.ALL_YEARS' | translate }}</mat-option>
         @for (year of availableYears(); track year) {
           <mat-option [value]="year">{{ year }}</mat-option>
         }
@@ -13,7 +13,7 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="ssf-input">
-      <mat-label>Comparer Festivals</mat-label>
+      <mat-label>{{ 'FESTIVAL_STATS.COMPARE' | translate }}</mat-label>
       <mat-select multiple [ngModel]="filterFestivals()" (ngModelChange)="updateFestivals($event)">
         @for (fest of rawStats(); track fest.id) {
           <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
@@ -34,7 +34,7 @@
       <table mat-table [dataSource]="filteredStats()" class="festify-grid-table">
 
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Festival </th>
+          <th mat-header-cell *matHeaderCellDef> {{ 'FESTIVAL_STATS.FESTIVAL' | translate }} </th>
           <td mat-cell *matCellDef="let row" class="bold-text"> 
             {{ row.name }} 
             <span class="year-badge">{{ row.year }}</span>
@@ -42,39 +42,39 @@
         </ng-container>
 
         <ng-container matColumnDef="artist_count">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Artistes Uniques </th>
+          <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'FESTIVAL_STATS.AARTISTS' | translate }} </th>
           <td mat-cell *matCellDef="let row" class="text-center"> {{ row.artist_count }} </td>
         </ng-container>
 
         <ng-container matColumnDef="performance_count">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Performances </th>
+          <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'FESTIVAL_STATS.APERF' | translate }} </th>
           <td mat-cell *matCellDef="let row" class="text-center"> {{ row.performance_count }} </td>
         </ng-container>
 
         <ng-container matColumnDef="top_stage_name">
-          <th mat-header-cell *matHeaderCellDef> Scène la plus utilisée </th>
+          <th mat-header-cell *matHeaderCellDef> {{ 'FESTIVAL_STATS.STAGE' | translate }} </th>
           <td mat-cell *matCellDef="let row">
             {{ row.top_stage_name }} 
           </td>
         </ng-container>
 
         <ng-container matColumnDef="top_stage_perf_count">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Shows (Top Scène) </th>
+          <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'FESTIVAL_STATS.APERFS' | translate }} </th>
           <td mat-cell *matCellDef="let row" class="text-center"> {{ row.top_stage_perf_count }} </td>
         </ng-container>
 
         <ng-container matColumnDef="top_stage_avg_pop">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Pop. Moyenne </th>
+          <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'FESTIVAL_STATS.POP' | translate }} </th>
           <td mat-cell *matCellDef="let row" class="text-center"> 
             {{ row.top_stage_avg_pop }} / 5 
           </td>
         </ng-container>
 
         <ng-container matColumnDef="top_stage_env">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Environnement </th>
+          <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'FESTIVAL_STATS.ENV' | translate }} </th>
           <td mat-cell *matCellDef="let row" class="text-center"> 
             @if (row.top_stage_env && row.top_stage_env !== 'N/A') {
-              <span class="env-badge">{{ row.top_stage_env }}</span>
+              <span>{{ row.top_stage_env }}</span>
             } @else {
               <span style="color: #999">N/A</span>
             }
@@ -89,7 +89,7 @@
 
   @if (!isLoading() && filteredStats().length === 0) {
     <div class="empty-state">
-      <p>Aucune donnée statistique disponible.</p>
+      <p>{{ 'FESTIVAL_STATS.NOTHING' | translate }}</p>
     </div>
   }
 

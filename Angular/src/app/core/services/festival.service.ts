@@ -9,7 +9,6 @@ import { ApiResponse } from '../models/api-response';
 export class FestivalService {
   private http = inject(HttpClient);
   private readonly API_URL = '/api/festivals';
-  private readonly API_STATS = '/api/stats/festivals';
 
   getFestivals(status?: string): Observable<Festival[]> {
     let params = new HttpParams();
@@ -72,10 +71,5 @@ export class FestivalService {
       }),
       catchError((error) => throwError(() => error))
     );
-  }
-
-  getFestivalStats() {
-    return this.http.get<{ status: string, data: any[] }>(`${this.API_STATS}`)
-      .pipe(map(response => response.data));
   }
 }

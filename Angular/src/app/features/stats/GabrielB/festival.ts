@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { firstValueFrom } from 'rxjs';
 import { FestivalStatsService } from '../../../../app/core/services/festival-stats.service';
-
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 export interface FestivalStatRow {
   id: number;
   name: string;
@@ -28,7 +28,7 @@ export interface FestivalStatRow {
   imports: [
     CommonModule, RouterModule, FormsModule,
     MatTableModule, MatIconModule, MatProgressSpinnerModule,
-    MatFormFieldModule, MatSelectModule
+    MatFormFieldModule, MatSelectModule, TranslateModule
   ],
   templateUrl: './festival.html',
   styleUrls: ['./festival.css']

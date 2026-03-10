@@ -1,17 +1,19 @@
 <div class="admin-page">
 
   <header class="admin-top-bar">
-    <div class="top-bar-side">
+    <div class="top-bar-side left-align">
       <button mat-stroked-button class="btn-new" (click)="navigateToAdd()">
         <mat-icon>add</mat-icon>
         {{'FESTIVAL.NEW_FESTIVAL' | translate}}
       </button>
     </div>
 
-    <h1 class="header-title">{{'FESTIVAL.ADMINISTRATION' | translate}}</h1>
+    <div class="header-center">
+      <h1 class="header-title">{{'FESTIVAL.ADMINISTRATION' | translate}}</h1>
+    </div>
 
     <div class="top-bar-side right-align">
-      <span class="greeting">{{'FESTIVAL.HELLO' | translate}} {{ auth.currentUser()?.name || auth.currentUser()?.email }}</span>
+      <span class="greeting">{{'FESTIVAL.HELLO' | translate}} {{ auth.currentUser()?.name || auth.currentUser()?.email }} 👋</span>
     </div>
   </header>
 

@@ -648,6 +648,26 @@
   "HOME":{
     "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"
   },
+  "STATS":{
+    "FESTIVAL": "Festival",
+    "HEBERGEMENT": "Hébergement",
+    "BILLETTERIE": "Billetterie",
+    "TACHE": "Tâches",
+    "STAT": "Statistiques"
+  },
+  "FESTIVAL_STATS":{
+    "YEAR_FILTER": "Filtrer par Année",
+    "ALL_YEARS": "Toutes les années",
+    "COMPARE": "Comparer Festivals",
+    "FESTIVAL": "Festival",
+    "AARTISTS": "Nombre Artistes",
+    "APERF": "Nombre Performances",
+    "STAGE": "Scène la plus utilisée",
+    "APERFS": " Nombre Performances sur cette scène",
+    "POP": "Popularité moyenne artists sur cette scène",
+    "ENV": "Environnement",
+    "NOTHING": "Aucune donnée statistique disponible."
+  },
   "404":{
     "NOT_FOUND": "Page introuvable",
     "MESSAGE": "La page que vous recherchez n'existe pas ou a été déplacée.",

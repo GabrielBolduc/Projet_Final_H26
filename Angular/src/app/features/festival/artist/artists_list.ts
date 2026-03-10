@@ -42,12 +42,9 @@ export class ArtistsListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   public translate = inject(TranslateService);
 
-  // --- Signaux d'état ---
   artists = signal<Artist[]>([]);
   isLoading = signal(true);
   serverErrors = signal<string[]>([]);
-
-  // --- Signaux pour les filtres ---
   searchQuery = signal<string>('');
   filterGenre = signal<string | null>(null);
 
@@ -73,8 +70,7 @@ export class ArtistsListComponent implements OnInit, OnDestroy {
         const params: any = {};
         if (this.searchQuery()) params.search = this.searchQuery();
         if (this.filterGenre()) params.genre = this.filterGenre();
-
-        // Plus besoin d'envoyer de paramètre "sort", le backend le fait automatiquement
+        
         const data = await firstValueFrom(this.artistService.getArtists(params));
         this.artists.set(data);
       } catch (error) {

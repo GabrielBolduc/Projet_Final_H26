@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     resources :packages
 
     get "ticketing_stats", to: "ticketing_stats#index"
+    get "stats/accommodations", to: "accommodations_stats#index"
 
     namespace :admin do
       resources :orders, only: [ :index, :show ]

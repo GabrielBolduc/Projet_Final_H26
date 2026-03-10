@@ -12,6 +12,17 @@ class Accommodation < ApplicationRecord
   validates :latitude, :longitude, presence: true
   validates :time_car, :time_walk, presence: true
 
+  scope :with_stats_data, -> {
+    joins(:festival)
+      .includes(:units)
+      .select("accommodations.*")
+      .select(
+        "ST_Distance_Sphere(
+          POINT(accommodations.longitude, accommodations.latitude),
+          POINT(festivals.longitude, festivals.latitude)
+        ) / 1000 AS distance_from_festival_km"
+      )
+  }
   scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
   scope :within_walk_time, ->(max_time) { where("time_walk <= ?", max_time) }
   scope :within_radius, ->(f_lat, f_lng, radius_km) {
@@ -45,16 +56,67 @@ class Accommodation < ApplicationRecord
 
   before_validation :strip_fields
 
-def as_json(options = {})
-  safe_options = options.is_a?(Hash) ? options : {}
-  json = super(safe_options.except(:base_url))
+  def statistics_data
 
-  if safe_options[:base_url]
-    json[:units] = units.map { |u| u.as_json(safe_options) }
+    total_reservations = units.sum { |u| u.reservations.size }
+
+    total_revenue = units.sum do |unit|
+      unit.reservations.size * unit.cost_person_per_night
+    end
+
+    commission_multiplier = (100 - commission) / 100.0
+    actual_profit = (total_revenue * commission_multiplier).round(2)
+
+    {
+      id: id,
+      festival_id: festival_id,
+      name: name,
+      category: category,
+      unit_count: units.size,
+      pricing: {
+        avg_nightly_rate: unit_prices.any? ? (unit_prices.sum / unit_prices.size.to_f).round(2) : 0,
+        avg_parking_fee: parking_fees.any? ? (parking_fees.sum / parking_fees.size.to_f).round(2) : 0
+      },
+      services: {
+        water: summarize_water_quality
+        wifi: summarize_service(units.map(&:wifi)),
+        electricity: summarize_service(units.map(&:electricity))
+      },
+      location: {
+        address: address,
+        distance_km: respond_to?(:distance_from_festival_km) ? distance_from_festival_km.to_f.round(2) : 0
+      },
+      reservation_stats: {
+        total_count: total_reservations,
+        avg_reservations_per_unit: units.any? ? (total_reservations / units.size.to_f).round(1) : 0
+      },
+      finance: {
+        total_revenue: total_revenue.to_f.round(2),
+        commission_rate: "#{commission}%",
+        actual_profit: actual_profit
+      },
+      inventory: {
+        total_reservations: units.sum { |u| u.reservations.size },
+        total_units: units.sum(:quantity)
+      },
+    }
   end
 
-  json
-end
+
+  def as_json(options = {})
+    safe_options = options.is_a?(Hash) ? options : {}
+    json = super(safe_options.except(:base_url))
+
+    if safe_options[:base_url]
+      json[:units] = units.map { |u| u.as_json(safe_options) }
+    end
+
+    json
+  end
+
+  def self.category_counts
+    group(:category).count
+  end
 
   private
 
@@ -68,5 +130,21 @@ end
   def strip_fields
     self.name = name&.strip
     self.address = address&.strip
+  end
+
+  def summarize_service(boolean_array)
+    return "no access" if boolean_array.empty? || boolean_array.all?(false)
+    return "full access" if boolean_array.all?(true)
+
+    "partial access"
+  end
+
+  def summarize_water_quality
+    qualities = units.map(&:water_before_type_cast)
+    return "no access" if qualities.all?(0)
+
+    return "full drinkable access" if qualities.all?(2)
+
+    "partial access"
   end
 end

@@ -36,6 +36,7 @@ import { UserUpdateAffectationComponent } from '@features/laurent/affectation/us
 import { ArtistsListComponent } from './features/festival/artist/artists_list';
 import { ArtistFormComponent } from './features/festival/artist/artist_form';
 import { ArtistDetailComponent } from './features/festival/public_programation/artist_detail'; 
+import { staffGuard } from '@core/guards/staff-guard';
 
 export const routes: Routes = [
     {
@@ -238,17 +239,17 @@ export const routes: Routes = [
     {
         path: 'affectations',
         component: UserListAffectationComponent,
-        canActivate: [AuthGuard, adminGuard]
+        canActivate: [AuthGuard, staffGuard]
     },
     {
         path: 'affectations/:affectationId',
         component: ShowAffectationComponent,
-        canActivate: [AuthGuard, adminGuard]
+        canActivate: [AuthGuard, staffGuard]
     },
     {
         path: 'affectations/edit/:id',
         component: UserUpdateAffectationComponent,
-        canActivate: [AuthGuard, adminGuard]
+        canActivate: [AuthGuard, staffGuard]
     },
     {
         path: '**',

@@ -2,7 +2,9 @@ class Api::FestivalsStatsController < ApiController
   before_action :require_admin!
 
   def festivals
-    festivals = Festival.with_stats_data
+    festivals = Festival.recent
+                        .filter_by_year(params[:year])
+                        .filter_by_ids(params[:festival_id])
 
     stats = festivals.map(&:statistics_data)
 

@@ -1,14 +1,37 @@
 <div class="stats-container-fade">
 
+  <div class="ssf-toolbar">
+    
+    <mat-form-field appearance="outline" class="ssf-input">
+      <mat-label>Filtrer par Année</mat-label>
+      <mat-select [ngModel]="filterYear()" (ngModelChange)="updateYear($event)">
+        <mat-option [value]="null">Toutes les années</mat-option>
+        @for (year of availableYears(); track year) {
+          <mat-option [value]="year">{{ year }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="ssf-input">
+      <mat-label>Comparer Festivals</mat-label>
+      <mat-select multiple [ngModel]="filterFestivals()" (ngModelChange)="updateFestivals($event)">
+        @for (fest of rawStats(); track fest.id) {
+          <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
   @if (isLoading()) {
     <div class="spinner-container">
       <mat-spinner diameter="50" color="primary"></mat-spinner>
     </div>
   }
 
-  @if (!isLoading() && stats().length > 0) {
+  @if (!isLoading() && filteredStats().length > 0) {
     <div class="grid-table-container">
-      <table mat-table [dataSource]="stats()" class="festify-grid-table">
+      <table mat-table [dataSource]="filteredStats()" class="festify-grid-table">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Festival </th>
@@ -64,7 +87,7 @@
     </div>
   }
 
-  @if (!isLoading() && stats().length === 0) {
+  @if (!isLoading() && filteredStats().length === 0) {
     <div class="empty-state">
       <p>Aucune donnée statistique disponible.</p>
     </div>

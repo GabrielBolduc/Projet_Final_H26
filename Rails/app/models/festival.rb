@@ -3,11 +3,14 @@ class Festival < ApplicationRecord
   has_many :affectations, dependent: :destroy
   has_many :packages, dependent: :destroy
   has_many :accommodations, dependent: :destroy
+  has_many :stages, through: :performances
+  has_many :artists, through: :performances
 
   scope :recent, -> { order(start_at: :desc) }
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
   scope :filter_by_status, ->(status) { where(status: status) }
   scope :publicly_visible, -> { ongoing }
+  scope :with_stats_data, -> { includes(performances: [:artist, :stage])}
 
   before_destroy :prevent_destroy_if_active_or_archived
 
@@ -26,6 +29,26 @@ class Festival < ApplicationRecord
   validate :start_at_cannot_be_in_the_past, unless: :completed?
 
   composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
+
+  def statistics_data
+    perfs = performances
+    return empty_stats if perfs.empty?
+
+    top_stage, top_count = find_top_stage(perfs)
+    avg_pop = calculate_avg_popularity(perfs, top_stage)
+
+    {
+      id: id,
+      name: name,
+      year: start_at&.year || Time.current.year,
+      artist_count: perfs.map(&:artist_id).uniq.size,
+      performance_count: perfs.size,
+      top_stage_name: top_stage.name,
+      top_stage_perf_count: top_count,
+      top_stage_avg_pop: avg_pop,
+      top_stage_env: top_stage.respond_to?(:environment) ? top_stage.environment : "N/A"
+    }
+  end
 
   private
 
@@ -54,5 +77,31 @@ class Festival < ApplicationRecord
     if start_at_changed? && start_at.present? && start_at < Date.today
       errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive)")
     end
+  end
+
+  def find_top_stage(perfs)
+    stage_counts = perfs.group_by(&:stage).transform_values(&:size)
+    stage_counts.max_by { |_stage, count| count }
+  end
+
+  def calculate_avg_popularity(perfs, top_stage)
+    artists = perfs.select { |p| p.stage_id == top_stage.id }.map(&:artist)
+    return 0.0 if artists.empty?
+
+    (artists.sum(&:popularity).to_f / artists.size).round(1)
+  end
+
+  def empty_stats
+    {
+      id: id,
+      name: name,
+      year: start_at&.year || Time.current.year,
+      artist_count: 0,
+      performance_count: 0,
+      top_stage_name: "Aucune",
+      top_stage_perf_count: 0,
+      top_stage_avg_pop: 0.0,
+      top_stage_env: "N/A"
+    }
   end
 end

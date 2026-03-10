@@ -15,6 +15,8 @@ Rails.application.routes.draw do
       end
     end
 
+    get 'stats/festivals', to: 'festivals_stats#festivals'
+
     resources :stages, only: [ :index ]
     resources :performances
     resources :reservations
@@ -32,6 +34,8 @@ Rails.application.routes.draw do
     end
 
     resources :packages
+
+    get "ticketing_stats", to: "ticketing_stats#index"
 
     namespace :admin do
       resources :orders, only: [ :index, :show ]

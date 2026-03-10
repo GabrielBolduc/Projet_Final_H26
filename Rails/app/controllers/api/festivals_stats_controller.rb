@@ -1,8 +1,10 @@
-class Api::StatsController < ApiController
+class Api::FestivalsStatsController < ApiController
   before_action :require_admin!
 
   def festivals
-    stats = Festival.statistics_report
+    festivals = Festival.with_stats_data
+
+    stats = festivals.map(&:statistics_data)
 
     render json: {
       status: "success",

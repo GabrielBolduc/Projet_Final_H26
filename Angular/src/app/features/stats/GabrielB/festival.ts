@@ -4,11 +4,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { firstValueFrom } from 'rxjs';
+import { FestivalStatsService } from '../../../../app/core/services/festival-stats.service';
 
-import { FestivalService } from '../../../../app/core/services/festival.service';
-// Si tu as un ErrorHandlerService, n'hésite pas à l'importer aussi !
-
-// On définit la structure exacte que Rails nous renvoie
 export interface FestivalStatRow {
   id: number;
   name: string;
@@ -34,7 +31,7 @@ export interface FestivalStatRow {
   styleUrls: ['./festival.css']
 })
 export class FestivalComponent implements OnInit {
-  private festivalService = inject(FestivalService);
+  private festivalService = inject(FestivalStatsService);
 
   isLoading = signal(true);
   stats = signal<FestivalStatRow[]>([]);

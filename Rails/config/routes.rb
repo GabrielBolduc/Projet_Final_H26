@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       end
     end
 
-    get 'stats/festivals', to: 'stats#festivals'
+    get 'stats/festivals', to: 'festivals_stats#festivals'
 
     resources :stages, only: [ :index ]
     resources :performances

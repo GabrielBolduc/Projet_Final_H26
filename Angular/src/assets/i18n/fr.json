@@ -652,5 +652,26 @@
     "NOT_FOUND": "Page introuvable",
     "MESSAGE": "La page que vous recherchez n'existe pas ou a été déplacée.",
     "BTN": "Retour à la page d'accueil"
+  },
+  "STATS": {
+    "ACCOMMODATIONS": {
+      "HIGHEST_EARNER": "Hébergement le plus rentable",
+      "LOWEST_EARNER": "Hébergement le moins rentable",
+      "EMPTY": "Aucune donnée disponible pour le moment.",
+      "ERROR": "Erreur lors du chargement des statistiques.",
+      "RETRY": "Réessayer",
+      "COLUMNS": {
+        "NAME": "Hébergement",
+        "REVENUE": "Revenu Brut",
+        "PROFIT": "Profit Net",
+        "DISTANCE": "Distance (KM)",
+        "SERVICES": "Services",
+        "INVENTORY": "Disponibilité"
+      },
+      "CATEGORIES": {
+        "CAMPING": "Camping",
+        "HOTEL": "Hôtel"
+      }
+    }
   }
 }

@@ -13,15 +13,15 @@ class Accommodation < ApplicationRecord
   validates :time_car, :time_walk, presence: true
 
   scope :with_stats_data, -> {
-    joins(:festival)
-      .includes(:units)
-      .select("accommodations.*")
-      .select(
-        "ST_Distance_Sphere(
-          POINT(accommodations.longitude, accommodations.latitude),
-          POINT(festivals.longitude, festivals.latitude)
-        ) / 1000 AS distance_from_festival_km"
-      )
+    includes(:festival, units: :reservations)
+    .joins(:festival)
+    .select("accommodations.*")
+    .select(
+      "ST_Distance_Sphere(
+        POINT(accommodations.longitude, accommodations.latitude),
+        POINT(festivals.longitude, festivals.latitude)
+      ) / 1000 AS distance_from_festival_km"
+    )
   }
   scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
   scope :within_walk_time, ->(max_time) { where("time_walk <= ?", max_time) }
@@ -57,7 +57,8 @@ class Accommodation < ApplicationRecord
   before_validation :strip_fields
 
   def statistics_data
-
+    unit_prices = units.map(&:cost_person_per_night)
+    parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
     total_reservations = units.sum { |u| u.reservations.size }
 
     total_revenue = units.sum do |unit|
@@ -70,15 +71,16 @@ class Accommodation < ApplicationRecord
     {
       id: id,
       festival_id: festival_id,
+      festival_name: festival.name,
       name: name,
-      category: category,
+      category: category_before_type_cast,
       unit_count: units.size,
       pricing: {
         avg_nightly_rate: unit_prices.any? ? (unit_prices.sum / unit_prices.size.to_f).round(2) : 0,
         avg_parking_fee: parking_fees.any? ? (parking_fees.sum / parking_fees.size.to_f).round(2) : 0
       },
       services: {
-        water: summarize_water_quality
+        water: summarize_water_quality,
         wifi: summarize_service(units.map(&:wifi)),
         electricity: summarize_service(units.map(&:electricity))
       },
@@ -96,12 +98,12 @@ class Accommodation < ApplicationRecord
         actual_profit: actual_profit
       },
       inventory: {
-        total_reservations: units.sum { |u| u.reservations.size },
-        total_units: units.sum(:quantity)
-      },
+        total_reservations: total_reservations,
+        total_units: units.sum(:quantity),
+        available_now: units.sum { |u| [u.quantity - u.reservations.size, 0].max }
+      }
     }
   end
-
 
   def as_json(options = {})
     safe_options = options.is_a?(Hash) ? options : {}

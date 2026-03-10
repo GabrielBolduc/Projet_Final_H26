@@ -71,13 +71,21 @@ export interface AccommodationStats {
   };
 }
 
-export type GroupedAccommodationStats = { [festivalId: string]: AccommodationStats[] };
+export interface FestivalEditionData {
+  items: AccommodationStats[];
+  highlights: {
+    top: { name: string; finance: any };
+    bottom: { name: string; finance: any };
+  };
+}
+
+export type GroupedAccommodationStats = { [festivalName: string]: FestivalEditionData };
 
 export interface AccommodationStatsResponse {
   status: string;
   highlights: {
-    highest_earner: Partial<AccommodationStats>;
-    lowest_earner: Partial<AccommodationStats>;
+    highest_earner: { name: string; finance: any };
+    lowest_earner: { name: string; finance: any };
   };
   data: GroupedAccommodationStats;
 }

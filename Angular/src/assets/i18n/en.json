@@ -650,5 +650,26 @@
     "NOT_FOUND": "Page Not Found",
     "MESSAGE": "The page you're looking for doesn't exist or has been moved.",
     "BTN": "Go Home"
+  },
+  "STATS": {
+    "ACCOMMODATIONS": {
+      "HIGHEST_EARNER": "Most Profitable Accommodation",
+      "LOWEST_EARNER": "Least Profitable Accommodation",
+      "EMPTY": "No data available at the moment.",
+      "ERROR": "Error loading statistics.",
+      "RETRY": "Retry",
+      "COLUMNS": {
+        "NAME": "Accommodation",
+        "REVENUE": "Gross Revenue",
+        "PROFIT": "Net Profit",
+        "DISTANCE": "Distance (KM)",
+        "SERVICES": "Services",
+        "INVENTORY": "Availability"
+      },
+      "CATEGORIES": {
+        "CAMPING": "Camping",
+        "HOTEL": "Hotel"
+      }
+    }
   }
 }

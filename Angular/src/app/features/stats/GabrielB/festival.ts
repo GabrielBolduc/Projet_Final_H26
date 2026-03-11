@@ -7,13 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatCardModule } from '@angular/material/card'; // Ajouté pour les cartes de KPI
-import { TranslateModule } from '@ngx-translate/core'; // Ajouté pour le support du pipe | translate
+import { MatCardModule } from '@angular/material/card'; 
+import { TranslateModule } from '@ngx-translate/core'; 
 import { firstValueFrom } from 'rxjs';
 
 import { FestivalStatsService } from '../../../../app/core/services/festival-stats.service';
-
-// --- INTERFACES DE TYPAGE STRICT ---
 
 export interface GlobalStats {
   total_festivals: number;
@@ -55,12 +53,10 @@ export class FestivalComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  // --- ÉTATS GLOBAUX ---
   isLoading = signal(true);
   globalStats = signal<GlobalStats | null>(null);
   rawStats = signal<FestivalStatRow[]>([]); 
   
-  // --- ÉTATS DES FILTRES ---
   filterYear = signal<number | null>(null);
   filterFestivals = signal<number[]>([]);
   
@@ -71,13 +67,11 @@ export class FestivalComponent implements OnInit {
     'top_stage_perf_count', 'top_stage_avg_pop', 'top_stage_env'
   ];
 
-  // --- COMPUTED : Extraction des années pour le select ---
   availableYears = computed(() => {
     const years = this.rawStats().map(s => s.year);
     return [...new Set(years)].sort((a, b) => b - a);
   });
 
-  // --- COMPUTED : Filtrage automatique réactif ---
   filteredStats = computed(() => {
     let data = [...this.rawStats()];
     const year = this.filterYear();
@@ -95,7 +89,6 @@ export class FestivalComponent implements OnInit {
   });
 
   constructor() {
-    // --- EFFECT : Synchronisation avec l'URL ---
     effect(() => {
       if (!this.initialized) return;
       
@@ -114,7 +107,6 @@ export class FestivalComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // 1. Lecture des Query Params au chargement
     const params = this.route.snapshot.queryParams;
     
     if (params['year']) {
@@ -125,17 +117,13 @@ export class FestivalComponent implements OnInit {
       this.filterFestivals.set(params['festivals'].split(',').map(Number));
     }
 
-    // 2. Initialisation terminée, l'Effect peut surveiller
     this.initialized = true;
-
-    // 3. Chargement des données
     this.loadStats();
   }
 
   async loadStats(): Promise<void> {
     this.isLoading.set(true);
     try {
-      // Le typage strict s'applique ici, supprimant les erreurs .global et .list
       const data = await firstValueFrom(this.statsService.getFestivalStats()) as FestivalStatsResponse;
       
       this.globalStats.set(data.global);
@@ -147,7 +135,6 @@ export class FestivalComponent implements OnInit {
     }
   }
 
-  // --- MÉTHODES D'INTERACTION (Appelées par le HTML) ---
   updateYear(val: number | null) {
     this.filterYear.set(val);
   }

@@ -1137,7 +1137,7 @@ end
 
 ## Alexandre 2
 
-# actuel
+#actuel
 unit1.save!
 unit_camp_high.save!
 unit_camp_low.save!
@@ -1148,7 +1148,7 @@ unit_hotel_double.save!
 unit_camp_standard.save!
 unit_camp_premium.save!
 
-# passe
+#passe
 
 unit1old.save!
 unit_camp_high_old.save!
@@ -1186,7 +1186,7 @@ res1 = Reservation.create!(
 res2 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 18),
-  nb_of_people: 6,
+  nb_of_people: 6, 
   reservation_name: "Alice Wonderland",
   phone_number: "8195554444",
   user: c2,
@@ -1209,7 +1209,7 @@ res3 = Reservation.create!(
 res4 = Reservation.create!(
   arrival_at: f.start_at,
   departure_at: f.end_at,
-  nb_of_people: 2,
+  nb_of_people: 2, 
   reservation_name: "Charlie Day",
   phone_number: "8195556666",
   user: c,
@@ -1219,9 +1219,9 @@ res4 = Reservation.create!(
 )
 
 res5 = Reservation.create!(
-  arrival_at: Date.new(2026, 7, 15),
+  arrival_at: Date.new(2026, 7, 15), 
   departure_at: Date.new(2026, 7, 17),
-  nb_of_people: 2,
+  nb_of_people: 2, 
   reservation_name: "Dana Scully",
   phone_number: "8195557777",
   user: c4,
@@ -1353,7 +1353,6 @@ res10old = Reservation.create!(
 
 
 
-# Oct 27 to Oct 29 (3 days before)
 res1oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 29),
@@ -1366,7 +1365,6 @@ res1oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 27 to Oct 28
 res2oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 28),
@@ -1379,7 +1377,6 @@ res2oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 28 to Oct 29 (No overlap with res2oldold)
 res3oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 28),
   departure_at: Date.new(2024, 10, 29),
@@ -1392,7 +1389,6 @@ res3oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 30 to Oct 31 (During Festival)
 res4oldold = Reservation.create!(
   arrival_at: f4.start_at,
   departure_at: f4.end_at,
@@ -1405,7 +1401,6 @@ res4oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 27 to Oct 29
 res5oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 29),
@@ -1418,7 +1413,6 @@ res5oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 1 to Nov 3 (After Festival)
 res6oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 1),
   departure_at: Date.new(2024, 11, 3),
@@ -1431,7 +1425,6 @@ res6oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 1 to Nov 2
 res7oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 1),
   departure_at: Date.new(2024, 11, 2),
@@ -1444,7 +1437,6 @@ res7oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 2 to Nov 3 (No overlap with res7oldold)
 res8oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 2),
   departure_at: Date.new(2024, 11, 3),
@@ -1457,7 +1449,6 @@ res8oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 30 to Oct 31 (During Festival)
 res9oldold = Reservation.create!(
   arrival_at: f4.start_at,
   departure_at: f4.end_at,
@@ -1470,7 +1461,6 @@ res9oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 1 to Nov 2
 res10oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 1),
   departure_at: Date.new(2024, 11, 2),

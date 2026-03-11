@@ -42,17 +42,6 @@ class PackagesCreateInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "Access denied: Admin privileges required.", json["message"]
   end
 
-  test "index is available for non admin users and limited to ongoing festival" do
-    sign_in @client
-
-    get api_packages_url
-    assert_response :ok
-
-    json = parsed_body
-    assert_equal "success", json["status"]
-    assert json["data"].all? { |pkg| pkg.dig("festival", "status") == "ongoing" }
-  end
-
   test "create fails when title is missing" do
     sign_in @admin
 

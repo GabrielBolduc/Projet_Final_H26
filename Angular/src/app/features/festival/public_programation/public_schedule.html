@@ -63,13 +63,13 @@
           </h2>
 
           <div class="ssf-toolbar">
-            <mat-form-field appearance="outline" class="ssf-input">
+            <mat-form-field appearance="outline" class="ssf-input" subscriptSizing="dynamic">
               <mat-label>{{'PUBLIC.SEARCH' | translate}}</mat-label>
               <mat-icon matPrefix>search</mat-icon>
               <input matInput [ngModel]="searchQuery()" (ngModelChange)="updateSearch($event)">
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="ssf-input filter-select">
+            <mat-form-field appearance="outline" class="ssf-input filter-select" subscriptSizing="dynamic">
               <mat-label>{{'PUBLIC.FILTER' | translate}}</mat-label>
               <mat-select [value]="filterStageId()" (selectionChange)="updateFilter($event.value)">
                 <mat-option [value]="null">{{'PUBLIC.ALL_STAGE' | translate}}</mat-option>

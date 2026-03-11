@@ -123,7 +123,6 @@
     "END": "Fin",
     "NOTE": "Notes",
     "ACTION": "Actions",
-    "NO_ONGOING": "Aucun festival en cours",
     "READ_ONLY_ARCHIVE": "Archive en lecture seule",
     "FESTIVAL_NOT_FOUND": "Festival introuvable",
     "FESTIVAL_NOT_FOUND_DESC": "Le festival demandé n'existe pas ou a été supprimé.",
@@ -133,6 +132,8 @@
     "EDIT_IMPOSSIBLE": "Modification impossible (Archivé)",
     "DELETE_CONFIRM_TITLE": "Confirmation de suppression",
     "DELETE_CONFIRM_BODY": "Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.",
+    "ARCHIVED_SUCCESS": "Festival archivé avec succès.",
+    "DELETE_ONGOING_ERROR": "Impossible de supprimer un festival en cours.",
     "FESTIVALS_LOAD_ERROR": "Erreur lors du chargement des festivals",
     "DELETE_SUCCESS": "Performance supprimée avec succès"
   },
@@ -158,6 +159,8 @@
     "ADD_SUCCESS": "Artiste ajouté avec succès !",
     "EDIT_SUCCESS": "Artiste mis à jour avec succès !",
     "ERROR_SAVE": "Une erreur est survenue lors de l'enregistrement.",
+    "LOAD_ERROR": "Erreur lors du chargement de l'artiste.",
+    "SAVE_ERROR": "Erreur lors de l'enregistrement de l'artiste.",
     "DELETE_SUCCESS": "Artiste supprimé avec succès"
   },
   "ARTIST_LIST": {
@@ -172,7 +175,12 @@
     "ACTIONS": "Action",
     "ALL_GENRES": "Tous les genres musical",
     "SEARCH": "Rechercher artiste...",
-    "LOAD_ERROR_GENRE": "Erreur chargement genres"
+    "ERROR_GENRE": "Erreur chargement genres"
+  },
+  "ARTIST_DETAIL":{
+    "BACK": "Retour",
+    "ABOUT": "À propos",
+    "NOTHING": "Biographie à venir..."
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",
@@ -208,6 +216,7 @@
     "NEW_PACKAGE": "Nouveau Forfait",
     "TITLE": "Gestion des forfaits",
     "SEARCH_TITLE": "Titre",
+    "SEARCH_TITLE_DESC": "Titre ou description",
     "SORT_BY": "Trier par",
     "SORT_ASC": "Plus ancien en premier",
     "SORT_DESC": "Plus récent en premier",
@@ -256,7 +265,21 @@
     "REVENUES": "Revenus",
     "PROFIT": "Profit",
     "AVG_TICKETS": "Moy. billets par commande",
-    "REFUNDS": "Montant remboursé"
+    "REFUNDS": "Montant remboursé",
+    "DATE_FROM": "Du",
+    "DATE_TO": "Au",
+    "PACKAGE_TYPES": "Types de forfaits",
+    "PACKAGE_GENERAL": "Général",
+    "PACKAGE_DAILY": "Journalier",
+    "PACKAGE_EVENING": "Soirée",
+    "EXPENSES_TOTAL": "Dépenses (Total)",
+    "EXPENSES_PERFORMANCE": "Dépenses (Spectacles)",
+    "EXPENSES_OTHER": "Dépenses (Autres)",
+    "REVENUES_TOTAL": "Revenus (Total)",
+    "REVENUES_TICKETS": "Revenus (Billets)",
+    "REVENUES_OTHER": "Revenus (Autres)",
+    "REFUNDS_COUNT": "Remboursements (Nombre)",
+    "EMPTY": "Aucune statistique disponible avec ces filtres."
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",
@@ -303,6 +326,8 @@
     "CONFIRM_ORDER": "Confirmer la commande",
     "INVALID_QUANTITY": "La quantité doit être au moins 1.",
     "SOLD_OUT": "Complet",
+    "DISCOUNT_BADGE": "Économisez {{ rate }}",
+    "SAVE": "Vous économisez",
     "REMAINING_TICKETS": "Il reste seulement {{count}} billet(s) disponible(s).",
     "AVAILABILITY": "Disponibilité",
     "MY_ORDERS": "Mes commandes",
@@ -401,6 +426,7 @@
   "TACHES": {
     "TITLE": "Tâches",
     "DESCRIPTION": "Description",
+    "REQUIS": "Requis",
     "DIFFICULTY": "Difficulté",
     "REUSABLE": "Réutilisable",
     "ACTIONS": "Actions",
@@ -440,6 +466,8 @@
   "AFFECTATIONS": {
     "ADD": "Ajouter Affectation",
     "TITLE": "Affectations",
+    "AFFECTATION": "Affectation",
+    "DESCRIPTION": "Description",
     "USER": "Utilisateur",
     "MORE": "Plus de détails",
     "NAME": "Nom",
@@ -647,6 +675,30 @@
   },
   "HOME":{
     "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"
+  },
+  "STATS_GLOBAL":{
+    "FESTIVAL": "Festival",
+    "HEBERGEMENT": "Hébergement",
+    "BILLETTERIE": "Billetterie",
+    "TACHE": "Tâches",
+    "STAT": "Statistiques"
+  },
+  "FESTIVAL_STATS":{
+    "YEAR_FILTER": "Filtrer par Année",
+    "ALL_YEARS": "Toutes les années",
+    "COMPARE": "Comparer Festivals",
+    "FESTIVAL": "Festival",
+    "AARTISTS": "Nombre Artistes",
+    "APERF": "Nombre Performances",
+    "STAGE": "Scène la plus utilisée",
+    "APERFS": " Nombre Performances sur cette scène",
+    "POP": "Popularité moyenne artists sur cette scène",
+    "ENV": "Environnement",
+    "NOTHING": "Aucune donnée statistique disponible.",
+    "TOTAL_FESTIVALS": "Festivals organisés",
+    "AVG_SATISFACTION": "Satisfaction globale",
+    "TOTAL_ARTISTS": "Artistes uniques",
+    "GENRES": "Répartition des genres"
   },
   "404":{
     "NOT_FOUND": "Page introuvable",

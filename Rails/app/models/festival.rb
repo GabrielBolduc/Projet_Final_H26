@@ -10,7 +10,13 @@ class Festival < ApplicationRecord
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
   scope :filter_by_status, ->(status) { where(status: status) }
   scope :publicly_visible, -> { ongoing }
-  scope :with_stats_data, -> { includes(performances: [:artist, :stage])}
+  
+  scope :filter_by_year, ->(year){
+    where(start_at: Date.new(year.to_i).all_year) if year.present?
+  }
+  scope :filter_by_ids, ->(ids){
+    where(id: ids) if ids.present?
+  }
 
   before_destroy :prevent_destroy_if_active_or_archived
 
@@ -31,22 +37,61 @@ class Festival < ApplicationRecord
   composed_of :coordinates, class_name: "GeoPoint", mapping: [ %w[latitude latitude], %w[longitude longitude] ]
 
   def statistics_data
-    perfs = performances
-    return empty_stats if perfs.empty?
+    total_perfs = performances.count
+    return empty_stats if total_perfs == 0
 
-    top_stage, top_count = find_top_stage(perfs)
-    avg_pop = calculate_avg_popularity(perfs, top_stage)
+    total_artists = performances.select(:artist_id).distinct.count
+
+    top_stage = Stage.joins(:performances)
+                     .where(performances: { festival_id: self.id })
+                     .group('stages.id')
+                     .order(Arel.sql('COUNT(performances.id) DESC'))
+                     .select('stages.*, COUNT(performances.id) AS perf_count')
+                     .first
+
+    avg_pop = if top_stage
+                Artist.joins(:performances)
+                      .where(performances: { festival_id: self.id, stage_id: top_stage.id })
+                      .average(:popularity)
+              else
+                0.0
+              end
 
     {
       id: id,
       name: name,
       year: start_at&.year || Time.current.year,
-      artist_count: perfs.map(&:artist_id).uniq.size,
-      performance_count: perfs.size,
-      top_stage_name: top_stage.name,
-      top_stage_perf_count: top_count,
-      top_stage_avg_pop: avg_pop,
-      top_stage_env: top_stage.respond_to?(:environment) ? top_stage.environment : "N/A"
+      artist_count: total_artists,
+      performance_count: total_perfs,
+      top_stage_name: top_stage&.name || "Aucune",
+      top_stage_perf_count: top_stage&.perf_count || 0,
+      top_stage_avg_pop: avg_pop ? avg_pop.round(1).to_f : 0.0,
+      top_stage_env: top_stage&.respond_to?(:environment) && top_stage.environment.present? ? top_stage.environment : "N/A"
+    }
+  end
+
+  def self.global_stats
+    festivals = Festival.all
+    avg_satisfaction = festivals.average(:satisfaction)&.round(1) || 0.0
+    
+    total_artists = Performance.select(:artist_id).distinct.count
+    
+    genre_counts = Artist.joins(:performances).group(:genre).count
+    total_genres = genre_counts.values.sum.to_f
+    
+    genre_percentages = if total_genres > 0 
+                          genre_counts.map do |name, count| 
+                            { name: name || 'Inconnu', percent: ((count / total_genres) * 100).round(1) }
+                          end
+                        else
+                          []
+                        end
+
+    {
+      total_festivals: festivals.count,
+      avg_satisfaction: avg_satisfaction,
+      total_artists: total_artists,
+      genres_repartition: genre_percentages
     }
   end
 
@@ -77,18 +122,6 @@ class Festival < ApplicationRecord
     if start_at_changed? && start_at.present? && start_at < Date.today
       errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive)")
     end
-  end
-
-  def find_top_stage(perfs)
-    stage_counts = perfs.group_by(&:stage).transform_values(&:size)
-    stage_counts.max_by { |_stage, count| count }
-  end
-
-  def calculate_avg_popularity(perfs, top_stage)
-    artists = perfs.select { |p| p.stage_id == top_stage.id }.map(&:artist)
-    return 0.0 if artists.empty?
-
-    (artists.sum(&:popularity).to_f / artists.size).round(1)
   end
 
   def empty_stats

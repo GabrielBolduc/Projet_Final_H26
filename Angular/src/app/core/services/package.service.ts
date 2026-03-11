@@ -12,6 +12,7 @@ export interface PackageFilters {
   festivalId?: number;
   status?: PackageStatus;
   q?: string;
+  dow?: string;
   sort?: PackageSort;
   categories?: Array<'general' | 'daily' | 'evening'>;
   sold_out?: 'true' | 'false' | boolean;
@@ -37,6 +38,10 @@ export class PackageService {
 
     if (filters.q?.trim()) {
       params = params.set('q', filters.q.trim());
+    }
+
+    if (filters.dow?.trim()) {
+      params = params.set('dow', filters.dow.trim());
     }
 
     if (filters.sort) {

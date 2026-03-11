@@ -101,7 +101,7 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
 
   currentLang = toSignal(
     this.translate.onLangChange.pipe(map(event => this.formatLang(event.lang))),
-    { initialValue: this.formatLang(this.translate.currentLang) }
+    { initialValue: this.formatLang(this.translate.getCurrentLang()) }
   );
 
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description'];

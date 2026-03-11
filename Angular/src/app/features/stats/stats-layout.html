@@ -7,7 +7,7 @@
       <div class="header-center">
         <h1 class="header-title">
           <mat-icon style="font-size: 28px; width: 28px; height: 28px; margin-right: 5px;">bar_chart</mat-icon>
-          Statistiques
+          {{'STATS_GLOBAL.STAT' | translate}}
         </h1>
       </div>
   
@@ -22,7 +22,9 @@
            [active]="rla.isActive">
            
            <mat-icon style="margin-right: 8px;">{{ link.icon }}</mat-icon>
-           {{ link.label }}
+           
+           {{ link.label | translate }}
+           
         </a>
       }
     </nav>

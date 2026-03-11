@@ -3,14 +3,14 @@
   <div class="theme-accent-circle"></div>
 
   @if (isLoading()) { <div class="center-state"><mat-spinner diameter="50"></mat-spinner></div> }
-  @if (!isLoading() && error()) { <div class="center-state"><p>{{ error() }}</p><button mat-button (click)="goBack()">Retour</button></div> }
+  @if (!isLoading() && error()) { <div class="center-state"><p>{{ error() }}</p><button mat-button (click)="goBack()">{{'ARTIST_DETAIL.BACK' | translate}}</button></div> }
 
   @if (artist(); as a) {
     <div class="content-wrapper fade-in">
       
       <header class="detail-header">
         <button mat-button color="primary" class="back-button" (click)="goBack()">
-          <mat-icon>arrow_back</mat-icon> Retour
+          <mat-icon>arrow_back</mat-icon> {{'ARTIST_DETAIL.BACK' | translate}}
         </button>
         <span class="genre-badge">
           {{ a.genre || 'Genre Varié' }}
@@ -37,9 +37,9 @@
           <h1 class="artist-name">{{ a.name }}</h1>
           <div class="divider"></div>
           <div class="bio-container">
-            <h3 class="section-label">À propos</h3>
+            <h3 class="section-label">{{'ARTIST_DETAIL.ABOUT' | translate}}</h3>
             <p class="bio-text">
-              {{ a.bio || "Biographie à venir..." }}
+              {{ a.bio || "{{'ARTIST_DETAIL.NOTHING' | translate}}" }}
             </p>
           </div>
         </div>

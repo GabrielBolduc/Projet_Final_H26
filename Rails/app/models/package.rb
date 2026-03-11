@@ -105,16 +105,38 @@ class Package < ApplicationRecord
     sold_count >= quota
   end
 
-  def self.total_tickets_sold_for_festival(festival_id)
-    joins(:tickets).where(festival_id: festival_id, tickets: { refunded_at: nil }).count
+  def self.for_festival_and_categories(festival_id, categories = nil)
+    scope = where(festival_id: festival_id)
+    return scope unless categories.present?
+    scope.where(category: categories)
   end
 
-  def self.total_revenue_for_festival(festival_id)
-    joins(:tickets).where(festival_id: festival_id, tickets: { refunded_at: nil }).sum("tickets.price")
+  def self.total_tickets_sold_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where(tickets: { refunded_at: nil })
+      .count
   end
 
-  def self.total_refunds_for_festival(festival_id)
-    joins(:tickets).where(festival_id: festival_id).where.not(tickets: { refunded_at: nil }).sum("tickets.price")
+  def self.total_revenue_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where(tickets: { refunded_at: nil })
+      .sum("tickets.price")
+  end
+
+  def self.total_refunds_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where.not(tickets: { refunded_at: nil })
+      .sum("tickets.price")
+  end
+
+  def self.total_refund_count_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where.not(tickets: { refunded_at: nil })
+      .count
   end
 
   private

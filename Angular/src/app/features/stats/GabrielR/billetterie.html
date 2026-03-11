@@ -1,27 +1,135 @@
-<div class="admin-billetterie-stats">
-    <div class="header">
-    <h1 class="page-title">{{ 'TICKETING_STATS.TITLE' | translate }}</h1>
+<div class="stats-container-fade">
+  <div class="ssf-toolbar">
+    <mat-form-field appearance="outline" class="ssf-input">
+      <mat-label>{{ 'TICKETING_STATS.DATE_FROM' | translate }}</mat-label>
+      <input
+        matInput
+        type="date"
+        [ngModel]="startDate()"
+        (ngModelChange)="startDate.set($event)"
+      >
+    </mat-form-field>
 
+    <mat-form-field appearance="outline" class="ssf-input">
+      <mat-label>{{ 'TICKETING_STATS.DATE_TO' | translate }}</mat-label>
+      <input
+        matInput
+        type="date"
+        [ngModel]="endDate()"
+        (ngModelChange)="endDate.set($event)"
+      >
+    </mat-form-field>
+
+    <div class="category-filters">
+      <span class="filter-label">{{ 'TICKETING_STATS.PACKAGE_TYPES' | translate }}</span>
+      <mat-checkbox [checked]="categoryFilters().general" (change)="toggleCategory('general', $event.checked)">
+        {{ 'TICKETING_STATS.PACKAGE_GENERAL' | translate }}
+      </mat-checkbox>
+      <mat-checkbox [checked]="categoryFilters().daily" (change)="toggleCategory('daily', $event.checked)">
+        {{ 'TICKETING_STATS.PACKAGE_DAILY' | translate }}
+      </mat-checkbox>
+      <mat-checkbox [checked]="categoryFilters().evening" (change)="toggleCategory('evening', $event.checked)">
+        {{ 'TICKETING_STATS.PACKAGE_EVENING' | translate }}
+      </mat-checkbox>
     </div>
+  </div>
 
-    <mat-grid-list cols="7" rowHeight="50px">
-            @for (tile of tiles; track tile.text) {
-                <mat-grid-tile colspan="{{tile.cols}}" style="border: solid 1px #000; font-weight: bold;">{{ tile.text | translate }}</mat-grid-tile>
-            }
+  @if (isLoading()) {
+    <div class="spinner-container">
+      <mat-spinner diameter="50" color="primary"></mat-spinner>
+    </div>
+  }
 
-            @for (item of stats(); track item.id) {
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.name }}</mat-grid-tile>
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.total_tickets_sold }}</mat-grid-tile>
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.expenses | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.revenues | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.profit | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.avg_tickets_per_order }}</mat-grid-tile>
-                <mat-grid-tile style="border: solid 1px #000;">{{ item.refunds_amount | currency:'CAD':'symbol-narrow' }}</mat-grid-tile>
-            }
+  @if (!isLoading() && stats().length > 0) {
+    <div class="grid-table-container">
+      <table mat-table [dataSource]="stats()" class="festify-grid-table">
+        <ng-container matColumnDef="festival">
+          <th mat-header-cell *matHeaderCellDef>{{ 'TICKETING_STATS.FESTIVAL' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="bold-text">
+            {{ row.name }}
+            <span class="year-badge">{{ row.year }}</span>
+          </td>
+        </ng-container>
 
-    </mat-grid-list>
+        <ng-container matColumnDef="expenses_total">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.EXPENSES_TOTAL' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.expenses_total | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
 
+        <ng-container matColumnDef="expenses_performance">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.EXPENSES_PERFORMANCE' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.expenses_performance | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
 
+        <ng-container matColumnDef="expenses_other">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.EXPENSES_OTHER' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.expenses_other | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
 
+        <ng-container matColumnDef="revenues_total">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.REVENUES_TOTAL' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.revenues_total | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
 
+        <ng-container matColumnDef="revenues_tickets">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.REVENUES_TICKETS' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.revenues_tickets | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="revenues_other">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.REVENUES_OTHER' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.revenues_other | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="profit">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.PROFIT' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center profit-text">
+            {{ row.profit | currency:'CAD':'symbol-narrow' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="total_tickets">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.TOTAL_TICKETS' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.total_tickets_sold }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="avg_tickets">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.AVG_TICKETS' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.avg_tickets_per_order | number:'1.0-2' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="refunds_count">
+          <th mat-header-cell *matHeaderCellDef class="text-center">{{ 'TICKETING_STATS.REFUNDS_COUNT' | translate }}</th>
+          <td mat-cell *matCellDef="let row" class="text-center">
+            {{ row.refunds_count }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  }
+
+  @if (!isLoading() && stats().length === 0) {
+    <div class="empty-state">
+      <p>{{ 'TICKETING_STATS.EMPTY' | translate }}</p>
+    </div>
+  }
 </div>

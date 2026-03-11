@@ -459,7 +459,8 @@
       "STATUS": "Statut",
       "ALL": "TOUT",
       "COMPLETER": "Completer",
-      "ORDER": "Ordonné"
+      "ORDER": "Ordonné",
+      "ONGOING":"En cours"
     }
 
   },

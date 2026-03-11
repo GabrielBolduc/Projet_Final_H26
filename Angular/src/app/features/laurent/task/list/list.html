@@ -21,18 +21,6 @@
             (input)="updateQuery({ search: $any($event.target).value })">
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="filter-field">
-           <mat-label>{{ 'TACHES.SSF.ORDERBY' | translate }}</mat-label>
-          <mat-select
-            [value]="orderBy()"
-            (selectionChange)="updateQuery({ orderBy: $event.value })">
-           
-            <mat-option value="priority">{{ 'TACHES.SSF.PRIORITY' | translate }}</mat-option>
-            <mat-option value="difficulty">{{ 'TACHES.SSF.DIFFICULTY' | translate }}</mat-option>
-            <mat-option value="affectation">{{ 'TACHES.SSF.AFFECTATION' | translate }}</mat-option>
-
-          </mat-select>
-        </mat-form-field>
 
         <mat-form-field appearance="outline" class="filter-field">
           <mat-label>{{ 'TACHES.SSF.STATUS' | translate }}</mat-label>
@@ -42,10 +30,26 @@
             (selectionChange)="updateQuery({ status: $event.value })">
 
             <mat-option value="">{{ 'TACHES.SSF.ALL' | translate }}</mat-option>
+            <mat-option value="ongoing">{{ 'TACHES.SSF.ongoing' | translate }}</mat-option>
             <mat-option value="completed">{{ 'TACHES.SSF.COMPLETER' | translate }}</mat-option>
+
 
           </mat-select>
 
+        </mat-form-field>
+
+        
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'TACHES.SSF.ORDERBY' | translate }}</mat-label>
+          <mat-select
+            [value]="orderBy()"
+            (selectionChange)="updateQuery({ orderBy: $event.value })">
+           
+            <mat-option value="priority">{{ 'TACHES.SSF.PRIORITY' | translate }}</mat-option>
+            <mat-option value="difficulty">{{ 'TACHES.SSF.DIFFICULTY' | translate }}</mat-option>
+            <mat-option value="affectation">{{ 'TACHES.SSF.AFFECTATION' | translate }}</mat-option>
+
+          </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="filter-field">

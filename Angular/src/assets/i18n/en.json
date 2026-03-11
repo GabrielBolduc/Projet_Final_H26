@@ -448,7 +448,7 @@
     "TITLE_UPDATE": "Edit Task",
     "REUSABLE_TASKS": "Reusable Tasks",
     "SELECT_REUSABLE": "Select reusable tasks",
-     "NOTFOUND": "No task found",
+    "NOTFOUND": "No task found",
     "SSF": {
 
       "DIFFICULTY": "Difficulty",
@@ -459,7 +459,8 @@
       "STATUS": "Status",
       "ALL": "All",
       "COMPLETER": "Completed",
-      "ORDER": "Order"
+      "ORDER": "Order",
+      "ONGOING":"Ongoing"
     }
 
   },

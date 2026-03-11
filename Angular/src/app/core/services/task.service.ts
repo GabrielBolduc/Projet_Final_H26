@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { TaskPayload } from '@core/models/task-payload';
+import {TaskReport} from '@core/models/task-report'
 
 interface ApiResponse<T> {
   status: 'success' | 'error';
@@ -116,6 +117,20 @@ export class TaskService {
                 }
           })
         );  
+
+  }
+
+  raport(){
+    return this.http.delete<ApiResponse<TaskReport>>('api/tasks/raport').pipe(
+             map(response => {
+              console.log(response)
+              if (response.status === 'success') {
+                return response.data;
+              } else {
+                throw new Error(response.message || 'erreur api');
+              }
+        })
+      );  
 
   }
 

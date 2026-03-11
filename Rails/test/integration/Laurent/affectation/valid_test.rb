@@ -78,8 +78,8 @@ class AffectationsTest < ActionDispatch::IntegrationTest
         assert json_response["data"].is_a?(Array), "data should be an array"
     end
 
-     test "can create anime" do
-        sign_in users(:one)
+     test "can create affectation" do
+        sign_in users(:three)
 
         # base de donnees
         assert_difference "Affectation.count", 1 do
@@ -99,7 +99,7 @@ class AffectationsTest < ActionDispatch::IntegrationTest
     end
 
     test "can update affectation" do
-        sign_in users(:one)
+        sign_in users(:three)
 
         # base de donnees
         assert_no_difference "Affectation.count" do
@@ -119,7 +119,7 @@ class AffectationsTest < ActionDispatch::IntegrationTest
     end
 
     test " can delete affectation" do
-        sign_in users(:one)
+        sign_in users(:three)
 
         # base de donnees
         assert_difference "Affectation.count", -1 do

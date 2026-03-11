@@ -660,7 +660,7 @@
   "HOME":{
     "MESSAGE" : "No festivals are currently taking place. Check back later for our next announcements!"
   },
-  "STATS":{
+  "STATS_GLOBAL":{
     "FESTIVAL": "Festival",
     "HEBERGEMENT": "Accommodation",
     "BILLETTERIE": "Ticketing",
@@ -678,7 +678,11 @@
     "APERFS": "Performances on this Stage",
     "POP": "Average Artist Popularity",
     "ENV": "Environment",
-    "NOTHING": "No statistical data available."
+    "NOTHING": "No statistical data available.",
+    "TOTAL_FESTIVALS": "Organized Festivals",
+    "AVG_SATISFACTION": "Overall Satisfaction",
+    "TOTAL_ARTISTS": "Unique Artists",
+    "GENRES": "Genre Distribution"
   },
   "404":{
     "NOT_FOUND": "Page Not Found",

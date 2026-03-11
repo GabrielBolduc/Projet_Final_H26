@@ -11,7 +11,7 @@ export class FestivalStatsService {
   private http = inject(HttpClient);
   private readonly API_URL = '/api/stats/festivals';
 
-  getFestivalStats(year?: number | null, festivalIds?: number[]): Observable<any[]> {
+  getFestivalStats(year?: number | null, festivalIds?: number[]): Observable<any> {
     let params = new HttpParams();
 
     if (year){
@@ -24,9 +24,9 @@ export class FestivalStatsService {
       })
     }
 
-    return this.http.get<ApiResponse<any[]>>(this.API_URL, {params}).pipe(
+    return this.http.get<ApiResponse<any>>(this.API_URL).pipe(
       map(response => {
-        if (response.status === 'success') return response.data || [];
+        if (response.status === 'success') return response.data;
         throw response;
       }),
       catchError((error) => throwError(() => error))

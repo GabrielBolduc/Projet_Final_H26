@@ -10,7 +10,10 @@ class Api::FestivalsStatsController < ApiController
 
     render json: {
       status: "success",
-      data: stats
+      data: {
+        global: Festival.global_stats,
+        list: stats                    
+      }
     }, status: :ok
   end
 end

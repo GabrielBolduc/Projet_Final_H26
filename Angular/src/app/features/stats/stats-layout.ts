@@ -22,9 +22,9 @@ export class StatsLayoutComponent {
   public translate = inject(TranslateService);
 
   navLinks = [
-    { path: 'festival', label: 'STATS.FESTIVAL', icon: 'festival' },
-    { path: 'hebergement', label: 'STATS.HEBERGEMENT', icon: 'hotel' },
-    { path: 'billetterie', label: 'STATS.BILLETTERIE', icon: 'local_activity' },
-    { path: 'tache', label: 'STATS.TACHE', icon: 'assignment' }
+    { path: 'festival', label: 'STATS_GLOBAL.FESTIVAL', icon: 'festival' },
+    { path: 'hebergement', label: 'STATS_GLOBAL.HEBERGEMENT', icon: 'hotel' },
+    { path: 'billetterie', label: 'STATS_GLOBAL.BILLETTERIE', icon: 'local_activity' },
+    { path: 'tache', label: 'STATS_GLOBAL.TACHE', icon: 'assignment' }
   ];
 }

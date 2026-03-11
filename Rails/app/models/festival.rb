@@ -70,6 +70,31 @@ class Festival < ApplicationRecord
     }
   end
 
+  def self.global_stats
+    festivals = Festival.all
+    avg_satisfaction = festivals.average(:satisfaction)&.round(1) || 0.0
+    
+    total_artists = Performance.select(:artist_id).distinct.count
+    
+    genre_counts = Artist.joins(:performances).group(:genre).count
+    total_genres = genre_counts.values.sum.to_f
+    
+    genre_percentages = if total_genres > 0 
+                          genre_counts.map do |name, count| 
+                            { name: name || 'Inconnu', percent: ((count / total_genres) * 100).round(1) }
+                          end
+                        else
+                          []
+                        end
+
+    {
+      total_festivals: festivals.count,
+      avg_satisfaction: avg_satisfaction,
+      total_artists: total_artists,
+      genres_repartition: genre_percentages
+    }
+  end
+
   private
 
   def end_at_after_start_at

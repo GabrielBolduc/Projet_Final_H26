@@ -16,7 +16,7 @@
       <mat-icon matPrefix>search</mat-icon>
       <input
         matInput
-        [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE' | translate"
+        [placeholder]="'TICKETING_ADMIN.SEARCH_TITLE_DESC' | translate"
         [ngModel]="searchQuery()"
         (ngModelChange)="searchQuery.set($event)"
       >
@@ -92,7 +92,7 @@
 
                   <div class="ticket-info">
                     <div class="info-header">
-                      <h3>{{ pkg.title }}</h3>
+                      <h3 class="title-text">{{ pkg.title }}</h3>
                       <span class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</span>
                     </div>
                     
@@ -152,7 +152,7 @@
 
                   <div class="ticket-info">
                     <div class="info-header">
-                      <h3>{{ pkg.title }}</h3>
+                      <h3 class="title-text">{{ pkg.title }}</h3>
                       <span class="price">{{ pkg.price | currency:'CAD':'symbol-narrow' }}</span>
                     </div>
                     

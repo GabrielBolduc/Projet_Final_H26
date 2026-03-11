@@ -35,7 +35,16 @@
 
       <mat-form-field appearance="outline" class="day-field">
         <mat-label>{{ 'TICKETING_PUBLIC.DAY_PICKER' | translate }}</mat-label>
-        <mat-select [ngModel]="selectedWeekday()" (ngModelChange)="selectedWeekday.set($event)">
+        <mat-select multiple [ngModel]="selectedWeekdays()" (ngModelChange)="selectedWeekdays.set($event)">
+          <mat-select-trigger>
+            @if (selectedWeekdays().length === 0) {
+              {{ 'TICKETING_PUBLIC.DAY_ALL' | translate }}
+            } @else {
+              @for (day of selectedWeekdays(); track day; let last = $last) {
+                {{ getWeekdayLabel(day) | translate }}@if (!last) {, }
+              }
+            }
+          </mat-select-trigger>
           @for (option of weekdayOptions; track option.labelKey) {
             <mat-option [value]="option.value">{{ option.labelKey | translate }}</mat-option>
           }
@@ -104,9 +113,16 @@
                   {{ 'PACKAGE_FORM.TYPE_' + (pkg.category | uppercase) | translate }}
                 </span>
 
-                @if (isSoldOut(pkg)) {
-                  <span class="sold-out-badge">{{ 'TICKETING_PUBLIC.SOLD_OUT' | translate }}</span>
-                }
+                <div class="badge-stack">
+                  @if (hasDiscount(pkg)) {
+                    <span class="discount-badge">
+                      {{ 'TICKETING_PUBLIC.DISCOUNT_BADGE' | translate:{ rate: formatDiscount(pkg) } }}
+                    </span>
+                  }
+                  @if (isSoldOut(pkg)) {
+                    <span class="sold-out-badge">{{ 'TICKETING_PUBLIC.SOLD_OUT' | translate }}</span>
+                  }
+                </div>
               </div>
             </div>
 

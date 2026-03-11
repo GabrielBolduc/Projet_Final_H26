@@ -666,7 +666,11 @@
     "APERFS": " Nombre Performances sur cette scène",
     "POP": "Popularité moyenne artists sur cette scène",
     "ENV": "Environnement",
-    "NOTHING": "Aucune donnée statistique disponible."
+    "NOTHING": "Aucune donnée statistique disponible.",
+    "TOTAL_FESTIVALS": "Festivals Organisés",
+    "AVG_SATISFACTION": "Satisfaction Globale",
+    "TOTAL_ARTISTS": "Artistes Uniques",
+    "GENRES": "Répartition des genres"
   },
   "404":{
     "NOT_FOUND": "Page introuvable",

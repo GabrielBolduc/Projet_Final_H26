@@ -87,6 +87,48 @@
     </div>
   }
 
+  @if (globalStats(); as stats) {
+    <div class="global-stats-grid">
+      
+      <mat-card class="stat-card">
+        <mat-icon>festival</mat-icon>
+        <div class="stat-info">
+          <h3>{{ stats.total_festivals }}</h3>
+          <p>{{ 'FESTIVAL_STATS.TOTAL_FESTIVALS' | translate }}</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-icon>star</mat-icon>
+        <div class="stat-info">
+          <h3>{{ stats.avg_satisfaction }} / 5</h3>
+          <p>{{ 'FESTIVAL_STATS.AVG_SATISFACTION' | translate }}</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-icon>groups</mat-icon>
+        <div class="stat-info">
+          <h3>{{ stats.total_artists }}</h3>
+          <p>{{ 'FESTIVAL_STATS.TOTAL_ARTISTS' | translate }}</p>
+        </div>
+      </mat-card>
+
+      <mat-card class="stat-card genres-card">
+        <mat-icon>music_note</mat-icon>
+        <div class="stat-info">
+          <p style="margin-bottom: 5px;">{{ 'FESTIVAL_STATS.GENRES' | translate }}</p>
+          <div class="genre-tags">
+            @for (genre of stats.genres_repartition; track genre.name) {
+              <span class="genre-tag">{{ genre.name }}: {{ genre.percent }}%</span>
+            }
+          </div>
+        </div>
+      </mat-card>
+
+    </div>
+  }
+
   @if (!isLoading() && filteredStats().length === 0) {
     <div class="empty-state">
       <p>{{ 'FESTIVAL_STATS.NOTHING' | translate }}</p>

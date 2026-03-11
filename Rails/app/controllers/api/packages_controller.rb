@@ -7,6 +7,7 @@ class Api::PackagesController < Api::AdminController
   # GET /api/packages
   def index
     packages = Package.admin_scope(**index_scope_options)
+    packages = Package.filter_by_weekdays(packages, params[:dow]) if params[:dow].present?
 
     render json: {
       status: "success",

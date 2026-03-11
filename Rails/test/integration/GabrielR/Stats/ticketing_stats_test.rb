@@ -26,6 +26,7 @@ class TicketingStatsTest < ActionDispatch::IntegrationTest
 
     get api_ticketing_stats_url(format: :json), as: :json
 
+    # format reponse
     json = parsed_body
     assert_equal "success", json["status"]
 
@@ -46,6 +47,30 @@ class TicketingStatsTest < ActionDispatch::IntegrationTest
     assert_equal @festival_one.start_at.year, sample["year"]
   end
 
+  test "date range filter with only start_date keeps festivals ending after date" do
+    sign_in @admin
+
+    get api_ticketing_stats_url(format: :json, start_date: "2026-09-01"), as: :json
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+
+    ids = json["data"].map { |row| row["id"] }.sort
+    assert_equal [ @festival_three.id ], ids
+  end
+
+  test "date range filter with only end_date keeps festivals starting before date" do
+    sign_in @admin
+
+    get api_ticketing_stats_url(format: :json, end_date: "2025-07-10"), as: :json
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+
+    ids = json["data"].map { |row| row["id"] }.sort
+    assert_equal [ @festival_two.id ], ids
+  end
+
   test "date range filter returns only matching festivals" do
     sign_in @admin
 
@@ -55,6 +80,19 @@ class TicketingStatsTest < ActionDispatch::IntegrationTest
     assert_equal "success", json["status"]
     ids = json["data"].map { |row| row["id"] }
     assert_equal [ @festival_one.id ], ids.sort
+  end
+
+  test "invalid date params are ignored and return all festivals" do
+    sign_in @admin
+
+    get api_ticketing_stats_url(format: :json, start_date: "invalid-date"), as: :json
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+
+    ids = json["data"].map { |row| row["id"] }.sort
+    expected = [ @festival_one.id, @festival_two.id, @festival_three.id ].sort
+    assert_equal expected, ids
   end
 
   test "category filter limits ticket and refund counts" do
@@ -88,6 +126,39 @@ class TicketingStatsTest < ActionDispatch::IntegrationTest
     assert_in_delta expected_refunds_amount, festival_row["refunds_amount"].to_f, 0.01
     assert_in_delta expected_revenues_tickets, festival_row["revenues_tickets"].to_f, 0.01
     assert_in_delta expected_avg, festival_row["avg_tickets_per_order"].to_f, 0.01
+  end
+
+  test "category filter accepts arrays and applies multiple categories" do
+    sign_in @admin
+
+    get api_ticketing_stats_url(format: :json, categories: [ "general", "daily" ]), as: :json
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+
+    festival_row = json["data"].find { |row| row["id"] == @festival_one.id }
+    category_values = [ Package.categories["general"], Package.categories["daily"] ]
+    ticket_scope = Ticket.joins(:package).where(packages: { festival_id: @festival_one.id, category: category_values })
+
+    expected_total_tickets_sold = ticket_scope.where(refunded_at: nil).count
+    expected_refunds_count = ticket_scope.where.not(refunded_at: nil).count
+
+    assert_equal expected_total_tickets_sold, festival_row["total_tickets_sold"]
+    assert_equal expected_refunds_count, festival_row["refunds_count"]
+  end
+
+  test "festival with only refunded tickets reports zero sales and refund amounts" do
+    sign_in @admin
+
+    get api_ticketing_stats_url(format: :json), as: :json
+
+    json = parsed_body
+    assert_equal "success", json["status"]
+
+    festival_row = json["data"].find { |row| row["id"] == @festival_two.id }
+    assert_equal 0, festival_row["total_tickets_sold"]
+    assert_equal 1, festival_row["refunds_count"]
+    assert_in_delta 55.0, festival_row["refunds_amount"].to_f, 0.01
   end
 
   test "calculations for festival one match database totals" do

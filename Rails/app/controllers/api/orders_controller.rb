@@ -26,6 +26,15 @@ class Api::OrdersController < Api::ClientController
     package = Package.find(order_params[:package_id])
     quantity = order_params[:quantity].to_i
 
+    if package.festival.nil? || package.festival.status != "ongoing"
+      return render_error("Package is not available for purchase")
+    end
+
+    now = Time.current
+    if package.expired_at && package.expired_at < now
+      return render_error("Package has expired")
+    end
+
     return render_error("Quantity must be greater than 0") if quantity <= 0
 
     subtotal = package.price * quantity

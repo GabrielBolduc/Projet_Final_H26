@@ -23,7 +23,9 @@ class Accommodation < ApplicationRecord
       ) / 1000 AS distance_from_festival_km"
     )
   }
-  scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
+  scope :search_by_name, ->(term) {
+    where("accommodations.name LIKE ?", "%#{term}%")
+  }
   scope :within_walk_time, ->(max_time) { where("time_walk <= ?", max_time) }
   scope :within_radius, ->(f_lat, f_lng, radius_km) {
     radius_meters = radius_km.to_f * 1000
@@ -53,20 +55,34 @@ class Accommodation < ApplicationRecord
 
     joins(:units).merge(unit_query).distinct
   }
+  scope :for_festivals, ->(ids) {
+    where(festival_id: Array(ids).compact_blank)
+  }
+  scope :by_festival_date, ->(after, before) {
+    query = joins(:festival)
+    query = query.where("festivals.start_at >= ?", after) if after.present?
+    query = query.where("festivals.start_at <= ?", before) if before.present?
+    query
+  }
+
 
   before_validation :strip_fields
 
-  def statistics_data
-    unit_prices = units.map(&:cost_person_per_night)
-    parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
-    total_reservations = units.sum { |u| u.reservations.size }
+def statistics_data
+  valid_reservations = Reservation.where(unit_id: unit_ids, status: [ :active, :completed ])
 
-    total_revenue = units.sum do |unit|
-      unit.reservations.size * unit.cost_person_per_night
-    end
+  unit_prices = units.map(&:cost_person_per_night)
+  parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
 
-    commission_multiplier = (100 - commission) / 100.0
-    actual_profit = (total_revenue * commission_multiplier).round(2)
+  total_valid_bookings = valid_reservations.count
+  total_people = valid_reservations.sum(:nb_of_people)
+
+  total_revenue = units.sum do |unit|
+    unit.reservations.where(status: [ :active, :completed ]).sum(:nb_of_people) * unit.cost_person_per_night
+  end
+
+  commission_multiplier = (100 - commission) / 100.0
+  actual_profit = (total_revenue * commission_multiplier).round(2)
 
     {
       id: id,
@@ -89,8 +105,9 @@ class Accommodation < ApplicationRecord
         distance_km: respond_to?(:distance_from_festival_km) ? distance_from_festival_km.to_f.round(2) : 0
       },
       reservation_stats: {
-        total_count: total_reservations,
-        avg_reservations_per_unit: units.any? ? (total_reservations / units.size.to_f).round(1) : 0
+        total_count: total_valid_bookings,
+        total_people: total_people,
+        avg_people_per_booking: total_valid_bookings.positive? ? (total_people / total_valid_bookings.to_f).round(1) : 0
       },
       finance: {
         total_revenue: total_revenue.to_f.round(2),
@@ -98,9 +115,8 @@ class Accommodation < ApplicationRecord
         actual_profit: actual_profit
       },
       inventory: {
-        total_reservations: total_reservations,
-        total_units: units.sum(:quantity),
-        available_now: units.sum { |u| [ u.quantity - u.reservations.size, 0 ].max }
+        total_reservations: total_valid_bookings,
+        total_units: units.sum(:quantity)
       }
     }
   end

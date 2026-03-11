@@ -110,20 +110,53 @@
   height: 14px;
 }
 
+.festival-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 2rem 0 1.5rem 0;
+  border-bottom: 2px solid var(--mat-sys-outline-variant);
+  padding-bottom: 10px;
+}
+
 .festival-divider {
   color: var(--mat-sys-primary);
   font-weight: 900;
-  margin: 2rem 0 1rem 0;
+  margin: 0;
   display: flex;
   align-items: center;
-  gap: 15px;
 }
 
 .festival-divider::after {
-  content: "";
-  flex: 1;
-  height: 2px;
-  background: var(--mat-sys-outline-variant);
+  display: none; 
+}
+
+.category-summary {
+  display: flex;
+  gap: 10px;
+}
+
+.summary-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 2px solid var(--mat-sys-on-surface);
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.summary-badge.camping {
+  background: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.summary-badge.hotel {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
 }
 
 @keyframes fadeIn {
@@ -208,5 +241,74 @@
   
   .highlight-card {
     padding: 15px;
+  }
+}
+
+.price-stack, .res-count-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.main-price, .total-res {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.sub-price, .avg-res {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--mat-sys-secondary);
+  opacity: 0.8;
+}
+
+.text-center { text-align: center; }
+
+.ssf-toolbar {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background-color: var(--mat-sys-surface-container-low);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 40px;
+  border: 2px solid var(--mat-sys-on-surface);
+  flex-wrap: wrap;
+}
+
+.ssf-toolbar mat-form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+.ssf-toolbar.mdc-notched-outline__leading,
+.ssf-toolbar.mdc-notched-outline__notch,
+.ssf-toolbar.mdc-notched-outline__trailing {
+  border-width: 1px;
+  border-color: var(--mat-sys-outline-variant);
+}
+
+.ssf-toolbar mat-form-field:hover.mdc-notched-outline > * {
+  border-color: var(--mat-sys-primary);
+}
+
+.ssf-toolbar mat-form-field.mat-focused.mdc-notched-outline > * {
+  border-width: 2px;
+  border-color: var(--mat-sys-primary);
+}
+
+@media screen and (max-width: 850px) {
+  .ssf-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .ssf-toolbar mat-form-field {
+    min-width: 100%;
+    margin-bottom: -5px; 
   }
 }

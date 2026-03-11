@@ -177,6 +177,11 @@
     "SEARCH": "Search artist...",
     "ERROR_GENRE": "Error loading genres"
   },
+  "ARTIST_DETAIL":{
+    "BACK": "Back",
+    "ABOUT": "About",
+    "NOTHING": "Biography to come..."
+  },
   "FORM_ADD_PERFORMANCES": {
     "EDIT_PERFORMANCE": "Edit performance",
     "NEW_PERFORMANCE": "New performance",

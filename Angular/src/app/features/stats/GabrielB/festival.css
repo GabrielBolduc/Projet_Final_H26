@@ -3,7 +3,6 @@
   padding-bottom: 30px;
 }
 
-
 .ssf-toolbar {
   display: flex;
   gap: 20px;
@@ -11,8 +10,8 @@
   background-color: var(--mat-sys-surface-container-low);
   padding: 20px;
   border-radius: 15px;
-  margin-bottom: 25px;
-  border: 1px solid var(--mat-sys-outline-variant);
+  margin-bottom: 40px;
+  border: 2px solid var(--mat-sys-on-surface);
   flex-wrap: wrap;
 }
 

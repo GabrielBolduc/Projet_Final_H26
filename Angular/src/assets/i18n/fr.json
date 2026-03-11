@@ -257,21 +257,7 @@
     "REVENUES": "Revenus",
     "PROFIT": "Profit",
     "AVG_TICKETS": "Moy. billets par commande",
-    "REFUNDS": "Montant remboursé",
-    "DATE_FROM": "Du",
-    "DATE_TO": "Au",
-    "PACKAGE_TYPES": "Types de forfaits",
-    "PACKAGE_GENERAL": "Général",
-    "PACKAGE_DAILY": "Journalier",
-    "PACKAGE_EVENING": "Soirée",
-    "EXPENSES_TOTAL": "Dépenses (Total)",
-    "EXPENSES_PERFORMANCE": "Dépenses (Spectacles)",
-    "EXPENSES_OTHER": "Dépenses (Autres)",
-    "REVENUES_TOTAL": "Revenus (Total)",
-    "REVENUES_TICKETS": "Revenus (Billets)",
-    "REVENUES_OTHER": "Revenus (Autres)",
-    "REFUNDS_COUNT": "Remboursements (Nombre)",
-    "EMPTY": "Aucune statistique disponible avec ces filtres."
+    "REFUNDS": "Montant remboursé"
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",
@@ -665,7 +651,7 @@
   "HOME":{
     "MESSAGE" : "Aucun festival n'est actuellement en cours. Revenez plus tard pour nos prochaines annonces !"
   },
-  "STATS":{
+  "STATS_GLOBAL":{
     "FESTIVAL": "Festival",
     "HEBERGEMENT": "Hébergement",
     "BILLETTERIE": "Billetterie",
@@ -683,14 +669,18 @@
     "APERFS": " Nombre Performances sur cette scène",
     "POP": "Popularité moyenne artists sur cette scène",
     "ENV": "Environnement",
-    "NOTHING": "Aucune donnée statistique disponible."
+    "NOTHING": "Aucune donnée statistique disponible.",
+    "TOTAL_FESTIVALS": "Festivals Organisés",
+    "AVG_SATISFACTION": "Satisfaction Globale",
+    "TOTAL_ARTISTS": "Artistes Uniques",
+    "GENRES": "Répartition des genres"
   },
   "404":{
     "NOT_FOUND": "Page introuvable",
     "MESSAGE": "La page que vous recherchez n'existe pas ou a été déplacée.",
     "BTN": "Retour à la page d'accueil"
   },
-  "STATS-ACCOMMODATIONS": {
+  "STATS": {
     "ACCOMMODATIONS": {
       "HIGHEST_EARNER": "Hébergement le plus rentable",
       "LOWEST_EARNER": "Hébergement le moins rentable",

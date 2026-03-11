@@ -7,9 +7,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card'; 
+import { TranslateModule } from '@ngx-translate/core'; 
 import { firstValueFrom } from 'rxjs';
+
 import { FestivalStatsService } from '../../../../app/core/services/festival-stats.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+
+export interface GlobalStats {
+  total_festivals: number;
+  avg_satisfaction: number;
+  total_artists: number;
+  genres_repartition: { name: string; percent: number }[];
+}
+
 export interface FestivalStatRow {
   id: number;
   name: string;
@@ -22,13 +32,18 @@ export interface FestivalStatRow {
   top_stage_env: string;
 }
 
+export interface FestivalStatsResponse {
+  global: GlobalStats;
+  list: FestivalStatRow[];
+}
+
 @Component({
   selector: 'app-stats-festival',
   standalone: true,
   imports: [
-    CommonModule, RouterModule, FormsModule,
+    CommonModule, RouterModule, FormsModule, TranslateModule,
     MatTableModule, MatIconModule, MatProgressSpinnerModule,
-    MatFormFieldModule, MatSelectModule, TranslateModule
+    MatFormFieldModule, MatSelectModule, MatCardModule
   ],
   templateUrl: './festival.html',
   styleUrls: ['./festival.css']
@@ -39,6 +54,7 @@ export class FestivalComponent implements OnInit {
   private router = inject(Router);
 
   isLoading = signal(true);
+  globalStats = signal<GlobalStats | null>(null);
   rawStats = signal<FestivalStatRow[]>([]); 
   
   filterYear = signal<number | null>(null);
@@ -68,6 +84,7 @@ export class FestivalComponent implements OnInit {
     if (fests && fests.length > 0) {
       data = data.filter(f => fests.includes(f.id));
     }
+
     return data;
   });
 
@@ -107,8 +124,10 @@ export class FestivalComponent implements OnInit {
   async loadStats(): Promise<void> {
     this.isLoading.set(true);
     try {
-      const data = await firstValueFrom(this.statsService.getFestivalStats()) as FestivalStatRow[];
-      this.rawStats.set(data);
+      const data = await firstValueFrom(this.statsService.getFestivalStats()) as FestivalStatsResponse;
+      
+      this.globalStats.set(data.global);
+      this.rawStats.set(data.list);
     } catch (error) {
       console.error("Erreur lors du chargement des statistiques", error);
     } finally {

@@ -14,7 +14,6 @@ class TasksTest < ActionDispatch::IntegrationTest
     test "should not show one task  and return user not connect" do
         # base de donnees
         assert_no_difference("Task.count") do
-          
           get api_task_path(@task_one)
         end
 
@@ -33,7 +32,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     # base de donnees
     assert_no_difference("Task.count") do
       get api_task_path(7)
-      #puts response.body
+      # puts response.body
     end
 
     # code http
@@ -130,7 +129,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         # format reponse
         json = JSON.parse(response.body)
 
-        # donne reponse
+       # donne reponse
        assert_equal "error", json["status"]
     end
 
@@ -155,7 +154,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         # base de donnees
         assert_no_difference "Task.count", "Anime should not be created with invalid param" do
              post api_tasks_path, params: { task: invalid_task_params }
-             #puts response.body
+          # puts response.body
         end
 
         # code http

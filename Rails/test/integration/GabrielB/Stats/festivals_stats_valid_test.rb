@@ -76,9 +76,9 @@ class FestivalsStatsValidTest < ActionDispatch::IntegrationTest
 
   test "admin should fetch correct fallback stats for a festival with NO performances" do
     sign_in @admin
-    
+
     empty_festival = Festival.create!(
-      name: "Festival Vide", start_at: "2026-08-01", end_at: "2026-08-05", 
+      name: "Festival Vide", start_at: "2026-08-01", end_at: "2026-08-05",
       status: "draft", address: "123", daily_capacity: 1000, latitude: 0, longitude: 0
     )
 
@@ -96,7 +96,7 @@ class FestivalsStatsValidTest < ActionDispatch::IntegrationTest
     # donne reponse
     assert_equal "success", json["status"]
     stat = json["data"]["list"].first
-    
+
     assert_equal 0, stat["performance_count"]
     assert_equal 0, stat["artist_count"]
     assert_equal "Aucune", stat["top_stage_name"]
@@ -105,9 +105,9 @@ class FestivalsStatsValidTest < ActionDispatch::IntegrationTest
 
   test "admin should fetch list sorted by start_at descending (recent scope)" do
     sign_in @admin
-    
+
     Festival.create!(
-      name: "Festival Futur", start_at: "2050-01-01", end_at: "2050-01-05", 
+      name: "Festival Futur", start_at: "2050-01-01", end_at: "2050-01-05",
       status: "draft", address: "123", daily_capacity: 1000, latitude: 0, longitude: 0
     )
 
@@ -125,8 +125,8 @@ class FestivalsStatsValidTest < ActionDispatch::IntegrationTest
     # donne reponse
     assert_equal "success", json["status"]
     list = json["data"]["list"]
-    
+
     assert list.length >= 2
-    assert list.first["year"] >= list.last["year"] 
+    assert list.first["year"] >= list.last["year"]
   end
 end

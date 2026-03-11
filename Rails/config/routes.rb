@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :tasks do
       collection do
         get "get_reusable", to: "tasks#get_reusable"
+        get "raport", to: "tasks#raport"
       end
     end
 

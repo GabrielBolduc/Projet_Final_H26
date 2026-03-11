@@ -1,1 +1,27 @@
-<h1>Tache</h1>
+<div class="report-container" *ngIf="taskReport() as report">
+
+  <mat-card class="report-card">
+    <div class="report-item">
+      <mat-icon>task_alt</mat-icon>
+      <span class="label">Completed</span>
+      <span class="badge">{{ report.tasks_completed }} / {{ report.tasks_count }}</span>
+    </div>
+  </mat-card>
+
+  <mat-card class="report-card">
+    <div class="report-item">
+      <mat-icon>play_circle</mat-icon>
+      <span class="label">Ongoing</span>
+      <span class="badge">{{ report.tasks_ongoing }} / {{ report.tasks_count }}</span>
+    </div>
+  </mat-card>
+
+  <mat-card class="report-card">
+    <div class="report-item">
+      <mat-icon>schedule</mat-icon>
+      <span class="label">Waiting</span>
+      <span class="badge">{{ report.tasks_waiting }} / {{ report.tasks_count }}</span>
+    </div>
+  </mat-card>
+
+</div>

@@ -123,7 +123,6 @@
     "END": "Fin",
     "NOTE": "Notes",
     "ACTION": "Actions",
-    "NO_ONGOING": "Aucun festival en cours",
     "READ_ONLY_ARCHIVE": "Archive en lecture seule",
     "FESTIVAL_NOT_FOUND": "Festival introuvable",
     "FESTIVAL_NOT_FOUND_DESC": "Le festival demandé n'existe pas ou a été supprimé.",
@@ -133,6 +132,8 @@
     "EDIT_IMPOSSIBLE": "Modification impossible (Archivé)",
     "DELETE_CONFIRM_TITLE": "Confirmation de suppression",
     "DELETE_CONFIRM_BODY": "Êtes-vous sûr de vouloir supprimer définitivement cette performance ? Cette action est irréversible.",
+    "ARCHIVED_SUCCESS": "Festival archivé avec succès.",
+    "DELETE_ONGOING_ERROR": "Impossible de supprimer un festival en cours.",
     "FESTIVALS_LOAD_ERROR": "Erreur lors du chargement des festivals",
     "DELETE_SUCCESS": "Performance supprimée avec succès"
   },
@@ -158,6 +159,8 @@
     "ADD_SUCCESS": "Artiste ajouté avec succès !",
     "EDIT_SUCCESS": "Artiste mis à jour avec succès !",
     "ERROR_SAVE": "Une erreur est survenue lors de l'enregistrement.",
+    "LOAD_ERROR": "Erreur lors du chargement de l'artiste.",
+    "SAVE_ERROR": "Erreur lors de l'enregistrement de l'artiste.",
     "DELETE_SUCCESS": "Artiste supprimé avec succès"
   },
   "ARTIST_LIST": {
@@ -172,7 +175,7 @@
     "ACTIONS": "Action",
     "ALL_GENRES": "Tous les genres musical",
     "SEARCH": "Rechercher artiste...",
-    "LOAD_ERROR_GENRE": "Erreur chargement genres"
+    "ERROR_GENRE": "Erreur chargement genres"
   },
   "FORM_ADD_PERFORMANCES":{
     "EDIT_PERFORMANCE": "Modifier la performance",
@@ -257,7 +260,21 @@
     "REVENUES": "Revenus",
     "PROFIT": "Profit",
     "AVG_TICKETS": "Moy. billets par commande",
-    "REFUNDS": "Montant remboursé"
+    "REFUNDS": "Montant remboursé",
+    "DATE_FROM": "Du",
+    "DATE_TO": "Au",
+    "PACKAGE_TYPES": "Types de forfaits",
+    "PACKAGE_GENERAL": "Général",
+    "PACKAGE_DAILY": "Journalier",
+    "PACKAGE_EVENING": "Soirée",
+    "EXPENSES_TOTAL": "Dépenses (Total)",
+    "EXPENSES_PERFORMANCE": "Dépenses (Spectacles)",
+    "EXPENSES_OTHER": "Dépenses (Autres)",
+    "REVENUES_TOTAL": "Revenus (Total)",
+    "REVENUES_TICKETS": "Revenus (Billets)",
+    "REVENUES_OTHER": "Revenus (Autres)",
+    "REFUNDS_COUNT": "Remboursements (Nombre)",
+    "EMPTY": "Aucune statistique disponible avec ces filtres."
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Billetterie",
@@ -404,6 +421,7 @@
   "TACHES": {
     "TITLE": "Tâches",
     "DESCRIPTION": "Description",
+    "REQUIS": "Requis",
     "DIFFICULTY": "Difficulté",
     "REUSABLE": "Réutilisable",
     "ACTIONS": "Actions",
@@ -443,6 +461,8 @@
   "AFFECTATIONS": {
     "ADD": "Ajouter Affectation",
     "TITLE": "Affectations",
+    "AFFECTATION": "Affectation",
+    "DESCRIPTION": "Description",
     "USER": "Utilisateur",
     "MORE": "Plus de détails",
     "NAME": "Nom",
@@ -670,9 +690,9 @@
     "POP": "Popularité moyenne artists sur cette scène",
     "ENV": "Environnement",
     "NOTHING": "Aucune donnée statistique disponible.",
-    "TOTAL_FESTIVALS": "Festivals Organisés",
-    "AVG_SATISFACTION": "Satisfaction Globale",
-    "TOTAL_ARTISTS": "Artistes Uniques",
+    "TOTAL_FESTIVALS": "Festivals organisés",
+    "AVG_SATISFACTION": "Satisfaction globale",
+    "TOTAL_ARTISTS": "Artistes uniques",
     "GENRES": "Répartition des genres"
   },
   "404":{

@@ -4,10 +4,6 @@ class Api::AccommodationsStatsController < ApiController
   def index
     accommodations = Accommodation.with_stats_data
 
-    all_stats = accommodations.map(&:statistics_data)
-                              .sort_by { |s| s[:finance][:total_revenue] }
-                              .reverse
-
     grouped_data = accommodations.group_by(&:festival)
                                 .sort_by { |festival, _| festival.start_at }
                                 .reverse
@@ -19,19 +15,22 @@ class Api::AccommodationsStatsController < ApiController
 
       hash[festival.name] = {
         items: stats_list,
+        counts: {
+          camping: list.count { |a| a.category_before_type_cast == 0 },
+          hotel: list.count { |a| a.category_before_type_cast == 1 }
+        },
         highlights: {
           top: stats_list.first&.slice(:name, :finance),
           bottom: stats_list.last&.slice(:name, :finance)
+        },
+        reservation_stats: {
+          total_people: stats_list.sum { |s| s[:reservation_stats][:total_people] || 0 }
         }
       }
     end
 
     render json: {
       status: "success",
-      highlights: {
-        highest_earner: all_stats.first&.slice(:name, :finance),
-        lowest_earner: all_stats.last&.slice(:name, :finance)
-      },
       data: grouped_data
     }, status: :ok
   rescue StandardError => e

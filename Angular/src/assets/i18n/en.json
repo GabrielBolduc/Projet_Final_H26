@@ -712,17 +712,28 @@
       "EMPTY": "No data available at the moment.",
       "ERROR": "Error loading statistics.",
       "RETRY": "Retry",
+      "NIGHT": "night",
+      "PARKING": "parking",
+      "BOOKINGS": "bookings",
+      "PEOPLE": "people",
       "COLUMNS": {
         "NAME": "Accommodation",
+        "AVG_PRICE": "Avg. Price",
         "REVENUE": "Gross Revenue",
         "PROFIT": "Net Profit",
         "DISTANCE": "Distance (KM)",
         "SERVICES": "Services",
-        "INVENTORY": "Availability"
+        "OCCUPANCY": "Total Occupancy"
       },
       "CATEGORIES": {
         "CAMPING": "Camping",
         "HOTEL": "Hotel"
+      },
+      "SERVICES_STATUS": {
+        "NO_ACCESS": "None",
+        "PARTIAL_ACCESS": "Limited",
+        "FULL_ACCESS": "Available",
+        "FULL_DRINKABLE_ACCESS": "Drinkable"
       }
     }
   }

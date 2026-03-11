@@ -56,17 +56,21 @@ class Accommodation < ApplicationRecord
 
   before_validation :strip_fields
 
-  def statistics_data
-    unit_prices = units.map(&:cost_person_per_night)
-    parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
-    total_reservations = units.sum { |u| u.reservations.size }
+def statistics_data
+  valid_reservations = Reservation.where(unit_id: unit_ids, status: [:active, :completed])
+  
+  unit_prices = units.map(&:cost_person_per_night)
+  parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
 
-    total_revenue = units.sum do |unit|
-      unit.reservations.size * unit.cost_person_per_night
-    end
+  total_valid_bookings = valid_reservations.count
+  total_people = valid_reservations.sum(:nb_of_people)
 
-    commission_multiplier = (100 - commission) / 100.0
-    actual_profit = (total_revenue * commission_multiplier).round(2)
+  total_revenue = units.sum do |unit|
+    unit.reservations.where(status: [:active, :completed]).sum(:nb_of_people) * unit.cost_person_per_night
+  end
+
+  commission_multiplier = (100 - commission) / 100.0
+  actual_profit = (total_revenue * commission_multiplier).round(2)
 
     {
       id: id,
@@ -89,8 +93,9 @@ class Accommodation < ApplicationRecord
         distance_km: respond_to?(:distance_from_festival_km) ? distance_from_festival_km.to_f.round(2) : 0
       },
       reservation_stats: {
-        total_count: total_reservations,
-        avg_reservations_per_unit: units.any? ? (total_reservations / units.size.to_f).round(1) : 0
+        total_count: total_valid_bookings,
+        total_people: total_people,
+        avg_people_per_booking: total_valid_bookings.positive? ? (total_people / total_valid_bookings.to_f).round(1) : 0
       },
       finance: {
         total_revenue: total_revenue.to_f.round(2),
@@ -98,9 +103,8 @@ class Accommodation < ApplicationRecord
         actual_profit: actual_profit
       },
       inventory: {
-        total_reservations: total_reservations,
-        total_units: units.sum(:quantity),
-        available_now: units.sum { |u| [u.quantity - u.reservations.size, 0].max }
+        total_reservations: total_valid_bookings,
+        total_units: units.sum(:quantity)
       }
     }
   end

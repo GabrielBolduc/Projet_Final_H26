@@ -712,17 +712,28 @@
       "EMPTY": "Aucune donnée disponible pour le moment.",
       "ERROR": "Erreur lors du chargement des statistiques.",
       "RETRY": "Réessayer",
+      "NIGHT": "nuit",
+      "PARKING": "stationnement",
+      "BOOKINGS": "réservations",
+      "PEOPLE": "personnes",
       "COLUMNS": {
         "NAME": "Hébergement",
-        "REVENUE": "Revenu Brut",
-        "PROFIT": "Profit Net",
+        "AVG_PRICE": "Prix moyen",
+        "REVENUE": "Revenu brut",
+        "PROFIT": "Bénéfice net",
         "DISTANCE": "Distance (KM)",
         "SERVICES": "Services",
-        "INVENTORY": "Disponibilité"
+        "OCCUPANCY": "Occupation totale"
       },
       "CATEGORIES": {
-        "CAMPING": "Camping",
-        "HOTEL": "Hôtel"
+      "CAMPING": "Camping",
+      "HOTEL": "Hôtel"
+      },
+      "SERVICES_STATUS": {
+        "NO_ACCESS": "Aucun",
+        "PARTIAL_ACCESS": "Limité",
+        "FULL_ACCESS": "Disponible",
+        "FULL_DRINKABLE_ACCESS": "Potable"
       }
     }
   }

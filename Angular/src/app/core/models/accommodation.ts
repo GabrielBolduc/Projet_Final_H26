@@ -69,10 +69,18 @@ export interface AccommodationStats {
     total_units: number;
     available_now: number;
   };
+  reservation_stats: {
+    total_people: number;
+    total_count: number;
+  };
 }
 
 export interface FestivalEditionData {
   items: AccommodationStats[];
+  counts: {
+    camping: number;
+    hotel: number;
+  };
   highlights: {
     top: { name: string; finance: any };
     bottom: { name: string; finance: any };
@@ -83,9 +91,5 @@ export type GroupedAccommodationStats = { [festivalName: string]: FestivalEditio
 
 export interface AccommodationStatsResponse {
   status: string;
-  highlights: {
-    highest_earner: { name: string; finance: any };
-    lowest_earner: { name: string; finance: any };
-  };
   data: GroupedAccommodationStats;
 }

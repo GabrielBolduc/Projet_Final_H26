@@ -1,17 +1,63 @@
 <div class="stats-container-fade">
-  @if (stats$ | async; as statsData) {
-    @for (group of statsData.data | keyvalue: returnZero; track group.key) {
-      <h2 class="festival-divider">{{ group.key | uppercase }}</h2>
+  <div class="ssf-toolbar mb-4">
 
-      <div class="highlights-grid mb-4">
+    <!-- Festival Selection -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }}</mat-label>
+      <mat-select [ngModel]="filterFestivalName()" (ngModelChange)="updateFest($event)">
+        <mat-option [value]="null">{{ 'RESERVATIONS.STATUS.ALL' | translate }}</mat-option>
+        @for (fest of availableFestivals(); track fest) {
+          <mat-option [value]="fest">{{ fest }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Search Input -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'RESERVATIONS.SEARCH' | translate }}</mat-label>
+      <input matInput 
+            [ngModel]="searchTerm()" 
+            (ngModelChange)="updateSearch(searchTrigger.value)" 
+            #searchTrigger
+            placeholder="{{ 'RESERVATIONS.SEARCH_PLACEHOLDER' | translate }}">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+  </div>
+
+  @if (loading()) {
+    <div class="spinner-container">
+      <mat-progress-spinner diameter="50" mode="indeterminate" color="primary"></mat-progress-spinner>
+    </div>
+  } 
+
+  @else if (filteredStats(); as statsData) { 
+    @for (group of (statsData.data | keyvalue: returnZero); track group.key) {
+
+        <div class="festival-header">
+          <h2 class="festival-divider">{{ $any(group.key) | uppercase }}</h2>
+          <div class="category-summary">
+            <span class="summary-badge camping">
+              <mat-icon inline>terrain</mat-icon> 
+              {{ group.value.counts?.camping || 0 }} {{ 'STATS.ACCOMMODATIONS.CATEGORIES.CAMPING' | translate }}
+            </span>
+            <span class="summary-badge hotel">
+              <mat-icon inline>hotel</mat-icon> 
+              {{ group.value.counts?.hotel || 0 }} {{ 'STATS.ACCOMMODATIONS.CATEGORIES.HOTEL' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <div class="highlights-grid mb-4">
+  
         <div class="highlight-card top-earner">
           <div class="highlight-icon">
             <mat-icon>trending_up</mat-icon>
           </div>
-          <div class="highlight-info">
+          <div class="stat-info">
             <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.HIGHEST_EARNER' | translate }}</span>
-            <h3 class="highlight-name">{{ group.value.highlights.top.name }}</h3>
-            <p class="highlight-value">{{ group.value.highlights.top.finance.actual_profit | currency:'USD' }}</p>
+            <h3 class="highlight-value">{{ group.value.highlights.top?.finance?.actual_profit | currency:'USD' }}</h3>
+            <p class="highlight-name"><strong>{{ group.value.highlights.top?.name }}</strong></p>
           </div>
         </div>
 
@@ -19,10 +65,20 @@
           <div class="highlight-icon">
             <mat-icon>trending_down</mat-icon>
           </div>
-          <div class="highlight-info">
+          <div class="stat-info">
             <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.LOWEST_EARNER' | translate }}</span>
-            <h3 class="highlight-name">{{ group.value.highlights.bottom.name }}</h3>
-            <p class="highlight-value">{{ group.value.highlights.bottom.finance.actual_profit | currency:'USD' }}</p>
+            <h3 class="highlight-value">{{ group.value.highlights.bottom?.finance?.actual_profit | currency:'USD' }}</h3>
+            <p class="highlight-name"><strong>{{ group.value.highlights.bottom?.name }}</strong></p>
+          </div>
+        </div>
+
+        <div class="highlight-card">
+          <div class="highlight-icon" style="background: var(--mat-sys-secondary-container);">
+            <mat-icon>groups</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.COLUMNS.OCCUPANCY' | translate }}</span>
+            <h3 class="highlight-value">{{ group.value.reservation_stats?.total_people || 0 }}</h3>
           </div>
         </div>
       </div>
@@ -37,6 +93,16 @@
               <span class="category-badge">
                 {{ (acc.category === 0 ? 'STATS.ACCOMMODATIONS.CATEGORIES.CAMPING' : 'STATS.ACCOMMODATIONS.CATEGORIES.HOTEL') | translate }}
               </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="avg_pricing">
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.AVG_PRICE' | translate }} </th>
+            <td mat-cell *matCellDef="let acc" class="text-center">
+              <div class="price-stack">
+                <span class="main-price">{{ acc.pricing.avg_nightly_rate | currency:'USD' }}<small>/{{ 'STATS.ACCOMMODATIONS.NIGHT' | translate }}</small></span>
+                <span class="sub-price">+{{ acc.pricing.avg_parking_fee | currency:'USD' }} {{ 'STATS.ACCOMMODATIONS.PARKING' | translate }}</span>
+              </div>
             </td>
           </ng-container>
 
@@ -59,17 +125,20 @@
             <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.SERVICES' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center">
               <div class="services-wrapper">
-                <span class="service-badge water-badge"><mat-icon inline>water_drop</mat-icon> {{ acc.services.water }}</span>
-                <span class="service-badge electric-badge"><mat-icon inline>bolt</mat-icon> {{ acc.services.electricity }}</span>
-                <span class="service-badge wifi-badge"><mat-icon inline>wifi</mat-icon> {{ acc.services.wifi }}</span>
+                <span class="service-badge water-badge"><mat-icon inline>water_drop</mat-icon> {{ 'STATS.ACCOMMODATIONS.SERVICES_STATUS.' + formatServiceKey(acc.services.water) | translate }}</span>
+                <span class="service-badge electric-badge"><mat-icon inline>bolt</mat-icon> {{ 'STATS.ACCOMMODATIONS.SERVICES_STATUS.' + formatServiceKey(acc.services.electricity) | translate }}</span>
+                <span class="service-badge wifi-badge"><mat-icon inline>wifi</mat-icon> {{ 'STATS.ACCOMMODATIONS.SERVICES_STATUS.' + formatServiceKey(acc.services.wifi) | translate }}</span>
               </div>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="inventory">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.INVENTORY' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.OCCUPANCY' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center"> 
-              <strong>{{ acc.inventory.available_now }}</strong> / {{ acc.inventory.total_units }}
+              <div class="res-count-stack">
+                <strong class="total-res">{{ acc.reservation_stats.total_people }}</strong>
+                <span class="avg-res">{{ acc.reservation_stats.total_count }} {{ 'STATS.ACCOMMODATIONS.BOOKINGS' | translate }}</span>
+              </div>
             </td>
           </ng-container>
 
@@ -79,9 +148,18 @@
       </div>
     }
 
-  } @else if (loading) {
-    <div class="spinner-container">
-      <mat-progress-spinner diameter="50" mode="indeterminate" color="primary"></mat-progress-spinner>
+    @if ((statsData.data | keyvalue: returnZero)?.length === 0) {
+      <div class="empty-state">
+        <mat-icon>search_off</mat-icon>
+        <p>{{ 'FESTIVAL_STATS.NOTHING' | translate }}</p>
+      </div>
+    }
+
+  } @else if (error()) {
+    <div class="empty-state">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ 'STATS.ACCOMMODATIONS.ERROR' | translate }}</p>
+      <button mat-flat-button color="primary" (click)="fetchStats()">{{ 'STATS.ACCOMMODATIONS.RETRY' | translate }}</button>
     </div>
   }
 </div>

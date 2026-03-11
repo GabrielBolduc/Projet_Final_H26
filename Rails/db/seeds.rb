@@ -975,7 +975,7 @@ end
 
 ## Alexandre 2
 
-#actuel
+# actuel
 unit1.save!
 unit_camp_high.save!
 unit_camp_low.save!
@@ -986,7 +986,7 @@ unit_hotel_double.save!
 unit_camp_standard.save!
 unit_camp_premium.save!
 
-#passe
+# passe
 
 unit1old.save!
 unit_camp_high_old.save!
@@ -1014,7 +1014,7 @@ res1 = Reservation.create!(
 res2 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 18),
-  nb_of_people: 6, 
+  nb_of_people: 6,
   reservation_name: "Alice Wonderland",
   phone_number: "8195554444",
   user: c2,
@@ -1037,7 +1037,7 @@ res3 = Reservation.create!(
 res4 = Reservation.create!(
   arrival_at: f.start_at,
   departure_at: f.end_at,
-  nb_of_people: 2, 
+  nb_of_people: 2,
   reservation_name: "Charlie Day",
   phone_number: "8195556666",
   user: c,
@@ -1047,9 +1047,9 @@ res4 = Reservation.create!(
 )
 
 res5 = Reservation.create!(
-  arrival_at: Date.new(2026, 7, 15), 
+  arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 17),
-  nb_of_people: 2, 
+  nb_of_people: 2,
   reservation_name: "Dana Scully",
   phone_number: "8195557777",
   user: c4,

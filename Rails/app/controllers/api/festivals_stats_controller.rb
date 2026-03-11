@@ -12,7 +12,7 @@ class Api::FestivalsStatsController < ApiController
       status: "success",
       data: {
         global: Festival.global_stats,
-        list: stats                    
+        list: stats
       }
     }, status: :ok
   end

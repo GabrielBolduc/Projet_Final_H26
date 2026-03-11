@@ -100,7 +100,7 @@ class Accommodation < ApplicationRecord
       inventory: {
         total_reservations: total_reservations,
         total_units: units.sum(:quantity),
-        available_now: units.sum { |u| [u.quantity - u.reservations.size, 0].max }
+        available_now: units.sum { |u| [ u.quantity - u.reservations.size, 0 ].max }
       }
     }
   end

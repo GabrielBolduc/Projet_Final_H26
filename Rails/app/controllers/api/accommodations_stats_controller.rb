@@ -12,7 +12,6 @@ class Api::AccommodationsStatsController < ApiController
                                 .sort_by { |festival, _| festival.start_at }
                                 .reverse
                                 .each_with_object({}) do |(festival, list), hash|
-      
       stats_list = list.map(&:statistics_data)
                       .sort_by { |s| s[:finance][:total_revenue] }
                       .reverse

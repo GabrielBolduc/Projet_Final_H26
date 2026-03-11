@@ -707,28 +707,34 @@
     "BTN": "Retour à la page d'accueil"
   },
   "STATS": {
+    "SEARCH": "Rechercher",
+    "SORT_BY": "Trier par",
+    "NONE": "Aucun",
+    "REVENUE": "Revenu Brut",
+    "NAME": "Ordre Alphabétique",
     "ACCOMMODATIONS": {
+      "SEARCH_PLACEHOLDER": "Rechercher par nom d'hébergement...",
       "HIGHEST_EARNER": "Hébergement le plus rentable",
       "LOWEST_EARNER": "Hébergement le moins rentable",
       "EMPTY": "Aucune donnée disponible pour le moment.",
       "ERROR": "Erreur lors du chargement des statistiques.",
       "RETRY": "Réessayer",
       "NIGHT": "nuit",
-      "PARKING": "stationnement",
+      "PARKING": "parking",
       "BOOKINGS": "réservations",
       "PEOPLE": "personnes",
       "COLUMNS": {
         "NAME": "Hébergement",
-        "AVG_PRICE": "Prix moyen",
-        "REVENUE": "Revenu brut",
-        "PROFIT": "Bénéfice net",
+        "AVG_PRICE": "Prix Moyen",
+        "REVENUE": "Revenu Brut",
+        "PROFIT": "Profit Net",
         "DISTANCE": "Distance (KM)",
         "SERVICES": "Services",
-        "OCCUPANCY": "Occupation totale"
+        "OCCUPANCY": "Occupation Totale"
       },
       "CATEGORIES": {
-      "CAMPING": "Camping",
-      "HOTEL": "Hôtel"
+        "CAMPING": "Camping",
+        "HOTEL": "Hôtel"
       },
       "SERVICES_STATUS": {
         "NO_ACCESS": "Aucun",

@@ -23,7 +23,9 @@ class Accommodation < ApplicationRecord
       ) / 1000 AS distance_from_festival_km"
     )
   }
-  scope :search_by_name, ->(name) { where("name LIKE ?", "%#{name}%") }
+  scope :search_by_name, ->(term) { 
+    where("accommodations.name LIKE ?", "%#{term}%") 
+  }
   scope :within_walk_time, ->(max_time) { where("time_walk <= ?", max_time) }
   scope :within_radius, ->(f_lat, f_lng, radius_km) {
     radius_meters = radius_km.to_f * 1000
@@ -53,6 +55,16 @@ class Accommodation < ApplicationRecord
 
     joins(:units).merge(unit_query).distinct
   }
+  scope :for_festivals, ->(ids) { 
+    where(festival_id: Array(ids).compact_blank) 
+  }
+  scope :by_festival_date, ->(after, before) {
+    query = joins(:festival)
+    query = query.where("festivals.start_at >= ?", after) if after.present?
+    query = query.where("festivals.start_at <= ?", before) if before.present?
+    query
+  }
+
 
   before_validation :strip_fields
 

@@ -707,7 +707,13 @@
     "BTN": "Go Home"
   },
   "STATS": {
+    "SEARCH": "Search",
+    "SORT_BY": "Sort by",
+    "NONE": "None",
+    "REVENUE": "Gross Revenue",
+    "NAME": "Alphabetical",
     "ACCOMMODATIONS": {
+      "SEARCH_PLACEHOLDER": "Search by accommodation name...",
       "HIGHEST_EARNER": "Most Profitable Accommodation",
       "LOWEST_EARNER": "Least Profitable Accommodation",
       "EMPTY": "No data available at the moment.",

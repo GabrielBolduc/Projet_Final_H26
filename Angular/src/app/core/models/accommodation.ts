@@ -85,6 +85,9 @@ export interface FestivalEditionData {
     top: { name: string; finance: any };
     bottom: { name: string; finance: any };
   };
+  reservation_stats: {
+    total_people: number;
+  };
 }
 
 export type GroupedAccommodationStats = { [festivalName: string]: FestivalEditionData };

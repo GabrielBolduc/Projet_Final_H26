@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
@@ -23,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     CommonModule, RouterModule, TranslateModule, MatIconModule, 
     MatTableModule, MatProgressSpinnerModule, MatButtonModule,
     MatFormFieldModule, MatInputModule, MatSelectModule,
-    MatCardModule, FormsModule 
+    MatCardModule, FormsModule, ReactiveFormsModule, MatAutocompleteModule 
   ],
   templateUrl: './hebergement.html',
   styleUrls: ['./hebergement.css']
@@ -34,83 +36,100 @@ export class HebergementComponent implements OnInit {
   private router = inject(Router);
 
   public rawStats = signal<AccommodationStatsResponse | null>(null);
+  public availableFestivals = signal<{id: number, name: string}[]>([]);
   public loading = signal(true);
   public error = signal(false);
 
-  public filterFestivalName = signal<string | null>(null);
   public searchTerm = signal<string>('');
-  private searchSubject = new Subject<string>();
+  public sortBy = signal<string>('date');
+  public festivalIds = signal<number[]>([]);
+  public dateAfter = signal<string | null>(null);
+  public dateBefore = signal<string | null>(null);
+  public searchControl = new FormControl('');
+  public suggestions = signal<string[]>([]);
 
   private initialized = false;
 
-  public availableFestivals = computed(() => {
-    const data = this.rawStats();
-    return data ? Object.keys(data.data) : [];
-  });
-
-  public filteredStats = computed(() => {
-    const data = this.rawStats();
-    if (!data) return null;
-
-    const term = this.searchTerm().toLowerCase();
-    const festName = this.filterFestivalName();
-
-    const filtered: any = {};
-
-    Object.entries(data.data).forEach(([name, group]) => {
-      const matchesFest = !festName || name === festName;
-
-      if (matchesFest) {
-        const filteredItems = group.items.filter(item => 
-          item.name.toLowerCase().includes(term)
-        );
-
-        if (filteredItems.length > 0) {
-          filtered[name] = { ...group, items: filteredItems };
-        }
-      }
-    });
-
-    return { ...data, data: filtered };
-  });
+  public filteredStats = computed(() => this.rawStats());
 
   constructor() {
-    this.searchSubject.pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(val => this.searchTerm.set(val));
+    this.searchControl.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(value => {
+      this.searchTerm.set(value || '');
+      this.updateSuggestions(value || '');
+    });
 
     effect(() => {
-      if (!this.initialized) return;
-      const queryParams = {
-        festival: this.filterFestivalName(),
-        q: this.searchTerm() || null
+      const filters = {
+        name: this.searchTerm(),
+        sort_by: this.sortBy(),
+        festival_ids: this.festivalIds(),
       };
-      this.router.navigate([], { relativeTo: this.route, queryParams, queryParamsHandling: 'merge', replaceUrl: true });
+
+      if (this.initialized) {
+        untracked(() => this.fetchStats(filters));
+      }
     });
   }
+  
 
   ngOnInit(): void {
     const params = this.route.snapshot.queryParams;
-    if (params['festival']) this.filterFestivalName.set(params['festival']);
-    if (params['q']) this.searchTerm.set(params['q']);
+    if (params['name']) this.searchTerm.set(params['name']);
+    if (params['sort_by']) this.sortBy.set(params['sort_by']);
+    if (params['festival_ids']) {
+      this.festivalIds.set(params['festival_ids'].split(',').map(Number));
+    }
 
     this.initialized = true;
     this.fetchStats();
   }
 
-  fetchStats() {
+  fetchStats(filters: any = {}) {
     this.loading.set(true);
-    this.statsService.getStats().subscribe({
-      next: (res) => { this.rawStats.set(res); this.loading.set(false); },
-      error: () => { this.error.set(true); this.loading.set(false); }
+    this.statsService.getStats(filters).subscribe({
+      next: (res) => { 
+        this.rawStats.set(res); 
+        this.loading.set(false); 
+        this.error.set(false);
+
+        if (this.availableFestivals().length === 0 && res.data) {
+          const list = Object.entries(res.data).map(([name, group]: any) => ({
+            id: group.items[0]?.festival_id,
+            name: name
+          })).filter(f => f.id);
+          this.availableFestivals.set(list);
+        }
+      },
+      error: () => { 
+        this.error.set(true); 
+        this.loading.set(false); 
+      }
     });
   }
 
-  updateFest = (val: string | null) => this.filterFestivalName.set(val);
-  updateSearch(value: string): void {
-    this.searchSubject.next(value);
-  }
+  updateSearch = (val: string) => this.searchTerm.set(val);
+  updateSort = (val: string) => this.sortBy.set(val);
+  updateCompare = (ids: number[]) => this.festivalIds.set(ids);
 
-  returnZero = () => 0;
   formatServiceKey = (s: string | undefined) => s ? s.toUpperCase().replace(/\s+/g, '_') : 'NO_ACCESS';
   displayedColumns: string[] = ['name', 'avg_pricing', 'revenue', 'profit', 'distance', 'services', 'inventory'];
+  returnZero = () => 0;
+
+  private updateSuggestions(term: string) {
+    if (term.length < 2) {
+      this.suggestions.set([]);
+      return;
+    }
+    const allNames = this.rawStats() ? 
+      Object.values(this.rawStats()!.data).flatMap(g => g.items.map(i => i.name)) : [];
+    
+    const uniqueMatches = [...new Set(allNames)]
+      .filter(n => n.toLowerCase().includes(term.toLowerCase()))
+      .slice(0, 5);
+    
+    this.suggestions.set(uniqueMatches);
+  }
 }

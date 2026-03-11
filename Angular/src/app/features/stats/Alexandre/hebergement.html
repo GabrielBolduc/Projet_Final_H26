@@ -1,25 +1,37 @@
 <div class="stats-container-fade">
   <div class="ssf-toolbar mb-4">
 
-    <!-- Festival Selection -->
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }}</mat-label>
-      <mat-select [ngModel]="filterFestivalName()" (ngModelChange)="updateFest($event)">
-        <mat-option [value]="null">{{ 'RESERVATIONS.STATUS.ALL' | translate }}</mat-option>
-        @for (fest of availableFestivals(); track fest) {
-          <mat-option [value]="fest">{{ fest }}</mat-option>
+      <mat-label>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }} (Compare)</mat-label>
+      <mat-select [ngModel]="festivalIds()" (ngModelChange)="updateCompare($event)" multiple>
+        @for (fest of availableFestivals(); track fest.id) {
+          <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
 
-    <!-- Search Input -->
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'RESERVATIONS.SEARCH' | translate }}</mat-label>
+      <mat-label>{{ 'STATS.SORT_BY' | translate }}</mat-label>
+      <mat-select [ngModel]="sortBy()" (ngModelChange)="updateSort($event)">
+        <mat-option value="none">{{ 'STATS.NONE' | translate }}</mat-option>
+        <mat-option value="revenue">{{ 'STATS.REVENUE' | translate }}</mat-option>
+        <mat-option value="name">{{ 'STATS.NAME' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'STATS.SEARCH' | translate }}</mat-label>
       <input matInput 
-            [ngModel]="searchTerm()" 
-            (ngModelChange)="updateSearch(searchTrigger.value)" 
-            #searchTrigger
-            placeholder="{{ 'RESERVATIONS.SEARCH_PLACEHOLDER' | translate }}">
+            [formControl]="searchControl" 
+            [matAutocomplete]="auto"
+            placeholder="{{ 'STATS.ACCOMMODATIONS.SEARCH_PLACEHOLDER' | translate }}">
+      
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="searchTerm.set($event.option.value)">
+        @for (name of suggestions(); track name) {
+          <mat-option [value]="name">{{ name }}</mat-option>
+        }
+      </mat-autocomplete>
+      
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 

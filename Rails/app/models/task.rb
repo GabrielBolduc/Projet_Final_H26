@@ -16,7 +16,7 @@ class Task < ApplicationRecord
     def affectations_count
         affectations.count
     end
-
+  
 
     def completed
         affectations.exists? && affectations.where(end: nil).none?

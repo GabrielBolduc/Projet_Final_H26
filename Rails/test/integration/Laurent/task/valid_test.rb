@@ -36,7 +36,7 @@ class TasksTest < ActionDispatch::IntegrationTest
 
   # get /api/tasks
   test "should get tasks list and return JSON" do
-    sign_in users(:one)
+    sign_in users(:three)
     # la base de donnée n'a pas changer
     assert_no_difference("Task.count") do
      get api_tasks_path
@@ -56,7 +56,7 @@ class TasksTest < ActionDispatch::IntegrationTest
   end
 
   test "should get rhe reusables tasks list and return JSON" do
-    sign_in users(:one)
+    sign_in users(:three)
     # la base de donnée n'a pas changer
     assert_no_difference("Task.count") do
      get get_reusable_api_tasks_path
@@ -76,7 +76,7 @@ class TasksTest < ActionDispatch::IntegrationTest
   end
 
   test "can update task" do
-        sign_in users(:one)
+        sign_in users(:three)
 
         # base de donnees
         assert_no_difference "Task.count" do
@@ -96,7 +96,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test " can delete task" do
-        sign_in users(:one)
+        sign_in users(:three)
 
         # base de donnees
         assert_difference "Task.count", -1 do
@@ -115,7 +115,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
  test "can create anime" do
-        sign_in users(:one)
+        sign_in users(:three)
 
         # base de donnees
         assert_difference "Task.count", 1 do
@@ -133,6 +133,29 @@ class TasksTest < ActionDispatch::IntegrationTest
         # contenu de reponse
         assert_equal true, json_response["success"], "Success flag should be true"
     end
+
+    test "report shoudl return value of the report" do
+        sign_in users(:three)
+
+        assert_no_difference("Task.count") do
+            get raport_api_tasks_path
+           #puts response.body
+        end
+
+         # format de reponse
+        assert_nothing_raised { JSON.parse(response.body) }
+        json_response = JSON.parse(response.body)
+
+        # code http
+        assert_response :success
+
+        # contenu de reponse
+        assert_equal 5, json_response["data"]["tasks_count"]
+        assert_equal 5, json_response["data"]["tasks_completed"]
+        assert_equal 0, json_response["data"]["tasks_ongoing"]
+        assert_equal 0, json_response["data"]["tasks_waiting"]
+       
+      end
 
 
     def valid_task_params

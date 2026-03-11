@@ -1,4 +1,5 @@
-import { Component, OnInit, computed, effect, inject, resource, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, resource, signal, untracked } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -44,11 +45,11 @@ export class Ticketing implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private initialQueryParams = this.route.snapshot.queryParams;
+  private queryParams = toSignal(this.route.queryParams, { initialValue: this.route.snapshot.queryParams });
   private readonly allowedSortOptions: PackageSort[] = [ 'price_asc', 'price_desc', 'date_asc', 'date_desc' ];
 
-  private initialized = false;
+  private initialized = signal(false);
   readonly weekdayOptions = [
-    { value: null as number | null, labelKey: 'TICKETING_PUBLIC.DAY_ALL' },
     { value: 0, labelKey: 'TICKETING_PUBLIC.DAY_SUNDAY' },
     { value: 1, labelKey: 'TICKETING_PUBLIC.DAY_MONDAY' },
     { value: 2, labelKey: 'TICKETING_PUBLIC.DAY_TUESDAY' },
@@ -59,7 +60,7 @@ export class Ticketing implements OnInit {
   ];
 
   searchQuery = signal(this.initialQueryParams['q'] || '');
-  selectedWeekday = signal<number | null>(this.parseInitialWeekday(this.initialQueryParams['dow']));
+  selectedWeekdays = signal<number[]>(this.parseInitialWeekdays(this.initialQueryParams['dow']));
   sortOption = signal<PackageSort>(this.parseInitialSort(this.initialQueryParams['sort']));
   showGeneral = signal(this.initialQueryParams['gen'] !== 'f');
   showDaily = signal(this.initialQueryParams['day'] !== 'f');
@@ -85,37 +86,25 @@ export class Ticketing implements OnInit {
   });
 
   packagesResource = resource<Package[], PackageFilters>({
-    params: () => ({
-      sort: this.sortOption(),
-      categories: this.selectedCategories()
-    }),
+    params: () => {
+      const query = this.searchQuery().trim();
+      return {
+        q: query ? query : undefined,
+        dow: this.selectedWeekdays().length > 0 ? this.selectedWeekdays().join(',') : undefined,
+        sort: this.sortOption(),
+        categories: this.selectedCategories()
+      };
+    },
     loader: ({ params }) => firstValueFrom(this.packageService.getPackages(params))
   });
 
   packages = computed(() => this.packagesResource.value() ?? []);
-  filteredPackages = computed(() => {
-    let result = this.packages();
-
-    const query = this.searchQuery().trim().toLowerCase();
-    if (query) {
-      result = result.filter(pkg => 
-        (pkg.title?.toLowerCase().includes(query)) || 
-        (pkg.description?.toLowerCase().includes(query))
-      );
-    }
-
-    const weekday = this.selectedWeekday();
-    if (weekday !== null) {
-      result = result.filter(pkg => this.packageIncludesWeekday(pkg, weekday));
-    }
-
-    return result;
-  });
+  filteredPackages = computed(() => this.packages());
 
   isLoading = computed(() => this.packagesResource.isLoading());
   hasActiveFilters = computed(() =>
     this.searchQuery().trim() !== '' ||
-    this.selectedWeekday() !== null || 
+    this.selectedWeekdays().length > 0 || 
     this.selectedCategories().length < 3
   );
   emptyStateKey = computed(() => {
@@ -132,11 +121,12 @@ export class Ticketing implements OnInit {
 
   constructor() {
     effect(() => {
-      if (!this.initialized) return;
+      const initialized = this.initialized();
+      if (!initialized) return;
 
       const queryParams = {
         q: this.searchQuery() || null,
-        dow: this.selectedWeekday(),
+        dow: this.selectedWeekdays().length > 0 ? this.selectedWeekdays().join(',') : null,
         sort: this.sortOption() === 'price_asc' ? null : this.sortOption(),
         gen: this.showGeneral() ? null : 'f',
         day: this.showDaily() ? null : 'f',
@@ -150,10 +140,48 @@ export class Ticketing implements OnInit {
         replaceUrl: true
       });
     });
+
+    effect(() => {
+      const initialized = this.initialized();
+      if (!initialized) return;
+
+      const params = this.queryParams();
+      untracked(() => {
+        const nextSearch = String(params['q'] ?? '');
+        if (this.searchQuery() !== nextSearch) {
+          this.searchQuery.set(nextSearch);
+        }
+
+        const nextWeekdays = this.parseInitialWeekdays(params['dow']);
+        if (!this.areWeekdaysEqual(this.selectedWeekdays(), nextWeekdays)) {
+          this.selectedWeekdays.set(nextWeekdays);
+        }
+
+        const nextSort = this.parseInitialSort(params['sort']);
+        if (this.sortOption() !== nextSort) {
+          this.sortOption.set(nextSort);
+        }
+
+        const nextGeneral = params['gen'] !== 'f';
+        if (this.showGeneral() !== nextGeneral) {
+          this.showGeneral.set(nextGeneral);
+        }
+
+        const nextDaily = params['day'] !== 'f';
+        if (this.showDaily() !== nextDaily) {
+          this.showDaily.set(nextDaily);
+        }
+
+        const nextEvening = params['eve'] !== 'f';
+        if (this.showEvening() !== nextEvening) {
+          this.showEvening.set(nextEvening);
+        }
+      });
+    });
   }
 
   ngOnInit(): void {
-    this.initialized = true;
+    this.initialized.set(true);
   }
 
   isSoldOut(pkg: Package): boolean {
@@ -162,49 +190,40 @@ export class Ticketing implements OnInit {
     return quota > 0 && sold >= quota;
   }
 
-  private packageIncludesWeekday(pkg: Package, weekday: number): boolean {
-    const start = this.toDate(pkg.valid_at);
-    const end = this.toDate(pkg.expired_at);
-    if (!start || !end) {
-      return false;
-    }
-
-    const startDay = new Date(start);
-    const endDay = new Date(end);
-    startDay.setHours(0, 0, 0, 0);
-    endDay.setHours(0, 0, 0, 0);
-
-    if (endDay < startDay) {
-      return false;
-    }
-
-    const current = new Date(startDay);
-    for (let i = 0; i <= 60 && current <= endDay; i += 1) {
-      if (current.getDay() === weekday) {
-        return true;
-      }
-      current.setDate(current.getDate() + 1);
-    }
-
-    return false;
+  hasDiscount(pkg: Package): boolean {
+    const minQty = Number(pkg.discount_min_quantity ?? 0);
+    const rate = Number(pkg.discount_rate ?? 0);
+    return minQty > 0 && rate > 0;
   }
 
-  private toDate(value: string | Date | null | undefined): Date | null {
-    if (!value) {
-      return null;
-    }
-
-    const parsed = value instanceof Date ? value : new Date(value);
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  formatDiscount(pkg: Package): string {
+    const rate = Number(pkg.discount_rate ?? 0);
+    return `${Math.round(rate * 100)}%`;
   }
 
-  private parseInitialWeekday(value: unknown): number | null {
+  getWeekdayLabel(value: number): string {
+    return this.weekdayOptions.find(option => option.value === value)?.labelKey ?? '';
+  }
+
+  private parseInitialWeekdays(value: unknown): number[] {
     if (value === undefined || value === null || value === '') {
-      return null;
+      return [];
     }
 
-    const parsed = Number(value);
-    return Number.isInteger(parsed) && parsed >= 0 && parsed <= 6 ? parsed : null;
+    const raw = Array.isArray(value) ? value.join(',') : String(value);
+    const parsed = raw
+      .split(',')
+      .map(entry => Number(entry))
+      .filter(day => Number.isInteger(day) && day >= 0 && day <= 6);
+
+    return Array.from(new Set(parsed));
+  }
+
+  private areWeekdaysEqual(a: number[], b: number[]): boolean {
+    if (a.length !== b.length) return false;
+    const sortedA = [...a].sort();
+    const sortedB = [...b].sort();
+    return sortedA.every((day, index) => day === sortedB[index]);
   }
 
   private parseInitialSort(value: unknown): PackageSort {

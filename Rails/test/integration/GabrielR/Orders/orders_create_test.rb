@@ -101,4 +101,33 @@ class OrdersCreateTest < ActionDispatch::IntegrationTest
     assert_equal "error", json["status"]
     assert_equal "Quantity must be greater than 0", json["message"]
   end
+
+  test "should fail to create when package festival is not ongoing" do
+    sign_in @client
+    draft_package = packages(:six)
+
+    assert_no_difference("Order.count") do
+      post api_orders_url, params: { order: { package_id: draft_package.id, quantity: 1 } }, as: :json
+    end
+
+    assert_response :ok
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_equal "Package is not available for purchase", json["message"]
+  end
+
+  test "should fail to create when package is expired" do
+    sign_in @client
+    expired_package = packages(:two)
+    expired_package.update_columns(expired_at: 2.days.ago, valid_at: 3.days.ago)
+
+    assert_no_difference("Order.count") do
+      post api_orders_url, params: { order: { package_id: expired_package.id, quantity: 1 } }, as: :json
+    end
+
+    assert_response :ok
+    json = JSON.parse(response.body)
+    assert_equal "error", json["status"]
+    assert_equal "Package has expired", json["message"]
+  end
 end

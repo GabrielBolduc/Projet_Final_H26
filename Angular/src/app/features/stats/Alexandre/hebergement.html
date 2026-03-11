@@ -9,7 +9,7 @@
             <mat-icon>trending_up</mat-icon>
           </div>
           <div class="highlight-info">
-            <span class="highlight-label">{{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.HIGHEST_EARNER' | translate }}</span>
+            <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.HIGHEST_EARNER' | translate }}</span>
             <h3 class="highlight-name">{{ group.value.highlights.top.name }}</h3>
             <p class="highlight-value">{{ group.value.highlights.top.finance.actual_profit | currency:'USD' }}</p>
           </div>
@@ -20,7 +20,7 @@
             <mat-icon>trending_down</mat-icon>
           </div>
           <div class="highlight-info">
-            <span class="highlight-label">{{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.LOWEST_EARNER' | translate }}</span>
+            <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.LOWEST_EARNER' | translate }}</span>
             <h3 class="highlight-name">{{ group.value.highlights.bottom.name }}</h3>
             <p class="highlight-value">{{ group.value.highlights.bottom.finance.actual_profit | currency:'USD' }}</p>
           </div>
@@ -31,32 +31,32 @@
         <table mat-table [dataSource]="group.value.items" class="festify-grid-table">
           
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> {{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.COLUMNS.NAME' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef> {{ 'STATS.ACCOMMODATIONS.COLUMNS.NAME' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="bold-text"> 
               {{ acc.name }} 
               <span class="category-badge">
-                {{ (acc.category === 0 ? 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.CATEGORIES.CAMPING' : 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.CATEGORIES.HOTEL') | translate }}
+                {{ (acc.category === 0 ? 'STATS.ACCOMMODATIONS.CATEGORIES.CAMPING' : 'STATS.ACCOMMODATIONS.CATEGORIES.HOTEL') | translate }}
               </span>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="revenue">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.COLUMNS.REVENUE' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.REVENUE' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center"> {{ acc.finance.total_revenue | currency:'USD' }} </td>
           </ng-container>
 
           <ng-container matColumnDef="profit">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.COLUMNS.PROFIT' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.PROFIT' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center profit-text"> {{ acc.finance.actual_profit | currency:'USD' }} </td>
           </ng-container>
 
           <ng-container matColumnDef="distance">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.COLUMNS.DISTANCE' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.DISTANCE' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center"> {{ acc.location.distance_km }} km </td>
           </ng-container>
 
           <ng-container matColumnDef="services">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.COLUMNS.SERVICES' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.SERVICES' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center">
               <div class="services-wrapper">
                 <span class="service-badge water-badge"><mat-icon inline>water_drop</mat-icon> {{ acc.services.water }}</span>
@@ -67,7 +67,7 @@
           </ng-container>
 
           <ng-container matColumnDef="inventory">
-            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS-ACCOMMODATIONS.ACCOMMODATIONS.COLUMNS.INVENTORY' | translate }} </th>
+            <th mat-header-cell *matHeaderCellDef class="text-center"> {{ 'STATS.ACCOMMODATIONS.COLUMNS.INVENTORY' | translate }} </th>
             <td mat-cell *matCellDef="let acc" class="text-center"> 
               <strong>{{ acc.inventory.available_now }}</strong> / {{ acc.inventory.total_units }}
             </td>

@@ -83,8 +83,12 @@
 }
 
 .final-price.has-discount {
-  color: var(--mat-sys-error);
+  color: #2e7d32;
   font-weight: 600;
+}
+
+.discount-row {
+  color: #2e7d32;
 }
 
 .order-panel strong {

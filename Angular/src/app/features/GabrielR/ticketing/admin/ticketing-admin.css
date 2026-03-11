@@ -97,7 +97,8 @@
 .card-content-layout {
   display: flex;
   padding: 0;
-  height: 140px;
+  min-height: 140px;
+  height: auto;
 }
 
 
@@ -148,18 +149,24 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .info-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
-.info-header h3 {
+.title-text {
   margin: 0;
   font-size: 1.2rem;
   font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .price {
@@ -172,6 +179,11 @@
   margin: 0;
   color: var(--mat-sys-outline);
   font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 

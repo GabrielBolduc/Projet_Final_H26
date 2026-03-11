@@ -51,6 +51,7 @@ class TicketsDestroyInvalidTest < ActionDispatch::IntegrationTest
 
   test "refund fails when ticket is already refunded" do
     sign_in @client
+    original_refunded_at = @refunded_ticket.refunded_at
 
     assert_no_difference("Ticket.count") do
       delete api_ticket_url(@refunded_ticket), as: :json
@@ -61,6 +62,23 @@ class TicketsDestroyInvalidTest < ActionDispatch::IntegrationTest
     json = parsed_body
     assert_equal "error", json["status"]
     assert_equal "Ticket already refunded", json["message"]
+    assert_equal original_refunded_at.to_i, @refunded_ticket.reload.refunded_at.to_i
+  end
+
+  test "refund fails when ticket package is expired" do
+    sign_in @client
+    expired_ticket = tickets(:one)
+    expired_ticket.package.update_columns(expired_at: 1.day.ago, valid_at: 2.days.ago)
+
+    assert_no_difference("Ticket.count") do
+      delete api_ticket_url(expired_ticket), as: :json
+    end
+
+    assert_response :ok
+    json = parsed_body
+    assert_equal "error", json["status"]
+    assert_equal "Cannot refund an expired ticket", json["message"]
+    assert_not expired_ticket.reload.refunded?
   end
 
   test "refund does not allow refunding a ticket belonging to another client" do
@@ -77,16 +95,6 @@ class TicketsDestroyInvalidTest < ActionDispatch::IntegrationTest
     assert_equal "error", json["status"]
     assert_equal "Resource not found", json["message"]
     assert_not @ticket.reload.refunded?
-  end
-
-  test "refund error does not modify refunded_at on already refunded ticket" do
-    sign_in @client
-    original_refunded_at = @refunded_ticket.refunded_at
-
-    delete api_ticket_url(@refunded_ticket), as: :json
-    assert_response :ok
-
-    assert_equal original_refunded_at.to_i, @refunded_ticket.reload.refunded_at.to_i
   end
 
   test "failed refund attempt by another client does not modify the ticket" do

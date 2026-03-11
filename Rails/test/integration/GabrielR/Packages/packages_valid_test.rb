@@ -64,6 +64,15 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
     assert_equal [ packages(:three).id ], json["data"].map { |pkg| pkg["id"] }
   end
 
+  test "index search matches description as well as title" do
+    get api_packages_url, params: { q: "journalier", status: "ongoing" }
+    assert_response :ok
+
+    json = parsed_body
+    ids = json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:four).id, packages(:two).id ], ids
+  end
+
   test "index search with no match returns empty list" do
     get api_packages_url, params: { q: "no-match-title", status: "ongoing" }
     assert_response :ok
@@ -87,6 +96,36 @@ class PackagesValidTest < ActionDispatch::IntegrationTest
 
     json = parsed_body
     assert_equal [], json["data"]
+  end
+
+  test "index supports weekday filter for a single day" do
+    # Monday (1) should include packages spanning Aug 3rd
+    get api_packages_url, params: { status: "ongoing", dow: "1" }
+    assert_response :ok
+
+    json = parsed_body
+    ids = json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:seven).id, packages(:one).id ], ids
+  end
+
+  test "index supports weekday filter for multiple days" do
+    # Saturday (6) + Sunday (0)
+    get api_packages_url, params: { status: "ongoing", dow: "0,6" }
+    assert_response :ok
+
+    json = parsed_body
+    ids = json["data"].map { |pkg| pkg["id"] }
+    assert_equal [ packages(:four).id, packages(:two).id, packages(:three).id, packages(:one).id ], ids
+  end
+
+  test "index ignores invalid weekday values and returns default ongoing list" do
+    get api_packages_url, params: { status: "ongoing", dow: "x,9,-1" }
+    assert_response :ok
+
+    json = parsed_body
+    returned_ids = json["data"].map { |pkg| pkg["id"] }
+    expected_ids = [ packages(:four), packages(:two), packages(:seven), packages(:three), packages(:one) ].map(&:id)
+    assert_equal expected_ids, returned_ids
   end
 
   test "index supports date_desc sort" do

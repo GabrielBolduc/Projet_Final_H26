@@ -104,6 +104,9 @@
     "UPDATE_SUCCESS": "Festival updated successfully",
     "CREATE_SUCCESS": "Festival created successfully",
     "SAVE_ERROR": "Error saving. Please check the fields.",
+    "ARCHIVED_SUCCESS": "Festival archived successfully.",
+    "DELETE_ONGOING_ERROR": "Cannot delete an ongoing festival.",
+    "DELETE_SUCCESS": "Festival deleted successfully.",
     "DELETE_CONFIRM": "Are you sure you want to delete this festival? This action is irreversible.",
     "FINISH": "End the festival"
   },
@@ -156,6 +159,8 @@
     "ADD_SUCCESS": "Artist added successfully!",
     "EDIT_SUCCESS": "Artist updated successfully!",
     "ERROR_SAVE": "An error occurred while saving.",
+    "LOAD_ERROR": "Error loading artist.",
+    "SAVE_ERROR": "Error saving artist.",
     "DELETE_SUCCESS": "Artist deleted successfully."
   },
   "ARTIST_LIST": {
@@ -206,6 +211,7 @@
     "NEW_PACKAGE": "New Package",
     "TITLE": "Packages Management",
     "SEARCH_TITLE": "Title",
+    "SEARCH_TITLE_DESC": "Title or description",
     "SORT_BY": "Sort by",
     "SORT_ASC": "Oldest first",
     "SORT_DESC": "Newest first",
@@ -315,6 +321,8 @@
     "CONFIRM_ORDER": "Confirm order",
     "INVALID_QUANTITY": "Quantity must be at least 1.",
     "SOLD_OUT": "Sold out",
+    "DISCOUNT_BADGE": "Save {{ rate }}",
+    "SAVE": "You save",
     "REMAINING_TICKETS": "Only {{count}} ticket(s) are still available.",
     "AVAILABILITY": "Availability",
     "MY_ORDERS": "My Orders",
@@ -413,6 +421,7 @@
   "TACHES": {
     "TITLE": "Tasks",
     "DESCRIPTION": "Description",
+    "REQUIS": "Required",
     "DIFFICULTY": "Difficulty",
     "REUSABLE": "Reusable",
     "ACTIONS": "Actions",
@@ -452,6 +461,8 @@
   "AFFECTATIONS": {
     "ADD": "Add Affectation",
     "TITLE": "Affectations",
+    "AFFECTATION": "Affectation",
+    "DESCRIPTION": "Description",
     "USER": "User",
     "MORE": "More details",
     "NAME": "Name",
@@ -689,7 +700,7 @@
     "MESSAGE": "The page you're looking for doesn't exist or has been moved.",
     "BTN": "Go Home"
   },
-  "STATS-ACCOMMODATIONS": {
+  "STATS": {
     "ACCOMMODATIONS": {
       "HIGHEST_EARNER": "Most Profitable Accommodation",
       "LOWEST_EARNER": "Least Profitable Accommodation",

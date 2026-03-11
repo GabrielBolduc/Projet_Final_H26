@@ -168,6 +168,13 @@
   padding: 10px;
 }
 
+.badge-stack {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
 .visual-placeholder {
   position: absolute;
   inset: 0;
@@ -220,6 +227,19 @@
   padding: 5px 10px;
   background: var(--mat-sys-error);
   color: var(--mat-sys-on-error);
+}
+
+.discount-badge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  border: 1px solid #1b5e20;
+  background: #1b5e20;
+  color: #fff;
+  box-shadow: 0 6px 12px rgba(27, 94, 32, 0.25);
 }
 
 .package-body {

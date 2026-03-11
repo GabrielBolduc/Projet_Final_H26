@@ -22,7 +22,7 @@ class Order < ApplicationRecord
   end
 
   def subtotal
-    tickets.sum(:price)
+    tickets.where(refunded_at: nil).sum(:price)
   end
 
   def total_price

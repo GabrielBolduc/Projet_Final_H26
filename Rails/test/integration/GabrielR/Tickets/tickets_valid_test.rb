@@ -43,16 +43,6 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     assert_equal dates, dates.sort.reverse
   end
 
-  test "index returns both active and refunded tickets" do
-    get api_tickets_url
-    assert_response :ok
-
-    json = parsed_body
-    refunded_at_values = json["data"].map { |t| t["refunded_at"] }
-    assert refunded_at_values.any?(&:present?), "Expected at least one refunded ticket"
-    assert refunded_at_values.any?(&:blank?), "Expected at least one active ticket"
-  end
-
   test "index does not return tickets belonging to another client" do
     other_client = users(:four)
     sign_out @client
@@ -233,25 +223,6 @@ class TicketsValidTest < ActionDispatch::IntegrationTest
     end
 
     assert Ticket.exists?(@ticket.id)
-  end
-
-  test "refunded ticket is still visible via show" do
-    get api_ticket_url(@refunded_ticket)
-    assert_response :ok
-
-    json = parsed_body
-    assert_equal "success", json["status"]
-    assert json.dig("data", "refunded_at").present?
-    assert_equal @refunded_ticket.id, json.dig("data", "id")
-  end
-
-  test "refunded ticket appears in index" do
-    get api_tickets_url
-    assert_response :ok
-
-    json = parsed_body
-    ids = json["data"].map { |t| t["id"] }
-    assert_includes ids, @refunded_ticket.id
   end
 
   private

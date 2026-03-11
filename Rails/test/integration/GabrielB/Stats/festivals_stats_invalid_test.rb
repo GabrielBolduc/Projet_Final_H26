@@ -4,7 +4,7 @@ class FestivalsStatsInvalidTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   setup do
-    @client = users(:one) 
+    @client = users(:one)
   end
 
   test "should return error when normal user tries to access stats" do
@@ -27,7 +27,7 @@ class FestivalsStatsInvalidTest < ActionDispatch::IntegrationTest
 
   test "should return error when guest (not logged in) tries to access stats" do
     # Aucun sign_in ici
-    
+
     # modif ou non
     assert_no_difference("Festival.count") do
       get "/api/stats/festivals", as: :json
@@ -47,7 +47,7 @@ class FestivalsStatsInvalidTest < ActionDispatch::IntegrationTest
   test "should return empty list when filtering by non-existent year" do
     admin = users(:three)
     sign_in admin
-    
+
     # modif ou non
     assert_no_difference("Festival.count") do
       get "/api/stats/festivals?year=3000", as: :json
@@ -67,7 +67,7 @@ class FestivalsStatsInvalidTest < ActionDispatch::IntegrationTest
   test "should return empty list when filtering by non-existent festival ids" do
     admin = users(:three)
     sign_in admin
-    
+
     # modif ou non
     assert_no_difference("Festival.count") do
       get "/api/stats/festivals?festival_ids[]=999999", as: :json

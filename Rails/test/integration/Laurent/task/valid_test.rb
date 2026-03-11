@@ -139,10 +139,10 @@ class TasksTest < ActionDispatch::IntegrationTest
 
         assert_no_difference("Task.count") do
             get raport_api_tasks_path
-           #puts response.body
+          # puts response.body
         end
 
-         # format de reponse
+        # format de reponse
         assert_nothing_raised { JSON.parse(response.body) }
         json_response = JSON.parse(response.body)
 
@@ -154,7 +154,6 @@ class TasksTest < ActionDispatch::IntegrationTest
         assert_equal 5, json_response["data"]["tasks_completed"]
         assert_equal 0, json_response["data"]["tasks_ongoing"]
         assert_equal 0, json_response["data"]["tasks_waiting"]
-       
       end
 
 

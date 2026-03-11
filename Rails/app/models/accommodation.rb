@@ -23,8 +23,8 @@ class Accommodation < ApplicationRecord
       ) / 1000 AS distance_from_festival_km"
     )
   }
-  scope :search_by_name, ->(term) { 
-    where("accommodations.name LIKE ?", "%#{term}%") 
+  scope :search_by_name, ->(term) {
+    where("accommodations.name LIKE ?", "%#{term}%")
   }
   scope :within_walk_time, ->(max_time) { where("time_walk <= ?", max_time) }
   scope :within_radius, ->(f_lat, f_lng, radius_km) {
@@ -55,8 +55,8 @@ class Accommodation < ApplicationRecord
 
     joins(:units).merge(unit_query).distinct
   }
-  scope :for_festivals, ->(ids) { 
-    where(festival_id: Array(ids).compact_blank) 
+  scope :for_festivals, ->(ids) {
+    where(festival_id: Array(ids).compact_blank)
   }
   scope :by_festival_date, ->(after, before) {
     query = joins(:festival)
@@ -69,8 +69,8 @@ class Accommodation < ApplicationRecord
   before_validation :strip_fields
 
 def statistics_data
-  valid_reservations = Reservation.where(unit_id: unit_ids, status: [:active, :completed])
-  
+  valid_reservations = Reservation.where(unit_id: unit_ids, status: [ :active, :completed ])
+
   unit_prices = units.map(&:cost_person_per_night)
   parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
 
@@ -78,7 +78,7 @@ def statistics_data
   total_people = valid_reservations.sum(:nb_of_people)
 
   total_revenue = units.sum do |unit|
-    unit.reservations.where(status: [:active, :completed]).sum(:nb_of_people) * unit.cost_person_per_night
+    unit.reservations.where(status: [ :active, :completed ]).sum(:nb_of_people) * unit.cost_person_per_night
   end
 
   commission_multiplier = (100 - commission) / 100.0

@@ -5,7 +5,7 @@ class Api::AccommodationsStatsController < ApiController
 
     apply_filters!
 
-    unless params[:sort_by] == 'revenue'
+    unless params[:sort_by] == "revenue"
       @accommodations = apply_sql_sorting(@accommodations)
     end
 
@@ -13,7 +13,7 @@ class Api::AccommodationsStatsController < ApiController
       { acc: acc, stats: acc.statistics_data }
     end
 
-    if params[:sort_by] == 'revenue'
+    if params[:sort_by] == "revenue"
       all_stats.sort_by! { |item| item[:stats].dig(:finance, :total_revenue) || 0 }.reverse!
     end
 
@@ -29,7 +29,7 @@ class Api::AccommodationsStatsController < ApiController
   def apply_filters!
     @accommodations = @accommodations.search_by_name(params[:name]) if params[:name].present?
     @accommodations = @accommodations.for_festivals(params[:festival_ids]) if params[:festival_ids].present?
-    
+
     if params[:date_after].present? || params[:date_before].present?
       @accommodations = @accommodations.by_festival_date(params[:date_after], params[:date_before])
     end
@@ -37,8 +37,8 @@ class Api::AccommodationsStatsController < ApiController
 
   def apply_sql_sorting(scope)
     case params[:sort_by]
-    when 'name' then scope.order(name: :asc)
-    else scope.order('festivals.start_at DESC')
+    when "name" then scope.order(name: :asc)
+    else scope.order("festivals.start_at DESC")
     end
   end
 
@@ -47,7 +47,6 @@ class Api::AccommodationsStatsController < ApiController
              .sort_by { |fest, _| fest.start_at }
              .reverse
              .each_with_object({}) do |(festival, items), hash|
-      
       list = items.map { |i| i[:stats] }
 
       hash[festival.name] = {
@@ -64,6 +63,6 @@ class Api::AccommodationsStatsController < ApiController
           total_people: list.sum { |s| s.dig(:reservation_stats, :total_people) || 0 }
         }
       }
-    end 
-  end 
+    end
+  end
 end

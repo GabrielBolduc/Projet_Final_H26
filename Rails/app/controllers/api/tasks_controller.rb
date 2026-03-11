@@ -54,7 +54,6 @@ class Api::TasksController < ApiController
     end
 
     def raport
-
         @tasks = Task.all
 
         @tasks_count = Task.all.count

@@ -10,8 +10,12 @@ export class TicketingStatsService {
   private http = inject(HttpClient);
   private readonly API_URL = '/api/ticketing_stats';
 
-  getStats(): Observable<TicketingStats[]> {
-    return this.http.get<ApiResponse<TicketingStats[]>>(this.API_URL).pipe(
+  getStats(filters: { start_date?: string; end_date?: string; categories?: string } = {}): Observable<TicketingStats[]> {
+    const params = Object.fromEntries(
+      Object.entries(filters).filter(([, value]) => value !== undefined && value !== null && value !== '')
+    );
+
+    return this.http.get<ApiResponse<TicketingStats[]>>(this.API_URL, { params }).pipe(
       map(response => {
         if (response.status === 'success') {
           return response.data ?? [];

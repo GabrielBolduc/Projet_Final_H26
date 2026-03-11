@@ -254,7 +254,21 @@
     "REVENUES": "Revenues",
     "PROFIT": "Profit",
     "AVG_TICKETS": "Avg. tickets sold per order",
-    "REFUNDS": "Refunds amount"
+    "REFUNDS": "Refunds amount",
+    "DATE_FROM": "From",
+    "DATE_TO": "To",
+    "PACKAGE_TYPES": "Package types",
+    "PACKAGE_GENERAL": "General",
+    "PACKAGE_DAILY": "Daily",
+    "PACKAGE_EVENING": "Evening",
+    "EXPENSES_TOTAL": "Expenses (Total)",
+    "EXPENSES_PERFORMANCE": "Expenses (Performances)",
+    "EXPENSES_OTHER": "Expenses (Other)",
+    "REVENUES_TOTAL": "Revenue (Total)",
+    "REVENUES_TICKETS": "Revenue (Tickets)",
+    "REVENUES_OTHER": "Revenue (Other)",
+    "REFUNDS_COUNT": "Refunds (Count)",
+    "EMPTY": "No stats available for the selected filters."
   },
   "TICKETING_PUBLIC": {
     "TITLE": "Ticketing",
@@ -671,7 +685,7 @@
     "MESSAGE": "The page you're looking for doesn't exist or has been moved.",
     "BTN": "Go Home"
   },
-  "STATS": {
+  "STATS-ACCOMMODATIONS": {
     "ACCOMMODATIONS": {
       "HIGHEST_EARNER": "Most Profitable Accommodation",
       "LOWEST_EARNER": "Least Profitable Accommodation",

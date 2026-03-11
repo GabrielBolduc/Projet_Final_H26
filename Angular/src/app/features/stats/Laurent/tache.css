@@ -1,0 +1,38 @@
+.report-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.report-card {
+  padding: 20px;
+  border-radius: 14px;
+  border: 2px solid var(--mat-sys-on-surface);
+  background: var(--mat-sys-surface-container-low);
+  transition: none; /* remove hover animation */
+}
+
+.report-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.report-item mat-icon {
+  font-size: 28px;
+  color: var(--mat-sys-primary);
+}
+
+.label {
+  flex: 1;
+  font-weight: 600;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font-weight: bold;
+}

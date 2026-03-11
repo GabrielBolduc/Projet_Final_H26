@@ -2,41 +2,37 @@
   <div class="header-section">
     <h1>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }}</h1>
 
-    <div class="filter-row">
-      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-        <mat-label>Rechercher</mat-label>
-        <input matInput 
-               [value]="searchTerm()" 
-               (input)="updateSearch(trigger.value)" 
-               #trigger 
-               [matAutocomplete]="auto">
-        
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="updateSearch($event.option.value)">
-          @for (option of filteredOptions(); track option) {
-            <mat-option [value]="option">{{ option }}</mat-option>
-          }
-        </mat-autocomplete>
+    <div class="filters-card">
+      <div class="filter-row">
+        <mat-form-field appearance="outline" class="filter-field search-field" subscriptSizing="dynamic">
+          <mat-label>Rechercher</mat-label>
+          <input matInput [value]="searchTerm()" (input)="updateSearch(trigger.value)" #trigger [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="updateSearch($event.option.value)">
+            @for (option of filteredOptions(); track option) {
+              <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-autocomplete>
+          <div matSuffix class="suffix-container">
+            @if (searchTerm()) {
+              <button mat-icon-button (click)="updateSearch('')" type="button" class="clear-btn">
+                <mat-icon>close</mat-icon>
+              </button>
+            } @else {
+              <mat-icon>search</mat-icon>
+            }
+          </div>
+        </mat-form-field>
 
-        <div matSuffix class="suffix-container">
-          @if (searchTerm()) {
-            <button mat-icon-button (click)="updateSearch('')" type="button" class="clear-btn">
-              <mat-icon>close</mat-icon>
-            </button>
-          } @else {
-            <mat-icon>search</mat-icon>
-          }
-        </div>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="status-combo" subscriptSizing="dynamic">
-        <mat-label>{{ 'RESERVATIONS.STATUS.STATUS_LABEL' | translate }}</mat-label>
-        <mat-select [value]="statusFilter()" (selectionChange)="statusFilter.set($any($event).value)">
-          <mat-option value="all">{{ 'RESERVATIONS.STATUS.ALL' | translate }}</mat-option>
-          <mat-option value="active">{{ 'RESERVATIONS.STATUS.ACTIVE' | translate }}</mat-option>
-          <mat-option value="cancelled">{{ 'RESERVATIONS.STATUS.CANCELLED' | translate }}</mat-option>
-          <mat-option value="archived">{{ 'RESERVATIONS.STATUS.ARCHIVED' | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field appearance="outline" class="filter-field status-combo" subscriptSizing="dynamic">
+          <mat-label>{{ 'RESERVATIONS.STATUS.STATUS_LABEL' | translate }}</mat-label>
+          <mat-select [value]="statusFilter()" (selectionChange)="statusFilter.set($any($event).value)">
+            <mat-option value="all">{{ 'RESERVATIONS.STATUS.ALL' | translate }}</mat-option>
+            <mat-option value="active">{{ 'RESERVATIONS.STATUS.ACTIVE' | translate }}</mat-option>
+            <mat-option value="cancelled">{{ 'RESERVATIONS.STATUS.CANCELLED' | translate }}</mat-option>
+            <mat-option value="archived">{{ 'RESERVATIONS.STATUS.ARCHIVED' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </div>
 

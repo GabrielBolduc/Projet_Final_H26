@@ -545,7 +545,7 @@ acc3old = Accommodation.create!(
 )
 
 acc4old = Accommodation.create!(
-  name: "The Front Row Fields - old",
+  name: "The Front Row Fields - old old",
   category: :camping,
   address: "Zero Mile Marker, Glastonbury",
   latitude: 46.5250,
@@ -555,6 +555,58 @@ acc4old = Accommodation.create!(
   time_walk: Time.parse("00:05:00"),
   commission: 2.50,
   festival: f2
+)
+
+acc1oldold = Accommodation.create!(
+  name: "Grand Royal Hotel - old old",
+  category: :hotel,
+  address: "123 Festival Lane, Palm Springs, CA",
+  latitude: 46.56571486688975,
+  longitude: -72.72712896089062,
+  shuttle: true,
+  time_car: Time.parse("00:15:00"),
+  time_walk: Time.parse("01:00:00"),
+  commission: 12.50,
+  festival: f4
+)
+
+acc2oldold = Accommodation.create!(
+  name: "Wildwood Luxury Camping - old old",
+  category: :camping,
+  address: "North Gate, Sector B, Glastonbury",
+  latitude: 46.52391224860748,
+  longitude: -72.32665159829943,
+  shuttle: false,
+  time_car: Time.parse("00:05:00"),
+  time_walk: Time.parse("00:10:00"),
+  commission: 10.00,
+  festival: f4
+)
+
+acc3oldold = Accommodation.create!(
+  name: "Starlight Hostel - old old",
+  category: :hotel,
+  address: "45 Economy St, Downtown",
+  latitude: 46.5400,
+  longitude: -72.7400,
+  shuttle: false,
+  time_car: Time.parse("00:11:00"),
+  time_walk: Time.parse("00:46:00"),
+  commission: 20.00,
+  festival: f4
+)
+
+acc4oldold = Accommodation.create!(
+  name: "The Front Row Fields - old",
+  category: :camping,
+  address: "Zero Mile Marker, Glastonbury",
+  latitude: 46.5250,
+  longitude: -72.3300,
+  shuttle: false,
+  time_car: Time.parse("00:02:00"),
+  time_walk: Time.parse("00:05:00"),
+  commission: 2.50,
+  festival: f4
 )
 
 
@@ -760,6 +812,106 @@ unit_camp_premium_old = Units::DeluxeTerrain.new(
 )
 
 
+unit1oldold = Units::SimpleRoom.new(
+  accommodation: acc1oldold,
+  cost_person_per_night: 50.00,
+  quantity: 10,
+  wifi: true,
+  water: 2,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_hotel_mid_old_old = Units::DoubleRoom.new(
+  accommodation: acc1oldold,
+  cost_person_per_night: 85.00,
+  quantity: 12,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+unit_hotel_high_old_old = Units::FamilyRoom.new(
+  accommodation: acc1oldold,
+  cost_person_per_night: 150.00,
+  quantity: 5,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Room service,Restaurant"
+)
+
+unit_camp_low_old_old = Units::SmallTerrain.new(
+  accommodation: acc2oldold,
+  cost_person_per_night: 25.00,
+  quantity: 30,
+  wifi: false,
+  water: :no_water,
+  electricity: false,
+  parking_cost: 5.00,
+  food_options: "None"
+)
+
+unit_camp_high_old_old = Units::DeluxeTerrain.new(
+  accommodation: acc2oldold,
+  cost_person_per_night: 75.00,
+  quantity: 10,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "Canteen"
+)
+
+unit_hotel_basic_old_old = Units::SimpleRoom.new(
+  accommodation: acc3oldold,
+  cost_person_per_night: 350.00,
+  quantity: 20,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 5.00,
+  food_options: "Canteen"
+)
+
+unit_hotel_double_old_old = Units::DoubleRoom.new(
+  accommodation: acc3oldold,
+  cost_person_per_night: 65.00,
+  quantity: 8,
+  wifi: false,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 5.00,
+  food_options: "Canteen"
+)
+
+unit_camp_standard_old_old = Units::StandardTerrain.new(
+  accommodation: acc4oldold,
+  cost_person_per_night: 60.00,
+  quantity: 25,
+  wifi: false,
+  water: :undrinkable,
+  electricity: true,
+  parking_cost: 0.00,
+  food_options: "None"
+)
+
+unit_camp_premium_old_old = Units::DeluxeTerrain.new(
+  accommodation: acc4oldold,
+  cost_person_per_night: 10.00,
+  quantity: 4,
+  wifi: true,
+  water: :drinkable,
+  electricity: true,
+  parking_cost: 10.00,
+  food_options: "Restaurant"
+)
+
+
 # Racine
 
 p_general = Package.create!(
@@ -955,7 +1107,17 @@ images = {
   unit_hotel_basic_old   => 'hotel-water.jpg',
   unit_hotel_double_old  => 'hotel-water-2.jpg',
   unit_camp_standard_old => 'lava-camping.jpg',
-  unit_camp_premium_old  => 'lava-camping-2.jpg'
+  unit_camp_premium_old  => 'lava-camping-2.jpg',
+
+  unit1oldold => 'hotel-image.jpg',
+  unit_hotel_mid_old_old => 'hotel-mid.jpg',
+  unit_hotel_high_old_old => 'hotel-high.jpg',
+  unit_camp_low_old_old => 'camping-cheap.jpg',
+  unit_camp_high_old_old => 'oubliette.jpg',
+  unit_hotel_basic_old_old   => 'hotel-water.jpg',
+  unit_hotel_double_old_old  => 'hotel-water-2.jpg',
+  unit_camp_standard_old_old => 'lava-camping.jpg',
+  unit_camp_premium_old_old  => 'lava-camping-2.jpg'
 }
 
 images.each do |package, filename|
@@ -975,7 +1137,7 @@ end
 
 ## Alexandre 2
 
-#actuel
+# actuel
 unit1.save!
 unit_camp_high.save!
 unit_camp_low.save!
@@ -986,7 +1148,7 @@ unit_hotel_double.save!
 unit_camp_standard.save!
 unit_camp_premium.save!
 
-#passe
+# passe
 
 unit1old.save!
 unit_camp_high_old.save!
@@ -997,6 +1159,16 @@ unit_hotel_basic_old.save!
 unit_hotel_double_old.save!
 unit_camp_standard_old.save!
 unit_camp_premium_old.save!
+
+unit1oldold.save!
+unit_camp_high_old_old.save!
+unit_camp_low_old_old.save!
+unit_hotel_high_old_old.save!
+unit_hotel_mid_old_old.save!
+unit_hotel_basic_old_old.save!
+unit_hotel_double_old_old.save!
+unit_camp_standard_old_old.save!
+unit_camp_premium_old_old.save!
 
 # Reservations festival actuel
 
@@ -1014,7 +1186,7 @@ res1 = Reservation.create!(
 res2 = Reservation.create!(
   arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 18),
-  nb_of_people: 6, 
+  nb_of_people: 6,
   reservation_name: "Alice Wonderland",
   phone_number: "8195554444",
   user: c2,
@@ -1037,7 +1209,7 @@ res3 = Reservation.create!(
 res4 = Reservation.create!(
   arrival_at: f.start_at,
   departure_at: f.end_at,
-  nb_of_people: 2, 
+  nb_of_people: 2,
   reservation_name: "Charlie Day",
   phone_number: "8195556666",
   user: c,
@@ -1047,9 +1219,9 @@ res4 = Reservation.create!(
 )
 
 res5 = Reservation.create!(
-  arrival_at: Date.new(2026, 7, 15), 
+  arrival_at: Date.new(2026, 7, 15),
   departure_at: Date.new(2026, 7, 17),
-  nb_of_people: 2, 
+  nb_of_people: 2,
   reservation_name: "Dana Scully",
   phone_number: "8195557777",
   user: c4,
@@ -1176,6 +1348,138 @@ res10old = Reservation.create!(
   user: c4,
   unit: unit_camp_standard_old,
   festival: f2,
+  status: :completed
+)
+
+
+
+# Oct 27 to Oct 29 (3 days before)
+res1oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 10, 27),
+  departure_at: Date.new(2024, 10, 29),
+  nb_of_people: 1,
+  reservation_name: "Jean Danieler",
+  phone_number: "+1 (819) 555-3333",
+  user: c,
+  unit: unit1oldold,
+  festival: f4,
+  status: :completed
+)
+
+# Oct 27 to Oct 28
+res2oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 10, 27),
+  departure_at: Date.new(2024, 10, 28),
+  nb_of_people: 6,
+  reservation_name: "Alice Wonderlander",
+  phone_number: "+1 (819) 555-4444",
+  user: c2,
+  unit: unit_camp_high_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Oct 28 to Oct 29 (No overlap with res2oldold)
+res3oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 10, 28),
+  departure_at: Date.new(2024, 10, 29),
+  nb_of_people: 4,
+  reservation_name: "Bob Builderer",
+  phone_number: "+1 (819) 555-5555",
+  user: c3,
+  unit: unit_camp_high_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Oct 30 to Oct 31 (During Festival)
+res4oldold = Reservation.create!(
+  arrival_at: f4.start_at,
+  departure_at: f4.end_at,
+  nb_of_people: 2,
+  reservation_name: "Charlie Dayer",
+  phone_number: "+1 (819) 555-6666",
+  user: c,
+  unit: unit_hotel_double_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Oct 27 to Oct 29
+res5oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 10, 27),
+  departure_at: Date.new(2024, 10, 29),
+  nb_of_people: 2,
+  reservation_name: "Dana Scullierer",
+  phone_number: "+1 (819) 555-7777",
+  user: c4,
+  unit: unit_camp_standard_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Nov 1 to Nov 3 (After Festival)
+res6oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 11, 1),
+  departure_at: Date.new(2024, 11, 3),
+  nb_of_people: 1,
+  reservation_name: "Jean Danielierer",
+  phone_number: "+1 (819) 555-3333",
+  user: c,
+  unit: unit1oldold,
+  festival: f4,
+  status: :completed
+)
+
+# Nov 1 to Nov 2
+res7oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 11, 1),
+  departure_at: Date.new(2024, 11, 2),
+  nb_of_people: 6,
+  reservation_name: "Alice Wonderlanderer",
+  phone_number: "+1 (819) 555-4444",
+  user: c2,
+  unit: unit_camp_high_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Nov 2 to Nov 3 (No overlap with res7oldold)
+res8oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 11, 2),
+  departure_at: Date.new(2024, 11, 3),
+  nb_of_people: 4,
+  reservation_name: "Bob Buildererer",
+  phone_number: "+1 (819) 555-5555",
+  user: c3,
+  unit: unit_camp_high_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Oct 30 to Oct 31 (During Festival)
+res9oldold = Reservation.create!(
+  arrival_at: f4.start_at,
+  departure_at: f4.end_at,
+  nb_of_people: 1,
+  reservation_name: "Charlie Gayerer",
+  phone_number: "+1 (819) 555-6666",
+  user: c,
+  unit: unit_hotel_basic_old_old,
+  festival: f4,
+  status: :completed
+)
+
+# Nov 1 to Nov 2
+res10oldold = Reservation.create!(
+  arrival_at: Date.new(2024, 11, 1),
+  departure_at: Date.new(2024, 11, 2),
+  nb_of_people: 2,
+  reservation_name: "Dana Scullierer",
+  phone_number: "+1 (819) 555-7777",
+  user: c4,
+  unit: unit_camp_standard_old_old,
+  festival: f4,
   status: :completed
 )
 

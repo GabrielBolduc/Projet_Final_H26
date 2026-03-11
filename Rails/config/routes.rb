@@ -12,10 +12,11 @@ Rails.application.routes.draw do
     resources :tasks do
       collection do
         get "get_reusable", to: "tasks#get_reusable"
+        get "raport", to: "tasks#raport"
       end
     end
 
-    get 'stats/festivals', to: 'festivals_stats#index'
+    get "stats/festivals", to: "festivals_stats#index"
 
     resources :stages, only: [ :index ]
     resources :performances
@@ -35,7 +36,7 @@ Rails.application.routes.draw do
 
     resources :packages
 
-    get "ticketing_stats", to: "ticketing_stats#index"
+    get "stats/ticketing", to: "ticketing_stats#index"
     get "stats/accommodations", to: "accommodations_stats#index"
 
     namespace :admin do

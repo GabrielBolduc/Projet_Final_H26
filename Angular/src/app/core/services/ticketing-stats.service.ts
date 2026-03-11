@@ -8,7 +8,7 @@ import { TicketingStats } from '../models/ticketing-stats';
 @Injectable({ providedIn: 'root' })
 export class TicketingStatsService {
   private http = inject(HttpClient);
-  private readonly API_URL = '/api/ticketing_stats';
+  private readonly API_URL = '/api/stats/ticketing';
 
   getStats(filters: { start_date?: string; end_date?: string; categories?: string } = {}): Observable<TicketingStats[]> {
     const params = Object.fromEntries(

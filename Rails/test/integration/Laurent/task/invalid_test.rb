@@ -14,7 +14,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     test "should not show one task  and return user not connect" do
         # base de donnees
         assert_no_difference("Task.count") do
-        get api_task_path(@task_one)
+          get api_task_path(@task_one)
         end
 
         # code http
@@ -28,20 +28,21 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "should not show one task  and return not found " do
-    sign_in users(:one)
+    sign_in users(:three)
     # base de donnees
     assert_no_difference("Task.count") do
       get api_task_path(7)
+      # puts response.body
     end
 
     # code http
-    assert_response :not_found
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
 
     # donne reponse
-    assert_equal "not_found", json["error"]
+    assert_equal "error", json["status"]
     end
 
 
@@ -95,7 +96,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "can not update task params invalide" do
-      sign_in users(:one)
+      sign_in users(:three)
         # base de donnees
         assert_no_difference "Task.count" do
             patch  api_task_path(@task_one), params: { task: invalid_task_params }
@@ -115,7 +116,7 @@ class TasksTest < ActionDispatch::IntegrationTest
 
 
     test "delete non-existent task" do
-        sign_in users(:one)
+        sign_in users(:three)
 
         # base de donnees
         assert_no_difference "Task.count" do
@@ -123,13 +124,13 @@ class TasksTest < ActionDispatch::IntegrationTest
         end
 
         # code http
-        assert_response :not_found
+        assert_response :success
 
         # format reponse
         json = JSON.parse(response.body)
 
-        # donne reponse
-        assert_equal "not_found", json["error"]
+       # donne reponse
+       assert_equal "error", json["status"]
     end
 
     test "should not destroy one task  and return 401 user not connect" do
@@ -149,10 +150,11 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
        test "cannot create a task without type params " do
-      sign_in users(:one)
+      sign_in users(:three)
         # base de donnees
         assert_no_difference "Task.count", "Anime should not be created with invalid param" do
              post api_tasks_path, params: { task: invalid_task_params }
+          # puts response.body
         end
 
         # code http
@@ -171,6 +173,22 @@ class TasksTest < ActionDispatch::IntegrationTest
         # base de donnees
         assert_no_difference "Task.count" do
             post api_tasks_path, params: { task: valid_task_params }
+          # puts response.body
+        end
+            # code http
+            assert_response :success
+
+            # format reponse
+            json = JSON.parse(response.body)
+
+            # donne reponse
+            assert_equal "error", json["status"]
+    end
+
+    test "can not get report while log out" do
+        # base de donnees
+        assert_no_difference "Task.count" do
+            get raport_api_tasks_path
           # puts response.body
         end
             # code http

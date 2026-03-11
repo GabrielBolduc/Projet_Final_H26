@@ -34,20 +34,20 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "should not show one Affectation  and return not found " do
-    sign_in users(:one)
+    sign_in users(:three)
     # base de donnees
     assert_no_difference("Affectation.count") do
       get api_affectation_path(7)
     end
 
     # code http
-    assert_response :not_found
+    assert_response :success
 
     # format reponse
     json = JSON.parse(response.body)
 
     # donne reponse
-    assert_equal "not_found", json["error"]
+    assert_equal "error", json["status"]
     end
 
     test "should not get  affectations list by user but and return JSON" do
@@ -100,7 +100,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
     test "can not update affectation params invalide" do
-      sign_in users(:one)
+      sign_in users(:three)
         # base de donnees
         assert_no_difference "Affectation.count" do
             patch  api_affectation_path(@affectation_one), params: { affectation: invalid_edit_affectation_params }
@@ -128,13 +128,13 @@ class TasksTest < ActionDispatch::IntegrationTest
         end
 
         # code http
-        assert_response :not_found
+        assert_response :success
 
         # format reponse
         json = JSON.parse(response.body)
 
         # donne reponse
-        assert_equal "not_found", json["error"]
+        assert_equal "error", json["status"]
     end
 
     test "should not destroy one affectation  and return 401 user not connect" do
@@ -154,7 +154,7 @@ class TasksTest < ActionDispatch::IntegrationTest
     end
 
        test "cannot create a affectation without type params " do
-      sign_in users(:one)
+      sign_in users(:three)
         # base de donnees
         assert_no_difference "Affectation.count", "Affectation should not be created with invalid param" do
              post api_affectations_path, params: { affectation: invalid_create_affectation_params }

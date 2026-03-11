@@ -15,6 +15,15 @@ class Api::TasksController < ApiController
             @tasks = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id))
         end
 
+        if params[:status] == "ongoing"
+            @tasks = @tasks.where(
+                id: Affectation
+                .where.not(start: nil)
+                .where(end: nil)
+                .select(:task_id)
+            )
+        end
+
 
         case params[:orderBy]
 
@@ -43,6 +52,39 @@ class Api::TasksController < ApiController
             data: @tasks.as_json(task_json)
         }, status: :ok
     end
+
+    def raport
+        @tasks = Task.all
+
+        @tasks_count = Task.all.count
+
+        @tasks_completed = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id)).count
+
+        @tasks_ongoing = @tasks.where(
+                id: Affectation
+                .where.not(start: nil)
+                .where(end: nil)
+                .select(:task_id)
+            ).count
+
+        @tasks_waiting = @tasks.where(
+                id: Affectation
+                .where(start: nil)
+                .where(end: nil)
+                .select(:task_id)
+            ).count
+
+        render json: {
+            status: "success",
+            data: {
+            tasks_count: @tasks_count,
+            tasks_completed: @tasks_completed,
+            tasks_ongoing: @tasks_ongoing,
+            tasks_waiting: @tasks_waiting
+            }
+        }, status: :ok
+    end
+
     def show
        render json: {
         status: "success",

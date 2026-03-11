@@ -143,25 +143,55 @@ f2 = Festival.create!(
   comment: "Bon festival"
 )
 
+f3 = Festival.create!(
+  name: "Festify winter",
+  start_at: Date.new(2026, 12, 20),
+  end_at: Date.new(2026, 12, 31),
+  daily_capacity: 6000,
+  address: "123 Rue rue, Shawinigan, QC",
+  latitude: 46.577793,
+  longitude: -72.710997,
+  status: "draft",
+  satisfaction: 4,
+  other_income: 15000.00,
+  other_expense: 5000.00,
+  comment: "Bon festival d'hiver"
+)
+
+f4 = Festival.create!(
+  name: "Festify Fall",
+  start_at: Date.new(2026, 10, 30),
+  end_at: Date.new(2026, 10, 31),
+  daily_capacity: 6000,
+  address: "123 Rue rue, Shawinigan, QC",
+  latitude: 46.559249,
+  longitude: -72.736864,
+  status: "draft",
+  satisfaction: 4,
+  other_income: 25000.00,
+  other_expense: 6000.00,
+  comment: "Bon festival d'authomne"
+)
+
 main_stage = Stage.create!(
-    name: "Main stage",
-    capacity: 15000,
-    environment: "outdoor",
-    technical_specs: "Big speaker"
+  name: "Main stage",
+  capacity: 15000,
+  environment: "outdoor",
+  technical_specs: "Big speaker"
 )
 
 b_stage = Stage.create!(
-    name: "Secondary stage",
-    capacity: 8000,
-    environment: "indoor",
-    technical_specs: "Medium stage"
+  name: "Secondary stage",
+  capacity: 8000,
+  environment: "indoor",
+  technical_specs: "Medium stage"
 )
 
 c_stage = Stage.create!(
-    name: "Small stage",
-    capacity: 2000,
-    environment: "covered",
-    technical_specs: "Small speaker"
+  name: "Small stage",
+  capacity: 2000,
+  environment: "covered",
+  technical_specs: "Small speaker"
 )
 
 artist1 = Artist.create!(
@@ -329,11 +359,96 @@ Performance.create!(
   artist: artist2
 )
 
+# perf pour f3 (completed)
+Performance.create!(
+  title: "First Winter Show",
+  description: "Un show dehors",
+  price: 1500.00,
+  start_at: f3.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f3.start_at.to_time.change(hour: 22, min: 0),
+  festival: f3,
+  stage: b_stage,
+  artist: artist2
+)
+
+Performance.create!(
+  title: "Winter Show",
+  description: "Un show",
+  price: 14000,
+  start_at: (f3.start_at + 1.day).to_time.change(hour: 19, min: 0),
+  end_at: (f3.start_at + 1.day).to_time.change(hour: 20, min: 30),
+  festival: f3,
+  stage: b_stage,
+  artist: artist4
+)
+
+Performance.create!(
+  title: "Last Winter Show",
+  description: "Un dernier show show",
+  price: 14000,
+  start_at: (f3.start_at + 2.day).to_time.change(hour: 19, min: 0),
+  end_at: (f3.start_at + 2.day).to_time.change(hour: 20, min: 30),
+  festival: f3,
+  stage: b_stage,
+  artist: artist1
+)
+
+# perf pour f4 (completed)
+Performance.create!(
+  title: "First Fall Show",
+  description: "Un show couvert",
+  price: 1500.00,
+  start_at: f4.start_at.to_time.change(hour: 16, min: 0),
+  end_at: f4.start_at.to_time.change(hour: 19, min: 0),
+  festival: f4,
+  stage: c_stage,
+  artist: artist1
+)
+
+Performance.create!(
+  title: "Nice Fall Show",
+  description: "Un show couvert",
+  price: 1500.00,
+  start_at: f4.start_at.to_time.change(hour: 20, min: 0),
+  end_at: f4.start_at.to_time.change(hour: 22, min: 0),
+  festival: f4,
+  stage: c_stage,
+  artist: artist2
+)
+
+Performance.create!(
+  title: "Big Fall Show",
+  description: "Un show",
+  price: 14000,
+  start_at: (f4.start_at + 1.day).to_time.change(hour: 18, min: 0),
+  end_at: (f4.start_at + 1.day).to_time.change(hour: 20, min: 0),
+  festival: f4,
+  stage: c_stage,
+  artist: artist3
+)
+
+Performance.create!(
+  title: "Last Fall Show",
+  description: "Un show",
+  price: 14000,
+  start_at: (f4.start_at + 1.day).to_time.change(hour: 21, min: 0),
+  end_at: (f4.start_at + 1.day).to_time.change(hour: 23, min: 30),
+  festival: f4,
+  stage: c_stage,
+  artist: artist4
+)
+
 f2.update!(status: "completed", start_at: Date.new(2025, 7, 15), end_at: Date.new(2025, 7, 20))
 f2.reload
 
-## Alexandre 1
+f3.update!(status: "completed", start_at: Date.new(2025, 12, 20), end_at: Date.new(2025, 12, 31))
+f3.reload
 
+f4.update!(status: "completed", start_at: Date.new(2024, 10, 30), end_at: Date.new(2024, 10, 31))
+f4.reload
+
+# Alexandre
+## Alexandre 1
 # Accommodations festival actuel.
 acc1 = Accommodation.create!(
   name: "Grand Royal Hotel",

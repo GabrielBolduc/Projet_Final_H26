@@ -141,18 +141,15 @@ export class AccommodationsForm implements OnInit {
         ? this.service.updateAccommodation(id!, payload) 
         : this.service.createAccommodation(payload);
 
-      request.subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          this.router.navigate(['/accommodations'], { 
-            queryParams: { category: categoryLabel } 
-          });
-        },
-        error: (err) => {
-          this.serverErrors.set([err.message]);
-          this.isLoading.set(false);
-        }
-      });
+        request.subscribe({
+          next: () => {
+            this.isLoading.set(false);
+            this.router.navigate(['/accommodations'], { 
+              queryParams: { category: categoryLabel } 
+            });
+          },
+          error: (err) => this.handleError(err)
+        });
     }
   }
 
@@ -178,14 +175,25 @@ export class AccommodationsForm implements OnInit {
     this.service.deleteAccommodation(id).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/accommodations'], { 
-          queryParams: { category: categoryLabel } 
-        });
+        this.router.navigate(['/accommodations'], { queryParams: { category: categoryLabel } });
       },
-      error: (err) => {
-        this.serverErrors.set([err.message]);
-        this.isLoading.set(false);
-      }
+      error: (err) => this.handleError(err)
     });
+  }
+
+  private handleError(err: any) {
+    this.isLoading.set(false);
+    const apiError = err.error || err;
+
+    if (apiError.errors) {
+      const messages = Object.entries(apiError.errors).map(
+        ([field, msgs]) => `${field.replace('_', ' ')}: ${(msgs as string[]).join(', ')}`
+      );
+      this.serverErrors.set(messages);
+    } else if (apiError.message) {
+      this.serverErrors.set(Array.isArray(apiError.message) ? apiError.message : [apiError.message]);
+    } else {
+      this.serverErrors.set(['An unexpected error occurred.']);
+    }
   }
 }

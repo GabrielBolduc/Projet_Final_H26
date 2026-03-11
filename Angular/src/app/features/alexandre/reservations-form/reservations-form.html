@@ -1,4 +1,9 @@
 <mat-card class="perf-card">
+
+  @if (accommodationName()) {
+    <h1 class="accommodation-title">{{ accommodationName() }}</h1>
+  }
+
   <button mat-stroked-button 
           type="button" 
           class="fill-info-btn" 
@@ -98,6 +103,11 @@
     @if (form.errors?.['dateRangeInvalid'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
       <p class="form-error" style="text-align: left; margin-top: -10px;">
         {{ 'RESERVATIONS.ERRORS.INVALID_RANGE' | translate }}
+      </p>
+    }
+    @if (form.errors?.['rangeContainsReserved'] && (form.get('arrival_at')?.touched || form.get('departure_at')?.touched)) {
+      <p class="form-error" style="text-align: left; margin-top: -10px;">
+        {{ 'RESERVATIONS.ERRORS.CONTAINS_RESERVED_DATES' | translate }}
       </p>
     }
 

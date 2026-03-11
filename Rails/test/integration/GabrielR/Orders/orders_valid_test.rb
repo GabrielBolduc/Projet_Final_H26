@@ -30,10 +30,14 @@ class OrdersValidTest < ActionDispatch::IntegrationTest
     assert json["data"].all? { |o| o["user_id"] == @client.id }
 
     # discount présence
-    order_data = json["data"].first
+    order_data = json["data"].find { |o| o["id"] == @order.id }
     assert_not_nil order_data["subtotal"]
     assert_not_nil order_data["discount"]
     assert_not_nil order_data["total_price"]
+
+    expected_subtotal = @order.tickets.where(refunded_at: nil).sum(:price).to_f
+    assert_equal expected_subtotal, order_data["subtotal"].to_f
+    assert_equal (expected_subtotal - @order.discount.to_f), order_data["total_price"].to_f
   end
 
   test "client should show one of their orders" do
@@ -56,7 +60,7 @@ class OrdersValidTest < ActionDispatch::IntegrationTest
     assert_not_nil json["data"]["tickets"]
 
     # discount exactitude
-    expected_subtotal = @order.tickets.sum(&:price).to_f
+    expected_subtotal = @order.tickets.where(refunded_at: nil).sum(:price).to_f
     assert_equal expected_subtotal, json["data"]["subtotal"].to_f
     assert_equal @order.discount.to_f, json["data"]["discount"].to_f
     assert_equal (expected_subtotal - @order.discount.to_f), json["data"]["total_price"].to_f

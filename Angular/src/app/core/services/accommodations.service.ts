@@ -59,6 +59,9 @@ export class AccommodationsService {
     if (response.status === 'success') {
       return response.data;
     } else {
+      if (response.errors) {
+        throw response; 
+      }
       const errorMessage = response.message || 'Server Error';
       throw new Error(Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage);
     }

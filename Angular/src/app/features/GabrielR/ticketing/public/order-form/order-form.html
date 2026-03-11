@@ -27,23 +27,14 @@
         </div>
       }
 
-      <div class="pricing-summary" [class.has-discount-rule]="discountHint()">
-        @if (discount() > 0) {
-          <div class="pricing-row total-row" [class.has-discount]="discount() > 0">
-            <span>{{ 'TICKETING_PUBLIC.SUBTOTAL' | translate }} :</span>
-            <span>
-              {{ subtotal() | currency:'CAD':'symbol-narrow' }}
-              <span class="price-breakdown">({{ quantity() }} × {{ (selectedPackage()?.price ?? 0) | currency:'CAD':'symbol-narrow' }})</span>
-            </span>
-          </div>
-          <div class="pricing-row discount-row">
-            <span>{{ 'TICKETING_PUBLIC.DISCOUNT' | translate }} ({{ discountHint()?.rate | percent }}) :</span>
-            <span>-{{ discount() | currency:'CAD':'symbol-narrow' }}</span>
-          </div>
-        }
+      <div class="pricing-summary">
         <div class="pricing-row total-row">
           <span class="price">{{ totalPrice() | currency:'CAD':'symbol-narrow' }}</span>
-          @if (quantity() > 1 && discount() === 0) {
+          @if (discount() > 0) {
+            <span class="discount-inline">
+              {{ 'TICKETING_PUBLIC.SAVE' | translate }} {{ discountHint()?.rate | percent }} / -{{ discount() | currency:'CAD':'symbol-narrow' }}
+            </span>
+          } @else if (quantity() > 1) {
             <span class="price-breakdown">
               ({{ quantity() }} × {{ (selectedPackage()?.price ?? 0) | currency:'CAD':'symbol-narrow' }})
             </span>

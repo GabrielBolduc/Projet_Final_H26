@@ -32,7 +32,12 @@ export class ReservationsService {
       });
     }
 
-    return this.http.get<ApiResponse<Reservation[]>>(`${this.BASE_URL}/reservations`, { params });
+    return this.http.get<ApiResponse<Reservation[]>>(`${this.BASE_URL}/reservations`, { params }).pipe(
+      map(res => {
+        if (res.status === 'error') throw res;
+        return res;
+      })
+    );
   }
 
   get(id: number): Observable<Reservation> {
@@ -68,7 +73,7 @@ export class ReservationsService {
     if (response.status === 'success') {
       return response.data;
     } else {
-      throw new Error(response.message || 'An unknown error occurred');
+      throw response; 
     }
   }
 }

@@ -68,7 +68,7 @@
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 40px;
-  border: 1px solid var(--mat-sys-outline-variant);
+  border: 2px solid var(--mat-sys-on-surface);
   flex-wrap: wrap;
 }
 

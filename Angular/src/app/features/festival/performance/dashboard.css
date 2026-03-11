@@ -65,7 +65,7 @@
   padding: 20px;
   border-radius: 15px;
   margin-bottom: 40px;
-  border: 1px solid var(--mat-sys-outline-variant);
+  border: 2px solid var(--mat-sys-on-surface);
   flex-wrap: wrap;
 }
 
@@ -73,6 +73,19 @@
   flex: 1;
   min-width: 250px;
 }
+
+.sort-btn {
+  height: 56px; 
+  border: 2px solid var(--mat-sys-primary);
+  color: var(--mat-sys-primary);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 28px;
+  padding: 0 24px;
+}
+
 
 .sort-toggle {
   height: 56px;

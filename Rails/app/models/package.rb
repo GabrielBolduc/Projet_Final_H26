@@ -8,7 +8,8 @@ class Package < ApplicationRecord
   scope :for_festival_status, ->(status) { joins(:festival).where(festivals: { status: status }) }
   scope :for_categories, ->(category_values) { where(category: category_values) }
   scope :search_by_title, ->(query) do
-    where("LOWER(packages.title) LIKE ?", "%#{sanitize_sql_like(query.downcase)}%")
+    search = "%#{sanitize_sql_like(query.downcase)}%"
+    where("LOWER(packages.title) LIKE :search OR LOWER(packages.description) LIKE :search", search: search)
   end
   scope :sorted_for_admin, ->(sort_key) do
     case sort_key
@@ -97,6 +98,44 @@ class Package < ApplicationRecord
   end
   private_class_method :sanitize_category_filters
 
+  def self.filter_by_weekdays(packages, raw_weekdays)
+    weekdays = parse_weekday_filters(raw_weekdays)
+    return packages if weekdays.empty?
+
+    packages.select { |package| package_includes_weekday?(package, weekdays) }
+  end
+
+  def self.parse_weekday_filters(raw_weekdays)
+    values = Array(raw_weekdays)
+      .flat_map { |value| value.to_s.split(",") }
+      .map { |value| value.to_s.strip }
+      .reject(&:blank?)
+
+    values.map { |value| Integer(value, exception: false) }
+          .compact
+          .select { |day| day.between?(0, 6) }
+          .uniq
+  end
+  private_class_method :parse_weekday_filters
+
+  def self.package_includes_weekday?(package, weekdays)
+    return false unless package.valid_at && package.expired_at
+
+    start_day = package.valid_at.to_date
+    end_day = package.expired_at.to_date
+    return false if end_day < start_day
+
+    current = start_day
+    0.upto(60) do
+      return true if weekdays.include?(current.wday)
+      current += 1
+      break if current > end_day
+    end
+
+    false
+  end
+  private_class_method :package_includes_weekday?
+
   def sold_count
     tickets.where(refunded_at: nil).count
   end
@@ -105,16 +144,38 @@ class Package < ApplicationRecord
     sold_count >= quota
   end
 
-  def self.total_tickets_sold_for_festival(festival_id)
-    joins(:tickets).where(festival_id: festival_id, tickets: { refunded_at: nil }).count
+  def self.for_festival_and_categories(festival_id, categories = nil)
+    scope = where(festival_id: festival_id)
+    return scope unless categories.present?
+    scope.where(category: categories)
   end
 
-  def self.total_revenue_for_festival(festival_id)
-    joins(:tickets).where(festival_id: festival_id, tickets: { refunded_at: nil }).sum("tickets.price")
+  def self.total_tickets_sold_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where(tickets: { refunded_at: nil })
+      .count
   end
 
-  def self.total_refunds_for_festival(festival_id)
-    joins(:tickets).where(festival_id: festival_id).where.not(tickets: { refunded_at: nil }).sum("tickets.price")
+  def self.total_revenue_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where(tickets: { refunded_at: nil })
+      .sum("tickets.price")
+  end
+
+  def self.total_refunds_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where.not(tickets: { refunded_at: nil })
+      .sum("tickets.price")
+  end
+
+  def self.total_refund_count_for_festival(festival_id, categories: nil)
+    for_festival_and_categories(festival_id, categories)
+      .joins(:tickets)
+      .where.not(tickets: { refunded_at: nil })
+      .count
   end
 
   private

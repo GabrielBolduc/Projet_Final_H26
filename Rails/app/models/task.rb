@@ -21,4 +21,14 @@ class Task < ApplicationRecord
     def completed
         affectations.exists? && affectations.where(end: nil).none?
     end
+
+    def ongoing
+        affectations.where.not(start: nil).exists? &&
+        affectations.where(end: nil).exists?
+    end
+
+    
+    def awaiting
+    affectations.where.not(start: nil).none?
+    end
 end

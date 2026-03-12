@@ -150,10 +150,9 @@ class TasksTest < ActionDispatch::IntegrationTest
         assert_response :success
 
         # contenu de reponse
-        assert_equal 5, json_response["data"]["tasks_count"]
-        assert_equal 5, json_response["data"]["tasks_completed"]
-        assert_equal 0, json_response["data"]["tasks_ongoing"]
-        assert_equal 0, json_response["data"]["tasks_waiting"]
+      assert json_response.is_a?(Hash)
+      assert_equal "success", json_response["status"]
+      assert json_response["data"].is_a?(Array), "data should be an array"
       end
 
 

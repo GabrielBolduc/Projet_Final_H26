@@ -461,6 +461,16 @@
       "COMPLETER": "Completer",
       "ORDER": "Ordonné",
       "ONGOING":"En cours"
+    },
+    "REPORT":{
+      "COMPLETE": "compléter",
+      "ONGOING":"En cours",
+      "WAITING": "En attente",
+      "STATUS":"Status",
+      "TASK":"Tâche",
+      "AFFECTATION":"Affectation",
+      "START":"Commence",
+      "END":"Finit"
     }
 
   },

@@ -56,32 +56,11 @@ class Api::TasksController < ApiController
     def raport
         @tasks = Task.all
 
-        @tasks_count = Task.all.count
-
-        @tasks_completed = @tasks.where.not(id: Affectation.where(end: nil).select(:task_id)).count
-
-        @tasks_ongoing = @tasks.where(
-                id: Affectation
-                .where.not(start: nil)
-                .where(end: nil)
-                .select(:task_id)
-            ).count
-
-        @tasks_waiting = @tasks.where(
-                id: Affectation
-                .where(start: nil)
-                .where(end: nil)
-                .select(:task_id)
-            ).count
+      
 
         render json: {
             status: "success",
-            data: {
-            tasks_count: @tasks_count,
-            tasks_completed: @tasks_completed,
-            tasks_ongoing: @tasks_ongoing,
-            tasks_waiting: @tasks_waiting
-            }
+            data: @tasks.as_json(task_report_json)
         }, status: :ok
     end
 
@@ -139,6 +118,19 @@ class Api::TasksController < ApiController
             success: true,
             only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
              methods: [ :file_url, :affectations_count, :completed ]
+        }
+    end
+
+    def task_report_json
+        {
+            success: true,
+            only: [:id, :title, :description, :reusable, :difficulty, :priority],
+            methods: [:file_url, :affectations_count, :completed ,:ongoing ,:awaiting ],
+            include: {
+                affectations: {
+                    only: [ :id, :status, :start, :end, :expected_start, :expected_end, :responsability]
+                }
+            }
         }
     end
 

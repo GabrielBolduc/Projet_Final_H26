@@ -121,7 +121,7 @@ export class TaskService {
   }
 
   raport(){
-    return this.http.delete<ApiResponse<TaskReport>>('api/tasks/raport').pipe(
+    return this.http.get<ApiResponse<TaskReport[]>>('api/tasks/raport').pipe(
              map(response => {
               console.log(response)
               if (response.status === 'success') {

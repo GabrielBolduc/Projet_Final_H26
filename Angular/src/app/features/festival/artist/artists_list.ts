@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, ViewChild, TemplateRef, effect } from '@angular/core';
+import { Component, OnDestroy, inject, signal, computed, ViewChild, TemplateRef, effect, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -30,7 +30,7 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
   templateUrl: './artists_list.html',
   styleUrls: ['./artists_list.css']
 })
-export class ArtistsListComponent implements OnInit, OnDestroy {
+export class ArtistsListComponent implements OnDestroy {
   @ViewChild('bioDialogTemplate') bioDialogTemplate!: TemplateRef<any>;
   @ViewChild('confirmDeleteTemplate') confirmDeleteTemplate!: TemplateRef<any>;
 
@@ -42,34 +42,53 @@ export class ArtistsListComponent implements OnInit, OnDestroy {
   private snackBar = inject(MatSnackBar);
   public translate = inject(TranslateService);
 
+  // 1. SIGNAL INPUTS (L'URL est la seule source de vérité)
+  search = input<string>();
+  genre = input<string>();
+
+  // 2. SIGNAUX CALCULÉS UTILITAIRES
+  parsedSearch = computed(() => this.search() || '');
+  parsedGenre = computed(() => this.genre() || null);
+
+  // 3. ÉTATS GLOBAUX
   artists = signal<Artist[]>([]);
+  availableGenres = signal<string[]>([]);
   isLoading = signal(true);
   serverErrors = signal<string[]>([]);
-  searchQuery = signal<string>('');
-  filterGenre = signal<string | null>(null);
+  
+  // Petit signal pour forcer le rafraîchissement après une suppression (facultatif mais très propre)
+  private reloadTrigger = signal<number>(0);
 
-  private initialized = false;
   private searchSubject = new Subject<string>();
-  private searchSubscription?: Subscription;
+  private searchSubscription: Subscription;
 
-  availableGenres = signal<string[]>([])
   displayedColumns: string[] = ['photo', 'name', 'genre', 'popularity', 'bio', 'actions'];
+  
   constructor() {
-    effect(() => {
-      if (!this.initialized) return;
-      const queryParams = {
-        search: this.searchQuery() || null,
-        genre: this.filterGenre() || null
-      };
-      this.router.navigate([], { relativeTo: this.route, queryParams, queryParamsHandling: 'merge', replaceUrl: true });
+    // A. Chargement initial des genres (remplace ngOnInit)
+    this.loadGenres();
+
+    // B. Configuration du Debounce RxJS pour la recherche textuelle
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(val => {
+      this.updateUrl({ search: val || null });
     });
 
+    // =====================================================================
+    // C. L'EXIGENCE DU PROFESSEUR : L'effect qui pilote la requête HTTP
+    // =====================================================================
     effect(async () => {
+      const q = this.parsedSearch();
+      const g = this.parsedGenre();
+      this.reloadTrigger(); // S'abonne au trigger de rechargement
+
       this.isLoading.set(true);
       try {
         const params: any = {};
-        if (this.searchQuery()) params.search = this.searchQuery();
-        if (this.filterGenre()) params.genre = this.filterGenre();
+        if (q) params.search = q;
+        if (g) params.genre = g;
         
         const data = await firstValueFrom(this.artistService.getArtists(params));
         this.artists.set(data);
@@ -81,29 +100,36 @@ export class ArtistsListComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    firstValueFrom(this.artistService.getGenres())
-    .then(genres => this.availableGenres.set(genres))
-    .catch(err => console.error(this.translate.instant('ARTIST_LIST.ERROR_GENRE'), err))
-
-    this.searchSubscription = this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(val => this.searchQuery.set(val));
-
-    const params = this.route.snapshot.queryParams;
-    if (params['search']) this.searchQuery.set(params['search']);
-    if (params['genre']) this.filterGenre.set(params['genre']);
-
-    this.initialized = true;
-  }
-
   ngOnDestroy(): void {
     this.searchSubscription?.unsubscribe();
   }
 
-  updateSearch(val: string) { this.searchSubject.next(val); }
-  updateGenre(genre: string | null) { this.filterGenre.set(genre); }
+  async loadGenres() {
+    try {
+      const genres = await firstValueFrom(this.artistService.getGenres());
+      this.availableGenres.set(genres);
+    } catch(err) {
+      console.error(this.translate.instant('ARTIST_LIST.ERROR_GENRE'), err);
+    }
+  }
+
+  // 4. FLUX UNIDIRECTIONNEL : On modifie l'URL !
+  updateSearch(val: string) { 
+    this.searchSubject.next(val); 
+  }
+  
+  updateGenre(genre: string | null) { 
+    this.updateUrl({ genre: genre || null }); 
+  }
+
+  private updateUrl(queryParams: any) {
+    this.router.navigate([], { 
+      relativeTo: this.route, 
+      queryParams, 
+      queryParamsHandling: 'merge', 
+      replaceUrl: true 
+    });
+  }
 
   navigateToAdd() { this.router.navigate(['/admin/artistes/ajout']); }
   navigateToEdit(id: number) { this.router.navigate(['/admin/artistes/edition', id]); }
@@ -119,8 +145,13 @@ export class ArtistsListComponent implements OnInit, OnDestroy {
     if (confirmed) {
       try {
         await firstValueFrom(this.artistService.deleteArtist(id));
-        this.artists.update(list => list.filter(a => a.id !== id));
         this.snackBar.open(this.translate.instant('ARTIST.DELETE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
+        
+        // Option 1 : Rafraîchissement réactif complet (demande au serveur la nouvelle liste)
+        this.reloadTrigger.update(v => v + 1);
+        
+        // Option 2 (Celle que tu avais, qui est aussi très bien pour économiser une requête) : 
+        // this.artists.update(list => list.filter(a => a.id !== id));
       } catch (error) {
         this.showErrorsAsSnackBar(error);
       }

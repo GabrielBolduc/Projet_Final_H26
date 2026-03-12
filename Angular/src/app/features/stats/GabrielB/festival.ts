@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, effect } from '@angular/core';
+import { Component, inject, signal, computed, effect, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +10,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card'; 
 import { TranslateModule } from '@ngx-translate/core'; 
 import { firstValueFrom } from 'rxjs';
-
 import { FestivalStatsService } from '../../../../app/core/services/festival-stats.service';
 
 export interface GlobalStats {
@@ -48,98 +47,82 @@ export interface FestivalStatsResponse {
   templateUrl: './festival.html',
   styleUrls: ['./festival.css']
 })
-export class FestivalComponent implements OnInit {
+export class FestivalComponent {
   private statsService = inject(FestivalStatsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
+  year = input<string>();
+  festivals = input<string>();
   isLoading = signal(true);
+  isFiltering = signal(false);
   globalStats = signal<GlobalStats | null>(null);
-  rawStats = signal<FestivalStatRow[]>([]); 
   
-  filterYear = signal<number | null>(null);
-  filterFestivals = signal<number[]>([]);
-  
-  private initialized = false;
+  statsList = signal<FestivalStatRow[]>([]); 
+  availableYears = signal<number[]>([]);
+  availableFestivals = signal<{id: number, name: string}[]>([]);
 
   displayedColumns: string[] = [
     'name', 'artist_count', 'performance_count', 'top_stage_name', 
     'top_stage_perf_count', 'top_stage_avg_pop', 'top_stage_env'
   ];
 
-  availableYears = computed(() => {
-    const years = this.rawStats().map(s => s.year);
-    return [...new Set(years)].sort((a, b) => b - a);
-  });
-
-  filteredStats = computed(() => {
-    let data = [...this.rawStats()];
-    const year = this.filterYear();
-    const fests = this.filterFestivals();
-
-    if (year) {
-      data = data.filter(f => f.year === year);
-    }
-
-    if (fests && fests.length > 0) {
-      data = data.filter(f => fests.includes(f.id));
-    }
-
-    return data;
-  });
+  parsedYear = computed(() => this.year() ? Number(this.year()) : null);
+  parsedFestivals = computed(() => this.festivals() ? this.festivals()!.split(',').map(Number) : []);
 
   constructor() {
-    effect(() => {
-      if (!this.initialized) return;
-      
-      const queryParams = {
-        year: this.filterYear() || null,
-        festivals: this.filterFestivals().length > 0 ? this.filterFestivals().join(',') : null
-      };
+    this.loadDropdownOptions();
 
-      this.router.navigate([], { 
-        relativeTo: this.route, 
-        queryParams, 
-        queryParamsHandling: 'merge', 
-        replaceUrl: true 
-      });
+    effect(async () => {
+      const y = this.parsedYear();
+      const f = this.parsedFestivals();
+
+      this.isFiltering.set(true);
+
+      try {
+        const params: any = {};
+        if (y) params.year = y;
+        if (f && f.length > 0) params.festival_ids = f;
+        const data = await firstValueFrom(this.statsService.getFestivalStats(params)) as FestivalStatsResponse;
+        this.globalStats.set(data.global);
+        this.statsList.set(data.list);
+      } catch (error) {
+        console.error("Erreur HTTP lors du filtrage", error);
+      } finally {
+        this.isFiltering.set(false);
+        this.isLoading.set(false);
+      }
     });
   }
 
-  ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-    
-    if (params['year']) {
-      this.filterYear.set(Number(params['year']));
-    }
-    
-    if (params['festivals']) {
-      this.filterFestivals.set(params['festivals'].split(',').map(Number));
-    }
-
-    this.initialized = true;
-    this.loadStats();
-  }
-
-  async loadStats(): Promise<void> {
-    this.isLoading.set(true);
+  async loadDropdownOptions() {
     try {
       const data = await firstValueFrom(this.statsService.getFestivalStats()) as FestivalStatsResponse;
       
-      this.globalStats.set(data.global);
-      this.rawStats.set(data.list);
+      const years = [...new Set(data.list.map(s => s.year))].sort((a, b) => b - a);
+      this.availableYears.set(years);
+      
+      this.availableFestivals.set(data.list.map(s => ({ id: s.id, name: s.name })));
     } catch (error) {
-      console.error("Erreur lors du chargement des statistiques", error);
-    } finally {
-      this.isLoading.set(false);
+      console.error("Erreur lors du chargement des options", error);
     }
   }
 
   updateYear(val: number | null) {
-    this.filterYear.set(val);
+    this.router.navigate([], { 
+      relativeTo: this.route, 
+      queryParams: { year: val || null }, 
+      queryParamsHandling: 'merge', 
+      replaceUrl: true 
+    });
   }
 
   updateFestivals(val: number[]) {
-    this.filterFestivals.set(val);
+    this.router.navigate([], { 
+      relativeTo: this.route, 
+      queryParams: { festivals: val && val.length > 0 ? val.join(',') : null }, 
+      queryParamsHandling: 'merge', 
+      replaceUrl: true 
+    });
   }
 }

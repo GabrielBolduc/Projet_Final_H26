@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, ViewChild, TemplateRef } from '@angular/core';
+import { Component, inject, signal, computed, ViewChild, TemplateRef, effect } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { MatCardModule } from '@angular/material/card';
@@ -38,7 +38,7 @@ import { ErrorHandlerService } from '../../../core/services/error-handler.servic
   templateUrl: './administration.html',
   styleUrls: ['./administration.css']
 })
-export class AdministrationComponent implements OnInit {
+export class AdministrationComponent {
   @ViewChild('confirmDialogTemplate') confirmDialogTemplate!: TemplateRef<any>;
   @ViewChild('finishDialogTemplate') finishDialogTemplate!: TemplateRef<any>;
   @ViewChild('notesDialogTemplate') notesDialogTemplate!: TemplateRef<any>;
@@ -49,9 +49,10 @@ export class AdministrationComponent implements OnInit {
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
   private translate = inject(TranslateService); 
-  public auth = inject(AuthService)
-  festivals = signal<Festival[]>([]);
+  public auth = inject(AuthService);
 
+  festivals = signal<Festival[]>([]);
+  private reloadTrigger = signal<number>(0);
   currentFestival = computed(() => 
     this.festivals().find(f => f.status === 'ongoing')
   );
@@ -64,24 +65,24 @@ export class AdministrationComponent implements OnInit {
     this.festivals().filter(f => f.status === 'completed')
   );
 
-  ngOnInit(): void {
-    this.loadFestivals();
+  constructor() {
+    effect(async () => {
+      this.reloadTrigger(); 
+      
+      try {
+        const festivalsList = await firstValueFrom(this.festivalService.getFestivals());
+        this.festivals.set(festivalsList);
+      } catch (err) {
+        this.showErrorsAsSnackBar(err);
+      }
+    });
   }
 
-  async loadFestivals(): Promise<void> {
-    try {
-      const festivalsList = await firstValueFrom(this.festivalService.getFestivals());
-      this.festivals.set(festivalsList);
-    } catch (err) {
-      this.showErrorsAsSnackBar(err);
-    }
-  }
-
-  showNotes(festival: Festival):void {
+  showNotes(festival: Festival): void {
     this.dialog.open(this.notesDialogTemplate, {
       width: '500px',
       data: festival
-    })
+    });
   }
 
   async openFinishDialog(festival: Festival): Promise<void> {
@@ -111,7 +112,8 @@ export class AdministrationComponent implements OnInit {
           this.translate.instant('COMMON.CLOSE'), 
           {duration: 3000}
         );
-        await this.loadFestivals();
+        this.reloadTrigger.update(v => v + 1); 
+
       } catch (err) {
         this.showErrorsAsSnackBar(err);
       }
@@ -148,7 +150,9 @@ export class AdministrationComponent implements OnInit {
           this.translate.instant('COMMON.CLOSE'), 
           { duration: 3000 }
         );
-        await this.loadFestivals();
+        
+        this.reloadTrigger.update(v => v + 1);
+
       } catch (err) {
         this.showErrorsAsSnackBar(err);
       }

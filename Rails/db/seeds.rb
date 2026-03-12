@@ -1351,8 +1351,6 @@ res10old = Reservation.create!(
   status: :completed
 )
 
-
-
 res1oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 29),

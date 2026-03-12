@@ -1,4 +1,5 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -32,7 +33,7 @@ import { ApiResponse } from '@core/models/api-response';
   templateUrl: './reservations-form.html',
   styleUrl: './reservations-form.css'
 })
-export class ReservationsForm implements OnInit {
+export class ReservationsForm {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute); 
   private router = inject(Router);        
@@ -53,6 +54,8 @@ export class ReservationsForm implements OnInit {
   maxDate = signal<Date | null>(null);
   reservedDates = signal<Set<number>>(new Set());
   startAtDate = signal<Date>(new Date());
+  private params = toSignal(this.route.paramMap);
+  private queryParams = toSignal(this.route.queryParamMap);
 
   private dateRangeValidator = (group: AbstractControl): ValidationErrors | null => {
     const start = group.get('arrival_at')?.value;
@@ -107,24 +110,32 @@ export class ReservationsForm implements OnInit {
     return type.includes('::') ? type.split('::')[1] : type;
   }
 
-  ngOnInit(): void {
+  constructor() {
     this.loadFestivalData();
 
-    const id = this.route.snapshot.paramMap.get('id');
-    const fromResId = this.route.snapshot.queryParamMap.get('from_reservation');
-    const accId = this.route.snapshot.queryParamMap.get('accommodationId');
-    const preSelectedUnitId = this.route.snapshot.queryParamMap.get('unit_id');
+    effect(() => {
+      const id = this.params()?.get('id');
+      const qParams = this.queryParams();
+      
+      const fromResId = qParams?.get('from_reservation');
+      const accId = qParams?.get('accommodationId');
+      const preSelectedUnitId = qParams?.get('unit_id');
 
-    if (id) {
-      this.isEditMode.set(true);
-      this.reservationId.set(+id);
-      this.loadReservation(+id);
-    } else if (fromResId) {
-      this.loadContextFromExistingReservation(+fromResId);
-    } else if (accId) {
-      this.loadUnits(+accId, preSelectedUnitId ? +preSelectedUnitId : undefined);
-    }
+      if (id) {
+        this.isEditMode.set(true);
+        this.reservationId.set(+id);
+        this.loadReservation(+id);
+      } else if (fromResId) {
+        this.loadContextFromExistingReservation(+fromResId);
+      } else if (accId) {
+        this.loadUnits(+accId, preSelectedUnitId ? +preSelectedUnitId : undefined);
+      }
+    }, { allowSignalWrites: true });
 
+    this.setupFormSubscriptions();
+  }
+
+  private setupFormSubscriptions() {
     this.form.get('unit_id')?.valueChanges.subscribe((unitId: number) => {
       if (unitId) {
         this.updateUnitCapacity(unitId);

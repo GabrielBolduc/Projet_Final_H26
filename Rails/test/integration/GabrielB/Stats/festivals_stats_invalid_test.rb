@@ -26,7 +26,6 @@ class FestivalsStatsInvalidTest < ActionDispatch::IntegrationTest
   end
 
   test "should return error when guest (not logged in) tries to access stats" do
-    
     # modif ou non
     assert_no_difference("Festival.count") do
       get "/api/stats/festivals", as: :json

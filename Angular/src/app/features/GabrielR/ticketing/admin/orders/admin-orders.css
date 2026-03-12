@@ -20,7 +20,7 @@
 
 .filters-card {
   border-radius: 15px;
-  background: var(--mat-sys-surface-container-low);
+  background-color: var(--mat-sys-surface-container-low);
   border: 2px solid var(--mat-sys-on-surface);
   padding: 20px !important;
   margin-bottom: 24px;
@@ -46,7 +46,7 @@
 .order-panel {
   border: 2px solid var(--mat-sys-outline) !important;
   border-radius: 12px !important;
-  background: var(--mat-sys-surface-container-lowest) !important;
+  background: var(--mat-sys-surface-container-low) !important;
   box-shadow: none !important;
   transition: all 0.2s ease;
   overflow: hidden;
@@ -61,6 +61,11 @@
 .order-panel mat-expansion-panel-header {
   padding: 0 24px;
   height: 72px;
+  background: var(--mat-sys-surface-container) !important;
+}
+
+.order-panel.mat-expanded mat-expansion-panel-header {
+  background: var(--mat-sys-surface-container-high) !important;
 }
 
 .panel-title,
@@ -98,13 +103,15 @@
 .order-content {
   padding: 16px 24px 24px;
   border-top: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface) !important;
 }
 
 .client-info {
   margin-bottom: 20px;
   padding: 12px 16px;
-  background: var(--mat-sys-surface-container-low);
+  background: var(--mat-sys-surface-container) !important;
   border-radius: 8px;
+  border-left: 4px solid var(--mat-sys-primary);
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -129,7 +136,7 @@
 
 .tickets-table th {
   text-align: left;
-  background: var(--mat-sys-surface-container);
+  background: var(--mat-sys-surface-container) !important;
   padding: 12px 16px;
   font-weight: 600;
   font-size: 0.9rem;
@@ -145,6 +152,10 @@
 
 .tickets-table tr:last-child td {
   border-bottom: none;
+}
+
+.tickets-table tr:nth-child(even) td {
+  background: var(--mat-sys-surface-container-lowest);
 }
 
 .loading-cell {

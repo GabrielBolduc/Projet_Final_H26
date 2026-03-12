@@ -10,11 +10,11 @@ class Festival < ApplicationRecord
   enum :status, { draft: "draft", ongoing: "ongoing",  completed: "completed" }, default: :draft, validate: true
   scope :filter_by_status, ->(status) { where(status: status) }
   scope :publicly_visible, -> { ongoing }
-  
-  scope :filter_by_year, ->(year){
+
+  scope :filter_by_year, ->(year) {
     where(start_at: Date.new(year.to_i).all_year) if year.present?
   }
-  scope :filter_by_ids, ->(ids){
+  scope :filter_by_ids, ->(ids) {
     where(id: ids) if ids.present?
   }
 
@@ -44,18 +44,18 @@ class Festival < ApplicationRecord
 
     top_stage = Stage.joins(:performances)
                      .where(performances: { festival_id: self.id })
-                     .group('stages.id')
-                     .order(Arel.sql('COUNT(performances.id) DESC'))
-                     .select('stages.*, COUNT(performances.id) AS perf_count')
+                     .group("stages.id")
+                     .order(Arel.sql("COUNT(performances.id) DESC"))
+                     .select("stages.*, COUNT(performances.id) AS perf_count")
                      .first
 
     avg_pop = if top_stage
                 Artist.joins(:performances)
                       .where(performances: { festival_id: self.id, stage_id: top_stage.id })
                       .average(:popularity)
-              else
+    else
                 0.0
-              end
+    end
 
     {
       id: id,
@@ -73,19 +73,19 @@ class Festival < ApplicationRecord
   def self.global_stats
     festivals = Festival.all
     avg_satisfaction = festivals.average(:satisfaction)&.round(1) || 0.0
-    
+
     total_artists = Performance.select(:artist_id).distinct.count
-    
+
     genre_counts = Artist.joins(:performances).group(:genre).count
     total_genres = genre_counts.values.sum.to_f
-    
-    genre_percentages = if total_genres > 0 
-                          genre_counts.map do |name, count| 
-                            { name: name || 'Inconnu', percent: ((count / total_genres) * 100).round(1) }
+
+    genre_percentages = if total_genres > 0
+                          genre_counts.map do |name, count|
+                            { name: name || "Inconnu", percent: ((count / total_genres) * 100).round(1) }
                           end
-                        else
+    else
                           []
-                        end
+    end
 
     {
       total_festivals: festivals.count,

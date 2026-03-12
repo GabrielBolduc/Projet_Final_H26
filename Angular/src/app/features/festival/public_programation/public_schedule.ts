@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, effect, OnDestroy } from '@angular/core';
+import { Component, inject, signal, computed, effect, input, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -44,7 +44,7 @@ interface FestivalArtist {
   templateUrl: './public_schedule.html',
   styleUrls: ['./public_schedule.css']
 })
-export class PublicScheduleComponent implements OnInit, OnDestroy {
+export class PublicScheduleComponent implements OnDestroy {
   private performanceService = inject(PerformanceService);
   private festivalService = inject(FestivalService);
   private errorHandler = inject(ErrorHandlerService);
@@ -53,20 +53,25 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   public translate = inject(TranslateService);
 
+  search = input<string>();
+  stage = input<string>();
+  sort = input<'asc' | 'desc'>();
+
   currentFestival = signal<Festival | null>(null);
   rawPerformances = signal<Performance[]>([]); 
+  performances = signal<Performance[]>([]); 
   festivalArtists = signal<FestivalArtist[]>([]);
+  
   isLoading = signal(true);
-  serverErrors = signal<string[]>([]); 
-  searchQuery = signal<string>('');
-  filterStageId = signal<number | null>(null);
-  sortDirection = signal<'asc' | 'desc'>('asc');
-
-  performances = signal<Performance[]>([]);
   isSearching = signal(false); 
-  private initialized = false;
+  serverErrors = signal<string[]>([]); 
+
   private searchSubject = new Subject<string>();
-  private searchSubscription?: Subscription;
+  private searchSubscription: Subscription;
+
+  parsedSearch = computed(() => this.search() || '');
+  parsedStageId = computed(() => this.stage() ? Number(this.stage()) : null);
+  parsedSort = computed(() => this.sort() || 'asc');
 
   availableStages = computed(() => {
     const stages = new Map();
@@ -77,8 +82,8 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
   });
 
   performanceGroups = computed(() => {
-    const data = [...this.performances()];
-    const dir = this.sortDirection();
+    let data = [...this.performances()]; 
+    const dir = this.parsedSort();
     
     data.sort((a, b) => {
       const dateA = new Date(a.start_at).getTime();
@@ -107,62 +112,43 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['artist', 'title', 'stage', 'start_at', 'end_at', 'description'];
 
   constructor() {
-    effect(() => {
-      if (!this.initialized) return;
-      const queryParams = {
-        search: this.searchQuery() || null,
-        stage: this.filterStageId() || null,
-        sort: this.sortDirection() === 'asc' ? null : this.sortDirection()
-      };
-      this.router.navigate([], { queryParams, queryParamsHandling: 'merge', replaceUrl: true });
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(val => {
+      this.updateUrl({ search: val || null });
     });
 
     effect(async () => {
       const festival = this.currentFestival();
       if (!festival) return;
 
+      const q = this.parsedSearch();
+      const sId = this.parsedStageId();
+
       this.isSearching.set(true);
+
       try {
         const params: any = { festival_id: festival.id };
-        if (this.searchQuery()) params.search = this.searchQuery();
-        if (this.filterStageId()) params.stage_id = this.filterStageId();
-
+        if (q) params.search = q;
+        if (sId) params.stage_id = sId;
         const data = await firstValueFrom(this.performanceService.getPerformances(params));
         this.performances.set(data);
+      } catch (err) {
+        console.error("Erreur de filtrage", err);
       } finally {
         this.isSearching.set(false);
       }
     });
-  }
 
-  ngOnInit(): void {
-    this.searchSubscription = this.searchSubject.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(val => this.searchQuery.set(val));
-
-    const params = this.route.snapshot.queryParams;
-    if (params['search']) this.searchQuery.set(params['search']);
-    if (params['stage']) this.filterStageId.set(Number(params['stage']));
-    if (params['sort']) this.sortDirection.set(params['sort'] as 'asc' | 'desc');
-    
-    this.initialized = true;
-    this.loadSchedule();
+    this.loadInitialData();
   }
 
   ngOnDestroy(): void {
     this.searchSubscription?.unsubscribe();
   }
 
-  updateSearch(val: string) { this.searchSubject.next(val); }
-  updateFilter(id: number | null) { this.filterStageId.set(id); }
-  toggleSort() { this.sortDirection.update((d: 'asc' | 'desc') => d === 'asc' ? 'desc' : 'asc'); }
-
-  private formatLang(lang: string | undefined): string {
-    return lang ? lang.split('-')[0] : 'en';
-  }
-
-  async loadSchedule(): Promise<void> {
+  async loadInitialData(): Promise<void> {
     this.isLoading.set(true);
     this.serverErrors.set([]);
 
@@ -171,7 +157,6 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
 
       if (ongoing) {
         this.currentFestival.set(ongoing);
-        
         const all = await firstValueFrom(this.performanceService.getPerformances({ festival_id: ongoing.id }));
         this.rawPerformances.set(all);
         
@@ -190,6 +175,32 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
       this.isLoading.set(false);
     }
   }
+  
+  updateSearch(val: string) { 
+    this.searchSubject.next(val); 
+  }
+
+  updateFilter(id: number | null) { 
+    this.updateUrl({ stage: id || null });
+  }
+
+  toggleSort() { 
+    const newSort = this.parsedSort() === 'asc' ? 'desc' : 'asc';
+    this.updateUrl({ sort: newSort === 'asc' ? null : newSort });
+  }
+
+  private updateUrl(queryParams: any) {
+    this.router.navigate([], { 
+      relativeTo: this.route, 
+      queryParams, 
+      queryParamsHandling: 'merge', 
+      replaceUrl: true 
+    });
+  }
+
+  private formatLang(lang: string | undefined): string {
+    return lang ? lang.split('-')[0] : 'en';
+  }
 
   private groupByDay(performances: Performance[]): DayGroup[] {
     const groups: { [key: string]: Performance[] } = {};
@@ -203,4 +214,4 @@ export class PublicScheduleComponent implements OnInit, OnDestroy {
       performances: groups[key]
     }));
   }
-} 
+}

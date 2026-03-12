@@ -10,14 +10,19 @@
   background-color: var(--mat-sys-surface-container-low);
   padding: 20px;
   border-radius: 15px;
-  margin-bottom: 25px;
-  border: 1px solid var(--mat-sys-outline-variant);
+  margin-bottom: 40px;
+  border: 2px solid var(--mat-sys-on-surface);
   flex-wrap: wrap;
+}
+
+.ssf-toolbar mat-form-field {
+  flex: 1;
+  min-width: 250px;
 }
 
 .ssf-input {
   flex: 1;
-  min-width: 220px;
+  min-width: 250px;
 }
 
 .category-filters {
@@ -141,6 +146,11 @@
     align-items: stretch;
     gap: 15px;
     padding: 15px;
+  }
+
+  .ssf-toolbar mat-form-field {
+    min-width: 100%;
+    margin-bottom: -15px;
   }
 
   .ssf-input {

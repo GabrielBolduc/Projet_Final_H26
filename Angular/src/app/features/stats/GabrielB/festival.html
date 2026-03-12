@@ -2,36 +2,36 @@
 
   <div class="ssf-toolbar">
     
-    <mat-form-field appearance="outline" class="ssf-input">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>{{ 'FESTIVAL_STATS.YEAR_FILTER' | translate }}</mat-label>
-      <mat-select [ngModel]="filterYear()" (ngModelChange)="updateYear($event)">
+      <mat-select [ngModel]="parsedYear()" (ngModelChange)="updateYear($event)">
         <mat-option [value]="null">{{ 'FESTIVAL_STATS.ALL_YEARS' | translate }}</mat-option>
-        @for (year of availableYears(); track year) {
-          <mat-option [value]="year">{{ year }}</mat-option>
+        @for (y of availableYears(); track y) {
+          <mat-option [value]="y">{{ y }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="ssf-input">
+    <mat-form-field appearance="outline" subscriptSizing="dynamic">
       <mat-label>{{ 'FESTIVAL_STATS.COMPARE' | translate }}</mat-label>
-      <mat-select multiple [ngModel]="filterFestivals()" (ngModelChange)="updateFestivals($event)">
-        @for (fest of rawStats(); track fest.id) {
-          <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
+      <mat-select multiple [ngModel]="parsedFestivals()" (ngModelChange)="updateFestivals($event)">
+        @for (f of availableFestivals(); track f.id) {
+          <mat-option [value]="f.id">{{ f.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
 
   </div>
 
-  @if (isLoading()) {
+  @if (isLoading() || isFiltering()) {
     <div class="spinner-container">
       <mat-spinner diameter="50" color="primary"></mat-spinner>
     </div>
   }
 
-  @if (!isLoading() && filteredStats().length > 0) {
+  @if (!isLoading() && !isFiltering() && statsList().length > 0) {
     <div class="grid-table-container">
-      <table mat-table [dataSource]="filteredStats()" class="festify-grid-table">
+      <table mat-table [dataSource]="statsList()" class="festify-grid-table">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> {{ 'FESTIVAL_STATS.FESTIVAL' | translate }} </th>
@@ -87,7 +87,7 @@
     </div>
   }
 
-  @if (globalStats(); as stats) {
+  @if (!isLoading() && !isFiltering() && globalStats(); as stats) {
     <div class="global-stats-grid">
       
       <mat-card class="stat-card">
@@ -129,7 +129,7 @@
     </div>
   }
 
-  @if (!isLoading() && filteredStats().length === 0) {
+  @if (!isLoading() && !isFiltering() && statsList().length === 0) {
     <div class="empty-state">
       <p>{{ 'FESTIVAL_STATS.NOTHING' | translate }}</p>
     </div>

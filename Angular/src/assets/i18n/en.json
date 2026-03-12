@@ -136,7 +136,9 @@
     "DELETE_ONGOING_ERROR": "Cannot delete an ongoing festival.",
     "DELETE_SUCCESS": "Festival deleted successfully.",
     "FESTIVALS_LOAD_ERROR": "Error loading festivals",
-    "BACK": "Go to the festivals page"
+    "BACK": "Go to the festivals page",
+    "EDIT_SUCCESS" : "Performance successfully updated!",
+    "CREATE_SUCCESS" : "Performance successfully added!"
   },
   "ARTIST": {
     "EDIT_TITLE": "Edit Artist",
@@ -202,7 +204,9 @@
     "CANCEL": "Cancel",
     "UPDATE": "Update",
     "SAVE": "Save",
-    "LOADING": "Loading..."
+    "LOADING": "Loading...",
+    "LOAD_ERROR": "Error loading performance.",
+    "SAVE_ERROR": "Error saving performance."
   },
   "ADMIN_NAV":{
     "FESTIVAL": "Festivals",

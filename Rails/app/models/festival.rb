@@ -147,5 +147,4 @@ class Festival < ApplicationRecord
       top_stage_env: "N/A"
     }
   end
-  
 end

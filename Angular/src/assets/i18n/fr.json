@@ -136,7 +136,9 @@
     "DELETE_ONGOING_ERROR": "Impossible de supprimer un festival en cours.",
     "FESTIVALS_LOAD_ERROR": "Erreur lors du chargement des festivals",
     "DELETE_SUCCESS": "Performance supprimée avec succès",
-    "BACK": "Aller à la page des festivals"
+    "BACK": "Aller à la page des festivals",
+    "EDIT_SUCCESS" : "Performance mis à jour avec succès !",
+    "CREATE_SUCCESS" : "Performance ajouté avec succès !"
   },
   "ARTIST": {
     "EDIT_TITLE": "Modifier l'artiste",
@@ -202,7 +204,9 @@
     "CANCEL": "Annuler",
     "UPDATE": "Mettre à jour",
     "SAVE": "Enregistrer",
-    "LOADING": "Traitement..."
+    "LOADING": "Traitement...",
+    "LOAD_ERROR": "Erreur lors du chargement de la performance",
+    "SAVE_ERROR": "Erreur lors de la sauvegarde"
   },
   "ADMIN_NAV":{
     "FESTIVAL": "Festivals",

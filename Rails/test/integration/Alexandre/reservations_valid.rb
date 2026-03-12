@@ -7,9 +7,9 @@ class Api::ReservationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @admin = users(:three)
     @client = users(:one)
-    @reservation = reservations(:one) # Active reservation belonging to @client
+    @reservation = reservations(:one)
     @unit = units(:one)
-    @festival = festivals(:one) # Ensure this is Festival.ongoing.first
+    @festival = festivals(:one)
   end
 
   def test_index_as_admin_returns_all
@@ -68,7 +68,6 @@ class Api::ReservationsControllerTest < ActionDispatch::IntegrationTest
 
   def test_create_reservation_success
     sign_in @client
-    # Align dates with the festival in your fixtures to satisfy model validations
     festival_start = @festival.start_date
 
     # Code http
@@ -111,7 +110,6 @@ class Api::ReservationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     json_response = JSON.parse(response.body)
 
-    # DEBUG: Uncomment this to see the exact validation error in your console
     puts json_response["errors"] if json_response["status"] == "error"
 
     assert_equal "success", json_response["status"]
@@ -125,7 +123,7 @@ class Api::ReservationsControllerTest < ActionDispatch::IntegrationTest
   def test_destroy_reservation_soft_deletes
     sign_in @client
 
-    # Code http (Soft delete: status becomes cancelled, record stays)
+    # Code http
     assert_no_difference("Reservation.count") do
       delete api_reservation_url(@reservation), as: :json
     end

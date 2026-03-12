@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, signal, computed, effect, untracked } from '@angular/core';
+import { Component, inject, signal, computed, effect, untracked } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -30,10 +31,12 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './hebergement.html',
   styleUrls: ['./hebergement.css']
 })
-export class HebergementComponent implements OnInit {
+export class HebergementComponent {
   private statsService = inject(AccommodationsStatsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
+  private queryParams = toSignal(this.route.queryParamMap);
 
   public rawStats = signal<AccommodationStatsResponse | null>(null);
   public availableFestivals = signal<{id: number, name: string}[]>([]);
@@ -53,6 +56,18 @@ export class HebergementComponent implements OnInit {
   public filteredStats = computed(() => this.rawStats());
 
   constructor() {
+    effect(() => {
+      const params = this.queryParams();
+      if (!params) return;
+
+      if (params.has('name')) this.searchTerm.set(params.get('name')!);
+      if (params.has('sort_by')) this.sortBy.set(params.get('sort_by')!);
+      if (params.has('festival_ids')) {
+        const ids = params.get('festival_ids')?.split(',').map(Number) || [];
+        this.festivalIds.set(ids);
+      }
+    }, { allowSignalWrites: true });
+
     this.searchControl.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged()
@@ -68,23 +83,8 @@ export class HebergementComponent implements OnInit {
         festival_ids: this.festivalIds(),
       };
 
-      if (this.initialized) {
-        untracked(() => this.fetchStats(filters));
-      }
+      untracked(() => this.fetchStats(filters));
     });
-  }
-  
-
-  ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-    if (params['name']) this.searchTerm.set(params['name']);
-    if (params['sort_by']) this.sortBy.set(params['sort_by']);
-    if (params['festival_ids']) {
-      this.festivalIds.set(params['festival_ids'].split(',').map(Number));
-    }
-
-    this.initialized = true;
-    this.fetchStats();
   }
 
   fetchStats(filters: any = {}) {

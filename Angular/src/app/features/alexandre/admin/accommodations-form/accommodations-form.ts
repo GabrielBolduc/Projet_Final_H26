@@ -1,6 +1,8 @@
-import { Component, signal, OnInit, inject, ViewChild, TemplateRef } from '@angular/core'; 
+import { 
+  Component, signal, OnInit, inject, ViewChild, TemplateRef, effect, input } from '@angular/core'; 
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'; 
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -8,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink, ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AccommodationsService } from '@core/services/accommodations.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -54,31 +56,35 @@ export class AccommodationsForm implements OnInit {
   isEditMode = signal(false);
   isLoading = signal(false);
   serverErrors = signal<string[]>([]);
-  festivals = signal([{ id: 1, name: 'Hellfest' }]);
+  private params = toSignal(this.route.paramMap);
+  private queryParams = toSignal(this.route.queryParamMap);
+
+  constructor() {
+    effect(() => {
+      const id = this.params()?.get('id');
+      
+      if (id) {
+        this.isEditMode.set(true);
+        this.accommodationId.set(+id);
+        this.loadAccommodation(+id);
+      } else {
+        this.isEditMode.set(false);
+        this.accommodationId.set(null);
+        this.form.reset({ category: 1, shuttle: false, commission: 0 });
+        
+        const cat = this.queryParams()?.get('category');
+        if (cat === 'camping') this.form.patchValue({ category: 0 });
+        if (cat === 'hotel') this.form.patchValue({ category: 1 });
+      }
+    });
+  }
+  
   
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    
-    if (id) {
-      this.isEditMode.set(true);
-      this.accommodationId.set(+id);
-      this.loadAccommodation(+id);
-    } else {
-      const catParam = this.route.snapshot.queryParamMap.get('category');
-      if (catParam === 'camping') {
-        this.form.patchValue({ category: 0 });
-      } else if (catParam === 'hotel') {
-        this.form.patchValue({ category: 1 });
-      }
-    }
-
     this.form.get('coordinates')?.valueChanges.subscribe(value => {
       if (value && this.coordRegex.test(value)) {
         const [lat, lng] = value.split(',').map((s: string) => parseFloat(s.trim()));
-        this.form.patchValue({ 
-          latitude: lat, 
-          longitude: lng 
-        }, { emitEvent: false });
+        this.form.patchValue({ latitude: lat, longitude: lng }, { emitEvent: false });
       }
     });
   }

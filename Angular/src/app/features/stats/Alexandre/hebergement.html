@@ -2,7 +2,7 @@
   <div class="ssf-toolbar mb-4">
 
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }} (Compare)</mat-label>
+      <mat-label>{{ 'STATS.TITLE' | translate }}</mat-label>
       <mat-select [ngModel]="festivalIds()" (ngModelChange)="updateCompare($event)" multiple>
         @for (fest of availableFestivals(); track fest.id) {
           <mat-option [value]="fest.id">{{ fest.name }}</mat-option>
@@ -51,11 +51,11 @@
           <div class="category-summary">
             <span class="summary-badge camping">
               <mat-icon inline>terrain</mat-icon> 
-              {{ group.value.counts?.camping || 0 }} {{ 'STATS.ACCOMMODATIONS.CATEGORIES.CAMPING' | translate }}
+              {{ group.value.counts.camping || 0 }} {{ 'STATS.ACCOMMODATIONS.CATEGORIES.CAMPING' | translate }}
             </span>
             <span class="summary-badge hotel">
               <mat-icon inline>hotel</mat-icon> 
-              {{ group.value.counts?.hotel || 0 }} {{ 'STATS.ACCOMMODATIONS.CATEGORIES.HOTEL' | translate }}
+              {{ group.value.counts.hotel || 0 }} {{ 'STATS.ACCOMMODATIONS.CATEGORIES.HOTEL' | translate }}
             </span>
           </div>
         </div>
@@ -68,8 +68,8 @@
           </div>
           <div class="stat-info">
             <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.HIGHEST_EARNER' | translate }}</span>
-            <h3 class="highlight-value">{{ group.value.highlights.top?.finance?.actual_profit | currency:'USD' }}</h3>
-            <p class="highlight-name"><strong>{{ group.value.highlights.top?.name }}</strong></p>
+            <h3 class="highlight-value">{{ group.value.highlights.top.finance.actual_profit | currency:'USD' }}</h3>
+            <p class="highlight-name"><strong>{{ group.value.highlights.top.name }}</strong></p>
           </div>
         </div>
 
@@ -79,8 +79,8 @@
           </div>
           <div class="stat-info">
             <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.LOWEST_EARNER' | translate }}</span>
-            <h3 class="highlight-value">{{ group.value.highlights.bottom?.finance?.actual_profit | currency:'USD' }}</h3>
-            <p class="highlight-name"><strong>{{ group.value.highlights.bottom?.name }}</strong></p>
+            <h3 class="highlight-value">{{ group.value.highlights.bottom.finance.actual_profit | currency:'USD' }}</h3>
+            <p class="highlight-name"><strong>{{ group.value.highlights.bottom.name }}</strong></p>
           </div>
         </div>
 
@@ -90,7 +90,7 @@
           </div>
           <div class="stat-info">
             <span class="highlight-label">{{ 'STATS.ACCOMMODATIONS.COLUMNS.OCCUPANCY' | translate }}</span>
-            <h3 class="highlight-value">{{ group.value.reservation_stats?.total_people || 0 }}</h3>
+            <h3 class="highlight-value">{{ group.value.reservation_stats.total_people || 0 }}</h3>
           </div>
         </div>
       </div>

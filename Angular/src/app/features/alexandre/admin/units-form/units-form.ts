@@ -1,4 +1,5 @@
-import { Component, signal, OnInit, inject } from '@angular/core';
+import { Component, signal, inject, effect } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +25,7 @@ import { UnitType } from '@core/models/unit';
   templateUrl: './units-form.html',
   styleUrl: './units-form.css'
 })
-export class UnitsForm implements OnInit {
+export class UnitsForm {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -50,12 +51,37 @@ export class UnitsForm implements OnInit {
   isTerrain = signal(false);
   selectedFile = signal<File | null>(null);
   serverErrors = signal<string[]>([]);
+  private params = toSignal(this.route.paramMap);
+  private queryParams = toSignal(this.route.queryParamMap);
 
   readonly ROOM_TYPES = ['SimpleRoom', 'DoubleRoom', 'FamilyRoom'];
   readonly TERRAIN_TYPES = ['SmallTerrain', 'StandardTerrain', 'DeluxeTerrain'];
   readonly FOOD_OPTIONS = ['None', 'Canteen', 'Room service', 'Restaurant'];
 
   constructor() {
+    effect(() => {
+      const id = this.params()?.get('id');
+      const isEdit = this.queryParams()?.get('edit') === 'true';
+
+      if (id) {
+        const numericId = Number(id);
+        if (isEdit) {
+          this.isEditMode.set(true);
+          this.unitId.set(numericId);
+          this.loadUnit(numericId);
+        } else {
+          this.isEditMode.set(false);
+          this.accommodationId.set(numericId);
+          this.fetchParentCategory(numericId);
+          this.form.reset({ quantity: 1, water: 'no_water', food_options: ['None'] });
+        }
+      }
+    });
+
+    this.setupFormSubscriptions();
+  }
+
+  private setupFormSubscriptions() {
     this.form.get('type')?.valueChanges.subscribe(value => {
       this.isTerrain.set(this.TERRAIN_TYPES.includes(value));
     });
@@ -74,24 +100,6 @@ export class UnitsForm implements OnInit {
         this.form.get('food_options')?.setValue(filtered, { emitEvent: false });
       }
     });
-  }
-
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    const isEdit = this.route.snapshot.queryParamMap.get('edit') === 'true';
-
-    if (id !== null) {
-      const numericId = Number(id);
-
-      if (isEdit) {
-        this.isEditMode.set(true);
-        this.unitId.set(numericId);
-        this.loadUnit(numericId);
-      } else {
-        this.accommodationId.set(numericId);
-        this.fetchParentCategory(numericId);
-      }
-    }
   }
 
   onFileSelected(event: Event): void {

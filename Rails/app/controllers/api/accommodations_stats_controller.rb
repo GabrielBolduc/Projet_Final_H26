@@ -1,20 +1,21 @@
-
 class Api::AccommodationsStatsController < ApiController
+  before_action :require_admin!
+
   def index
-    @accommodations = Accommodation.with_stats_data.includes(units: :reservations)
+    @accommodations = Accommodation.with_stats_data
+
+    @festival_highlights = calculate_festival_highlights(@accommodations)
 
     apply_filters!
 
-    unless params[:sort_by] == "revenue"
+    if params[:sort_by] == "revenue"
+      @accommodations = @accommodations.reorder("raw_revenue DESC")
+    else
       @accommodations = apply_sql_sorting(@accommodations)
     end
 
     all_stats = @accommodations.map do |acc|
       { acc: acc, stats: acc.statistics_data }
-    end
-
-    if params[:sort_by] == "revenue"
-      all_stats.sort_by! { |item| item[:stats].dig(:finance, :total_revenue) || 0 }.reverse!
     end
 
     grouped_data = render_grouped_stats(all_stats)
@@ -25,6 +26,15 @@ class Api::AccommodationsStatsController < ApiController
   end
 
   private
+
+  def calculate_festival_highlights(scope)
+    scope.to_a.group_by(&:festival_id).transform_values do |accs|
+      {
+        top: accs.max_by(&:raw_revenue)&.statistics_data&.slice(:name, :finance),
+        bottom: accs.min_by(&:raw_revenue)&.statistics_data&.slice(:name, :finance)
+      }
+    end
+  end
 
   def apply_filters!
     @accommodations = @accommodations.search_by_name(params[:name]) if params[:name].present?
@@ -37,14 +47,14 @@ class Api::AccommodationsStatsController < ApiController
 
   def apply_sql_sorting(scope)
     case params[:sort_by]
-    when "name" then scope.order(name: :asc)
-    else scope.order("festivals.start_at DESC")
+    when "name" then scope.reorder("accommodations.name ASC")
+    else scope.reorder("festivals.start_at DESC")
     end
   end
 
   def render_grouped_stats(all_stats)
     all_stats.group_by { |item| item[:acc].festival }
-             .sort_by { |fest, _| fest.start_at }
+             .sort_by { |fest, _| fest.start_at || Time.at(0) }
              .reverse
              .each_with_object({}) do |(festival, items), hash|
       list = items.map { |i| i[:stats] }
@@ -55,10 +65,7 @@ class Api::AccommodationsStatsController < ApiController
           camping: items.count { |i| i[:acc].camping? },
           hotel: items.count { |i| i[:acc].hotel? }
         },
-        highlights: {
-          top: list.first&.slice(:name, :finance),
-          bottom: list.last&.slice(:name, :finance)
-        },
+        highlights: @festival_highlights[festival.id] || { top: nil, bottom: nil },
         reservation_stats: {
           total_people: list.sum { |s| s.dig(:reservation_stats, :total_people) || 0 }
         }

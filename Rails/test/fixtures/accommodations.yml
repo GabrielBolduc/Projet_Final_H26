@@ -21,3 +21,51 @@ two:
   time_car: "00:05:00"
   time_walk: "00:10:00"
   commission: 5.00
+
+three:
+  festival: one
+  name: "Boutique Urban Stay"
+  category: 1 
+  address: "456 Downtown Ave"
+  latitude: 45.5088
+  longitude: -73.5540
+  shuttle: true
+  time_car: "00:10:00"
+  time_walk: "00:30:00"
+  commission: 20.0 
+
+four:
+  festival: two
+  name: "Lakeview Campground"
+  category: 0
+  address: "789 Shoreline Rd"
+  latitude: 46.8200
+  longitude: -71.2200
+  shuttle: false
+  time_car: "00:08:00"
+  time_walk: "00:25:00"
+  commission: 0.0
+
+five:
+  festival: one
+  name: "Remote Mountain Lodge"
+  category: 1
+  address: "999 Peak Path"
+  latitude: 45.7000
+  longitude: -73.8000
+  shuttle: false
+  time_car: "00:45:00"
+  time_walk: "05:00:00"
+  commission: 10.5
+
+six:
+  festival: two
+  name: "Festival Backlot Camping"
+  category: 0 
+  address: "Main Stage Rear"
+  latitude: 46.8140
+  longitude: -71.2081
+  shuttle: false
+  time_car: "00:01:00"
+  time_walk: "00:02:00"
+  commission: 2.5

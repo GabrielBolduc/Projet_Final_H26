@@ -19,6 +19,7 @@ class Festival < ApplicationRecord
   }
 
   before_destroy :prevent_destroy_if_active_or_archived
+  before_update :clear_archived_data_if_reopened
 
   validates :name, presence: true, length: { maximum: 100 }
   validates :start_at, :end_at, :status, :address, :latitude, :longitude, presence: true
@@ -72,7 +73,7 @@ class Festival < ApplicationRecord
 
   def self.global_stats
     festivals = Festival.all
-    avg_satisfaction = festivals.average(:satisfaction)&.round(1) || 0.0
+    avg_satisfaction = festivals.completed.average(:satisfaction)&.round(1) || 0.0
 
     total_artists = Performance.select(:artist_id).distinct.count
 
@@ -121,6 +122,15 @@ class Festival < ApplicationRecord
   def start_at_cannot_be_in_the_past
     if start_at_changed? && start_at.present? && start_at < Date.today
       errors.add(:start_at, "ne peut pas être dans le passé (sauf pour une archive)")
+    end
+  end
+
+  def clear_archived_data_if_reopened
+    if status_changed? && status_was == "completed" && status != "completed"
+      self.satisfaction = nil
+      self.other_income = nil
+      self.other_expense = nil
+      self.comment = nil
     end
   end
 

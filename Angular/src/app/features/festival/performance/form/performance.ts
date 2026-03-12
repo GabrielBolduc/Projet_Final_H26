@@ -4,13 +4,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractContro
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
-
 import { PerformanceService } from '../../../../core/services/performance.service';
 import { ArtistService } from '../../../../core/services/artist.service';
 import { StageService } from '../../../../core/services/stage.service';
 import { FestivalService } from '../../../../core/services/festival.service';
 import { ErrorHandlerService } from '../../../../core/services/error-handler.service';
-
 import { Artist } from '../../../../core/models/artist';
 import { Stage } from '../../../../core/models/stage';
 import { Festival } from '../../../../core/models/festival';
@@ -24,6 +22,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 
 const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
   const start = control.get('start_time')?.value;
@@ -42,7 +41,8 @@ const timeRangeValidator: ValidatorFn = (control: AbstractControl): ValidationEr
     CommonModule, ReactiveFormsModule,
     MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule,
     MatSelectModule, MatDatepickerModule, MatNativeDateModule, MatIconModule,
-    TranslateModule,MatProgressSpinnerModule
+    TranslateModule, MatProgressSpinnerModule,
+    MatSnackBarModule 
   ],
   templateUrl: './performance.html',
   styleUrls: ['./performance.css']
@@ -58,6 +58,8 @@ export class AddPerformanceComponent implements OnInit {
   private festivalService = inject(FestivalService);
   private errorHandler = inject(ErrorHandlerService);
   public translate = inject(TranslateService);
+  
+  private snackBar = inject(MatSnackBar);
 
   minDate = new Date(); 
 
@@ -171,6 +173,11 @@ export class AddPerformanceComponent implements OnInit {
         end_time: DateUtils.formatTime(end)
       });
     } catch (err) {
+      this.snackBar.open(
+        this.translate.instant('FORM_ADD_PERFORMANCES.LOAD_ERROR') || 'Erreur lors du chargement de la performance', 
+        this.translate.instant('COMMON.CLOSE'), 
+        { duration: 4000 }
+      );
       this.goBack();
     } finally {
       this.isLoading.set(false);
@@ -196,12 +203,32 @@ export class AddPerformanceComponent implements OnInit {
     try {
       if (this.isEditMode() && this.performanceId) {
         await firstValueFrom(this.performanceService.updatePerformance(this.performanceId, payload));
+        
+        this.snackBar.open(
+          this.translate.instant('DASHBOARD.EDIT_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       } else {
         await firstValueFrom(this.performanceService.createPerformance(payload));
+        
+        this.snackBar.open(
+          this.translate.instant('DASHBOARD.CREATE_SUCCESS'), 
+          this.translate.instant('COMMON.CLOSE'), 
+          { duration: 3000 }
+        );
       }
       this.goBack();
     } catch (err) {
-      this.serverErrors.set(this.errorHandler.parseRailsErrors(err));
+      const errors = this.errorHandler.parseRailsErrors(err);
+      this.serverErrors.set(errors);
+      
+      const errorMessage = errors.length > 0 ? errors[0] : (this.translate.instant('FORM_ADD_PERFORMANCES.SAVE_ERROR') || 'Erreur lors de la sauvegarde');
+      this.snackBar.open(
+        errorMessage, 
+        this.translate.instant('COMMON.UNDERSTOOD'), 
+        { duration: 6000 }
+      );
     } finally {
       this.isLoading.set(false);
     }

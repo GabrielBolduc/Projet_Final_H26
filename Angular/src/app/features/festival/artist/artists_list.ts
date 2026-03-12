@@ -42,21 +42,16 @@ export class ArtistsListComponent implements OnDestroy {
   private snackBar = inject(MatSnackBar);
   public translate = inject(TranslateService);
 
-  // 1. SIGNAL INPUTS (L'URL est la seule source de vérité)
   search = input<string>();
   genre = input<string>();
 
-  // 2. SIGNAUX CALCULÉS UTILITAIRES
   parsedSearch = computed(() => this.search() || '');
   parsedGenre = computed(() => this.genre() || null);
-
-  // 3. ÉTATS GLOBAUX
   artists = signal<Artist[]>([]);
   availableGenres = signal<string[]>([]);
   isLoading = signal(true);
   serverErrors = signal<string[]>([]);
   
-  // Petit signal pour forcer le rafraîchissement après une suppression (facultatif mais très propre)
   private reloadTrigger = signal<number>(0);
 
   private searchSubject = new Subject<string>();
@@ -65,10 +60,7 @@ export class ArtistsListComponent implements OnDestroy {
   displayedColumns: string[] = ['photo', 'name', 'genre', 'popularity', 'bio', 'actions'];
   
   constructor() {
-    // A. Chargement initial des genres (remplace ngOnInit)
     this.loadGenres();
-
-    // B. Configuration du Debounce RxJS pour la recherche textuelle
     this.searchSubscription = this.searchSubject.pipe(
       debounceTime(300),
       distinctUntilChanged()
@@ -76,13 +68,10 @@ export class ArtistsListComponent implements OnDestroy {
       this.updateUrl({ search: val || null });
     });
 
-    // =====================================================================
-    // C. L'EXIGENCE DU PROFESSEUR : L'effect qui pilote la requête HTTP
-    // =====================================================================
     effect(async () => {
       const q = this.parsedSearch();
       const g = this.parsedGenre();
-      this.reloadTrigger(); // S'abonne au trigger de rechargement
+      this.reloadTrigger();
 
       this.isLoading.set(true);
       try {
@@ -112,8 +101,7 @@ export class ArtistsListComponent implements OnDestroy {
       console.error(this.translate.instant('ARTIST_LIST.ERROR_GENRE'), err);
     }
   }
-
-  // 4. FLUX UNIDIRECTIONNEL : On modifie l'URL !
+  
   updateSearch(val: string) { 
     this.searchSubject.next(val); 
   }
@@ -146,12 +134,7 @@ export class ArtistsListComponent implements OnDestroy {
       try {
         await firstValueFrom(this.artistService.deleteArtist(id));
         this.snackBar.open(this.translate.instant('ARTIST.DELETE_SUCCESS'), this.translate.instant('COMMON.CLOSE'), { duration: 3000 });
-        
-        // Option 1 : Rafraîchissement réactif complet (demande au serveur la nouvelle liste)
         this.reloadTrigger.update(v => v + 1);
-        
-        // Option 2 (Celle que tu avais, qui est aussi très bien pour économiser une requête) : 
-        // this.artists.update(list => list.filter(a => a.id !== id));
       } catch (error) {
         this.showErrorsAsSnackBar(error);
       }

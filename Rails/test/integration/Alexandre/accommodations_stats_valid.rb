@@ -14,7 +14,7 @@ class Api::AccommodationsStatsControllerSecurityTest < ActionDispatch::Integrati
 
     # Code http
     get "/api/stats/accommodations", as: :json
-    assert_response :success 
+    assert_response :success
 
     # Format json valide
     json = JSON.parse(response.body)
@@ -49,8 +49,8 @@ class Api::AccommodationsStatsControllerSecurityTest < ActionDispatch::Integrati
     sign_in @admin
 
     # Code http
-    get "/api/stats/accommodations", 
-        params: { name: "Grand Hotel" }, 
+    get "/api/stats/accommodations",
+        params: { name: "Grand Hotel" },
         as: :json,
         headers: { "REQUEST_METHOD" => "GET" }
     assert_response :success
@@ -67,7 +67,7 @@ class Api::AccommodationsStatsControllerSecurityTest < ActionDispatch::Integrati
 
     # Validation de la cohérence de la base de données
     # (1 pers * 55 * 3) + (2 pers * 85 * 2) = 505.00
-    expected_revenue = 505.00 
+    expected_revenue = 505.00
     expected_profit = 429.25 # 505 * 0.85
     assert_in_delta expected_revenue, finance["total_revenue"].to_f, 0.001
     assert_in_delta expected_profit, finance["actual_profit"].to_f, 0.001
@@ -77,8 +77,8 @@ class Api::AccommodationsStatsControllerSecurityTest < ActionDispatch::Integrati
     sign_in @admin
 
     # Code http
-    get "/api/stats/accommodations", 
-        params: { name: "Grand Hotel" }, 
+    get "/api/stats/accommodations",
+        params: { name: "Grand Hotel" },
         as: :json,
         headers: { "REQUEST_METHOD" => "GET" }
     assert_response :success
@@ -90,7 +90,7 @@ class Api::AccommodationsStatsControllerSecurityTest < ActionDispatch::Integrati
     # Contenu du format json
     fest_name = festivals(:one).name
     hotel_stats = json["data"][fest_name]["items"].find { |i| i["name"] == "Grand Hotel" }
-    
+
     pricing   = hotel_stats["pricing"]
     services  = hotel_stats["services"]
     inventory = hotel_stats["inventory"]

@@ -46,7 +46,6 @@ class Api::AccommodationsStatsController < ApiController
              .sort_by { |fest, _| fest.start_at || Time.at(0) }
              .reverse
              .each_with_object({}) do |(festival, items), hash|
-      
       list = items.map { |i| i[:stats] }
 
       hash[festival.name] = {

@@ -21,9 +21,9 @@ class Accommodation < ApplicationRecord
       .select("AVG(IF(units.parking_cost > 0, units.parking_cost, NULL)) AS avg_parking_fee_val")
       .select("SUM(IF(reservations.status IN (0, 2), reservations.nb_of_people, 0)) AS total_people_val")
       .select(<<-SQL.squish)
-        SUM(IF(reservations.status IN (0, 2), 
-          reservations.nb_of_people * units.cost_person_per_night * 
-          GREATEST(TIMESTAMPDIFF(DAY, reservations.arrival_at, reservations.departure_at), 1), 
+        SUM(IF(reservations.status IN (0, 2),#{' '}
+          reservations.nb_of_people * units.cost_person_per_night *#{' '}
+          GREATEST(TIMESTAMPDIFF(DAY, reservations.arrival_at, reservations.departure_at), 1),#{' '}
           0)) AS raw_revenue
       SQL
       .select("COUNT(DISTINCT IF(reservations.status IN (0, 2), reservations.id, NULL)) AS total_bookings_val")
@@ -97,7 +97,7 @@ class Accommodation < ApplicationRecord
       festival_name: f_name,
       category: category_before_type_cast,
       unit_count: respond_to?(:unit_count_val) ? unit_count_val.to_i : units.size,
-      
+
       pricing: {
         avg_nightly_rate: (respond_to?(:avg_nightly_rate_val) ? avg_nightly_rate_val.to_f : 0).round(2),
         avg_parking_fee: (respond_to?(:avg_parking_fee_val) ? avg_parking_fee_val.to_f : 0).round(2)
@@ -123,7 +123,7 @@ class Accommodation < ApplicationRecord
 
       inventory: {
         total_units: total_q,
-        available_now: [total_q - bookings, 0].max
+        available_now: [ total_q - bookings, 0 ].max
       },
 
       reservation_stats: {

@@ -56,7 +56,7 @@ class Api::TasksController < ApiController
     def raport
         @tasks = Task.all
 
-      
+
 
         render json: {
             status: "success",
@@ -124,11 +124,11 @@ class Api::TasksController < ApiController
     def task_report_json
         {
             success: true,
-            only: [:id, :title, :description, :reusable, :difficulty, :priority],
-            methods: [:file_url, :affectations_count, :completed ,:ongoing ,:awaiting ],
+            only: [ :id, :title, :description, :reusable, :difficulty, :priority ],
+            methods: [ :file_url, :affectations_count, :completed, :ongoing, :awaiting ],
             include: {
                 affectations: {
-                    only: [ :id, :status, :start, :end, :expected_start, :expected_end, :responsability]
+                    only: [ :id, :status, :start, :end, :expected_start, :expected_end, :responsability ]
                 }
             }
         }

@@ -149,7 +149,7 @@ class TasksTest < ActionDispatch::IntegrationTest
         # code http
         assert_response :success
 
-        # contenu de reponse
+      # contenu de reponse
       assert json_response.is_a?(Hash)
       assert_equal "success", json_response["status"]
       assert json_response["data"].is_a?(Array), "data should be an array"

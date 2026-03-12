@@ -27,7 +27,7 @@ class Task < ApplicationRecord
         affectations.where(end: nil).exists?
     end
 
-    
+
     def awaiting
     affectations.where.not(start: nil).none?
     end

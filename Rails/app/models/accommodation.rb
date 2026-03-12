@@ -13,15 +13,29 @@ class Accommodation < ApplicationRecord
   validates :time_car, :time_walk, presence: true
 
   scope :with_stats_data, -> {
-    includes(:festival, units: :reservations)
-    .joins(:festival)
-    .select("accommodations.*")
-    .select(
-      "ST_Distance_Sphere(
-        POINT(accommodations.longitude, accommodations.latitude),
-        POINT(festivals.longitude, festivals.latitude)
-      ) / 1000 AS distance_from_festival_km"
-    )
+    left_joins(:festival)
+      .left_joins(units: :reservations)
+      .select("accommodations.*")
+      .select("festivals.name AS festival_name_val")
+      .select("AVG(units.cost_person_per_night) AS avg_nightly_rate_val")
+      .select("AVG(IF(units.parking_cost > 0, units.parking_cost, NULL)) AS avg_parking_fee_val")
+      .select("SUM(IF(reservations.status IN (0, 2), reservations.nb_of_people, 0)) AS total_people_val")
+      .select(<<-SQL.squish)
+        SUM(IF(reservations.status IN (0, 2),#{' '}
+          reservations.nb_of_people * units.cost_person_per_night *#{' '}
+          GREATEST(TIMESTAMPDIFF(DAY, reservations.arrival_at, reservations.departure_at), 1),#{' '}
+          0)) AS raw_revenue
+      SQL
+      .select("COUNT(DISTINCT IF(reservations.status IN (0, 2), reservations.id, NULL)) AS total_bookings_val")
+      .select("COUNT(DISTINCT units.id) AS unit_count_val")
+      .select("SUM(units.quantity) AS total_units_qty_val")
+      .select(<<-SQL.squish)
+        ST_Distance_Sphere(
+          POINT(accommodations.longitude, accommodations.latitude),
+          POINT(festivals.longitude, festivals.latitude)
+        ) / 1000 AS distance_from_festival_km
+      SQL
+      .group("accommodations.id, festivals.id, festivals.name")
   }
   scope :search_by_name, ->(term) {
     where("accommodations.name LIKE ?", "%#{term}%")
@@ -68,55 +82,53 @@ class Accommodation < ApplicationRecord
 
   before_validation :strip_fields
 
-def statistics_data
-  valid_reservations = Reservation.where(unit_id: unit_ids, status: [ :active, :completed ])
-
-  unit_prices = units.map(&:cost_person_per_night)
-  parking_fees = units.map(&:parking_cost).select { |cost| cost > 0 }
-
-  total_valid_bookings = valid_reservations.count
-  total_people = valid_reservations.sum(:nb_of_people)
-
-  total_revenue = units.sum do |unit|
-    unit.reservations.where(status: [ :active, :completed ]).sum(:nb_of_people) * unit.cost_person_per_night
-  end
-
-  commission_multiplier = (100 - commission) / 100.0
-  actual_profit = (total_revenue * commission_multiplier).round(2)
+  def statistics_data
+    people   = respond_to?(:total_people_val) ? total_people_val.to_i : 0
+    bookings = respond_to?(:total_bookings_val) ? total_bookings_val.to_i : 0
+    revenue  = respond_to?(:raw_revenue) ? raw_revenue.to_f : 0
+    total_q  = respond_to?(:total_units_qty_val) ? total_units_qty_val.to_i : 0
+    f_name   = respond_to?(:festival_name_val) ? festival_name_val : festival&.name
+    avg_parking = respond_to?(:avg_parking_fee_val) ? avg_parking_fee_val.to_f : 0
 
     {
       id: id,
       festival_id: festival_id,
-      festival_name: festival.name,
       name: name,
+      festival_name: f_name,
       category: category_before_type_cast,
-      unit_count: units.size,
+      unit_count: respond_to?(:unit_count_val) ? unit_count_val.to_i : units.size,
+
       pricing: {
-        avg_nightly_rate: unit_prices.any? ? (unit_prices.sum / unit_prices.size.to_f).round(2) : 0,
-        avg_parking_fee: parking_fees.any? ? (parking_fees.sum / parking_fees.size.to_f).round(2) : 0
+        avg_nightly_rate: (respond_to?(:avg_nightly_rate_val) ? avg_nightly_rate_val.to_f : 0).round(2),
+        avg_parking_fee: (respond_to?(:avg_parking_fee_val) ? avg_parking_fee_val.to_f : 0).round(2)
       },
+
       services: {
-        water: summarize_water_quality,
         wifi: summarize_service(units.map(&:wifi)),
-        electricity: summarize_service(units.map(&:electricity))
+        electricity: summarize_service(units.map(&:electricity)),
+        water: summarize_water_quality,
+        parking: (respond_to?(:avg_parking_fee_val) && avg_parking_fee_val.to_f > 0) ? "available" : "none"
       },
+
       location: {
         address: address,
         distance_km: respond_to?(:distance_from_festival_km) ? distance_from_festival_km.to_f.round(2) : 0
       },
-      reservation_stats: {
-        total_count: total_valid_bookings,
-        total_people: total_people,
-        avg_people_per_booking: total_valid_bookings.positive? ? (total_people / total_valid_bookings.to_f).round(1) : 0
-      },
+
       finance: {
-        total_revenue: total_revenue.to_f.round(2),
-        commission_rate: "#{commission}%",
-        actual_profit: actual_profit
+        total_revenue: revenue.round(2),
+        actual_profit: (revenue * (100 - commission) / 100.0).round(2),
+        commission_rate: "#{commission}%"
       },
+
       inventory: {
-        total_reservations: total_valid_bookings,
-        total_units: units.sum(:quantity)
+        total_units: total_q,
+        available_now: [ total_q - bookings, 0 ].max
+      },
+
+      reservation_stats: {
+        total_people: people,
+        total_count: bookings
       }
     }
   end

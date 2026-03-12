@@ -44,6 +44,7 @@ export interface AccommodationStats {
   id: number;
   festival_id: number;
   name: string;
+  festival_name: string;
   category: AccommodationCategory;
   unit_count: number;
   pricing: {

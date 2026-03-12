@@ -1351,9 +1351,6 @@ res10old = Reservation.create!(
   status: :completed
 )
 
-
-
-# Oct 27 to Oct 29 (3 days before)
 res1oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 29),
@@ -1366,7 +1363,6 @@ res1oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 27 to Oct 28
 res2oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 28),
@@ -1379,7 +1375,6 @@ res2oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 28 to Oct 29 (No overlap with res2oldold)
 res3oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 28),
   departure_at: Date.new(2024, 10, 29),
@@ -1392,7 +1387,6 @@ res3oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 30 to Oct 31 (During Festival)
 res4oldold = Reservation.create!(
   arrival_at: f4.start_at,
   departure_at: f4.end_at,
@@ -1405,7 +1399,6 @@ res4oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 27 to Oct 29
 res5oldold = Reservation.create!(
   arrival_at: Date.new(2024, 10, 27),
   departure_at: Date.new(2024, 10, 29),
@@ -1418,7 +1411,6 @@ res5oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 1 to Nov 3 (After Festival)
 res6oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 1),
   departure_at: Date.new(2024, 11, 3),
@@ -1431,7 +1423,6 @@ res6oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 1 to Nov 2
 res7oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 1),
   departure_at: Date.new(2024, 11, 2),
@@ -1444,7 +1435,6 @@ res7oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 2 to Nov 3 (No overlap with res7oldold)
 res8oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 2),
   departure_at: Date.new(2024, 11, 3),
@@ -1457,7 +1447,6 @@ res8oldold = Reservation.create!(
   status: :completed
 )
 
-# Oct 30 to Oct 31 (During Festival)
 res9oldold = Reservation.create!(
   arrival_at: f4.start_at,
   departure_at: f4.end_at,
@@ -1470,7 +1459,6 @@ res9oldold = Reservation.create!(
   status: :completed
 )
 
-# Nov 1 to Nov 2
 res10oldold = Reservation.create!(
   arrival_at: Date.new(2024, 11, 1),
   departure_at: Date.new(2024, 11, 2),

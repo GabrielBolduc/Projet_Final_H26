@@ -708,6 +708,7 @@
     "BTN": "Go Home"
   },
   "STATS": {
+    "TITLE": "Compare festivals",
     "SEARCH": "Search",
     "SORT_BY": "Sort by",
     "NONE": "None",

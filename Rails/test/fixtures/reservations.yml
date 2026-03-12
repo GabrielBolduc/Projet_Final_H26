@@ -2,20 +2,64 @@ one:
   user: one
   unit: one
   festival: one
-  status: 0
-  reservation_name: "Jean Dupont"
-  phone_number: "0612345678"
+  arrival_at: <%= 11.days.from_now.to_fs(:db) %>
+  departure_at: <%= 14.days.from_now.to_fs(:db) %>
+  reservation_name: "Miles Davis"
+  phone_number: "5145551234"
   nb_of_people: 1
-  arrival_at: <%= 2.months.from_now.to_date %>
-  departure_at: <%= (2.months.from_now + 2.days).to_date %>
+  status: 0 
 
 two:
-  user: one
+  user: four
   unit: two
   festival: two
-  status: 1
-  reservation_name: "Marie Curie"
-  phone_number: "0788990011"
+  arrival_at: <%= 1.month.from_now.to_fs(:db) %>
+  departure_at: <%= 1.month.from_now + 3.days %>
+  reservation_name: "Happy Camper"
+  phone_number: "4185559876"
+  nb_of_people: 4
+  status: 2
+
+three:
+  user: three
+  unit: four
+  festival: one
+  arrival_at: <%= 12.days.from_now.to_fs(:db) %>
+  departure_at: <%= 13.days.from_now.to_fs(:db) %>
+  reservation_name: "Cancelled Guest"
+  phone_number: "5551234567"
   nb_of_people: 2
-  arrival_at: <%= 6.months.from_now.to_date %>
-  departure_at: <%= (6.months.from_now + 3.days).to_date %>
+  status: 1
+
+four:
+  user: one
+  unit: seven
+  festival: one
+  arrival_at: <%= 10.days.from_now.to_fs(:db) %>
+  departure_at: <%= 12.days.from_now.to_fs(:db) %>
+  reservation_name: "John Coltrane"
+  phone_number: "5149998888"
+  nb_of_people: 2
+  status: 0
+
+five:
+  user: four
+  unit: five
+  festival: two
+  arrival_at: <%= 1.month.from_now + 5.days %>
+  departure_at: <%= 1.month.from_now + 10.days %>
+  reservation_name: "Lakeview Group"
+  phone_number: "4180001111"
+  nb_of_people: 6
+  status: 0
+
+six:
+  user: two
+  unit: six
+  festival: two
+  arrival_at: <%= 1.month.from_now.to_fs(:db) %>
+  departure_at: <%= 1.month.from_now + 1.day %>
+  reservation_name: "Backlot Staff"
+  phone_number: "4182223333"
+  nb_of_people: 1
+  status: 2

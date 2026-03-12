@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, signal, ViewChild, TemplateRef } from '@angular/core'; 
+import { Component, OnInit, inject, signal, ViewChild, TemplateRef, effect } from '@angular/core'; 
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog'; 
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -26,7 +27,7 @@ import { Unit } from '@core/models/unit';
   templateUrl: './units.html',
   styleUrl: './units.css',
 })
-export class Units implements OnInit {
+export class Units {
   private service = inject(UnitsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -38,15 +39,19 @@ export class Units implements OnInit {
   parentCategory = signal<number | string | null>(null);
   accommodationName = signal<string>('');
   units = signal<Unit[]>([]);
+  private params = toSignal(this.route.paramMap);
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const numericId = Number(id);
-      this.accommodationId.set(numericId);
-      this.loadUnits(numericId);
-      this.fetchAccommodationDetails(numericId);
-    }
+  constructor() {
+    effect(() => {
+      const id = this.params()?.get('id');
+      if (id) {
+        const numericId = Number(id);
+        this.accommodationId.set(numericId);
+        
+        this.loadUnits(numericId);
+        this.fetchAccommodationDetails(numericId);
+      }
+    });
   }
 
   private fetchAccommodationDetails(accId: number) {

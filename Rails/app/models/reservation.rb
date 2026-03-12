@@ -1,4 +1,3 @@
-# app/models/reservation.rb
 class Reservation < ApplicationRecord
   belongs_to :user
   belongs_to :unit

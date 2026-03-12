@@ -1,20 +1,19 @@
-
 class Api::AccommodationsStatsController < ApiController
+  before_action :require_admin!
+
   def index
-    @accommodations = Accommodation.with_stats_data.includes(units: :reservations)
+    @accommodations = Accommodation.with_stats_data
 
     apply_filters!
 
-    unless params[:sort_by] == "revenue"
+    if params[:sort_by] == "revenue"
+      @accommodations = @accommodations.order("raw_revenue DESC")
+    else
       @accommodations = apply_sql_sorting(@accommodations)
     end
 
     all_stats = @accommodations.map do |acc|
       { acc: acc, stats: acc.statistics_data }
-    end
-
-    if params[:sort_by] == "revenue"
-      all_stats.sort_by! { |item| item[:stats].dig(:finance, :total_revenue) || 0 }.reverse!
     end
 
     grouped_data = render_grouped_stats(all_stats)
@@ -37,14 +36,14 @@ class Api::AccommodationsStatsController < ApiController
 
   def apply_sql_sorting(scope)
     case params[:sort_by]
-    when "name" then scope.order(name: :asc)
+    when "name" then scope.order("accommodations.name ASC")
     else scope.order("festivals.start_at DESC")
     end
   end
 
   def render_grouped_stats(all_stats)
     all_stats.group_by { |item| item[:acc].festival }
-             .sort_by { |fest, _| fest.start_at }
+             .sort_by { |fest, _| fest.start_at || Time.at(0) }
              .reverse
              .each_with_object({}) do |(festival, items), hash|
       list = items.map { |i| i[:stats] }

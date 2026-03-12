@@ -56,7 +56,7 @@ class Package < ApplicationRecord
   validate :discount_fields_both_or_neither
 
   def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil, sold_out: nil)
-    relation = includes(:festival, :tickets, image_attachment: :blob)
+    relation = includes(:festival, image_attachment: :blob).preload(:tickets)
 
     if festival_id.present?
       relation = relation.for_festival(festival_id)

@@ -112,8 +112,12 @@
   gap: 15px;
   border-radius: 15px;
   background: var(--mat-sys-surface-container-low);
-  border: 1px solid var(--mat-sys-outline-variant);
-  box-shadow: none !important;
+  border: 2px solid var(--mat-sys-on-surface); 
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
 }
 
 .stat-card mat-icon {

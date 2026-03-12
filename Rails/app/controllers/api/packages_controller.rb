@@ -75,7 +75,7 @@ class Api::PackagesController < Api::AdminController
   private
 
   def set_package
-    scope = Package.includes(:festival)
+    scope = Package.includes(:festival, :tickets, image_attachment: :blob)
     scope = scope.joins(:festival).where(festivals: { status: Festival.statuses[:ongoing] }) unless admin_user?
     @package = scope.find(params[:id])
   end

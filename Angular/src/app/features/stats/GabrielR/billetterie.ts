@@ -42,14 +42,28 @@ export class BilletterieComponent implements OnInit {
   private ticketingStatsService = inject(TicketingStatsService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private snapshot = inject(ActivatedRoute).snapshot;
 
-  startDate = signal<Date | null>(null);
-  endDate = signal<Date | null>(null);
-  categoryFilters = signal({
-    general: true,
-    daily: true,
-    evening: true
-  });
+  startDate = signal<Date | null>(
+    this.parseDateParam(this.snapshot.queryParams['start_date'])
+  );
+
+  endDate = signal<Date | null>(
+    this.parseDateParam(this.snapshot.queryParams['end_date'])
+  );
+
+  categoryFilters = signal((() => {
+    const raw = this.snapshot.queryParams['categories']?.toString().trim().toLowerCase();
+    if (!raw) return { general: true, daily: true, evening: true };
+    if (raw === 'none') return { general: false, daily: false, evening: false };
+    const cats = raw.split(',').map((v: string) => v.trim());
+    return {
+      general: cats.includes('general'),
+      daily: cats.includes('daily'),
+      evening: cats.includes('evening')
+    };
+  })());
+
   private initialized = false;
 
   selectedCategories = computed(() => {
@@ -101,14 +115,13 @@ export class BilletterieComponent implements OnInit {
   constructor() {
     effect(() => {
       if (!this.initialized) return;
-
       const categories = this.selectedCategories();
+      const allSelected = categories.length === 3;
       const queryParams = {
         start_date: this.normalizeDate(this.startDate()) || null,
         end_date: this.normalizeDate(this.endDate()) || null,
-        categories: categories.length ? categories.join(',') : 'none'
+        categories: allSelected ? null : (categories.length ? categories.join(',') : 'none')
       };
-
       this.router.navigate([], {
         relativeTo: this.route,
         queryParams,
@@ -119,37 +132,6 @@ export class BilletterieComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-
-    if (params['start_date']) {
-      this.startDate.set(this.parseDateParam(params['start_date']));
-    }
-
-    if (params['end_date']) {
-      this.endDate.set(this.parseDateParam(params['end_date']));
-    }
-
-    if (params['categories']) {
-      const raw = params['categories'].toString().trim().toLowerCase();
-      if (raw === 'none') {
-        this.categoryFilters.set({
-          general: false,
-          daily: false,
-          evening: false
-        });
-      } else {
-        const categories = raw
-          .split(',')
-          .map((value: string) => value.trim().toLowerCase())
-          .filter(Boolean);
-
-        this.categoryFilters.set({
-          general: categories.includes('general'),
-          daily: categories.includes('daily'),
-          evening: categories.includes('evening')
-        });
-      }
-    }
 
     this.initialized = true;
   }

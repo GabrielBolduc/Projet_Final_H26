@@ -13,24 +13,28 @@ class Accommodation < ApplicationRecord
   validates :time_car, :time_walk, presence: true
 
   scope :with_stats_data, -> {
-    joins(:festival)
+    left_joins(:festival)
       .left_joins(units: :reservations)
       .select("accommodations.*")
       .select("festivals.name AS festival_name_val")
       .select("AVG(units.cost_person_per_night) AS avg_nightly_rate_val")
       .select("AVG(IF(units.parking_cost > 0, units.parking_cost, NULL)) AS avg_parking_fee_val")
-      .select("SUM(IF(reservations.status IN (1, 2), reservations.nb_of_people, 0)) AS total_people_val")
-      .select("SUM(IF(reservations.status IN (1, 2), reservations.nb_of_people * units.cost_person_per_night, 0)) AS raw_revenue")
-      .select("COUNT(DISTINCT IF(reservations.status IN (1, 2), reservations.id, NULL)) AS total_bookings_val")
+      .select("SUM(IF(reservations.status IN (0, 2), reservations.nb_of_people, 0)) AS total_people_val")
+      .select(<<-SQL.squish)
+        SUM(IF(reservations.status IN (0, 2), 
+          reservations.nb_of_people * units.cost_person_per_night * 
+          GREATEST(TIMESTAMPDIFF(DAY, reservations.arrival_at, reservations.departure_at), 1), 
+          0)) AS raw_revenue
+      SQL
+      .select("COUNT(DISTINCT IF(reservations.status IN (0, 2), reservations.id, NULL)) AS total_bookings_val")
       .select("COUNT(DISTINCT units.id) AS unit_count_val")
       .select("SUM(units.quantity) AS total_units_qty_val")
-      .select(<<-SQL.squish
+      .select(<<-SQL.squish)
         ST_Distance_Sphere(
           POINT(accommodations.longitude, accommodations.latitude),
           POINT(festivals.longitude, festivals.latitude)
         ) / 1000 AS distance_from_festival_km
       SQL
-      )
       .group("accommodations.id, festivals.id, festivals.name")
   }
   scope :search_by_name, ->(term) {
@@ -84,6 +88,7 @@ class Accommodation < ApplicationRecord
     revenue  = respond_to?(:raw_revenue) ? raw_revenue.to_f : 0
     total_q  = respond_to?(:total_units_qty_val) ? total_units_qty_val.to_i : 0
     f_name   = respond_to?(:festival_name_val) ? festival_name_val : festival&.name
+    avg_parking = respond_to?(:avg_parking_fee_val) ? avg_parking_fee_val.to_f : 0
 
     {
       id: id,

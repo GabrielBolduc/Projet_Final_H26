@@ -2,7 +2,7 @@
   <div class="ssf-toolbar mb-4">
 
     <mat-form-field appearance="outline">
-      <mat-label>{{ 'ADMIN.RESERVATIONS.TITLE' | translate }} (Compare)</mat-label>
+      <mat-label>{{ 'STATS.TITLE' | translate }}</mat-label>
       <mat-select [ngModel]="festivalIds()" (ngModelChange)="updateCompare($event)" multiple>
         @for (fest of availableFestivals(); track fest.id) {
           <mat-option [value]="fest.id">{{ fest.name }}</mat-option>

@@ -1,4 +1,6 @@
 class Api::AccommodationsStatsController < ApiController
+  before_action :require_admin!
+
   def index
     @accommodations = Accommodation.with_stats_data
 

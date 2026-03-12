@@ -135,7 +135,8 @@
     "ARCHIVED_SUCCESS": "Festival archived successfully.",
     "DELETE_ONGOING_ERROR": "Cannot delete an ongoing festival.",
     "DELETE_SUCCESS": "Festival deleted successfully.",
-    "FESTIVALS_LOAD_ERROR": "Error loading festivals"
+    "FESTIVALS_LOAD_ERROR": "Error loading festivals",
+    "BACK": "Go to the festivals page"
   },
   "ARTIST": {
     "EDIT_TITLE": "Edit Artist",
@@ -208,7 +209,7 @@
     "PROG": "Schedule",
     "TASK": "Tasks",
     "TICKET": "Ticketing",
-    "ARTIST": "Artits",
+    "ARTIST": "Artist",
     "AFFECTATIONS": "Affectations",
     "STATS": "Statistics"
   },

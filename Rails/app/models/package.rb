@@ -56,7 +56,7 @@ class Package < ApplicationRecord
   validate :discount_fields_both_or_neither
 
   def self.admin_scope(festival_id: nil, status: nil, query: nil, sort: nil, categories: nil, sold_out: nil)
-    relation = includes(:festival)
+    relation = includes(:festival, :tickets, image_attachment: :blob)
 
     if festival_id.present?
       relation = relation.for_festival(festival_id)
@@ -137,7 +137,11 @@ class Package < ApplicationRecord
   private_class_method :package_includes_weekday?
 
   def sold_count
-    tickets.where(refunded_at: nil).count
+    if tickets.loaded?
+      tickets.count { |t| t.refunded_at.nil? }
+    else
+      tickets.where(refunded_at: nil).count
+    end
   end
 
   def sold_out?

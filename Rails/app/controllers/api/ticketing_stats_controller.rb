@@ -6,7 +6,8 @@ class Api::TicketingStatsController < ApiController
     start_date = parse_date(params[:start_date])
     end_date = parse_date(params[:end_date])
 
-    @festivals = Festival.all
+    @festivals = Festival.order(start_at: :desc).includes(:performances)
+
     if start_date
       @festivals = @festivals.where("end_at >= ?", start_date)
     end
@@ -21,19 +22,14 @@ class Api::TicketingStatsController < ApiController
       refunds_count = Package.total_refund_count_for_festival(festival.id, categories: categories)
       ticket_revenue = Package.total_revenue_for_festival(festival.id, categories: categories)
       total_discounts = Order.total_discount_for_festival(festival.id, categories: categories)
-
-      expenses_performance = festival.performances.sum(:price)
+      expenses_performance = festival.performances.sum(&:price)
       expenses_other = festival.other_expense || 0
       expenses_total = expenses_performance + expenses_other
-
       revenues_other = festival.other_income || 0
       revenues_tickets = ticket_revenue - total_discounts
       revenues_total = revenues_other + revenues_tickets
-
       profit = revenues_total - expenses_total
-
       avg_tickets_per_order = num_orders > 0 ? (total_tickets_sold.to_f / num_orders).round(2) : 0
-
       {
         id: festival.id,
         name: festival.name,
@@ -54,10 +50,7 @@ class Api::TicketingStatsController < ApiController
       }
     end
 
-    render json: {
-      status: "success",
-      data: stats
-    }
+    render json: { status: "success", data: stats }
   end
 
   private

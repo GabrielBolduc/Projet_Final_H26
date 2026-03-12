@@ -545,7 +545,7 @@ acc3old = Accommodation.create!(
 )
 
 acc4old = Accommodation.create!(
-  name: "The Front Row Fields - old old",
+  name: "The Front Row Fields - old",
   category: :camping,
   address: "Zero Mile Marker, Glastonbury",
   latitude: 46.5250,
@@ -597,7 +597,7 @@ acc3oldold = Accommodation.create!(
 )
 
 acc4oldold = Accommodation.create!(
-  name: "The Front Row Fields - old",
+  name: "The Front Row Fields - old old",
   category: :camping,
   address: "Zero Mile Marker, Glastonbury",
   latitude: 46.5250,

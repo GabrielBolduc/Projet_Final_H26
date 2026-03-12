@@ -4,10 +4,12 @@ class Api::AccommodationsStatsController < ApiController
   def index
     @accommodations = Accommodation.with_stats_data
 
+    @festival_highlights = calculate_festival_highlights(@accommodations)
+
     apply_filters!
 
     if params[:sort_by] == "revenue"
-      @accommodations = @accommodations.order("raw_revenue DESC")
+      @accommodations = @accommodations.reorder("raw_revenue DESC")
     else
       @accommodations = apply_sql_sorting(@accommodations)
     end
@@ -25,6 +27,15 @@ class Api::AccommodationsStatsController < ApiController
 
   private
 
+  def calculate_festival_highlights(scope)
+    scope.to_a.group_by(&:festival_id).transform_values do |accs|
+      {
+        top: accs.max_by(&:raw_revenue)&.statistics_data&.slice(:name, :finance),
+        bottom: accs.min_by(&:raw_revenue)&.statistics_data&.slice(:name, :finance)
+      }
+    end
+  end
+
   def apply_filters!
     @accommodations = @accommodations.search_by_name(params[:name]) if params[:name].present?
     @accommodations = @accommodations.for_festivals(params[:festival_ids]) if params[:festival_ids].present?
@@ -36,8 +47,8 @@ class Api::AccommodationsStatsController < ApiController
 
   def apply_sql_sorting(scope)
     case params[:sort_by]
-    when "name" then scope.order("accommodations.name ASC")
-    else scope.order("festivals.start_at DESC")
+    when "name" then scope.reorder("accommodations.name ASC")
+    else scope.reorder("festivals.start_at DESC")
     end
   end
 
@@ -54,10 +65,7 @@ class Api::AccommodationsStatsController < ApiController
           camping: items.count { |i| i[:acc].camping? },
           hotel: items.count { |i| i[:acc].hotel? }
         },
-        highlights: {
-          top: list.first&.slice(:name, :finance),
-          bottom: list.last&.slice(:name, :finance)
-        },
+        highlights: @festival_highlights[festival.id] || { top: nil, bottom: nil },
         reservation_stats: {
           total_people: list.sum { |s| s.dig(:reservation_stats, :total_people) || 0 }
         }

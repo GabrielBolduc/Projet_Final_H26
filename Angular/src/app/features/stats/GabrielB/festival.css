@@ -12,7 +12,6 @@
   border-radius: 15px;
   margin-bottom: 40px;
   border: 2px solid var(--mat-sys-on-surface);
-  flex-wrap: wrap;
 }
 
 .ssf-toolbar mat-form-field {
@@ -113,8 +112,12 @@
   gap: 15px;
   border-radius: 15px;
   background: var(--mat-sys-surface-container-low);
-  border: 1px solid var(--mat-sys-outline-variant);
-  box-shadow: none !important;
+  border: 2px solid var(--mat-sys-on-surface); 
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
 }
 
 .stat-card mat-icon {
@@ -169,9 +172,10 @@
     gap: 15px;
     padding: 15px;
   }
-  
+
   .ssf-toolbar mat-form-field {
-    min-width: 100%;
-    margin-bottom: -15px;
+    flex: 1;
+    min-width: 250px;
   }
+
 }

@@ -135,7 +135,8 @@
     "ARCHIVED_SUCCESS": "Festival archivé avec succès.",
     "DELETE_ONGOING_ERROR": "Impossible de supprimer un festival en cours.",
     "FESTIVALS_LOAD_ERROR": "Erreur lors du chargement des festivals",
-    "DELETE_SUCCESS": "Performance supprimée avec succès"
+    "DELETE_SUCCESS": "Performance supprimée avec succès",
+    "BACK": "Aller à la page des festivals"
   },
   "ARTIST": {
     "EDIT_TITLE": "Modifier l'artiste",
